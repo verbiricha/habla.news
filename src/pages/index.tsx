@@ -1,56 +1,66 @@
+import Head from "next/head";
+import { useState, useMemo } from "react";
+
 import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from '@chakra-ui/react'
-import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
+  Flex,
+  Box,
+  Heading,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+import { useAtom } from "jotai";
 
-import { Hero } from '../components/Hero'
-import { Container } from '../components/Container'
-import { Main } from '../components/Main'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
-import { CTA } from '../components/CTA'
-import { Footer } from '../components/Footer'
+import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+import { followsAtom, relaysAtom } from "@habla/state";
+import Layout from "@habla/layouts/Layout";
+import Hero from "@habla/components/Hero";
+import Feed from "@habla/components/nostr/Feed";
 
-const Index = () => (
-  <Container height="100vh">
-    <Hero />
-    <Main>
-      <Text color="text">
-        Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{' '}
-        <Code>TypeScript</Code>.
-      </Text>
+function Index() {
+  const now = useMemo(() => Math.floor(Date.now() / 1000), []);
+  const [relays] = useAtom(relaysAtom);
+  const [follows] = useAtom(followsAtom);
+  const authors = useMemo(() => {
+    return Array.from(new Set(Array.from(follows).map((u) => u.hexpubkey())));
+  }, [follows]);
+  const [since, setSince] = useState(
+    Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000)
+  );
+  return (
+    <>
+      <Head>
+        <title>Habla</title>
+        <meta name="og:title" content="Habla" />
+        <meta name="og:description" content="Speak your mind" />
+      </Head>
+      <Layout hero>
+        <Tabs variant="soft-rounded" colorScheme="purple">
+          <TabList>
+            <Tab>Posts</Tab>
+            <Tab>Highlights</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel px={0}>
+              <Feed
+                key="articles"
+                filter={{ kinds: [LONG_FORM], since, until: now }}
+                options={{ closeOnEose: true, cacheUsage: "CACHE_FIRST" }}
+              />
+            </TabPanel>
+            <TabPanel px={0}></TabPanel>
+            <Feed
+              key="highlights"
+              filter={{ kinds: [HIGHLIGHT], limit: 3 }}
+              options={{ closeOnEose: false, cacheUsage: "ONLY_RELAY" }}
+            />
+          </TabPanels>
+        </Tabs>
+      </Layout>
+    </>
+  );
+}
 
-      <List spacing={3} my={0} color="text">
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
-          >
-            Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-            Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
-    </Main>
-
-    <DarkModeSwitch />
-    <Footer>
-      <Text>Next ❤️ Chakra</Text>
-    </Footer>
-    <CTA />
-  </Container>
-)
-
-export default Index
+export default Index;

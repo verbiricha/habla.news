@@ -1,39 +1,59 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme } from "@chakra-ui/react";
+import { withProse } from "@nikolovlazar/chakra-ui-prose";
 
-const fonts = { mono: `'Menlo', monospace` }
+import Card from "./theme/card";
+
+const fonts = { mono: `'Menlo', monospace` };
+
+const components = { Card };
 
 const breakpoints = {
-  sm: '40em',
-  md: '52em',
-  lg: '64em',
-  xl: '80em',
-}
+  sm: "40em",
+  md: "52em",
+  lg: "64em",
+  xl: "80em",
+};
 
-const theme = extendTheme({
-  semanticTokens: {
+const theme = extendTheme(
+  {
+    styles: {
+      global: {
+        mark: {
+          bg: "#FFF2CC",
+        },
+        img: {
+          borderRadius: "12px",
+          objectFit: "cover",
+        },
+        "::selection": {
+          color: "#16161D",
+          bg: "#FFD1DC",
+        },
+      },
+    },
+    semanticTokens: {
+      colors: {
+        highlight: {
+          default: "#A966FF",
+          _dark: "#A966FF",
+        },
+        secondary: {
+          default: "#757575",
+          _dark: "#A5A5A5",
+        },
+      },
+      radii: {
+        button: "12px",
+      },
+    },
     colors: {
-      text: {
-        default: '#16161D',
-        _dark: '#ade3b8',
-      },
-      heroGradientStart: {
-        default: '#7928CA',
-        _dark: '#e3a7f9',
-      },
-      heroGradientEnd: {
-        default: '#FF0080',
-        _dark: '#fbec8f',
-      },
+      black: "#16161D",
     },
-    radii: {
-      button: '12px',
-    },
+    fonts,
+    breakpoints,
+    components,
   },
-  colors: {
-    black: '#16161D',
-  },
-  fonts,
-  breakpoints,
-})
+  withProse()
+);
 
-export default theme
+export default theme;
