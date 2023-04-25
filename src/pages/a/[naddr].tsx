@@ -2,8 +2,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
-import pool from "@habla/pool";
-import NDK from "@nostr-dev-kit/ndk";
+import pool, { defaultRelays } from "@habla/pool";
 import { decodeNaddr } from "@habla/nostr";
 import { getMetadata } from "@habla/nip23";
 import Layout from "@habla/layouts/Layout";
@@ -46,7 +45,7 @@ export default function Article({ metadata }) {
 export async function getServerSideProps({ query }) {
   const { naddr } = query;
   const { kind, identifier, pubkey, relays } = decodeNaddr(naddr);
-  const event = await pool.get(relays, {
+  const event = await pool.get([...relays, ...defaultRelays], {
     kinds: [kind],
     authors: [pubkey],
     "#d": [identifier],

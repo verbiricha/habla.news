@@ -4,7 +4,9 @@ import dynamic from "next/dynamic";
 
 import pool, { defaultRelays } from "@habla/pool";
 import Layout from "@habla/layouts/Layout";
-import Feed from "@habla/components/nostr/Feed";
+const Feed = dynamic(() => import("@habla/components/nostr/Feed"), {
+  ssr: false,
+});
 const NProfile = dynamic(() => import("@habla/components/nostr/Profile"), {
   ssr: false,
 });
@@ -34,7 +36,7 @@ export default function Profile({ metadata }) {
 export async function getServerSideProps({ query }) {
   const { nprofile } = query;
   const { pubkey, relays } = decodeNpubOrNprofile(nprofile);
-  const event = await pool.get([...defaultRelays, ...relays], {
+  const event = await pool.get([...relays, ...defaultRelays], {
     kinds: [0],
     authors: [pubkey],
   });

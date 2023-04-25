@@ -1,4 +1,5 @@
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import { useState, useMemo } from "react";
 
 import {
@@ -17,7 +18,10 @@ import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { followsAtom, relaysAtom } from "@habla/state";
 import Layout from "@habla/layouts/Layout";
 import Hero from "@habla/components/Hero";
-import Feed from "@habla/components/nostr/Feed";
+
+const Feed = dynamic(() => import("@habla/components/nostr/Feed", {
+  ssr: false
+})
 
 function Index() {
   const now = useMemo(() => Math.floor(Date.now() / 1000), []);
