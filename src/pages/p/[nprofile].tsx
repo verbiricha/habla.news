@@ -14,17 +14,16 @@ const NProfile = dynamic(() => import("@habla/components/nostr/Profile"), {
 import { decodeNpubOrNprofile } from "@habla/nostr";
 
 export default function Profile({ metadata }) {
-  console.log("META", metadata);
   const router = useRouter();
   const { nprofile } = router.query;
   const { pubkey, relays } = decodeNpubOrNprofile(nprofile) ?? {};
   return (
     <>
       <Head>
-        <title>{metadata.display_name}</title>
-        <meta name="og:title" content={metadata.display_name} />
-        <meta name="og:description" content={metadata.about} />
-        {metadata.picture && (
+        <title>{metadata?.display_name}</title>
+        <meta name="og:title" content={metadata?.display_name} />
+        <meta name="og:description" content={metadata?.about} />
+        {metadata?.picture && (
           <meta name="og:image" content={metadata.picture} />
         )}
       </Head>
