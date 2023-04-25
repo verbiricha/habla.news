@@ -19,9 +19,9 @@ import { followsAtom, relaysAtom } from "@habla/state";
 import Layout from "@habla/layouts/Layout";
 import Hero from "@habla/components/Hero";
 
-const Feed = dynamic(() => import("@habla/components/nostr/Feed", {
-  ssr: false
-})
+const Feed = dynamic(() => import("@habla/components/nostr/Feed"), {
+  ssr: false,
+});
 
 function Index() {
   const now = useMemo(() => Math.floor(Date.now() / 1000), []);
