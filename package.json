@@ -31,7 +31,8 @@
     "remark-mark-plus": "^1.0.21",
     "remark-math": "^5.1.1",
     "remark-toc": "^8.0.1",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
