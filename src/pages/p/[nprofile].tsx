@@ -1,22 +1,15 @@
-import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
 import pool, { defaultRelays } from "@habla/pool";
 import Layout from "@habla/layouts/Layout";
-const Feed = dynamic(() => import("@habla/components/nostr/Feed"), {
-  ssr: false,
-});
+import { decodeNpubOrNprofile } from "@habla/nostr";
+
 const NProfile = dynamic(() => import("@habla/components/nostr/Profile"), {
   ssr: false,
 });
 
-import { decodeNpubOrNprofile } from "@habla/nostr";
-
-export default function Profile({ metadata }) {
-  const router = useRouter();
-  const { nprofile } = router.query;
-  const { pubkey, relays } = decodeNpubOrNprofile(nprofile) ?? {};
+export default function Profile({ pubkey, relays, metadata }) {
   return (
     <>
       <Head>
@@ -27,22 +20,35 @@ export default function Profile({ metadata }) {
           <meta name="og:image" content={metadata.picture} />
         )}
       </Head>
-      <Layout>{pubkey && <NProfile pubkey={pubkey} relays={relays} />}</Layout>
+      <Layout>
+        <NProfile pubkey={pubkey} relays={relays} />
+      </Layout>
     </>
   );
 }
 
 export async function getServerSideProps({ query }) {
   const { nprofile } = query;
-  const { pubkey, relays } = decodeNpubOrNprofile(nprofile);
+  const { pubkey, relays } = decodeNpubOrNprofile(nprofile) ?? {};
+  if (!pubkey) {
+    return {
+      redirect: {
+        permanent: true,
+        destination: "/",
+      },
+      props: {},
+    };
+  }
   const event = await pool.get([...relays, ...defaultRelays], {
     kinds: [0],
     authors: [pubkey],
   });
-  const metadata = JSON.parse(event.content);
+  const metadata = event ? JSON.parse(event.content) : {};
   return {
     props: {
       metadata,
+      pubkey,
+      relays,
     },
   };
 }

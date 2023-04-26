@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
@@ -8,8 +9,11 @@ import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
 import Layout from "@habla/layouts/Layout";
 import Feed from "@habla/components/nostr/Feed";
-import Relay from "@habla/components/nostr/Relay";
 import RelayFavicon from "@habla/components/RelayFavicon";
+
+const Relay = dynamic(() => import("@habla/components/nostr/Relay"), {
+  ssr: false,
+});
 
 export default function RelayPage() {
   const router = useRouter();

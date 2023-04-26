@@ -16,25 +16,20 @@ import Markdown from "@habla/markdown/Markdown";
 import User from "./User";
 import LongFormNote from "./feed/LongFormNote";
 
-export default function Profile({ pubkey, relays }) {
+export default function Profile({ pubkey }) {
   const profile = useUser(pubkey);
   const { events } = useEvents(
     {
       kinds: [LONG_FORM, HIGHLIGHT],
       authors: [pubkey],
     },
-    { relays, closeOnEose: false }
+    { cacheUsage: "PARALLEL" }
   );
 
   return (
     <>
       <Stack alignItems="center" spacing="2">
-        <User
-          pubkey={pubkey}
-          relays={relays}
-          size="xl"
-          flexDirection="column"
-        />
+        <User pubkey={pubkey} size="xl" flexDirection="column" />
         {profile?.about && (
           <Prose textAlign="center">
             <Markdown content={profile?.about} />
@@ -46,7 +41,6 @@ export default function Profile({ pubkey, relays }) {
           <Tab>Posts</Tab>
           <Tab>Highlights</Tab>
           <Tab isDisabled>Bookmarks</Tab>
-          <Tab isDisabled>⚡ Zapped</Tab>
         </TabList>
         <TabPanels>
           <TabPanel px={0}>

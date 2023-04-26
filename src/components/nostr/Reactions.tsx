@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 
 import { Flex } from "@chakra-ui/react";
-import { useReactions } from "../../nostr/hooks";
 
 import { ZAP, REACTION, HIGHLIGHT } from "@habla/const";
+import { useReactions } from "@habla/nostr/hooks";
 import Zaps from "../Zaps";
 import TextReactions from "../Reactions";
 import Comments from "../Reactions";

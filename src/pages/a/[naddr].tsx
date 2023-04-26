@@ -50,7 +50,7 @@ export async function getServerSideProps({ query }) {
     authors: [pubkey],
     "#d": [identifier],
   });
-  const metadata = getMetadata(event);
+  const metadata = event ? getMetadata(event) : {};
   return {
     props: {
       metadata,

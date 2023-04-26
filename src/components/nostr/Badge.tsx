@@ -2,6 +2,7 @@ import {
   Avatar,
   Flex,
   Text,
+  Heading,
   Card,
   CardHeader,
   CardBody,
@@ -15,7 +16,10 @@ export default function Badge({ naddr, event, relays }) {
   return (
     <Card variant="outline">
       <CardHeader>
-        <User pubkey={event.pubkey} relays={relays} />
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text>{name}</Text>
+          <User pubkey={event.pubkey} relays={relays} />
+        </Flex>
       </CardHeader>
       <CardBody>
         <Flex alignItems="center" gap="6">

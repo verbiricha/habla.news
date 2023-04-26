@@ -2,6 +2,7 @@ import { useMemo } from "react";
 
 import { Flex, Text } from "@chakra-ui/react";
 
+import { formatShortNumber } from "@habla/format";
 import { getZapRequest, getZapAmount } from "@habla/nip57";
 import { useReactions } from "@habla/nostr/hooks";
 import User from "@habla/components/nostr/User";
@@ -30,7 +31,12 @@ export default function LongFormNote({ event, relays }) {
         return (
           <Flex gap="1">
             <User pubkey={z.pubkey} relays={relays} />
-            <Text>zapped {z.amount}</Text>
+            <Text>
+              zapped{" "}
+              <Text as="span" fontSize="lg" fontWeight={500}>
+                {formatShortNumber(z.amount)}
+              </Text>
+            </Text>
           </Flex>
         );
       })}
