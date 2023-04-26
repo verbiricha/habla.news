@@ -10,12 +10,14 @@ const NProfile = dynamic(() => import("@habla/components/nostr/Profile"), {
 });
 
 export default function Profile({ pubkey, relays, metadata }) {
+  const title = metadata?.display_name ?? "Habla";
+  const description = metadata?.about ?? "Speak your mind";
   return (
     <>
       <Head>
-        <title>{metadata?.display_name}</title>
-        <meta name="og:title" content={metadata?.display_name} />
-        <meta name="og:description" content={metadata?.about} />
+        <title>{title}</title>
+        <meta name="og:title" content={title} />
+        <meta name="og:description" content={description} />
         {metadata?.picture && (
           <meta name="og:image" content={metadata.picture} />
         )}

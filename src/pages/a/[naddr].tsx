@@ -24,6 +24,7 @@ export default function Article({ metadata }) {
       <Head>
         <title>{title}</title>
         <meta name="og:title" content={title} />
+        <meta property="og:type" content="article" />
         <meta name="og:description" content={summary} />
         {image && <meta name="og:image" content={image} />}
       </Head>
@@ -50,7 +51,7 @@ export async function getServerSideProps({ query }) {
     authors: [pubkey],
     "#d": [identifier],
   });
-  const metadata = event ? getMetadata(event) : {};
+  const metadata = event ? getMetadata(event) : null;
   return {
     props: {
       metadata,

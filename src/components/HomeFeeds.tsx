@@ -43,7 +43,7 @@ export default function HomeFeeds() {
         <TabPanel px={0}></TabPanel>
         <Feed
           key="highlights"
-          filter={{ kinds: [HIGHLIGHT], limit: 3 }}
+          filter={{ kinds: [HIGHLIGHT], limit: 21 }}
           options={{ closeOnEose: false, cacheUsage: "ONLY_RELAY" }}
         />
       </TabPanels>
