@@ -11,7 +11,6 @@ export default function Hero() {
       justifyContent="center"
       color="#16161D"
       bg="#d8ccff"
-      margin={50}
       padding={5}
       width="100%"
       height="300px"

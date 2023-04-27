@@ -7,6 +7,7 @@ export const Container = (props: FlexProps) => (
     justifyContent="center"
     bg="gray.10"
     color="black"
+    marginTop={"59"}
     _dark={{
       bg: "gray.900",
       color: "white",
