@@ -13,11 +13,16 @@ export const Header = (props: FlexProps) => {
   return (
     <Flex
       as="header"
-      p={4}
+      p={2}
       width="100%"
-      maxWidth="48rem"
+      paddingLeft={"40px"}
       alignItems="center"
       justifyContent="space-between"
+      background={"#000000"}
+      color={"#ffffff"}
+      position={"fixed"}
+      top={0}
+      zIndex={999}
       {...props}
     >
       <Flex alignItems="center" gap="4">
