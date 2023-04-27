@@ -10,18 +10,14 @@ export default function Hero() {
       alignItems="center"
       justifyContent="center"
       color="#16161D"
-      bg="#d8ccff"
-      margin={50}
-      padding={5}
+      bg="#FFF2CC"
       width="100%"
-      height="300px"
       py={12}
-
     >
       <Flex width="100%" maxWidth="48rem" p={2}>
         <Stack
-          maxW={{ lg: "xl", md: "xl", xl: "xl" }}
-          spacing={{ base: "3", md: "5" }}
+          maxW={{ lg: "md", md: "xl", xl: "xl" }}
+          spacing={{ base: "4", md: "6" }}
         >
           <Heading fontSize="6xl" fontWeight={500} lineHeight={"52px"}>
             Speak your mind
