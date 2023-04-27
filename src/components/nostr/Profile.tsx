@@ -1,15 +1,10 @@
-import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Stack,
-} from "@chakra-ui/react";
+import { useMemo } from "react";
+import { Stack } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { useUser, useEvents } from "@habla/nostr/hooks";
+import Tabs from "@habla/components/Tabs";
 import Highlight from "@habla/components/nostr/feed/Highlight";
 import Markdown from "@habla/markdown/Markdown";
 
@@ -25,6 +20,34 @@ export default function Profile({ pubkey }) {
     },
     { cacheUsage: "PARALLEL" }
   );
+  const posts = useMemo(() => {
+    return events.filter((e) => e.kind === LONG_FORM);
+  }, [events]);
+  const highlights = useMemo(() => {
+    return events.filter((e) => e.kind === HIGHLIGHT);
+  }, [events]);
+  const tabs = [
+    {
+      name: "Posts",
+      panel: (
+        <Stack spacing="2">
+          {posts.map((e) => (
+            <LongFormNote key={e.id} event={e} excludeAuthor />
+          ))}
+        </Stack>
+      ),
+    },
+    {
+      name: "Highlights",
+      panel: (
+        <Stack spacing="2">
+          {highlights.map((e) => (
+            <Highlight key={e.id} event={e} />
+          ))}
+        </Stack>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -36,33 +59,7 @@ export default function Profile({ pubkey }) {
           </Prose>
         )}
       </Stack>
-      <Tabs key={pubkey} variant="soft-rounded" colorScheme="purple">
-        <TabList>
-          <Tab>Posts</Tab>
-          <Tab>Highlights</Tab>
-          <Tab isDisabled>Bookmarks</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel px={0}>
-            <Stack spacing="2">
-              {events
-                .filter((e) => e.kind === LONG_FORM && e.pubkey === pubkey)
-                .map((e) => (
-                  <LongFormNote key={e.id} event={e} excludeAuthor />
-                ))}
-            </Stack>
-          </TabPanel>
-          <TabPanel px={0}>
-            <Stack spacing="2">
-              {events
-                .filter((e) => e.kind === HIGHLIGHT && e.pubkey === pubkey)
-                .map((e) => (
-                  <Highlight key={e.id} event={e} />
-                ))}
-            </Stack>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <Tabs tabs={tabs} />
     </>
   );
 }

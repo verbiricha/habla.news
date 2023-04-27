@@ -23,7 +23,7 @@ export default function Profile({ pubkey, relays, metadata }) {
         )}
       </Head>
       <Layout>
-        <NProfile pubkey={pubkey} relays={relays} />
+        <NProfile key={pubkey} pubkey={pubkey} relays={relays} />
       </Layout>
     </>
   );

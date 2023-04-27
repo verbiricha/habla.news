@@ -68,9 +68,11 @@ export default function LongFormNote({ event, excludeAuthor }) {
   }, [event]);
   return (
     <Card variant="unstyled">
-      <CardHeader>
-        <User pubkey={event.pubkey} relays={relays} />
-      </CardHeader>
+      {!excludeAuthor && (
+        <CardHeader>
+          <User pubkey={event.pubkey} relays={relays} />
+        </CardHeader>
+      )}
       <CardBody cursor="pointer">
         <Link href={`/a/${naddr}`}>
           <LongFormTitle

@@ -75,7 +75,7 @@ export default function Highlight({ event, relays, showHeader = true }) {
         <User pubkey={event.pubkey} relays={relays} />
       </CardBody>
       <CardFooter>
-        <Reactions event={event} kinds={[ZAP, REACTION]} />
+        <Reactions event={event} kinds={[ZAP, REACTION, NOTE]} />
       </CardFooter>
     </Card>
   ) : null;

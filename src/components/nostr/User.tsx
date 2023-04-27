@@ -1,12 +1,15 @@
 import { useRouter } from "next/router";
 
 import { nip19 } from "nostr-tools";
+import { useAtom } from "jotai";
 import { Box, Flex, Stack, Avatar, Heading, Text } from "@chakra-ui/react";
 
-import { shortenString } from "../../format";
-import { useUser } from "../../nostr/hooks";
+import { relaysAtom } from "@habla/state";
+import { shortenString } from "@habla/format";
+import { useUser } from "@habla/nostr/hooks";
 
-export default function User({ pubkey, size = "xs", relays = [], ...rest }) {
+export default function User({ pubkey, size = "sm", ...rest }) {
+  const [relays] = useAtom(relaysAtom);
   const user = useUser(pubkey);
   const router = useRouter();
   return (

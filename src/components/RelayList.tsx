@@ -23,7 +23,7 @@ export default function RelayList({
       {urls.map((url) => {
         const content = (
           <Flex alignItems="center">
-            <RelayFavicon url={url} ml={-1} mb={2} size="xs" />
+            <RelayFavicon url={url} ml={-1} mb={2} />
             {showUrl && (
               <Text
                 margin={0}

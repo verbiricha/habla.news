@@ -10,9 +10,10 @@ export default function Hero() {
       alignItems="center"
       justifyContent="center"
       color="#16161D"
-      bg="#FFF2CC"
+      bg="purple.100"
       width="100%"
       py={12}
+      px={4}
     >
       <Flex width="100%" maxWidth="48rem" p={2}>
         <Stack
@@ -23,8 +24,7 @@ export default function Hero() {
             Speak your mind
           </Heading>
           <Text fontSize="2xl" mt={10}>
-            Write, publish, highlight, discuss, subscribe and get rewarded for
-            your content.
+            ✍️ Write, 📣 publish, <mark>highlight</mark>, 🗣️ discuss, 🤑 earn.
           </Text>
           <Text fontSize="xl" mt={10}>
             New to{" "}

@@ -7,6 +7,7 @@ import { utils } from "nostr-tools";
 
 import { ZAP, HIGHLIGHT, REACTION, LONG_FORM, NOTE } from "@habla/const";
 import db from "@habla/cache/db";
+import { relaysAtom } from "@habla/state";
 
 import NostrContext from "./provider";
 
@@ -48,6 +49,7 @@ async function updateIdUrls(id, url) {
 }
 
 export function useEvents(filter, options = {}) {
+  const [defaultRelays] = useAtom(relaysAtom);
   const { ndk } = useContext(NostrContext);
   const [events, setEvents] = useState([]);
   const { relays, ...rest } = options;
@@ -55,6 +57,10 @@ export function useEvents(filter, options = {}) {
   let opts = { ...defaultOpts, ...rest };
   if (relays?.length > 0) {
     const ndkRelays = new Set(relays.map((url) => new NDKRelay(url)));
+    const relaySet = new NDKRelaySet(ndkRelays, ndk);
+    opts = { ...opts, relaySet };
+  } else {
+    const ndkRelays = new Set(defaultRelays.map((url) => new NDKRelay(url)));
     const relaySet = new NDKRelaySet(ndkRelays, ndk);
     opts = { ...opts, relaySet };
   }
@@ -137,7 +143,7 @@ function eventToFilter(ev: NDKEvent) {
 
 export function useReactions(
   event: NDKEvent,
-  kinds = [ZAP, HIGHLIGHT, REACTION]
+  kinds = [ZAP, HIGHLIGHT, NOTE, REACTION]
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },

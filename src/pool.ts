@@ -7,6 +7,6 @@ export const defaultRelays = [
   "wss://nostr.wine",
 ];
 
-const pool = new SimplePool({ getTimeout: 300 });
+const pool = new SimplePool({ getTimeout: 1000 });
 
 export default pool;

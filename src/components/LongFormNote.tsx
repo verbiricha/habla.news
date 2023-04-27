@@ -16,6 +16,7 @@ import Reactions from "./Reactions";
 
 export default function LongFormNote({
   event,
+  excludeAuthor,
   zaps = [],
   highlights = [],
   reactions = [],
@@ -27,7 +28,7 @@ export default function LongFormNote({
   const relays = useSeenOn(event);
   return (
     <>
-      <User pubkey={event.pubkey} />
+      {!excludeAuthor && <User pubkey={event.pubkey} />}
       <Box as="article">
         <Prose>
           <Heading as="h1">{title}</Heading>
@@ -38,13 +39,11 @@ export default function LongFormNote({
             highlights={highlights}
           />
         </Prose>
+        <SeenIn relays={relays} />
         <Flex alignItems="center" gap="6" mt={10}>
           <Zaps event={event} zaps={zaps} />
           <Highlights event={event} highlights={highlights} />
           <Reactions event={event} reactions={reactions} />
-          <Box ml="auto">
-            <SeenIn relays={relays} />
-          </Box>
         </Flex>
       </Box>
     </>

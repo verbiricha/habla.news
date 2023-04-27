@@ -1,15 +1,18 @@
 import { useMemo } from "react";
 
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Stack } from "@chakra-ui/react";
+import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
+import Tabs from "@habla/components/Tabs";
 import { formatShortNumber } from "@habla/format";
 import { getZapRequest, getZapAmount } from "@habla/nip57";
 import { useReactions } from "@habla/nostr/hooks";
 import User from "@habla/components/nostr/User";
 import BaseLongFormNote from "@habla/components/LongFormNote";
 import Highlights from "@habla/components/nostr/Highlights";
+import Comments from "@habla/components/nostr/Comments";
 
-export default function LongFormNote({ event, relays }) {
+export default function LongFormNote({ event, relays, excludeAuthor }) {
   const { reactions, zaps, highlights } = useReactions(event);
   const zappers = useMemo(() => {
     return zaps
@@ -18,29 +21,51 @@ export default function LongFormNote({ event, relays }) {
       })
       .filter((z) => z.pubkey !== event.pubkey);
   }, [zaps]);
+  const tabs = [
+    {
+      name: "Zaps",
+      panel: (
+        <Stack spacing="2">
+          {zappers.map((z) => {
+            return (
+              <>
+                <Flex alignItems="center" gap="1">
+                  <User pubkey={z.pubkey} relays={relays} />
+                  <Text as="span" fontSize="lg" fontWeight={500}>
+                    {formatShortNumber(z.amount)}
+                  </Text>
+                </Flex>
+                {z.content.length > 0 && (
+                  <Prose>
+                    <Text as="blockquote">{z.content}</Text>
+                  </Prose>
+                )}
+              </>
+            );
+          })}
+        </Stack>
+      ),
+    },
+    {
+      name: "Highlights",
+      panel: <Highlights event={event} relays={relays} />,
+    },
+    {
+      name: "Comments",
+      panel: <Comments event={event} relays={relays} />,
+    },
+  ];
   return (
     <>
       <BaseLongFormNote
+        excludeAuthor={excludeAuthor}
         event={event}
         relays={relays}
         reactions={reactions}
         highlights={highlights}
         zaps={zaps}
       />
-      {zappers.map((z) => {
-        return (
-          <Flex gap="1">
-            <User pubkey={z.pubkey} relays={relays} />
-            <Text>
-              zapped{" "}
-              <Text as="span" fontSize="lg" fontWeight={500}>
-                {formatShortNumber(z.amount)}
-              </Text>
-            </Text>
-          </Flex>
-        );
-      })}
-      <Highlights event={event} relays={relays} />
+      <Tabs tabs={tabs} />
     </>
   );
 }
