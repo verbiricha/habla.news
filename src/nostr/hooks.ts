@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useState, useContext } from "react";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 
 import { NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -127,8 +127,6 @@ export function useEvent(filter, opts = defaultOpts) {
 
   return event;
 }
-
-const profileCache = atom({});
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);

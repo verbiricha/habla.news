@@ -9,7 +9,7 @@ import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { followsAtom, relaysAtom } from "@habla/state";
 import { useEvents } from "@habla/nostr/hooks";
 import Events from "@habla/components/nostr/feed/Events";
-import User from "@habla/components/nostr/User";
+import UserCard from "@habla/components/nostr/UserCard";
 import Tabs from "@habla/components/Tabs";
 
 export default function HomeFeeds() {
@@ -45,9 +45,10 @@ export default function HomeFeeds() {
       name: "Authors",
       panel: (
         <Stack spacing="4">
-          {authors.map((p) => (
-            <User pubkey={p} />
-          ))}
+          {authors.map((p) => {
+            const oped = posts.filter((post) => post.pubkey === p);
+            return <UserCard key={p} pubkey={p} posts={oped} />;
+          })}
         </Stack>
       ),
     },
