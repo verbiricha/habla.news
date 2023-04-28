@@ -6,7 +6,7 @@ import { useUser } from "../nostr/hooks";
 export default function NProfile({ pubkey, relays, nprofile }) {
   const profile = useUser(pubkey);
   return (
-    <Link href={`/p/${nprofile}`}>
+    <Link shallow={true} href={`/p/${nprofile}`}>
       {profile?.displayName || profile?.name || shortenString(pubkey, 8)}
     </Link>
   );

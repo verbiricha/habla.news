@@ -25,7 +25,7 @@ export default function Login() {
   return (
     <Flex width="120px">
       {user ? (
-        <Link href={`/p/${nprofile}`}>
+        <Link shallow={true} href={`/p/${nprofile}`}>
           <Flex gap="2" ml="auto">
             <Avatar
               name={

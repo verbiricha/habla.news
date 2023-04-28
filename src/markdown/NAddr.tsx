@@ -34,7 +34,7 @@ export default function Naddr({
   if (kind === LONG_FORM || kind === LONG_FORM_DRAFT) {
     const { title } = event ? getMetadata(event) : {};
     return (
-      <Link href={`/a/${naddr}`}>
+      <Link shallow={true} href={`/a/${naddr}`}>
         <Text as="span" fontWeight={500} {...rest}>
           {title}
         </Text>
@@ -47,7 +47,7 @@ export default function Naddr({
   }
 
   return (
-    <Link href={`/a/${naddr}`}>
+    <Link shallow={true} href={`/a/${naddr}`}>
       <Text as="span" fontWeight={500} {...rest}>
         {naddr}
       </Text>

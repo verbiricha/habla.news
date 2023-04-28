@@ -13,7 +13,7 @@ export default function ArticleTitle({ naddr, kind, identifier, pubkey }) {
 
   const { title } = event ? getMetadata(event) : {};
   return (
-    <Link href={`/a/${naddr}`}>
+    <Link shallow={true} href={`/a/${naddr}`}>
       <Heading size="lg">{title}</Heading>
     </Link>
   );

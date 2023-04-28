@@ -39,32 +39,41 @@ export default {
       let query;
 
       if (kinds.length > 0 && authors.length > 0 && identifiers.length > 0) {
+        console.debug("Query[kind+pubkey+d]");
         query = db.event
           .where("[kind+pubkey+d]")
           .anyOf(combineLists([kinds, authors, identifiers]));
       } else if (kinds.length > 0 && authors.length > 0) {
+        console.debug("Query[kind+pubkey]");
         query = db.event
           .where("[kind+pubkey]")
           .anyOf(combineLists([kinds, authors]));
       } else if (kinds.length > 0 && addresses.length > 0) {
+        console.debug("Query[kind+a]");
         query = db.event
           .where("[kind+a]")
           .anyOf(combineLists([kinds, addresses]));
       } else if (kinds.length > 0 && pubkeys.length > 0) {
+        console.debug("Query[kind+p]");
         query = db.event
           .where("[kind+p]")
           .anyOf(combineLists([kinds, pubkeys]));
       } else if (kinds.length > 0 && identifiers.length > 0) {
+        console.debug("Query[kind+d]");
         query = db.event
           .where("[kind+d]")
           .anyOf(combineLists([kinds, identifiers]));
       } else if (kinds.length > 0 && events.length > 0) {
+        console.debug("Query[kind+e]");
         query = db.event.where("[kind+e]").anyOf(combineLists([kinds, events]));
       } else if (kinds.length > 0) {
+        console.debug("Query[kind]");
         query = db.event.where("kind").anyOf(kinds);
       } else if (ids.length > 0) {
+        console.debug("Query[id]");
         query = db.event.where("id").anyOf(ids);
       } else if (authors.length > 0) {
+        console.debug("Query[pubkey]");
         query = db.event.where("pubkey").anyOf(authors);
       }
 
@@ -75,6 +84,7 @@ export default {
         query = query.and((ev) => ev.created_at < until);
       }
       // todo: limit
+
       if (query && filter["#d"]) {
         query = query.and((ev) => filter["#d"].includes(ev.d));
       }
@@ -87,9 +97,11 @@ export default {
       if (query && filter["#p"]) {
         query = query.and((ev) => filter["#p"].includes(ev.p));
       }
+
       if (query) {
         result = await query.toArray();
       }
+      console.debug("Query.result", filter, result);
 
       for (const ev of result) {
         const ndkEv = new NDKEvent(sub.ndk, ev);
@@ -105,6 +117,7 @@ export default {
       const a = findTag(event, "a");
       const e = findTag(event, "e");
       const p = findTag(event, "p");
+      // todo: cache profile events
       // todo: remove old entries for replaceable events
       return db.event.put({ ...event.rawEvent(), d, a, e, p });
     } catch (error) {

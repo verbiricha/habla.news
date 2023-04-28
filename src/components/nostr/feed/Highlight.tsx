@@ -62,7 +62,7 @@ export default function Highlight({ event, relays, showHeader = true }) {
       )}
       <CardBody>
         {naddr ? (
-          <Link href={`/a/${naddr}`}>
+          <Link shallow={true} href={`/a/${naddr}`}>
             <Prose mt={-6} mb={-2}>
               <Text as="blockquote">{event.content}</Text>
             </Prose>
