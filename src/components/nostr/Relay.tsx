@@ -3,39 +3,42 @@ import { useRouter } from "next/router";
 
 import { Flex, Heading, Text } from "@chakra-ui/react";
 
-import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, DAY } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
-import { useEvents } from "@habla/nostr/hooks";
 import Events from "@habla/components/nostr/feed/Events";
 import RelayFavicon from "@habla/components/RelayFavicon";
 import Tabs from "@habla/components/Tabs";
+import FeedPage from "@habla/components/nostr/feed/FeedPage";
 
 export default function Relay({ relay }) {
-  const [since, setSince] = useState(
-    Math.floor((Date.now() - 2 * 24 * 60 * 60 * 1000) / 1000)
-  );
-  const { events } = useEvents(
-    {
-      kinds: [LONG_FORM, HIGHLIGHT],
-      since,
-    },
-    {
-      relays: [relay],
-      closeOnEose: false,
-      cacheUsage: "ONLY_RELAY",
-    }
-  );
-  const posts = events.filter((e) => e.kind === LONG_FORM);
-  const highlights = events.filter((e) => e.kind === HIGHLIGHT);
   const tabs = [
     {
       name: "Posts",
-      // todo: page, on scroll bottom, recursive if events in page
-      panel: <Events events={posts} />,
+      panel: (
+        <FeedPage
+          key={`${relay}-posts`}
+          filter={{ kinds: [LONG_FORM] }}
+          offset={DAY}
+          options={{
+            relays: [relay],
+            cacheUsage: "ONLY_RELAY",
+          }}
+        />
+      ),
     },
     {
       name: "Highlights",
-      panel: <Events events={highlights} />,
+      panel: (
+        <FeedPage
+          key={`${relay}-highlights`}
+          filter={{ kinds: [HIGHLIGHT] }}
+          offset={DAY}
+          options={{
+            relays: [relay],
+            cacheUsage: "ONLY_RELAY",
+          }}
+        />
+      ),
     },
   ];
   return (

@@ -50,7 +50,7 @@ export default function Profile({ pubkey }) {
   ];
 
   return (
-    <>
+    <Stack>
       <Stack alignItems="center" spacing="2">
         <User pubkey={pubkey} size="xl" flexDirection="column" />
         {profile?.about && (
@@ -60,6 +60,6 @@ export default function Profile({ pubkey }) {
         )}
       </Stack>
       <Tabs tabs={tabs} />
-    </>
+    </Stack>
   );
 }

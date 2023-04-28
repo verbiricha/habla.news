@@ -63,8 +63,8 @@ async function updateIdUrls(id, url) {
 }
 
 export function useEvents(filter, options = {}) {
-  const [defaultRelays] = useAtom(relaysAtom);
   const { ndk } = useContext(NostrContext);
+  const [defaultRelays] = useAtom(relaysAtom);
   const [events, setEvents] = useState([]);
   const { relays, ...rest } = options;
 
@@ -73,7 +73,7 @@ export function useEvents(filter, options = {}) {
     const ndkRelays = new Set(relays.map((url) => new NDKRelay(url)));
     const relaySet = new NDKRelaySet(ndkRelays, ndk);
     opts = { ...opts, relaySet };
-  } else {
+  } else if (defaultRelays) {
     const ndkRelays = new Set(defaultRelays.map((url) => new NDKRelay(url)));
     const relaySet = new NDKRelaySet(ndkRelays, ndk);
     opts = { ...opts, relaySet };
@@ -110,6 +110,7 @@ export function useEvents(filter, options = {}) {
 }
 
 export function useEvent(filter, opts = defaultOpts) {
+  const [defaultRelays] = useAtom(relaysAtom);
   const { ndk } = useContext(NostrContext);
   const { relays, ...rest } = opts;
   const [event, setEvent] = useState();
@@ -117,6 +118,10 @@ export function useEvent(filter, opts = defaultOpts) {
 
   if (relays?.length > 0) {
     const ndkRelays = new Set(relays.map((url) => new NDKRelay(url)));
+    const relaySet = new NDKRelaySet(ndkRelays, ndk);
+    options = { ...options, relaySet };
+  } else if (defaultRelays) {
+    const ndkRelays = new Set(defaultRelays.map((url) => new NDKRelay(url)));
     const relaySet = new NDKRelaySet(ndkRelays, ndk);
     options = { ...options, relaySet };
   }

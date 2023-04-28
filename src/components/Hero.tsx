@@ -6,7 +6,7 @@ import Address from "@habla/markdown/NAddr";
 
 function Featured({ naddr, kind, pubkey, identifier }) {
   return (
-    <Flex alignItems="center" gap="2">
+    <Flex flexDirection="column">
       <Address
         fontSize="2xl"
         naddr={naddr}
@@ -14,8 +14,10 @@ function Featured({ naddr, kind, pubkey, identifier }) {
         pubkey={pubkey}
         identifier={identifier}
       />
-      <Text fontSize="xl">by</Text>
-      <User pubkey={pubkey} />
+      <Flex alignItems="center" gap="1">
+        <Text fontSize="md">by</Text>
+        <User size="xs" pubkey={pubkey} />
+      </Flex>
     </Flex>
   );
 }
