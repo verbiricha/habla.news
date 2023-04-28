@@ -49,17 +49,19 @@ const uniqByFn = <T>(arr: T[], keyFn: any): T[] => {
 };
 
 async function updateIdUrls(id, url) {
-  const existingUrl = await db.relaySet.get({ id });
+  return db.transaction("rw", db.relaySet, async () => {
+    const existingUrl = await db.relaySet.get({ id });
 
-  if (existingUrl) {
-    if (existingUrl.urls.includes(url)) {
-      return;
+    if (existingUrl) {
+      if (existingUrl.urls.includes(url)) {
+        return;
+      }
+      const updatedUrls = [...existingUrl.urls, url];
+      await db.relaySet.put({ id, urls: updatedUrls });
+    } else {
+      await db.relaySet.put({ id, urls: [url] });
     }
-    const updatedUrls = [...existingUrl.urls, url];
-    await db.relaySet.put({ id, urls: updatedUrls });
-  } else {
-    await db.relaySet.put({ id, urls: [url] });
-  }
+  });
 }
 
 export function useEvents(filter, options = {}) {
