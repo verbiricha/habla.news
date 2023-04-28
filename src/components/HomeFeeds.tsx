@@ -11,8 +11,10 @@ import { useEvents } from "@habla/nostr/hooks";
 import Events from "@habla/components/nostr/feed/Events";
 import UserCard from "@habla/components/nostr/UserCard";
 import Tabs from "@habla/components/Tabs";
+import Relays from "@habla/components/Relays";
 
 export default function HomeFeeds() {
+  const [relays] = useAtom(relaysAtom);
   const [follows] = useAtom(followsAtom);
   const now = useMemo(() => Math.floor(Date.now() / 1000), []);
   const [since, setSince] = useState(
@@ -29,28 +31,22 @@ export default function HomeFeeds() {
     }
   );
   const posts = events.filter((e) => e.kind === LONG_FORM);
+  const highlights = events.filter((e) => e.kind === HIGHLIGHT);
   const authors = useMemo(() => {
     return Array.from(new Set(posts.map((e) => e.pubkey)));
   }, [events]);
   const tabs = [
     {
-      name: "Posts",
+      name: `Posts`,
       panel: <Events events={posts} />,
     },
     {
-      name: "Highlights",
-      panel: <Events events={events.filter((e) => e.kind === HIGHLIGHT)} />,
+      name: `Highlights`,
+      panel: <Events events={highlights} />,
     },
     {
-      name: "Authors",
-      panel: (
-        <Stack spacing="4">
-          {authors.map((p) => {
-            const oped = posts.filter((post) => post.pubkey === p);
-            return <UserCard key={p} pubkey={p} posts={oped} />;
-          })}
-        </Stack>
-      ),
+      name: `Relays`,
+      panel: <Relays />,
     },
   ];
   return <Tabs tabs={tabs} />;

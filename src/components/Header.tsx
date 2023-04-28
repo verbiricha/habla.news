@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 //import { useAtom } from "jotai";
 
 import { Heading, Flex, FlexProps, IconButton } from "@chakra-ui/react";
-import { SearchIcon, EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 
 const Login = dynamic(() => import("@habla/components/nostr/Login"), {
   ssr: false,
@@ -26,13 +26,6 @@ export const Header = (props: FlexProps) => {
         </Link>
       </Flex>
       <Flex alignItems="center" gap="1">
-        <Link href="/search">
-          <IconButton
-            icon={<SearchIcon />}
-            color="secondary"
-            variant="unstyled"
-          />
-        </Link>
         <Link href="/write">
           <IconButton
             icon={<EditIcon />}

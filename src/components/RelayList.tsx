@@ -21,28 +21,10 @@ export default function RelayList({
   return (
     <Flex flexWrap="wrap" {...props}>
       {urls.map((url) => {
-        const content = (
-          <Flex alignItems="center">
-            <RelayFavicon url={url} ml={-1} mb={2} />
-            {showUrl && (
-              <Text
-                margin={0}
-                my={1}
-                fontSize="md"
-                color="purple.500"
-                style={{ textDecoration: "none" }}
-              >
-                {url}
-              </Text>
-            )}
-          </Flex>
-        );
-        return linkToNrelay ? (
+        return (
           <Link key={url} href={`/r/${nip19.nrelayEncode(url)}`}>
-            {content}
+            <RelayFavicon url={url} ml={-1} mb={2} />
           </Link>
-        ) : (
-          content
         );
       })}
     </Flex>
