@@ -14,7 +14,7 @@ import { getBadge } from "@habla/nip58";
 export default function Badge({ naddr, event, relays }) {
   const { name, description, image } = getBadge(event);
   return (
-    <Card variant="outline">
+    <Card variant="outline" my={4}>
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <Text>{name}</Text>
