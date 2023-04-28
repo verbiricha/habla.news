@@ -8,7 +8,7 @@ interface RelayEvents {
 const db = new Dexie("habla.news");
 db.version(1).stores({
   event:
-    "id,kind,pubkey,[kind+pubkey],[kind+pubkey+d],[kind+a],[kind+e],[kind+p]",
+    "id,created_at,kind,pubkey,[kind+pubkey],[kind+pubkey+d],[kind+a],[kind+e],[kind+p]",
   relaySet: "id,urls",
 });
 

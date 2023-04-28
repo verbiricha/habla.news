@@ -32,9 +32,9 @@ export const userAtom = atomWithLocalStorage<NDKUser | null>("user", null);
 export const pubkeyAtom = atomWithLocalStorage<Pubkey | null>("pubkey", null);
 export const followsAtom = atom<Set<NDKUser>>(new Set([]));
 export const relaysAtom = atomWithLocalStorage<string[]>("relays", [
-  "wss://relay.damus.io",
   "wss://purplepag.es",
-  "wss://relay.nostr.band",
+  "wss://nostr-relay.nokotaro.com",
   "wss://nos.lol",
+  "wss://offchain.pub",
   "wss://nostr.wine",
 ]);

@@ -16,6 +16,20 @@ const defaultOpts = {
   cacheUsage: "CACHE_FIRST",
 };
 
+function normalizeURL(url: string): string {
+  let p = new URL(url);
+  p.pathname = p.pathname.replace(/\/+/g, "/");
+  if (p.pathname.endsWith("/")) p.pathname = p.pathname.slice(0, -1);
+  if (
+    (p.port === "80" && p.protocol === "ws:") ||
+    (p.port === "443" && p.protocol === "wss:")
+  )
+    p.port = "";
+  p.searchParams.sort();
+  p.hash = "";
+  return p.toString();
+}
+
 const uniqByFn = <T>(arr: T[], keyFn: any): T[] => {
   return Object.values(
     arr.reduce((map, item) => {
@@ -76,13 +90,13 @@ export function useEvents(filter, options = {}) {
           )
         );
         if (relay) {
-          updateIdUrls(ev.id, relay.url);
+          updateIdUrls(ev.id, normalizeURL(relay.url));
         }
       });
 
       sub.on("event:dup", (ev, relay) => {
         if (relay) {
-          updateIdUrls(ev.id, relay.url);
+          updateIdUrls(ev.id, normalizeURL(relay.url));
         }
       });
 
@@ -118,20 +132,29 @@ const profileCache = atom({});
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
-  const [profiles, setProfiles] = useAtom(profileCache);
+  const events = useLiveQuery(
+    () =>
+      db.event.where("[kind+pubkey]").equals([0, pubkey]).sortBy("created_at"),
+
+    [pubkey]
+  );
+  const user = useMemo(() => {
+    if (events?.length > 0) {
+      return JSON.parse(events[events.length - 1].content);
+    }
+  }, [events]);
 
   useEffect(() => {
-    if (!profiles[pubkey]) {
-      const u = ndk.getUser({ hexpubkey: pubkey });
-      u.fetchProfile().then(() => {
-        setProfiles((pr) => {
-          return { ...pr, [pubkey]: u.profile };
-        });
-      });
-    }
+    ndk.fetchEvent(
+      {
+        kinds: [0],
+        authors: [pubkey],
+      },
+      {
+        cacheUsage: "CACHE_FIRST",
+      }
+    );
   }, [pubkey]);
-
-  const user = useMemo(() => profiles[pubkey], [profiles, pubkey]);
 
   return user;
 }

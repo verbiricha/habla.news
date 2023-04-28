@@ -16,7 +16,6 @@ export default function Reactions({
   kinds = [ZAP, REACTION, NOTE, HIGHLIGHT],
 }) {
   const { zaps, reactions, notes, highlights } = useReactions(event, kinds);
-  // TODO: threads
   return (
     <Flex alignItems="center" gap="6">
       {kinds.includes(ZAP) && <Zaps event={event} zaps={zaps} />}

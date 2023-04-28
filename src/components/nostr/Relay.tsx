@@ -21,7 +21,7 @@ export default function Relay({ relay }) {
     },
     {
       relays: [relay],
-      closeOnEose: true,
+      closeOnEose: false,
       cacheUsage: "ONLY_RELAY",
     }
   );
@@ -30,6 +30,7 @@ export default function Relay({ relay }) {
   const tabs = [
     {
       name: "Posts",
+      // todo: page, on scroll bottom, recursive if events in page
       panel: <Events events={posts} />,
     },
     {

@@ -112,6 +112,7 @@ export default {
     }
   },
   async setEvent(event: NDKEvent, filter: NDKFilter) {
+    // todo: replaceable events
     try {
       const d = findTag(event, "d");
       const a = findTag(event, "a");

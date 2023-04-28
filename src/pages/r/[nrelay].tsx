@@ -21,7 +21,7 @@ export default function RelayPage() {
   const relay = decodeNrelay(nrelay);
   const now = useMemo(() => Math.floor(Date.now() / 1000), []);
   const [since, setSince] = useState(
-    Math.floor((Date.now() - 7 * 24 * 60 * 60 * 1000) / 1000)
+    Math.floor((Date.now() - 1 * 24 * 60 * 60 * 1000) / 1000)
   );
   return (
     <>
