@@ -2,7 +2,7 @@ import { NDKEvent, NDKFilter, NDKSubscription } from "@nostr-dev-kit/ndk";
 import db from "@habla/cache/db";
 
 import { LONG_FORM } from "@habla/const";
-import { findTag } from "@habla/tags";
+import { findTag, findTags } from "@habla/tags";
 
 function combineLists(lists) {
   const result = [];
@@ -85,6 +85,9 @@ export default {
       if (query && filter["#d"]) {
         query = query.and((ev) => filter["#d"].includes(ev.d));
       }
+      if (query && filter["#t"]) {
+        query = query.and((ev) => filter["#t"].includes(ev.t));
+      }
       if (query && filter["#a"]) {
         query = query.and((ev) => filter["#a"].includes(ev.a));
       }
@@ -121,8 +124,9 @@ export default {
       const a = findTag(event, "a");
       const e = findTag(event, "e");
       const p = findTag(event, "p");
+      const t = findTags(event, "t");
       // todo: remove old entries for replaceable events
-      return db.event.put({ ...event.rawEvent(), d, a, e, p });
+      return db.event.put({ ...event.rawEvent(), d, a, e, p, t });
     } catch (error) {
       console.error(error);
     }

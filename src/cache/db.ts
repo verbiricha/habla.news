@@ -4,10 +4,10 @@ interface Event {}
 
 export class HablaDatabase extends Dexie {
   constructor() {
-    super("h");
+    super("habla-news-db");
     this.version(1).stores({
       event:
-        "id,created_at,kind,pubkey,[kind+pubkey],[kind+pubkey+d],[kind+a],[kind+e],[kind+p]",
+        "id,created_at,kind,pubkey,[kind+pubkey],[kind+pubkey+d],[kind+a],[kind+e],[kind+p],t",
       relaySet: "id,urls",
       profile: "id,name,display_name,about,picture,nip05,lud16,banner",
     });

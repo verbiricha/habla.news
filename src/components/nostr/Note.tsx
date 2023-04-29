@@ -44,7 +44,7 @@ export default function Note({ event }) {
           router.push(`/e/${nevent}`, undefined, { shallow: true })
         }
       >
-        <Markdown content={event.content} tags={event.tags} />
+        <Markdown pTag={false} content={event.content} tags={event.tags} />
       </CardBody>
       <CardFooter>
         <Flex alignItems="center" gap="6">

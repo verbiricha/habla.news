@@ -231,13 +231,7 @@ function transformText(ps, tags, transform) {
   fragments = extractNaddrs(fragments);
   fragments = extractNoteIds(fragments);
   fragments = extractNpubs(fragments);
-  if (
-    typeof fragments === "string" ||
-    (fragments?.length === 1 && fragments[0] === "string")
-  ) {
-    return transform(fragments);
-  }
-  return <>{fragments}</>;
+  return transform(fragments);
 }
 
 function nostrUriTransformer(uri) {
@@ -259,7 +253,12 @@ function processHighlights(content, hs) {
   return result;
 }
 
-export default function Markdown({ tags = [], content, highlights = [] }) {
+export default function Markdown({
+  tags = [],
+  content,
+  highlights = [],
+  pTag = true,
+}) {
   const highlighted = useMemo(
     () => processHighlights(content, highlights),
     [content, highlights]
@@ -334,7 +333,8 @@ export default function Markdown({ tags = [], content, highlights = [] }) {
       td: ({ children }) =>
         children && transformText(children, tags, (t) => <td>{t}</td>),
       p: ({ children }) =>
-        children && transformText(children, tags, (t) => <p>{t}</p>),
+        children &&
+        transformText(children, tags, (t) => (pTag ? <p>{t}</p> : t)),
       a: (props) => {
         return <HyperText link={props.href}>{props.children}</HyperText>;
       },

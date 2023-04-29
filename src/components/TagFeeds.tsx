@@ -4,46 +4,40 @@ import { useAtom } from "jotai";
 import { Flex, Box, Heading, Stack } from "@chakra-ui/react";
 
 import { getMetadata } from "@habla/nip23";
-import { LONG_FORM, HIGHLIGHT, DAY } from "@habla/const";
+import { LONG_FORM, NOTE, WEEK } from "@habla/const";
 import { followsAtom, relaysAtom } from "@habla/state";
 import { useEvents } from "@habla/nostr/hooks";
 import Events from "@habla/components/nostr/feed/Events";
 import Tabs from "@habla/components/Tabs";
 import Relays from "@habla/components/Relays";
-import FeedPage from "@habla/components/nostr/feed/FeedPage";
+import Feed from "@habla/components/nostr/Feed";
 import FeaturedArticles from "@habla/components/Featured";
 
-export default function HomeFeeds() {
+export default function TagFeeds({ tag }) {
   const [follows] = useAtom(followsAtom);
   const tabs = [
     {
       name: `Posts`,
       panel: (
-        <FeedPage
-          filter={{ kinds: [LONG_FORM] }}
-          offset={DAY}
-          options={{ cacheUsage: "CACHE_FIRST" }}
+        <Feed
+          filter={{ kinds: [LONG_FORM], "#t": [tag] }}
+          options={{ cacheUsage: "ONLY_RELAY", closeOnEose: true }}
         />
       ),
     },
     {
-      name: `Highlights`,
+      name: `Follows`,
       panel: (
-        <FeedPage
-          filter={{ kinds: [HIGHLIGHT] }}
-          offset={DAY}
-          options={{ cacheUsage: "CACHE_FIRST" }}
+        <Feed
+          filter={{ kinds: [LONG_FORM], authors: follows, "#t": [tag] }}
+          options={{ cacheUsage: "ONLY_RELAY", closeOnEose: true }}
         />
       ),
-    },
-    {
-      name: `Relays`,
-      panel: <Relays />,
     },
   ];
   return (
     <>
-      <FeaturedArticles />
+      <Heading>Tag: #{tag}</Heading>
       <Tabs tabs={tabs} />
     </>
   );
