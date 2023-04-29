@@ -14,7 +14,6 @@ import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 import { useNdk } from "@habla/nostr";
 
 function useNip07(ndk) {
-  const signer = useSigner();
   const [user, setUser] = useAtom(userAtom);
   const [, setRelays] = useAtom(relaysAtom);
   const [, setPubkey] = useAtom(pubkeyAtom);
@@ -22,7 +21,7 @@ function useNip07(ndk) {
 
   useEffect(() => {
     try {
-      signer.user().then(async (user) => {
+      ndk.signer?.user().then(async (user) => {
         if (user?.npub) {
           user.ndk = ndk;
           user.fetchProfile().then(() => {
@@ -73,7 +72,14 @@ function useNip07(ndk) {
 
 function useSigner() {
   const signer = useMemo(() => {
-    return typeof window === "undefined" ? null : new NDKNip07Signer();
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      return new NDKNip07Signer();
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   return signer;
