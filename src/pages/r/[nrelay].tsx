@@ -8,7 +8,6 @@ import { Flex, Heading, Text } from "@chakra-ui/react";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
 import Layout from "@habla/layouts/Layout";
-import Feed from "@habla/components/nostr/Feed";
 import RelayFavicon from "@habla/components/RelayFavicon";
 
 const Relay = dynamic(() => import("@habla/components/nostr/Relay"), {

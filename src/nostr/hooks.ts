@@ -137,17 +137,7 @@ export function useEvent(filter, opts = defaultOpts) {
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
-  const events = useLiveQuery(
-    () =>
-      db.event.where("[kind+pubkey]").equals([0, pubkey]).sortBy("created_at"),
-
-    [pubkey]
-  );
-  const user = useMemo(() => {
-    if (events?.length > 0) {
-      return JSON.parse(events[events.length - 1].content);
-    }
-  }, [events]);
+  const user = useLiveQuery(() => db.profile.get(pubkey), [pubkey]);
 
   useEffect(() => {
     ndk.fetchEvent(
@@ -161,7 +151,7 @@ export function useUser(pubkey) {
     );
   }, [pubkey]);
 
-  return user;
+  return user ?? {};
 }
 
 function eventToFilter(ev: NDKEvent) {
@@ -175,7 +165,7 @@ export function useReactions(
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },
-    { cacheUsage: "PARALLEL", closeOnEose: false }
+    { cacheUsage: "PARALLEL", closeOnEose: true }
   );
 
   const zaps = events.filter((e) => e.kind === ZAP);

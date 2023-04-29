@@ -1,7 +1,8 @@
 import { NDKEvent, NDKFilter, NDKSubscription } from "@nostr-dev-kit/ndk";
 import db from "@habla/cache/db";
 
-import { findTag } from "../tags";
+import { LONG_FORM } from "@habla/const";
+import { findTag } from "@habla/tags";
 
 function combineLists(lists) {
   const result = [];
@@ -39,41 +40,37 @@ export default {
       let query;
 
       if (kinds.length > 0 && authors.length > 0 && identifiers.length > 0) {
-        console.debug("Query[kind+pubkey+d]");
-        query = db.event
-          .where("[kind+pubkey+d]")
-          .anyOf(combineLists([kinds, authors, identifiers]));
+        const filter = combineLists([kinds, authors, identifiers]);
+        console.debug("Query[kind+pubkey+d]", filter);
+        query = db.event.where("[kind+pubkey+d]").anyOf(filter);
       } else if (kinds.length > 0 && authors.length > 0) {
-        console.debug("Query[kind+pubkey]");
-        query = db.event
-          .where("[kind+pubkey]")
-          .anyOf(combineLists([kinds, authors]));
+        const filter = combineLists([kinds, authors]);
+        console.debug("Query[kind+pubkey]", filter);
+        query = db.event.where("[kind+pubkey]").anyOf(filter);
       } else if (kinds.length > 0 && addresses.length > 0) {
-        console.debug("Query[kind+a]");
-        query = db.event
-          .where("[kind+a]")
-          .anyOf(combineLists([kinds, addresses]));
+        const filter = combineLists([kinds, addresses]);
+        console.debug("Query[kind+a]", filter);
+        query = db.event.where("[kind+a]").anyOf(filter);
       } else if (kinds.length > 0 && pubkeys.length > 0) {
-        console.debug("Query[kind+p]");
-        query = db.event
-          .where("[kind+p]")
-          .anyOf(combineLists([kinds, pubkeys]));
+        const filter = combineLists([kinds, pubkeys]);
+        console.debug("Query[kind+p]", filter);
+        query = db.event.where("[kind+p]").anyOf(filter);
       } else if (kinds.length > 0 && identifiers.length > 0) {
-        console.debug("Query[kind+d]");
-        query = db.event
-          .where("[kind+d]")
-          .anyOf(combineLists([kinds, identifiers]));
+        const filter = combineLists([kinds, identifiers]);
+        console.debug("Query[kind+d]", filter);
+        query = db.event.where("[kind+d]").anyOf(filter);
       } else if (kinds.length > 0 && events.length > 0) {
-        console.debug("Query[kind+e]");
-        query = db.event.where("[kind+e]").anyOf(combineLists([kinds, events]));
+        const filter = combineLists([kinds, events]);
+        console.debug("Query[kind+e]", filter);
+        query = db.event.where("[kind+e]").anyOf(filter);
       } else if (kinds.length > 0) {
-        console.debug("Query[kind]");
+        console.debug("Query[kind]", kinds);
         query = db.event.where("kind").anyOf(kinds);
       } else if (ids.length > 0) {
-        console.debug("Query[id]");
+        console.debug("Query[id]", ids);
         query = db.event.where("id").anyOf(ids);
       } else if (authors.length > 0) {
-        console.debug("Query[pubkey]");
+        console.debug("Query[pubkey]", authors);
         query = db.event.where("pubkey").anyOf(authors);
       }
 
@@ -114,11 +111,16 @@ export default {
   async setEvent(event: NDKEvent, filter: NDKFilter) {
     // todo: replaceable events
     try {
+      if (event.kind === 0) {
+        await db.profile.put({
+          id: event.pubkey,
+          ...JSON.parse(event.content),
+        });
+      }
       const d = findTag(event, "d");
       const a = findTag(event, "a");
       const e = findTag(event, "e");
       const p = findTag(event, "p");
-      // todo: cache profile events
       // todo: remove old entries for replaceable events
       return db.event.put({ ...event.rawEvent(), d, a, e, p });
     } catch (error) {

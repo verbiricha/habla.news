@@ -5,7 +5,7 @@ import RelayFavicon from "../components/RelayFavicon";
 
 export default function NRelay({ url, nrelay }) {
   return (
-    <Flex alignItems="center" gap="2">
+    <Flex alignItems="center" gap="2" my={4}>
       <RelayFavicon url={url} />
       <Link href={`/r/${nrelay}`}>
         <Text fontSize="md">{url}</Text>

@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import Link from "next/link";
 
 import { useAtom } from "jotai";
 import { Flex, Box, Heading, Stack } from "@chakra-ui/react";

@@ -32,6 +32,7 @@ export default function Write() {
       authors: [pubkey],
     },
     {
+      closeOnEose: true,
       cacheUsage: "PARALLEL",
     }
   );
@@ -69,7 +70,7 @@ export default function Write() {
             icon={<HamburgerIcon />}
             variant="outline"
           />
-          <MenuList>
+          <MenuList maxW="90vw">
             <MenuItem icon={<AddIcon />} onClick={() => setEvent()}>
               New
             </MenuItem>
@@ -77,7 +78,7 @@ export default function Write() {
             {drafts.length > 0 && (
               <MenuGroup title="Drafts">
                 {drafts.map((d) => (
-                  <MenuItem onClick={() => setEvent(d)}>
+                  <MenuItem key={d.id} onClick={() => setEvent(d)}>
                     {getMetadata(d).title}
                   </MenuItem>
                 ))}
@@ -86,7 +87,11 @@ export default function Write() {
             <MenuDivider />
             <MenuGroup title="Posts">
               {posts.map((p) => (
-                <MenuItem onClick={() => setEvent(p)}>
+                <MenuItem
+                  sx={{ wordBreak: "break-word" }}
+                  key={p.id}
+                  onClick={() => setEvent(p)}
+                >
                   {getMetadata(p).title}
                 </MenuItem>
               ))}

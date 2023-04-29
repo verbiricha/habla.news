@@ -223,7 +223,7 @@ function extractNoteIds(fragments) {
     .flat();
 }
 
-function transformText(ps, tags) {
+function transformText(ps, tags, transform) {
   let fragments = extractMentions(ps, tags);
   fragments = extractNprofiles(fragments);
   fragments = extractNevents(fragments);
@@ -231,7 +231,13 @@ function transformText(ps, tags) {
   fragments = extractNaddrs(fragments);
   fragments = extractNoteIds(fragments);
   fragments = extractNpubs(fragments);
-  return fragments;
+  if (
+    typeof fragments === "string" ||
+    (fragments?.length === 1 && fragments[0] === "string")
+  ) {
+    return transform(fragments);
+  }
+  return <>{fragments}</>;
 }
 
 function nostrUriTransformer(uri) {
@@ -324,10 +330,11 @@ export default function Markdown({ tags = [], content, highlights = [] }) {
         return <img key={src} alt={alt} src={src} />;
       },
       li: ({ children }) =>
-        children && <li>{transformText(children, tags)}</li>,
+        children && transformText(children, tags, (t) => <li>{t}</li>),
       td: ({ children }) =>
-        children && <td>{transformText(children, tags)}</td>,
-      p: ({ children }) => children && <p>{transformText(children, tags)}</p>,
+        children && transformText(children, tags, (t) => <td>{t}</td>),
+      p: ({ children }) =>
+        children && transformText(children, tags, (t) => <p>{t}</p>),
       a: (props) => {
         return <HyperText link={props.href}>{props.children}</HyperText>;
       },

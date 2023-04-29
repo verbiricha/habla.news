@@ -49,6 +49,30 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
         </Stack>
       ),
     },
+    {
+      name: "Zaps",
+      panel: (
+        <Stack spacing="3">
+          {zappers.map((z) => {
+            return (
+              <>
+                <Flex alignItems="center" gap="1">
+                  <User pubkey={z.pubkey} />
+                  <Text as="span" fontSize="lg" fontWeight={500}>
+                    {formatShortNumber(z.amount)}
+                  </Text>
+                </Flex>
+                {z.content.length > 0 && (
+                  <Prose>
+                    <Text as="blockquote">{z.content}</Text>
+                  </Prose>
+                )}
+              </>
+            );
+          })}
+        </Stack>
+      ),
+    },
   ];
   return (
     <>

@@ -64,18 +64,3 @@ export function decodeNevent(nevent) {
     console.error(error);
   }
 }
-
-export function useSigner() {
-  const signer = useMemo(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    try {
-      return new NDKNip07Signer();
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  return signer;
-}

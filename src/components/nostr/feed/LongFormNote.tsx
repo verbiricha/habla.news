@@ -82,16 +82,17 @@ export default function LongFormNote({ event, excludeAuthor }) {
           />
           {summary?.length > 0 && <Text py={1}>{summary}</Text>}
         </Link>
-        {hashtags.length > 0 && <Hashtags hashtags={hashtags.slice(0, 3)} />}
       </CardBody>
       <CardFooter>
-        <Flex
-          flexDirection={["column", "row"]}
-          justifyContent="space-between"
-          width="100%"
-        >
-          <Reactions event={event} />
-          <SeenIn relays={relays} />
+        <Flex flexDirection="column" width="100%">
+          {hashtags.length > 0 && <Hashtags hashtags={hashtags.slice(0, 3)} />}
+          <Flex
+            flexDirection={["column", "row"]}
+            justifyContent="space-between"
+          >
+            <Reactions event={event} />
+            <SeenIn relays={relays} />
+          </Flex>
         </Flex>
       </CardFooter>
     </Card>

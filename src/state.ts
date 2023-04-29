@@ -30,11 +30,11 @@ function atomWithLocalStorage<T>(key: string, initialValue: T) {
 
 export const userAtom = atom<NDKUser | null>(null);
 export const pubkeyAtom = atom<Pubkey | null>(null);
-export const followsAtom = atomWithLocalStorage<Set<NDKUser>>("following", []);
+export const followsAtom = atom<Set<NDKUser>>(new Set([]));
 export const relaysAtom = atomWithLocalStorage<string[]>("relays", [
   "wss://purplepag.es",
-  "wss://nostr-relay.nokotaro.com",
   "wss://nos.lol",
+  "wss://nostr-relay.nokotaro.com",
   "wss://offchain.pub",
   "wss://relay.damus.io",
   "wss://nostr.wine",

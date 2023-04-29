@@ -4,7 +4,7 @@ import User from "../User";
 
 export default function Note({ event }) {
   return (
-    <Card variant="untstyled">
+    <Card variant="unstyled">
       <CardHeader>
         <User pubkey={event.pubkey} />
       </CardHeader>
