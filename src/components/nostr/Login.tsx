@@ -5,11 +5,13 @@ import { NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
+import { useNdk } from "@habla/nostr";
 import { Avatar, Flex, Button, Text } from "@chakra-ui/react";
 
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 
 export default function Login() {
+  const ndk = useNdk();
   const [user, setUser] = useAtom(userAtom);
   const [relays, setRelays] = useAtom(relaysAtom);
   const [, setPubkey] = useAtom(pubkeyAtom);
