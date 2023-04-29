@@ -6,7 +6,6 @@ import { ZAP, REACTION, NOTE, HIGHLIGHT } from "@habla/const";
 import { useReactions } from "@habla/nostr/hooks";
 import Zaps from "../Zaps";
 import TextReactions from "../Reactions";
-import Comments from "../Reactions";
 import Highlights from "../Highlights";
 import Discussion from "../Discussion";
 
@@ -18,7 +17,6 @@ export default function Reactions({
   const { zaps, reactions, notes, highlights } = useReactions(event, kinds);
   return (
     <Flex alignItems="center" gap="6">
-      {kinds.includes(ZAP) && <Zaps event={event} zaps={zaps} />}
       {kinds.includes(HIGHLIGHT) && (
         <Highlights event={event} highlights={highlights} />
       )}
@@ -26,6 +24,7 @@ export default function Reactions({
       {kinds.includes(REACTION) && (
         <TextReactions event={event} reactions={reactions} />
       )}
+      {kinds.includes(ZAP) && <Zaps event={event} zaps={zaps} />}
     </Flex>
   );
 }

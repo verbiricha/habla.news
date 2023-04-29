@@ -13,11 +13,13 @@ import Markdown from "@habla/markdown/Markdown";
 import Zaps from "./Zaps";
 import Highlights from "./Highlights";
 import Reactions from "./Reactions";
+import Comments from "./Comments";
 
 export default function LongFormNote({
   event,
   excludeAuthor,
   zaps = [],
+  notes = [],
   highlights = [],
   reactions = [],
 }) {
@@ -41,9 +43,10 @@ export default function LongFormNote({
         </Prose>
         <SeenIn relays={relays} />
         <Flex alignItems="center" gap="6" mt={10}>
-          <Zaps event={event} zaps={zaps} />
           <Highlights event={event} highlights={highlights} />
+          <Comments event={event} comments={notes} />
           <Reactions event={event} reactions={reactions} />
+          <Zaps event={event} zaps={zaps} />
         </Flex>
       </Box>
     </>

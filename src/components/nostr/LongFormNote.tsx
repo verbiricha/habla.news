@@ -13,7 +13,7 @@ import Highlights from "@habla/components/nostr/Highlights";
 import Comments from "@habla/components/nostr/Comments";
 
 export default function LongFormNote({ event, relays, excludeAuthor }) {
-  const { reactions, zaps, highlights } = useReactions(event);
+  const { reactions, notes, zaps, highlights } = useReactions(event);
   const zappers = useMemo(() => {
     return zaps
       .map((z) => {
@@ -22,30 +22,6 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
       .filter((z) => z.pubkey !== event.pubkey);
   }, [zaps]);
   const tabs = [
-    {
-      name: "Zaps",
-      panel: (
-        <Stack spacing="3">
-          {zappers.map((z) => {
-            return (
-              <>
-                <Flex alignItems="center" gap="1">
-                  <User pubkey={z.pubkey} />
-                  <Text as="span" fontSize="lg" fontWeight={500}>
-                    {formatShortNumber(z.amount)}
-                  </Text>
-                </Flex>
-                {z.content.length > 0 && (
-                  <Prose>
-                    <Text as="blockquote">{z.content}</Text>
-                  </Prose>
-                )}
-              </>
-            );
-          })}
-        </Stack>
-      ),
-    },
     {
       name: "Highlights",
       panel: <Highlights event={event} />,
@@ -80,6 +56,7 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
         excludeAuthor={excludeAuthor}
         event={event}
         relays={relays}
+        notes={notes}
         reactions={reactions}
         highlights={highlights}
         zaps={zaps}
