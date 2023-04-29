@@ -14,18 +14,17 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { nip19 } from "nostr-tools";
 
-import { ZAP, REACTION, NOTE } from "@habla/const";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import NAddr from "@habla/markdown/Naddr";
-import { useEvent } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Reactions from "@habla/components/nostr/Reactions";
 import User from "@habla/components/nostr/User";
 
-export default function Highlight({ event, showHeader = true }) {
+export default function Highlight({ event }) {
   const a = findTag(event, "a");
   const r = findTag(event, "r");
+  const p = findTag(event, "p");
   const seenOn = useSeenOn(event);
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
   const nevent = useMemo(() => {
@@ -47,26 +46,27 @@ export default function Highlight({ event, showHeader = true }) {
   }, [kind, pubkey, identifier]);
   return event.content.length < 4200 ? (
     <Card variant="unstyled">
-      {showHeader && (
-        <CardHeader>
-          {naddr && (
-            <Stack direction="column" spacing="1">
-              <ArticleTitle
-                naddr={naddr}
-                kind={Number(kind)}
-                identifier={identifier}
-                pubkey={pubkey}
-              />
-              <User pubkey={pubkey} />
-            </Stack>
-          )}
-          {r && !naddr && !r.startsWith("https://habla.news") && (
+      <CardHeader>
+        {naddr && (
+          <Stack direction="column" spacing="1">
+            <ArticleTitle
+              naddr={naddr}
+              kind={Number(kind)}
+              identifier={identifier}
+              pubkey={pubkey}
+            />
+            <User pubkey={pubkey} />
+          </Stack>
+        )}
+        {r && !naddr && !r.startsWith("https://habla.news") && (
+          <Stack direction="column" spacing="1">
             <Link href={r}>
               <Heading fontSize="2xl">{r}</Heading>
             </Link>
-          )}
-        </CardHeader>
-      )}
+            {p && <User pubkey={p} />}
+          </Stack>
+        )}
+      </CardHeader>
       <CardBody>
         <Link shallow={true} href={`/e/${nevent}`}>
           <Prose mt={-6} mb={-2}>
@@ -76,7 +76,7 @@ export default function Highlight({ event, showHeader = true }) {
         <User pubkey={event.pubkey} />
       </CardBody>
       <CardFooter>
-        <Reactions event={event} kinds={[ZAP, REACTION, NOTE]} />
+        <Reactions event={event} />
       </CardFooter>
     </Card>
   ) : null;

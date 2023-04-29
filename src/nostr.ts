@@ -53,3 +53,14 @@ export function decodeNrelay(s) {
     console.error(error);
   }
 }
+
+export function decodeNevent(nevent) {
+  try {
+    const decoded = nip19.decode(nevent);
+    if (decoded.type === "nevent") {
+      return decoded.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}

@@ -2,8 +2,8 @@ import { useMemo } from "react";
 
 import { Flex, Text, Icon } from "@chakra-ui/react";
 
-import { formatShortNumber } from "../format";
-import Heart from "../icons/Heart";
+import { formatShortNumber } from "@habla/format";
+import Heart from "@habla/icons/Heart";
 
 export default function Comments({ event, reactions }) {
   const comments = useMemo(

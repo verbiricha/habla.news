@@ -10,6 +10,7 @@ import slugify from "slugify";
 import { Text } from "@chakra-ui/react";
 import { visit, SKIP } from "unist-util-visit";
 import { nip19 } from "nostr-tools";
+import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import HyperText from "./HyperText";
 import Hashtag from "./Hashtag";
