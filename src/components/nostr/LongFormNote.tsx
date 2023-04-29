@@ -25,12 +25,12 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
     {
       name: "Zaps",
       panel: (
-        <Stack spacing="2">
+        <Stack spacing="3">
           {zappers.map((z) => {
             return (
               <>
                 <Flex alignItems="center" gap="1">
-                  <User pubkey={z.pubkey} relays={relays} />
+                  <User pubkey={z.pubkey} />
                   <Text as="span" fontSize="lg" fontWeight={500}>
                     {formatShortNumber(z.amount)}
                   </Text>
@@ -48,11 +48,30 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
     },
     {
       name: "Highlights",
-      panel: <Highlights event={event} relays={relays} />,
+      panel: <Highlights event={event} />,
     },
     {
       name: "Comments",
-      panel: <Comments event={event} relays={relays} />,
+      panel: <Comments event={event} />,
+    },
+    {
+      name: "Reactions",
+      panel: (
+        <Stack spacing="3">
+          {reactions.map((r) => {
+            return (
+              <Flex alignItems="center" gap="2">
+                <User size="xs" pubkey={r.pubkey} />
+                {r.content === "+" && <Text fontSize="md">liked</Text>}
+                {r.content === "-" && <Text fontSize="md">disliked</Text>}
+                {!["+", "-"].includes(r.content) && (
+                  <Text fontSize="md">reacted with {r.content}</Text>
+                )}
+              </Flex>
+            );
+          })}
+        </Stack>
+      ),
     },
   ];
   return (

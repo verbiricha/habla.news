@@ -24,7 +24,7 @@ function Featured({ naddr, kind, pubkey, identifier }) {
 
 function FeaturedArticles() {
   return (
-    <Stack spacing="1">
+    <Stack spacing="3">
       <Featured
         naddr={
           "naddr1qqxnzd3cxy6rjv3hx5cnyde5qy88wumn8ghj7mn0wvhxcmmv9uq3uamnwvaz7tmwdaehgu3dwp6kytnhv4kxcmmjv3jhytnwv46z7qg3waehxw309ahx7um5wgh8w6twv5hszymhwden5te0danxvcmgv95kutnsw43z7qglwaehxw309ahx7um5wgkhyetvv9ujumn0ddhhgctjduhxxmmd9upzql6u9d8y3g8flm9x8frtz0xmsfyf7spq8xxkpgs8p2tge25p346aqvzqqqr4gukz494x"
@@ -65,10 +65,7 @@ export default function Hero() {
       px={4}
     >
       <Flex width="100%" maxWidth="48rem" p={2}>
-        <Stack
-          maxW={{ lg: "md", md: "xl", xl: "xl" }}
-          spacing={{ base: "4", md: "6" }}
-        >
+        <Stack spacing={{ base: "4", md: "6" }}>
           <Heading fontSize="6xl" fontWeight={500} lineHeight={"52px"}>
             Speak your mind
           </Heading>
@@ -76,13 +73,13 @@ export default function Hero() {
             ✍️ Write, 📣 publish, <mark>highlight</mark>, 🗣️ discuss, 🤑 earn.
           </Text>
           <Text fontSize="xl" mt={10}>
-            New to{" "}
+            Habla is a website for reading and publishing long form content over{" "}
             <Link href="https://nostr.how">
               <Text as="span" fontWeight={500}>
                 Nostr
               </Text>
             </Link>
-            ? Start here:{" "}
+            . Are you new? Start here:{" "}
           </Text>
           <FeaturedArticles />
         </Stack>
