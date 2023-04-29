@@ -18,6 +18,7 @@ import Comments from "./Comments";
 export default function LongFormNote({
   event,
   excludeAuthor,
+  isDraft,
   zaps = [],
   notes = [],
   highlights = [],
@@ -41,13 +42,15 @@ export default function LongFormNote({
             highlights={highlights}
           />
         </Prose>
-        <SeenIn relays={relays} />
-        <Flex alignItems="center" gap="6" mt={10}>
-          <Highlights event={event} highlights={highlights} />
-          <Comments event={event} comments={notes} />
-          <Reactions event={event} reactions={reactions} />
-          <Zaps event={event} zaps={zaps} />
-        </Flex>
+        {!isDraft && <SeenIn relays={relays} />}
+        {!isDraft && (
+          <Flex alignItems="center" gap="6" mt={10}>
+            <Highlights event={event} highlights={highlights} />
+            <Comments event={event} comments={notes} />
+            <Reactions event={event} reactions={reactions} />
+            <Zaps event={event} zaps={zaps} />
+          </Flex>
+        )}
       </Box>
     </>
   );

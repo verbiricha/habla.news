@@ -79,7 +79,7 @@ export default function Hero() {
                 Nostr
               </Text>
             </Link>
-            . Are you new? Start here:{" "}
+            . Want to lear more? Start here:{" "}
           </Text>
           <FeaturedArticles />
         </Stack>

@@ -1,9 +1,7 @@
 import { useMemo, useCallback } from "react";
 import ReactMarkdown, { uriTransformer } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import remarkMark from "remark-mark-plus";
 import remarkMath from "remark-math";
-import remarkToc from "remark-toc";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import slugify from "slugify";
@@ -339,7 +337,7 @@ export default function Markdown({ tags = [], content, highlights = [] }) {
   return (
     <ReactMarkdown
       components={components}
-      remarkPlugins={[remarkGfm, remarkToc, remarkMath]}
+      remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeRaw, rehypeKatex]}
       transformLinkUri={nostrUriTransformer}
     >

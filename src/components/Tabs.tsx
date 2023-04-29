@@ -2,7 +2,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 export default function HablaTabs({ tabs }) {
   return (
-    <Tabs variant="soft-rounded" colorScheme="purple">
+    <Tabs colorScheme="purple">
       <TabList>
         {tabs.map(({ name }) => {
           return <Tab key={name}>{name}</Tab>;
