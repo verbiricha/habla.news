@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 
-import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
+import NDK, { NDKEvent, NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
 
 export function useNdk(options) {
@@ -63,4 +63,19 @@ export function decodeNevent(nevent) {
   } catch (error) {
     console.error(error);
   }
+}
+
+export function useSigner() {
+  const signer = useMemo(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      return new NDKNip07Signer();
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  return signer;
 }

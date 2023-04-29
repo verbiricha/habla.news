@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 
+import { useAtom } from "jotai";
 import { Flex, Box, Heading, Stack } from "@chakra-ui/react";
 
 import { getMetadata } from "@habla/nip23";
@@ -13,6 +14,7 @@ import Relays from "@habla/components/Relays";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
 
 export default function HomeFeeds() {
+  const [follows] = useAtom(followsAtom);
   const tabs = [
     {
       name: `Posts`,

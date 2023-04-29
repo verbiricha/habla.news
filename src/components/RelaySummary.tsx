@@ -17,14 +17,14 @@ import User from "@habla/components/nostr/User";
 
 function Description({ info }) {
   const { description } = info;
-  return (
+  return description?.length > 0 ? (
     <Flex flexDirection="column" my={2}>
       <Heading fontSize="xl" mb={2}>
         Description
       </Heading>
       <Text>{description}</Text>
     </Flex>
-  );
+  ) : null;
 }
 
 function PayToRelay({ info }) {

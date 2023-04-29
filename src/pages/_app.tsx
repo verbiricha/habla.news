@@ -11,9 +11,9 @@ import cacheAdapter from "@habla/cache/indexeddb";
 
 import theme from "@habla/theme";
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
-import { useNdk } from "@habla/nostr";
+import { useNdk, useSigner } from "@habla/nostr";
 
-function useNip07(ndk) {
+function useNip07(ndk, signer) {
   const [user, setUser] = useAtom(userAtom);
   const [, setRelays] = useAtom(relaysAtom);
   const [, setPubkey] = useAtom(pubkeyAtom);
@@ -21,7 +21,7 @@ function useNip07(ndk) {
 
   useEffect(() => {
     try {
-      ndk.signer?.user().then(async (user) => {
+      signer?.user().then(async (user) => {
         if (user?.npub) {
           user.ndk = ndk;
           user.fetchProfile().then(() => {
@@ -70,36 +70,21 @@ function useNip07(ndk) {
   }, [user]);
 }
 
-function useSigner() {
-  const signer = useMemo(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-    try {
-      return new NDKNip07Signer();
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
-  return signer;
-}
-
 function MyApp({ Component, pageProps }: AppProps) {
   const [explicitRelayUrls] = useAtom(relaysAtom);
   const signer = useSigner();
   const options =
     typeof window === "undefined"
-      ? { explicitRelayUrls, signer }
+      ? { explicitRelayUrls }
       : {
           explicitRelayUrls,
           cacheAdapter,
           signer,
         };
   const ndk = useNdk(options);
-  useNip07(ndk);
+  useNip07(ndk, signer);
   return (
-    <NostrContext.Provider value={{ ndk, signer }}>
+    <NostrContext.Provider value={{ ndk }}>
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>

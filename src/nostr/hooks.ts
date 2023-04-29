@@ -175,7 +175,7 @@ export function useReactions(
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },
-    { closeOnEose: false }
+    { cacheUsage: "PARALLEL", closeOnEose: false }
   );
 
   const zaps = events.filter((e) => e.kind === ZAP);
@@ -184,4 +184,9 @@ export function useReactions(
   const notes = events.filter((e) => e.kind === NOTE);
 
   return { zaps, reactions, highlights, notes };
+}
+
+export function useNdk() {
+  const { ndk } = useContext(NostrContext);
+  return ndk;
 }
