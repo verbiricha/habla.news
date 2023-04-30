@@ -16,9 +16,7 @@ export default function TagPage() {
       <Head>
         <title>Hashtag: {tag}</title>
       </Head>
-      <Layout>
-        <TagFeeds tag={tag} />
-      </Layout>
+      <Layout>{tag && <TagFeeds tag={tag} />}</Layout>
     </>
   );
 }

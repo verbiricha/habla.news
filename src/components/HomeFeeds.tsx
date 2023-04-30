@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 
 import { useAtom } from "jotai";
-import { Flex, Box, Heading, Stack } from "@chakra-ui/react";
+import { Stack, Heading, Text } from "@chakra-ui/react";
 
 import { getMetadata } from "@habla/nip23";
 import { LONG_FORM, HIGHLIGHT, DAY } from "@habla/const";
@@ -13,10 +13,12 @@ import Relays from "@habla/components/Relays";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
 import FeaturedArticles from "@habla/components/Featured";
 import Tags from "@habla/components/Tags";
+import Hashtags from "@habla/components/Hashtags";
 import useTopTags from "@habla/hooks/useTopTags";
 
 export default function HomeFeeds() {
   const [follows] = useAtom(followsAtom);
+  const tags = useTopTags(21);
   const tabs = [
     {
       name: `Posts`,
@@ -34,6 +36,12 @@ export default function HomeFeeds() {
   return (
     <>
       <FeaturedArticles />
+      <Stack>
+        <Heading fontSize="4xl" fontWeight={500}>
+          🌶️ topics
+        </Heading>
+        <Hashtags hashtags={tags} />
+      </Stack>
       <Tabs tabs={tabs} />
     </>
   );

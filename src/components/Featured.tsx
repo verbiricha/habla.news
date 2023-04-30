@@ -20,7 +20,7 @@ export default function FeaturedArticles() {
   return (
     <>
       <Heading fontSize="4xl" fontWeight={500}>
-        Want to know more? Check out
+        👏 Featured
       </Heading>
       <Stack spacing="3">
         <Featured
