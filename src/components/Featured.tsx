@@ -19,8 +19,8 @@ function Featured({ naddr, kind, pubkey, identifier }) {
 export default function FeaturedArticles() {
   return (
     <>
-      <Heading fontSize="4xl" fontWeight={500}>
-        👏 Featured
+      <Heading fontSize="3xl" fontWeight={500}>
+        ✨ Featured
       </Heading>
       <Stack spacing="3">
         <Featured

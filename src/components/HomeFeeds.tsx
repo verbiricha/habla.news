@@ -18,7 +18,7 @@ import useTopTags from "@habla/hooks/useTopTags";
 
 export default function HomeFeeds() {
   const [follows] = useAtom(followsAtom);
-  const tags = useTopTags(21);
+  const tags = useTopTags(7);
   const tabs = [
     {
       name: `Posts`,
@@ -35,13 +35,13 @@ export default function HomeFeeds() {
   ];
   return (
     <>
-      <FeaturedArticles />
       <Stack>
         <Heading fontSize="4xl" fontWeight={500}>
-          🌶️ topics
+          🔥 topics
         </Heading>
         <Hashtags hashtags={tags} />
       </Stack>
+      <FeaturedArticles />
       <Tabs tabs={tabs} />
     </>
   );
