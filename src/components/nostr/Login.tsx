@@ -56,8 +56,10 @@ export default function Login() {
   }
 
   useEffect(() => {
-    loginWithExtension();
-  }, []);
+    if (!pubkey) {
+      loginWithExtension();
+    }
+  }, [pubkey]);
 
   useEffect(() => {
     if (pubkey) {
