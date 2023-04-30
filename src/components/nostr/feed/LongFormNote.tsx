@@ -68,32 +68,37 @@ export default function LongFormNote({ event, excludeAuthor }) {
   }, [event]);
   return (
     <Card variant="unstyled">
-      {!excludeAuthor && (
-        <CardHeader>
-          <User pubkey={event.pubkey} relays={relays} />
-        </CardHeader>
-      )}
-      <CardBody cursor="pointer">
-        <Link href={`/a/${naddr}`}>
-          <LongFormTitle
-            title={title}
-            publishedAt={publishedAt}
-            content={event.content}
-          />
-          {summary?.length > 0 && <Text py={1}>{summary}</Text>}
-        </Link>
+      <CardBody>
+        <Stack alignItems="center" direction="row" spacing={6}>
+          <Flex flexDirection="column" flexGrow="1" gap="1">
+            {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
+            <Link shallow={true} href={`/a/${naddr}`}>
+              <LongFormTitle
+                title={title}
+                publishedAt={publishedAt}
+                content={event.content}
+              />
+              {summary?.length > 0 && <Text py={1}>{summary}</Text>}
+            </Link>
+            {hashtags.length > 0 && (
+              <Hashtags hashtags={hashtags.slice(0, 3)} />
+            )}
+          </Flex>
+          {image?.length > 0 && (
+            <Link shallow={true} href={`/a/${naddr}`}>
+              <Image
+                src={image}
+                objectFit="contain"
+                maxH="130px"
+                maxW="200px"
+                alt={title}
+              />
+            </Link>
+          )}
+        </Stack>
       </CardBody>
       <CardFooter>
-        <Flex flexDirection="column" width="100%">
-          {hashtags.length > 0 && <Hashtags hashtags={hashtags.slice(0, 3)} />}
-          <Flex
-            flexDirection={["column", "row"]}
-            justifyContent="space-between"
-          >
-            <Reactions event={event} />
-            <SeenIn relays={relays} />
-          </Flex>
-        </Flex>
+        <Reactions event={event} />
       </CardFooter>
     </Card>
   );

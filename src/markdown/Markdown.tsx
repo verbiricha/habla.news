@@ -5,7 +5,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import slugify from "slugify";
-import { Text } from "@chakra-ui/react";
+import { Text, Image } from "@chakra-ui/react";
 import { visit, SKIP } from "unist-util-visit";
 import { nip19 } from "nostr-tools";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
@@ -326,7 +326,16 @@ export default function Markdown({
         </h6>
       ),
       img: ({ alt, src }) => {
-        return <img key={src} alt={alt} src={src} />;
+        return (
+          <Image
+            src={src}
+            alt={alt}
+            my={4}
+            maxH="420px"
+            width="100%"
+            objectFit="contain"
+          />
+        );
       },
       li: ({ children }) =>
         children && transformText(children, tags, (t) => <li>{t}</li>),

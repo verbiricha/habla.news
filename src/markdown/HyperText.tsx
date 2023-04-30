@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 
+import { Image } from "@chakra-ui/react";
 import Link from "next/link";
 
 // eslint-disable-next-line no-useless-escape
@@ -20,10 +21,12 @@ export default function HyperText({ link, children }) {
           case "bmp":
           case "webp": {
             return (
-              <img
-                alt={url.toString()}
-                key={url.toString()}
-                src={url.toString()}
+              <Image
+                src={src}
+                alt={alt}
+                maxH="420px"
+                width="100%"
+                objectFit="contain"
               />
             );
           }

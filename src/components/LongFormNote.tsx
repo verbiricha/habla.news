@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { Flex, Box, Heading, Text } from "@chakra-ui/react";
+import { Flex, Box, Heading, Text, Image } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import User from "./nostr/User";
@@ -36,19 +36,34 @@ export default function LongFormNote({
         <Prose>
           <Heading as="h1">{title}</Heading>
           {summary?.length > 0 && <blockquote>{summary}</blockquote>}
+          {image?.length > 0 && (
+            <Image src={image} alt={title} width="100%" objectFit="contain" />
+          )}
+
           <Markdown
             content={event.content}
             tags={event.tags}
             highlights={highlights}
           />
         </Prose>
-        {!isDraft && <SeenIn relays={relays} />}
         {!isDraft && (
-          <Flex alignItems="center" gap="6" mt={10}>
-            <Highlights event={event} highlights={highlights} />
-            <Comments event={event} comments={notes} />
-            <Reactions event={event} reactions={reactions} />
-            <Zaps event={event} zaps={zaps} />
+          <Flex
+            flexDirection={["column-reverse", "row"]}
+            alignItems={["flex-start", "center"]}
+            gap={4}
+            justifyContent="space-between"
+            mt={10}
+          >
+            <Flex alignItems="center" gap="6">
+              <Highlights event={event} highlights={highlights} />
+              <Comments event={event} comments={notes} />
+              <Reactions event={event} reactions={reactions} />
+              <Zaps event={event} zaps={zaps} />
+            </Flex>
+            <Flex alignItems="center" color="gray.500" gap={2}>
+              <Text fontSize="sm">seen in</Text>
+              <SeenIn relays={relays} />
+            </Flex>
           </Flex>
         )}
       </Box>

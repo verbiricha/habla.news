@@ -12,29 +12,19 @@ import Tabs from "@habla/components/Tabs";
 import Relays from "@habla/components/Relays";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
 import FeaturedArticles from "@habla/components/Featured";
+import Tags from "@habla/components/Tags";
+import useTopTags from "@habla/hooks/useTopTags";
 
 export default function HomeFeeds() {
   const [follows] = useAtom(followsAtom);
   const tabs = [
     {
       name: `Posts`,
-      panel: (
-        <FeedPage
-          filter={{ kinds: [LONG_FORM] }}
-          offset={DAY}
-          options={{ cacheUsage: "CACHE_FIRST" }}
-        />
-      ),
+      panel: <FeedPage filter={{ kinds: [LONG_FORM] }} offset={DAY} />,
     },
     {
       name: `Highlights`,
-      panel: (
-        <FeedPage
-          filter={{ kinds: [HIGHLIGHT] }}
-          offset={DAY}
-          options={{ cacheUsage: "CACHE_FIRST" }}
-        />
-      ),
+      panel: <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={DAY} />,
     },
     {
       name: `Relays`,

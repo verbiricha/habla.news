@@ -23,7 +23,11 @@ export default function RelayList({
       {urls.map((url) => {
         return (
           <Link key={url} href={`/r/${nip19.nrelayEncode(url)}`}>
-            <RelayFavicon url={url} ml={-1} mb={2} />
+            <RelayFavicon
+              url={url}
+              mr={-1}
+              sx={{ filter: "grayscale(.6)", ":hover": { filter: "none" } }}
+            />
           </Link>
         );
       })}

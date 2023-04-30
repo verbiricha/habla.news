@@ -4,8 +4,8 @@ import RelayList from "./RelayList";
 // todo: slice when too many
 export default function SeenIn({ relays }) {
   return (
-    <Flex alignItems="flex-start" flexDirection="column" mt={2}>
-      <RelayList my={1} size="xs" linkToNrelay={true} relays={relays} />
+    <Flex alignItems="flex-start" flexDirection="column">
+      <RelayList size="xs" linkToNrelay={true} relays={relays} />
     </Flex>
   );
 }

@@ -21,11 +21,13 @@ export default function Hero() {
             ✍️ Write, 📣 publish, <mark>highlight</mark>, 🗣️ discuss, 🤑 earn.
           </Text>
           <Text fontSize="xl" mt={10}>
-            Habla is a website for reading and publishing long form content over{" "}
+            Habla allows you to read, write, curate and monetize long form
+            content over{" "}
             <Link href="https://nostr.how">
               <Text as="span" fontWeight={500}>
                 Nostr
               </Text>
+              , a censorship-resistant protocol for social media.
             </Link>
           </Text>
         </Stack>

@@ -1,8 +1,8 @@
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { useToast } from "@chakra-ui/react";
 import {
+  useToast,
   Flex,
   Code,
   Box,
@@ -26,7 +26,6 @@ import { useSigner } from "@habla/nostr";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
-import RelaySelector from "@habla/components/RelaySelector";
 
 function dateToUnix() {
   return Math.floor(Date.now() / 1000);
@@ -34,10 +33,10 @@ function dateToUnix() {
 
 // todo: link to markdown reference
 export default function MyEditor({ event, showPreview }) {
+  const toast = useToast();
   const ndk = useNdk();
   const router = useRouter();
   const metadata = event && getMetadata(event);
-  const [signed, setSigned] = useState();
   const [isPublishing, setIsPublishing] = useState(false);
   const [title, setTitle] = useState(metadata?.title ?? "");
   const [slug, setSlug] = useState(metadata?.identifier ?? String(Date.now()));
@@ -75,46 +74,54 @@ export default function MyEditor({ event, showPreview }) {
     setContent(urlsToNip27(text));
   }
 
-  async function afterPublish(e) {
-    if (e.kind === LONG_FORM) {
-      const naddr = nip19.naddrEncode({
-        kind: LONG_FORM,
-        pubkey: e.pubkey,
-        identifier: getMetadata(e).identifier,
-      });
-      router.push(`/a/${naddr}`, undefined, { shallow: true });
-    }
-  }
-
   async function onPost() {
     try {
+      setIsPublishing(true);
       // todo: mention tags
       const s = await window.nostr.signEvent(ev);
-      console.log("signed", s);
-      const ndkEv = new NDKEvent(ndk, s);
-      setSigned(ndkEv);
-      setIsPublishing(true);
+      await ndk.publish(new NDKEvent(ndk, s));
+      toast({
+        title: "Posted",
+        status: "success",
+      });
+      const naddr = nip19.naddrEncode({
+        kind: ev.kind,
+        pubkey: ev.pubkey,
+        identifier: getMetadata(ev).identifier,
+      });
+      await router.push(`/a/${naddr}`, undefined, { shallow: true });
     } catch (error) {
       console.error(error);
       toast({
         title: "Couldn't sign post",
         status: "error",
       });
+    } finally {
+      setIsPublishing(false);
     }
   }
 
   async function onSave() {
     try {
+      setIsPublishing(true);
       // todo: mention tags
       const s = await window.nostr.signEvent({
         ...ev,
         kind: LONG_FORM_DRAFT,
       });
-      console.log("SIGNED", s);
-      setSigned(new NDKEvent(ndk, s));
-      setIsPublishing(true);
+      await ndk.publish(new NDKEvent(ndk, s));
+      toast({
+        title: "Draft saved",
+        status: "success",
+      });
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Couldn't save draft",
+        status: "error",
+      });
+    } finally {
+      setIsPublishing(false);
     }
   }
 
@@ -206,14 +213,6 @@ export default function MyEditor({ event, showPreview }) {
           <Code>d</Code> field
         </FormLabel>
       </Flex>
-      {signed && (
-        <RelaySelector
-          event={signed}
-          isOpen={isPublishing}
-          onClose={() => setIsPublishing(false)}
-          onPublished={afterPublish}
-        />
-      )}
     </>
   );
 }

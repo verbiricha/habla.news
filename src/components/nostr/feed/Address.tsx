@@ -1,15 +1,7 @@
 import { useEvent, useReactions } from "@habla/nostr/hooks";
-import {
-  LONG_FORM,
-  LONG_FORM_DRAFT,
-  ZAP,
-  HIGHLIGHT,
-  BADGE,
-  REACTION,
-} from "@habla/const";
+import { LONG_FORM, LONG_FORM_DRAFT, BADGE, REACTION } from "@habla/const";
 import LongFormNote from "./LongFormNote";
-import Feed from "./Feed";
-import Badge from "./Badge";
+import Badge from "../Badge";
 
 export default function Address({ naddr, kind, identifier, pubkey, relays }) {
   const event = useEvent({
