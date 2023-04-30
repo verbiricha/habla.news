@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Link from "next/link";
+import { useAtom } from "jotai";
 
 import { nip19 } from "nostr-tools";
 import {
@@ -14,12 +15,13 @@ import {
   Image,
 } from "@chakra-ui/react";
 
+import { relaysAtom } from "@habla/state";
+import { getMetadata } from "@habla/nip23";
+import { formatReadingTime, formatDay } from "@habla/format";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import SeenIn from "@habla/components/SeenIn";
 import User from "../User";
 import Hashtags from "../../Hashtags";
-import { getMetadata } from "../../../nip23";
-import { formatReadingTime, formatDay } from "../../../format";
 import Reactions from "../Reactions";
 
 function LongFormTitle({ title, content, publishedAt }) {
@@ -48,6 +50,7 @@ function LongFormTime({ content, publishedAt }) {
 }
 
 export default function LongFormNote({ event, excludeAuthor }) {
+  const [defaultRelays] = useAtom(relaysAtom);
   const {
     identifier,
     title,
@@ -63,7 +66,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
       identifier,
       pubkey: event.pubkey,
       kind: event.kind,
-      relays,
+      relays: relays.length > 0 ? relays : defaultRelays,
     });
   }, [event]);
   return (
