@@ -96,6 +96,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
                 maxH="130px"
                 maxW="200px"
                 alt={title}
+                display={["none", "block"]}
               />
             </Link>
           )}
