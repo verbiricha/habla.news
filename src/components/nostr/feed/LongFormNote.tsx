@@ -69,7 +69,11 @@ export default function LongFormNote({ event, excludeAuthor }) {
   return (
     <Card variant="unstyled">
       <CardBody>
-        <Stack alignItems="center" direction="row" spacing={6}>
+        <Stack
+          alignItems={["flex-start", "center"]}
+          direction={["column", "row"]}
+          spacing={6}
+        >
           <Flex flexDirection="column" flexGrow="1" gap="1">
             {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
             <Link shallow={true} href={`/a/${naddr}`}>
