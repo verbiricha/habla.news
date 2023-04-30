@@ -24,11 +24,11 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
   const tabs = [
     {
       name: "Highlights",
-      panel: <Highlights event={event} />,
+      panel: <Highlights event={event} highlights={highlights} />,
     },
     {
       name: "Comments",
-      panel: <Comments event={event} />,
+      panel: <Comments event={event} comments={notes} />,
     },
     {
       name: "Reactions",

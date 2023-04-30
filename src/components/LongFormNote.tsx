@@ -60,10 +60,12 @@ export default function LongFormNote({
               <Reactions event={event} reactions={reactions} />
               <Zaps event={event} zaps={zaps} />
             </Flex>
-            <Flex alignItems="center" color="gray.500" gap={2}>
-              <Text fontSize="sm">seen in</Text>
-              <SeenIn relays={relays} />
-            </Flex>
+            {relays.length > 0 && (
+              <Flex alignItems="center" color="gray.500" gap={2}>
+                <Text fontSize="sm">seen in</Text>
+                <SeenIn relays={relays} />
+              </Flex>
+            )}
           </Flex>
         )}
       </Box>

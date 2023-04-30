@@ -1,7 +1,9 @@
+import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
-import pool, { defaultRelays } from "@habla/pool";
+import { Text } from "@chakra-ui/react";
+
 import Layout from "@habla/layouts/Layout";
 import { decodeNpubOrNprofile } from "@habla/nostr";
 
@@ -9,7 +11,10 @@ const NProfile = dynamic(() => import("@habla/components/nostr/Profile"), {
   ssr: false,
 });
 
-export default function Profile({ pubkey, relays, metadata }) {
+export default function Profile({ metadata }) {
+  const router = useRouter();
+  const { nprofile } = router.query;
+  const { pubkey, relays } = decodeNpubOrNprofile(nprofile) ?? {};
   const title = metadata?.display_name ?? "Habla";
   const description = metadata?.about ?? "Speak your mind";
   return (
@@ -23,34 +28,12 @@ export default function Profile({ pubkey, relays, metadata }) {
         )}
       </Head>
       <Layout>
-        <NProfile key={pubkey} pubkey={pubkey} relays={relays} />
+        {!pubkey ? (
+          <Text>Could not find user</Text>
+        ) : (
+          <NProfile key={pubkey} pubkey={pubkey} relays={relays} />
+        )}
       </Layout>
     </>
   );
-}
-
-export async function getServerSideProps({ query }) {
-  const { nprofile } = query;
-  const { pubkey, relays } = decodeNpubOrNprofile(nprofile) ?? {};
-  if (!pubkey) {
-    return {
-      redirect: {
-        permanent: true,
-        destination: "/",
-      },
-      props: {},
-    };
-  }
-  const event = await pool.get([...relays, ...defaultRelays], {
-    kinds: [0],
-    authors: [pubkey],
-  });
-  const metadata = event ? JSON.parse(event.content) : {};
-  return {
-    props: {
-      metadata,
-      pubkey,
-      relays,
-    },
-  };
 }

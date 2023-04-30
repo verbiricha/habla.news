@@ -21,12 +21,12 @@ export const Header = (props: FlexProps) => {
       {...props}
     >
       <Flex alignItems="center" gap="4">
-        <Link shallow={true} href="/">
+        <Link href="/">
           <Heading>Habla</Heading>
         </Link>
       </Flex>
       <Flex alignItems="center" gap="1">
-        <Link shallow={true} href="/write">
+        <Link href="/write">
           <IconButton
             icon={<EditIcon />}
             color="secondary"

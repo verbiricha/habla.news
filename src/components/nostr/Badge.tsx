@@ -35,12 +35,7 @@ export default function Badge({ naddr, event }) {
           <User pubkey={event.pubkey} />
         </Flex>
       </CardHeader>
-      <CardBody
-        cursor="pointer"
-        onClick={() =>
-          router.push(`/e/${nevent}`, undefined, { shallow: true })
-        }
-      >
+      <CardBody cursor="pointer" onClick={() => router.push(`/e/${nevent}`)}>
         <Flex alignItems="center" gap="6">
           <Avatar src={image} alt={name} size="xl" />
           {description && <Text>{description}</Text>}

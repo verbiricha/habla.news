@@ -89,7 +89,7 @@ export default function MyEditor({ event, showPreview }) {
         pubkey: ev.pubkey,
         identifier: getMetadata(ev).identifier,
       });
-      await router.push(`/a/${naddr}`, undefined, { shallow: true });
+      await router.push(`/a/${naddr}`);
     } catch (error) {
       console.error(error);
       toast({

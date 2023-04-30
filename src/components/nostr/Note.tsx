@@ -38,13 +38,8 @@ export default function Note({ event }) {
       <CardHeader>
         <User pubkey={event.pubkey} size="sm" />
       </CardHeader>
-      <CardBody
-        cursor="pointer"
-        onClick={() =>
-          router.push(`/e/${nevent}`, undefined, { shallow: true })
-        }
-      >
-        <Markdown pTag={false} content={event.content} tags={event.tags} />
+      <CardBody cursor="pointer" onClick={() => router.push(`/e/${nevent}`)}>
+        <Markdown content={event.content} tags={event.tags} />
       </CardBody>
       <CardFooter>
         <Flex alignItems="center" gap="6">

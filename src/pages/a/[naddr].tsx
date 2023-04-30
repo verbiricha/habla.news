@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import { Text } from "@chakra-ui/react";
 
-import pool, { defaultRelays } from "@habla/pool";
 import { decodeNaddr } from "@habla/nostr";
 import { getMetadata } from "@habla/nip23";
 import Layout from "@habla/layouts/Layout";
@@ -12,12 +12,12 @@ const Address = dynamic(() => import("@habla/components/nostr/Address"), {
 });
 
 export default function Article({ metadata }) {
+  const router = useRouter();
+  const { naddr } = router.query;
   const { title, summary, image } = metadata ?? {
     title: "Habla",
     summary: "Speak your mind",
   };
-  const router = useRouter();
-  const { naddr } = router.query;
   const { kind, identifier, pubkey, relays } = decodeNaddr(naddr) ?? {};
   return (
     <>
@@ -29,7 +29,7 @@ export default function Article({ metadata }) {
         {image && <meta name="og:image" content={image} />}
       </Head>
       <Layout>
-        {kind && (
+        {kind ? (
           <Address
             kind={kind}
             identifier={identifier}
@@ -37,24 +37,10 @@ export default function Article({ metadata }) {
             relays={relays}
             naddr={naddr}
           />
+        ) : (
+          <Text>Could not find address</Text>
         )}
       </Layout>
     </>
   );
-}
-
-export async function getServerSideProps({ query }) {
-  const { naddr } = query;
-  const { kind, identifier, pubkey, relays } = decodeNaddr(naddr);
-  const event = await pool.get([...relays, ...defaultRelays], {
-    kinds: [kind],
-    authors: [pubkey],
-    "#d": [identifier],
-  });
-  const metadata = event ? getMetadata(event) : null;
-  return {
-    props: {
-      metadata,
-    },
-  };
 }

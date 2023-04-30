@@ -8,9 +8,7 @@ export default function Hashtags({ hashtags }) {
       {hashtags.map((t) => (
         <Box key={t} m={2} ml={0}>
           <Tag size="md">
-            <Link href={`/t/${t}`} shallow={true}>
-              {t}
-            </Link>
+            <Link href={`/t/${t}`}>{t}</Link>
           </Tag>
         </Box>
       ))}

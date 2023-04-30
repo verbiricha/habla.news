@@ -68,7 +68,7 @@ export default function Highlight({ event }) {
         )}
       </CardHeader>
       <CardBody>
-        <Link shallow={true} href={`/e/${nevent}`}>
+        <Link href={`/e/${nevent}`}>
           <Prose mt={-6} mb={-2}>
             <Text as="blockquote">{event.content}</Text>
           </Prose>

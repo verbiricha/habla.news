@@ -1,27 +1,23 @@
+import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 
-import pool, { defaultRelays } from "@habla/pool";
 import { decodeNevent } from "@habla/nostr";
 import { useEvent } from "@habla/nostr/hooks";
 import Layout from "@habla/layouts/Layout";
 
-const Event = dynamic(() => import("@habla/components/Event"), {
+const NEvent = dynamic(() => import("@habla/components/nostr/NEvent"), {
   ssr: false,
 });
 
-export default function Nevent({ id, author, relays, metadata }) {
+export default function Nevent({ metadata }) {
+  const router = useRouter();
+  const { nevent } = router.query;
+  const { id, author, relays } = decodeNevent(nevent) ?? {};
   const { title, summary, image } = metadata ?? {
     title: "Habla",
     summary: "Speak your mind",
   };
-  const event = useEvent(
-    {
-      ids: [id],
-      authors: [author],
-    },
-    { relays }
-  );
   return (
     <>
       <Head>
@@ -31,7 +27,11 @@ export default function Nevent({ id, author, relays, metadata }) {
         <meta name="og:description" content={summary} />
         {image && <meta name="og:image" content={image} />}
       </Head>
-      <Layout>{event && <Event event={event} />}</Layout>
+      <Layout>
+        {id && (
+          <NEvent nevent={nevent} id={id} author={author} relays={relays} />
+        )}
+      </Layout>
     </>
   );
 }

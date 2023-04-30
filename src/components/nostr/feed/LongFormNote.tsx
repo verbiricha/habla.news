@@ -79,7 +79,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
         >
           <Flex flexDirection="column" flexGrow="1" gap="1">
             {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
-            <Link shallow={true} href={`/a/${naddr}`}>
+            <Link href={`/a/${naddr}`}>
               <LongFormTitle
                 title={title}
                 publishedAt={publishedAt}
@@ -92,7 +92,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
             )}
           </Flex>
           {image?.length > 0 && (
-            <Link shallow={true} href={`/a/${naddr}`}>
+            <Link href={`/a/${naddr}`}>
               <Image
                 src={image}
                 objectFit="contain"

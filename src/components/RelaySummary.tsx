@@ -202,7 +202,7 @@ export default function RelaySummaryInfo({ url, info }) {
           <Heading fontSize="xl" mb={2}>
             URL
           </Heading>
-          <Link shallow={true} href={`/r/${nip19.nrelayEncode(url)}`}>
+          <Link href={`/r/${nip19.nrelayEncode(url)}`}>
             <Text>{url}</Text>
           </Link>
         </Flex>

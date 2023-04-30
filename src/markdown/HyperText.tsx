@@ -22,8 +22,8 @@ export default function HyperText({ link, children }) {
           case "webp": {
             return (
               <Image
-                src={src}
-                alt={alt}
+                src={url.toString()}
+                alt={url.toString()}
                 maxH="420px"
                 width="100%"
                 objectFit="contain"
