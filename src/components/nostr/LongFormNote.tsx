@@ -1,79 +1,47 @@
 import { useMemo } from "react";
 
-import { Flex, Text, Stack } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
-
 import Tabs from "@habla/components/Tabs";
-import { formatShortNumber } from "@habla/format";
-import { getZapRequest, getZapAmount } from "@habla/nip57";
 import { useReactions } from "@habla/nostr/hooks";
-import User from "@habla/components/nostr/User";
 import BaseLongFormNote from "@habla/components/LongFormNote";
 import Highlights from "@habla/components/nostr/Highlights";
 import Comments from "@habla/components/nostr/Comments";
+import TextReactions from "@habla/components/nostr/TextReactions";
+import Zaps from "@habla/components/nostr/Zaps";
 
 export default function LongFormNote({ event, relays, excludeAuthor }) {
   const { reactions, notes, zaps, highlights } = useReactions(event);
-  const zappers = useMemo(() => {
-    return zaps
-      .map((z) => {
-        return { ...getZapRequest(z), amount: getZapAmount(z) };
-      })
-      .filter((z) => z.pubkey !== event.pubkey);
-  }, [zaps]);
-  const tabs = [
-    {
-      name: "Highlights",
-      panel: <Highlights event={event} highlights={highlights} />,
-    },
-    {
-      name: "Comments",
-      panel: <Comments event={event} comments={notes} />,
-    },
-    {
-      name: "Reactions",
-      panel: (
-        <Stack spacing="3">
-          {reactions.map((r) => {
-            return (
-              <Flex alignItems="center" gap="2">
-                <User size="xs" pubkey={r.pubkey} />
-                {r.content === "+" && <Text fontSize="md">liked</Text>}
-                {r.content === "-" && <Text fontSize="md">disliked</Text>}
-                {!["+", "-"].includes(r.content) && (
-                  <Text fontSize="md">reacted with {r.content}</Text>
-                )}
-              </Flex>
-            );
-          })}
-        </Stack>
-      ),
-    },
-    {
-      name: "Zaps",
-      panel: (
-        <Stack spacing="3">
-          {zappers.map((z) => {
-            return (
-              <>
-                <Flex alignItems="center" gap="1">
-                  <User pubkey={z.pubkey} />
-                  <Text as="span" fontSize="lg" fontWeight={500}>
-                    {formatShortNumber(z.amount)}
-                  </Text>
-                </Flex>
-                {z.content.length > 0 && (
-                  <Prose>
-                    <Text as="blockquote">{z.content}</Text>
-                  </Prose>
-                )}
-              </>
-            );
-          })}
-        </Stack>
-      ),
-    },
-  ];
+  const tabs = useMemo(() => {
+    const result = [];
+    if (highlights.length > 0) {
+      result.push({
+        name: "Highlights",
+        panel: <Highlights event={event} highlights={highlights} />,
+      });
+    }
+    if (notes.length > 0) {
+      result.push({
+        name: "Comments",
+        panel: <Comments event={event} comments={notes} />,
+      });
+    }
+
+    if (reactions.length > 0) {
+      result.push({
+        name: "Reactions",
+        panel: <TextReactions reactions={reactions} />,
+      });
+    }
+
+    if (zaps.length > 0) {
+      result.push({
+        name: "Zaps",
+        panel: <Zaps event={event} zaps={zaps} />,
+      });
+    }
+
+    return result;
+  }, [reactions, notes, zaps, highlights]);
+
   return (
     <>
       <BaseLongFormNote
