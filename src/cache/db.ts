@@ -4,7 +4,7 @@ interface Event {}
 
 export class HablaDatabase extends Dexie {
   constructor() {
-    super("anew-db");
+    super("new-db");
     this.version(1).stores({
       event:
         "id,created_at,kind,pubkey,[kind+pubkey],[kind+pubkey+d],[kind+a],[kind+e],[kind+p],t",

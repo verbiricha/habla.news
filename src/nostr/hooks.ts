@@ -91,14 +91,14 @@ export function useEvents(filter, options = {}) {
             e.tagId()
           )
         );
-        if (relay) {
-          updateIdUrls(ev.id, normalizeURL(relay.url));
+        if (relay && ev.kind === LONG_FORM) {
+          updateIdUrls(ev.tagId(), normalizeURL(relay.url));
         }
       });
 
       sub.on("event:dup", (ev, relay) => {
-        if (relay) {
-          updateIdUrls(ev.id, normalizeURL(relay.url));
+        if (relay && ev.kind === LONG_FORM) {
+          updateIdUrls(ev.tagId(), normalizeURL(relay.url));
         }
       });
 
