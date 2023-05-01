@@ -173,7 +173,7 @@ export function useReactions(
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },
-    { cacheUsage: "CACHE_FIRST", closeOnEose: true }
+    { cacheUsage: "PARALLEL", closeOnEose: true }
   );
 
   const zaps = events.filter((e) => e.kind === ZAP);
