@@ -8,33 +8,38 @@ import Comments from "@habla/components/nostr/Comments";
 import TextReactions from "@habla/components/nostr/TextReactions";
 import Zaps from "@habla/components/nostr/Zaps";
 
+import HighlightIcon from "@habla/icons/Highlight";
+import CommentIcon from "@habla/icons/Comment";
+import HeartIcon from "@habla/icons/Heart";
+import ZapIcon from "@habla/icons/Zap";
+
 export default function LongFormNote({ event, relays, excludeAuthor }) {
   const { reactions, notes, zaps, highlights } = useReactions(event);
   const tabs = useMemo(() => {
     const result = [];
     if (highlights.length > 0) {
       result.push({
-        name: "Highlights",
+        name: <HighlightIcon />,
         panel: <Highlights event={event} highlights={highlights} />,
       });
     }
     if (notes.length > 0) {
       result.push({
-        name: "Comments",
+        name: <CommentIcon />,
         panel: <Comments event={event} comments={notes} />,
       });
     }
 
     if (reactions.length > 0) {
       result.push({
-        name: "Reactions",
+        name: <HeartIcon />,
         panel: <TextReactions reactions={reactions} />,
       });
     }
 
     if (zaps.length > 0) {
       result.push({
-        name: "Zaps",
+        name: <ZapIcon />,
         panel: <Zaps event={event} zaps={zaps} />,
       });
     }

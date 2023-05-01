@@ -37,9 +37,7 @@ export default function Article({ metadata }) {
             relays={relays}
             naddr={naddr}
           />
-        ) : (
-          <Text>Could not find address</Text>
-        )}
+        ) : null}
       </Layout>
     </>
   );
