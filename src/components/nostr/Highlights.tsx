@@ -7,7 +7,7 @@ import { getZapAmount } from "@habla/nip57";
 import { combineLists } from "@habla/util";
 import Highlight from "@habla/components/nostr/feed/Highlight";
 
-export default function Highlights({ highlights }) {
+export default function Highlights({ highlights, ...rest }) {
   const highlightedIds = highlights.map((z) => z.id);
   const highlightReactions = useLiveQuery(
     () => {
@@ -34,7 +34,7 @@ export default function Highlights({ highlights }) {
   return (
     <>
       {sorted.map((event) => (
-        <Highlight key={event.id} event={event} showHeader={false} />
+        <Highlight key={event.id} event={event} {...rest} />
       ))}
     </>
   );

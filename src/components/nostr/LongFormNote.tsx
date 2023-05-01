@@ -20,7 +20,7 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
     if (highlights.length > 0) {
       result.push({
         name: <HighlightIcon />,
-        panel: <Highlights event={event} highlights={highlights} />,
+        panel: <Highlights highlights={highlights} showHeader={false} />,
       });
     }
     if (notes.length > 0) {
