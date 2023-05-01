@@ -35,35 +35,3 @@ export default function Nevent({ metadata }) {
     </>
   );
 }
-
-export async function getServerSideProps({ query }) {
-  const { nevent } = query;
-  try {
-    const { id, author, relays } = decodeNevent(nevent);
-    const event = await pool.get([...relays, ...defaultRelays], {
-      ids: [id],
-      authors: [author],
-    });
-    // todo: generic event metadata
-    const metadata = {
-      title: event?.id,
-      summary: event?.content,
-    };
-    return {
-      props: {
-        metadata,
-        id,
-        author,
-        relays,
-      },
-    };
-  } catch (error) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
-      props: {},
-    };
-  }
-}
