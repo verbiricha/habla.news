@@ -116,30 +116,43 @@ export default {
     }
   },
   async setEvent(event: NDKEvent, filter: NDKFilter) {
-    // todo: replaceable? replace if created_at > stored created_at
-    try {
-      if (event.kind === 0) {
-        await db.profile.put({
-          id: event.pubkey,
-          ...JSON.parse(event.content),
+    return db
+      .transaction("rw", db.profile, db.event, async () => {
+        const id = event.tagId();
+        if (
+          event.kind === 0 ||
+          event.isParamReplaceable() ||
+          event.isReplaceable()
+        ) {
+          const existing = await db.event.get(id);
+          if (existing && existing.created_at >= event.created_at) {
+            return;
+          }
+        }
+
+        if (event.kind === 0) {
+          await db.profile.put({
+            id: event.pubkey,
+            ...JSON.parse(event.content),
+          });
+        }
+        const d = findTag(event, "d");
+        const a = findTag(event, "a");
+        const e = findTag(event, "e");
+        const p = findTag(event, "p");
+        const t = findTags(event, "t");
+        return db.event.put({
+          ...event.rawEvent(),
+          id,
+          d,
+          a,
+          e,
+          p,
+          t,
         });
-      }
-      const d = findTag(event, "d");
-      const a = findTag(event, "a");
-      const e = findTag(event, "e");
-      const p = findTag(event, "p");
-      const t = findTags(event, "t");
-      return db.event.put({
-        ...event.rawEvent(),
-        id: event.tagId(),
-        d,
-        a,
-        e,
-        p,
-        t,
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    } catch (error) {
-      console.error(error);
-    }
   },
 };
