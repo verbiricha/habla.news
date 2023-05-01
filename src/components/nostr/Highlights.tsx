@@ -31,7 +31,6 @@ export default function Highlights({ highlights, ...rest }) {
         }
         return acc + 2;
       }, 0);
-      console.log("score", e, score);
       return score;
     },
     [highlightReactions]

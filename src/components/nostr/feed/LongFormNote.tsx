@@ -11,7 +11,6 @@ import {
   Stack,
   CardHeader,
   CardBody,
-  CardFooter,
   Image,
 } from "@chakra-ui/react";
 
@@ -22,12 +21,11 @@ import useSeenOn from "@habla/hooks/useSeenOn";
 import SeenIn from "@habla/components/SeenIn";
 import User from "../User";
 import Hashtags from "../../Hashtags";
-import Reactions from "../Reactions";
 
 function LongFormTitle({ title, content, publishedAt, updatedAt }) {
   return (
     <>
-      <Heading fontSize="2xl">{title}</Heading>
+      <Heading fontSize="3xl">{title}</Heading>
       <LongFormTime
         publishedAt={publishedAt}
         updatedAt={updatedAt}
@@ -83,7 +81,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
     <Card variant="unstyled">
       {!excludeAuthor && (
         <CardHeader>
-          <User pubkey={event.pubkey} size="sm" />
+          <User pubkey={event.pubkey} size="xs" />
         </CardHeader>
       )}
       <CardBody>
@@ -106,7 +104,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
               <Hashtags hashtags={hashtags.slice(0, 3)} />
             )}
           </Flex>
-          {image?.length > 0 && (
+          {image?.length > 0 && summary?.length > 0 && (
             <Link href={`/a/${naddr}`}>
               <Image
                 src={image}
@@ -120,9 +118,6 @@ export default function LongFormNote({ event, excludeAuthor }) {
           )}
         </Stack>
       </CardBody>
-      <CardFooter>
-        <Reactions event={event} opts={{ closeOnEose: true }} />
-      </CardFooter>
     </Card>
   );
 }

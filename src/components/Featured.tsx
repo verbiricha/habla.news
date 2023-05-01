@@ -22,7 +22,7 @@ export default function FeaturedArticles() {
       <Heading fontSize="3xl" fontWeight={500}>
         ✨ Featured
       </Heading>
-      <Stack spacing="3">
+      <Stack spacing={2}>
         <Featured
           naddr={
             "naddr1qqxnzd3cxy6rjv3hx5cnyde5qy88wumn8ghj7mn0wvhxcmmv9uq3uamnwvaz7tmwdaehgu3dwp6kytnhv4kxcmmjv3jhytnwv46z7qg3waehxw309ahx7um5wgh8w6twv5hszymhwden5te0danxvcmgv95kutnsw43z7qglwaehxw309ahx7um5wgkhyetvv9ujumn0ddhhgctjduhxxmmd9upzql6u9d8y3g8flm9x8frtz0xmsfyf7spq8xxkpgs8p2tge25p346aqvzqqqr4gukz494x"

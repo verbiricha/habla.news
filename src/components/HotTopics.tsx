@@ -4,13 +4,15 @@ import Hashtags from "@habla/components/Hashtags";
 import useTopTags from "@habla/hooks/useTopTags";
 
 export default function HotTopics() {
-  const tags = useTopTags(7);
+  const tags = useTopTags(12);
   return tags.length > 0 ? (
-    <Stack>
-      <Heading fontSize="4xl" fontWeight={500}>
+    <>
+      <Heading fontSize="3xl" fontWeight={500}>
         🔥 topics
       </Heading>
-      <Hashtags hashtags={tags} />
-    </Stack>
+      <Stack spacing={4}>
+        <Hashtags hashtags={tags} />
+      </Stack>
+    </>
   ) : null;
 }

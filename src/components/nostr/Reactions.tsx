@@ -13,7 +13,7 @@ import Comments from "../Comments";
 export default function Reactions({
   event,
   kinds = [ZAP, REACTION, NOTE, HIGHLIGHT],
-  opts = { cacheUsage: "PARALLEL", closeOnEose: false },
+  opts = { cacheUsage: "CACHE_ONLY", closeOnEose: true },
   includeTabs = false,
 }) {
   const { zaps, reactions, notes, highlights } = useReactions(

@@ -33,9 +33,6 @@ export function getMetadata(ev: NDKEvent): PostMetadata {
   const summary = findTag(ev, "summary");
   if (summary) {
     metadata.summary = summary;
-  } else {
-    const firstSentence = ev.content.split("\n")[0];
-    metadata.summary = firstSentence;
   }
   return metadata;
 }

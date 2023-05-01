@@ -36,7 +36,9 @@ export default function Note({ event }) {
         <User pubkey={event.pubkey} size="sm" />
       </CardHeader>
       <CardBody cursor="pointer" onClick={() => router.push(`/e/${nevent}`)}>
-        <Markdown content={event.content} tags={event.tags} />
+        <Prose>
+          <Markdown content={event.content} tags={event.tags} />
+        </Prose>
       </CardBody>
       <CardFooter>
         <Reactions event={event} kinds={[ZAP]} />
