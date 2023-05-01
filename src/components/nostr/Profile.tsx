@@ -11,14 +11,14 @@ import Markdown from "@habla/markdown/Markdown";
 import User from "./User";
 import LongFormNote from "./feed/LongFormNote";
 
-export default function Profile({ pubkey }) {
+export default function Profile({ pubkey, relays }) {
   const profile = useUser(pubkey);
   const { events } = useEvents(
     {
       kinds: [LONG_FORM, HIGHLIGHT],
       authors: [pubkey],
     },
-    { cacheUsage: "PARALLEL" }
+    { relays, cacheUsage: "PARALLEL" }
   );
   const posts = useMemo(() => {
     return events.filter((e) => e.kind === LONG_FORM);
