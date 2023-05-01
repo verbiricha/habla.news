@@ -39,7 +39,6 @@ export default function LongFormNote({
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" objectFit="contain" />
           )}
-
           <Markdown
             content={event.content}
             tags={event.tags}

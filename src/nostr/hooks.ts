@@ -169,11 +169,12 @@ function eventToFilter(ev: NDKEvent) {
 
 export function useReactions(
   event: NDKEvent,
-  kinds = [ZAP, HIGHLIGHT, NOTE, REACTION]
+  kinds = [ZAP, HIGHLIGHT, NOTE, REACTION],
+  opts = {}
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },
-    { cacheUsage: "PARALLEL", closeOnEose: true }
+    { cacheUsage: "CACHE_FIRST", closeOnEose: true, ...opts }
   );
 
   const zaps = events.filter((e) => e.kind === ZAP);

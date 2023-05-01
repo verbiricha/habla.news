@@ -1,7 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 
-import { ZAP, NOTE } from "@habla/const";
+import { ZAP, REACTION, NOTE } from "@habla/const";
 import db from "@habla/cache/db";
 import { getZapAmount } from "@habla/nip57";
 import { combineLists } from "@habla/util";
@@ -11,26 +11,38 @@ export default function Highlights({ highlights, ...rest }) {
   const highlightedIds = highlights.map((z) => z.id);
   const highlightReactions = useLiveQuery(
     () => {
-      const filter = combineLists([[ZAP, NOTE], highlightedIds]);
+      const filter = combineLists([[ZAP, REACTION, NOTE], highlightedIds]);
       return db.event.where("[kind+e]").anyOf(filter).toArray();
     },
     [highlightedIds],
     []
   );
-  const scoreReactions = (e) => {
-    const result = highlightReactions.filter((h) =>
-      h.tags.some((t) => t[0] === "e" && t[1] === e)
-    );
-    return result.reduce(
-      (acc, r) => (r.kind === ZAP ? getZapAmount(r) + acc : acc + 1),
-      0
-    );
-  };
+  const scoreReactions = useCallback(
+    (e) => {
+      const result = highlightReactions.filter((h) =>
+        h.tags.some((t) => t[0] === "e" && t[1] === e.id)
+      );
+      const score = result.reduce((acc, r) => {
+        if (r.kind === ZAP) {
+          return acc + getZapAmount(r);
+        }
+        if (r.kind === REACTION) {
+          return acc + 1;
+        }
+        return acc + 2;
+      }, 0);
+      console.log("score", e, score);
+      return score;
+    },
+    [highlightReactions]
+  );
+
   const sorted = useMemo(() => {
     const s = [...highlights];
-    s.sort((a, b) => scoreReactions(b.id) - scoreReactions(a.id));
+    s.sort((a, b) => scoreReactions(b) - scoreReactions(a));
     return s;
   }, [highlights, highlightReactions]);
+
   return (
     <>
       {sorted.map((event) => (

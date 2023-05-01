@@ -223,7 +223,7 @@ function extractNoteIds(fragments) {
     .flat();
 }
 
-function transformText(ps, tags, transform) {
+function transformText(ps, tags, transform, alwaysTransform) {
   let fragments = extractMentions(ps, tags);
   fragments = extractNprofiles(fragments);
   fragments = extractNevents(fragments);
@@ -231,7 +231,10 @@ function transformText(ps, tags, transform) {
   fragments = extractNaddrs(fragments);
   fragments = extractNoteIds(fragments);
   fragments = extractNpubs(fragments);
-  return transform(fragments);
+  if (alwaysTransform || fragments.every((f) => typeof f === "string")) {
+    return transform(fragments);
+  }
+  return <>{fragments}</>;
 }
 
 function nostrUriTransformer(uri) {
@@ -338,9 +341,9 @@ export default function Markdown({
         );
       },
       li: ({ children }) =>
-        children && transformText(children, tags, (t) => <li>{t}</li>),
+        children && transformText(children, tags, (t) => <li>{t}</li>, true),
       td: ({ children }) =>
-        children && transformText(children, tags, (t) => <td>{t}</td>),
+        children && transformText(children, tags, (t) => <td>{t}</td>, true),
       p: ({ children }) =>
         children &&
         transformText(children, tags, (t) => (pTag ? <p>{t}</p> : t)),

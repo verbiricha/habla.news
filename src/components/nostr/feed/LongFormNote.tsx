@@ -24,21 +24,31 @@ import User from "../User";
 import Hashtags from "../../Hashtags";
 import Reactions from "../Reactions";
 
-function LongFormTitle({ title, content, publishedAt }) {
+function LongFormTitle({ title, content, publishedAt, updatedAt }) {
   return (
     <>
       <Heading fontSize="2xl">{title}</Heading>
-      <LongFormTime publishedAt={publishedAt} content={content} />
+      <LongFormTime
+        publishedAt={publishedAt}
+        updatedAt={updatedAt}
+        content={content}
+      />
     </>
   );
 }
 
-function LongFormTime({ content, publishedAt }) {
+function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
+  const updated = useMemo(() => {
+    return formatDay(updatedAt);
+  }, [publishedAt, updatedAt]);
   const readingTime = useMemo(() => formatReadingTime(content), [content]);
   return (
     <Flex alignItems="center" gap="2" color="secondary" fontSize="xs">
-      <Text>{day}</Text>
+      <Text>
+        {day}
+        {updated != day && `, updated ${updated}`}
+      </Text>
       {readingTime && (
         <>
           <Text>–</Text>
@@ -87,6 +97,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
               <LongFormTitle
                 title={title}
                 publishedAt={publishedAt}
+                updatedAt={event.created_at}
                 content={event.content}
               />
               {summary?.length > 0 && <Text py={1}>{summary}</Text>}
@@ -110,7 +121,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
         </Stack>
       </CardBody>
       <CardFooter>
-        <Reactions event={event} />
+        <Reactions event={event} opts={{ closeOnEose: true }} />
       </CardFooter>
     </Card>
   );

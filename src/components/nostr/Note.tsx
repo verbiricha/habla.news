@@ -14,17 +14,14 @@ import {
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { nip19 } from "nostr-tools";
 
-import { ZAP, REACTION } from "@habla/const";
-import { useReactions } from "@habla/nostr/hooks";
+import { ZAP } from "@habla/const";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import Markdown from "@habla/markdown/Markdown";
+import Reactions from "@habla/components/nostr/Reactions";
 import User from "./User";
-import Zaps from "../Zaps";
-import Reactions from "../Reactions";
 
 export default function Note({ event }) {
   const router = useRouter();
-  const { reactions, zaps } = useReactions(event, [ZAP, REACTION]);
   const seenOn = useSeenOn(event);
   const nevent = useMemo(() => {
     return nip19.neventEncode({
@@ -42,10 +39,7 @@ export default function Note({ event }) {
         <Markdown content={event.content} tags={event.tags} />
       </CardBody>
       <CardFooter>
-        <Flex alignItems="center" gap="6">
-          <Zaps event={event} zaps={zaps} />
-          <Reactions event={event} reactions={reactions} />
-        </Flex>
+        <Reactions event={event} kinds={[ZAP]} />
       </CardFooter>
     </Card>
   );

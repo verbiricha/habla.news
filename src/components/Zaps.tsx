@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Flex, Text, Icon } from "@chakra-ui/react";
+import { Flex, Text, IconButton } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 
 import { pubkeyAtom } from "@habla/state";
@@ -25,8 +25,13 @@ export default function Zaps({ event, zaps }) {
   }, [zappers]);
 
   return (
-    <Flex alignItems="center" gap="2">
-      <Icon color={zapped ? "purple.500" : "secondary"} as={ZapIcon} />
+    <Flex alignItems="center" gap="3">
+      <IconButton
+        variant="unstyled"
+        size={5}
+        color={zapped ? "purple.500" : "secondary"}
+        as={ZapIcon}
+      />
       <Text fontSize="xl">{formatShortNumber(zapsTotal)}</Text>
     </Flex>
   );

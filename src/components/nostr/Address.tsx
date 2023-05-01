@@ -10,11 +10,14 @@ import LongFormNote from "./LongFormNote";
 import Feed from "./Feed";
 
 export default function Address({ naddr, kind, identifier, pubkey, relays }) {
-  const event = useEvent({
-    kinds: [kind],
-    "#d": [identifier],
-    authors: [pubkey],
-  });
+  const event = useEvent(
+    {
+      kinds: [kind],
+      "#d": [identifier],
+      authors: [pubkey],
+    },
+    { cacheUsage: "CACHE_FIRST" }
+  );
 
   if (event && (kind === LONG_FORM || kind === LONG_FORM_DRAFT)) {
     return <LongFormNote event={event} relays={relays} />;

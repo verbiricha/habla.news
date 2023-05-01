@@ -14,13 +14,13 @@ export function getMetadata(ev: NDKEvent): PostMetadata {
   let publishedAt;
   if (pubAt) {
     try {
-      publishedAt = Number(publishedAt) * 1000;
+      publishedAt = Number(pubAt);
     } catch (error) {}
   }
   const metadata = {
     identifier: findTag(ev, "d"),
     hashtags: findTags(ev, "t"),
-    publishedAt: publishedAt ? publishedAt : ev.created_at,
+    publishedAt: publishedAt ? publishedAt : ev.created_at * 1000,
   };
   const title = findTag(ev, "title") || findTag(ev, "subject");
   if (title) {
@@ -33,6 +33,9 @@ export function getMetadata(ev: NDKEvent): PostMetadata {
   const summary = findTag(ev, "summary");
   if (summary) {
     metadata.summary = summary;
+  } else {
+    const firstSentence = ev.content.split("\n")[0];
+    metadata.summary = firstSentence;
   }
   return metadata;
 }

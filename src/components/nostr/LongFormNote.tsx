@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import { ZAP, HIGHLIGHT, NOTE, REACTION } from "@habla/const";
 import Tabs from "@habla/components/Tabs";
 import { useReactions } from "@habla/nostr/hooks";
 import BaseLongFormNote from "@habla/components/LongFormNote";
@@ -14,7 +15,11 @@ import HeartIcon from "@habla/icons/Heart";
 import ZapIcon from "@habla/icons/Zap";
 
 export default function LongFormNote({ event, relays, excludeAuthor }) {
-  const { reactions, notes, zaps, highlights } = useReactions(event);
+  const { reactions, notes, zaps, highlights } = useReactions(
+    event,
+    [ZAP, HIGHLIGHT, NOTE, REACTION],
+    { cacheUsage: "PARALLEL", closeOnEose: false }
+  );
   const tabs = useMemo(() => {
     const result = [];
     if (highlights.length > 0) {
@@ -58,7 +63,7 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
         highlights={highlights}
         zaps={zaps}
       />
-      <Tabs tabs={tabs} />
+      {tabs.length > 0 && <Tabs tabs={tabs} />}
     </>
   );
 }
