@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useAtom } from "jotai";
 import { Flex, Icon, Text } from "@chakra-ui/react";
 

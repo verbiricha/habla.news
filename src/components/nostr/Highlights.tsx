@@ -7,7 +7,7 @@ import { getZapAmount } from "@habla/nip57";
 import { combineLists } from "@habla/util";
 import Highlight from "@habla/components/nostr/feed/Highlight";
 
-export default function Highlights({ event, highlights }) {
+export default function Highlights({ highlights }) {
   const highlightedIds = highlights.map((z) => z.id);
   const highlightReactions = useLiveQuery(
     () => {

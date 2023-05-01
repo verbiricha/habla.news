@@ -5,7 +5,7 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { useUser, useEvents } from "@habla/nostr/hooks";
 import Tabs from "@habla/components/Tabs";
-import Highlight from "@habla/components/nostr/feed/Highlight";
+import Highlights from "@habla/components/nostr/Highlights";
 import Markdown from "@habla/markdown/Markdown";
 
 import User from "./User";
@@ -41,9 +41,7 @@ export default function Profile({ pubkey }) {
       name: "Highlights",
       panel: (
         <Stack spacing="2">
-          {highlights.map((e) => (
-            <Highlight key={e.id} event={e} />
-          ))}
+          <Highlights highlights={highlights} />
         </Stack>
       ),
     },
