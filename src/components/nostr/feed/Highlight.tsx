@@ -21,6 +21,7 @@ import { useEvent } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import User from "@habla/components/nostr/User";
+import Reactions from "@habla/components/nostr/LazyReactions";
 
 export default function Highlight({ event, showHeader = true }) {
   const a = findTag(event, "a");
@@ -74,6 +75,9 @@ export default function Highlight({ event, showHeader = true }) {
         </Link>
         <User pubkey={event.pubkey} />
       </CardBody>
+      <CardFooter>
+        <Reactions event={event} />
+      </CardFooter>
     </Card>
   ) : null;
 }

@@ -16,6 +16,19 @@ function Featured({ naddr, kind, pubkey, identifier }) {
   );
 }
 
+function NativeInternetProtocolForSocialMedia() {
+  return (
+    <Featured
+      naddr={
+        "naddr1qqxnzd3cxyerxd3h8qerwwfcqgsgydql3q4ka27d9wnlrmus4tvkrnc8ftc4h8h5fgyln54gl0a7dgsrqsqqqa28qy28wumn8ghj7un9d3shjtnyv9kh2uewd9hszrthwden5te0dehhxtnvdakqvtl0f3"
+      }
+      kind={30023}
+      pubkey="82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2"
+      identifier="1681236782798"
+    />
+  );
+}
+
 export default function FeaturedArticles() {
   return (
     <>
@@ -38,14 +51,6 @@ export default function FeaturedArticles() {
           kind={30023}
           pubkey="6e468422dfb74a5738702a8823b9b28168abab8655faacb6853cd0ee15deee93"
           identifier="1680612926599"
-        />
-        <Featured
-          naddr={
-            "naddr1qqxnzd3cxyerxd3h8qerwwfcqgsgydql3q4ka27d9wnlrmus4tvkrnc8ftc4h8h5fgyln54gl0a7dgsrqsqqqa28qy28wumn8ghj7un9d3shjtnyv9kh2uewd9hszrthwden5te0dehhxtnvdakqvtl0f3"
-          }
-          kind={30023}
-          pubkey="82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2"
-          identifier="1681236782798"
         />
       </Stack>
     </>

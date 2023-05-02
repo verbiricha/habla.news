@@ -13,7 +13,7 @@ export default function LazyReactions(props) {
       {inView ? (
         <Reactions
           {...props}
-          opts={{ cacheUsage: "PARALLEL", closeOnEose: false }}
+          opts={{ cacheUsage: "CACHE_FIRST", closeOnEose: false }}
         />
       ) : (
         <CachedReactions {...props} />

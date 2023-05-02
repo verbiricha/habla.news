@@ -18,7 +18,7 @@ import useSeenOn from "@habla/hooks/useSeenOn";
 import NAddr from "@habla/markdown/Naddr";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
-import Reactions from "@habla/components/nostr/Reactions";
+import Reactions from "@habla/components/nostr/LazyReactions";
 import User from "@habla/components/nostr/User";
 
 export default function Highlight({ event }) {
