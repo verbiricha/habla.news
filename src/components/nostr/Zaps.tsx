@@ -11,27 +11,25 @@ export default function Zaps({ event, zaps }) {
   const zappers = useMemo(() => {
     return zaps
       .map((z) => {
-        return { ...getZapRequest(z), amount: getZapAmount(z) };
+        return { ...z, ...getZapRequest(z), amount: getZapAmount(z) };
       })
       .filter((z) => z.pubkey !== event.pubkey);
   }, [zaps]);
+  const sorted = useMemo(() => {
+    const s = [...zappers];
+    s.sort((a, b) => b.amount - a.amount);
+    return s;
+  }, [zappers]);
   return (
     <Stack spacing="3">
-      {zappers.map((z) => {
+      {sorted.map((z) => {
         return (
-          <>
-            <Flex alignItems="center" gap="1">
-              <User pubkey={z.pubkey} />
-              <Text as="span" fontSize="lg" fontWeight={500}>
-                {formatShortNumber(z.amount)}
-              </Text>
-            </Flex>
-            {z.content.length > 0 && (
-              <Prose>
-                <Text as="blockquote">{z.content}</Text>
-              </Prose>
-            )}
-          </>
+          <Flex key={z.id} alignItems="center" gap="1">
+            <User pubkey={z.pubkey} />
+            <Text as="span" fontSize="lg" fontWeight={500}>
+              {formatShortNumber(z.amount)}
+            </Text>
+          </Flex>
         );
       })}
     </Stack>

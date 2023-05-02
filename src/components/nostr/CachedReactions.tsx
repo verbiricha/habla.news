@@ -8,6 +8,7 @@ import { ZAP, REACTION, NOTE, HIGHLIGHT } from "@habla/const";
 import { useReactions } from "@habla/nostr/hooks";
 import Tabs from "@habla/components/Tabs";
 import db from "@habla/cache/db";
+
 import Zaps from "../Zaps";
 import TextReactions from "../Reactions";
 import Highlights from "../Highlights";
@@ -20,19 +21,16 @@ export default function Reactions({
   includeTabs = false,
 }) {
   const reactionEvents = useLiveQuery(
-    () => {
+    async () => {
       const [t, v] = event.tagReference();
+      const filter = combineLists([[ZAP, REACTION, NOTE, HIGHLIGHT], [v]]);
+      let result;
       if (t === "a") {
-        return db.event
-          .where("[kind+a]")
-          .anyOf(combineLists([[ZAP, REACTION, NOTE, HIGHLIGHT], [v]]))
-          .toArray();
+        result = await db.event.where("[kind+a]").anyOf(filter).toArray();
       } else {
-        return db.event
-          .where("[kind+e]")
-          .anyOf(combineLists([[ZAP, REACTION, NOTE, HIGHLIGHT], [v]]))
-          .toArray();
+        result = await db.event.where("[kind+e]").anyOf(filter).toArray();
       }
+      return result;
     },
     [event],
     []

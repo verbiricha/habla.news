@@ -14,7 +14,7 @@ import {
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { nip19 } from "nostr-tools";
 
-import { ZAP } from "@habla/const";
+import { REACTION, ZAP } from "@habla/const";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import Markdown from "@habla/markdown/Markdown";
 import Reactions from "@habla/components/nostr/LazyReactions";
@@ -35,13 +35,17 @@ export default function Note({ event }) {
       <CardHeader>
         <User pubkey={event.pubkey} size="sm" />
       </CardHeader>
-      <CardBody cursor="pointer" onClick={() => router.push(`/e/${nevent}`)}>
+      <CardBody
+        pl={10}
+        cursor="pointer"
+        onClick={() => router.push(`/e/${nevent}`)}
+      >
         <Prose>
           <Markdown content={event.content} tags={event.tags} />
         </Prose>
       </CardBody>
-      <CardFooter>
-        <Reactions event={event} kinds={[ZAP]} />
+      <CardFooter pl={10}>
+        <Reactions event={event} kinds={[ZAP, REACTION]} />
       </CardFooter>
     </Card>
   );

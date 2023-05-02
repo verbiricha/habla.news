@@ -5,7 +5,7 @@ export default function HablaTabs({ tabs }) {
     <Tabs colorScheme="purple">
       <TabList>
         {tabs.map(({ name }) => {
-          return <Tab key={name}>{name}</Tab>;
+          return <Tab>{name}</Tab>;
         })}
       </TabList>
       <TabPanels>
