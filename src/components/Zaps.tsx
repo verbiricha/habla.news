@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { Flex, Text, IconButton } from "@chakra-ui/react";
+import { useMemo, useState } from "react";
+import { useDisclosure, Flex, Text, IconButton } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 
 import { pubkeyAtom } from "@habla/state";
@@ -7,9 +7,11 @@ import ZapIcon from "@habla/icons/Zap";
 import { getZapRequest, getZapAmount } from "@habla/nip57";
 import { ZAP } from "@habla/const";
 import { formatShortNumber } from "@habla/format";
+import ZapModal from "@habla/components/ZapModal";
 
 export default function Zaps({ event, zaps }) {
   const [pubkey] = useAtom(pubkeyAtom);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const zappers = useMemo(() => {
     return zaps
       .map((z) => {
@@ -25,14 +27,19 @@ export default function Zaps({ event, zaps }) {
   }, [zappers]);
 
   return (
-    <Flex alignItems="center" gap="3">
-      <IconButton
-        variant="unstyled"
-        size={5}
-        color={zapped ? "purple.500" : "secondary"}
-        as={ZapIcon}
-      />
-      <Text fontSize="xl">{formatShortNumber(zapsTotal)}</Text>
-    </Flex>
+    <>
+      <Flex alignItems="center" gap="3">
+        <IconButton
+          cursor="pointer"
+          variant="unstyled"
+          onClick={onOpen}
+          size={5}
+          color={zapped ? "purple.500" : "secondary"}
+          as={ZapIcon}
+        />
+        <Text fontSize="xl">{formatShortNumber(zapsTotal)}</Text>
+      </Flex>
+      <ZapModal isOpen={isOpen} onClose={onClose} event={event} />
+    </>
   );
 }

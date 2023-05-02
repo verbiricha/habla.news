@@ -8,7 +8,7 @@ export default function TextReactions({ event, reactions }) {
       {reactions.map((r) => {
         return (
           <Flex alignItems="center" gap="2">
-            <User size="xs" pubkey={r.pubkey} />
+            <User pubkey={r.pubkey} />
             {r.content === "+" && <Text fontSize="md">liked</Text>}
             {r.content === "-" && <Text fontSize="md">disliked</Text>}
             {!["+", "-"].includes(r.content) && (
