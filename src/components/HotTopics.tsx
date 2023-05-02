@@ -11,7 +11,7 @@ export default function HotTopics() {
         🔥 topics
       </Heading>
       <Stack spacing={4}>
-        <Hashtags hashtags={tags} />
+        <Hashtags hashtags={tags} colorScheme="orange" variant="solid" />
       </Stack>
     </>
   ) : null;

@@ -17,7 +17,7 @@ import { nip19 } from "nostr-tools";
 import { ZAP } from "@habla/const";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import Markdown from "@habla/markdown/Markdown";
-import Reactions from "@habla/components/nostr/Reactions";
+import Reactions from "@habla/components/nostr/LazyReactions";
 import User from "./User";
 
 export default function Note({ event }) {

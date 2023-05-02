@@ -26,6 +26,7 @@ export default function HyperText({ link, children }) {
                 alt={url.toString()}
                 maxH="420px"
                 width="100%"
+                my={4}
                 objectFit="contain"
               />
             );
