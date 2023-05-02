@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Link from "next/link";
+import { useInView } from "react-intersection-observer";
 
 import {
   Heading,
@@ -24,6 +25,9 @@ import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 
 export default function Highlight({ event, showHeader = true }) {
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
   const a = findTag(event, "a");
   const r = findTag(event, "r");
   const seenOn = useSeenOn(event);
@@ -46,7 +50,7 @@ export default function Highlight({ event, showHeader = true }) {
     }
   }, [kind, pubkey, identifier]);
   return event.content.length < 4200 ? (
-    <Card variant="unstyled">
+    <Card variant="unstyled" ref={ref} my={4}>
       {showHeader && (
         <CardHeader>
           {naddr && (
@@ -76,7 +80,7 @@ export default function Highlight({ event, showHeader = true }) {
         <User pubkey={event.pubkey} />
       </CardBody>
       <CardFooter>
-        <Reactions event={event} />
+        <Reactions event={event} kinds={[ZAP, NOTE, REACTION]} live={inView} />
       </CardFooter>
     </Card>
   ) : null;

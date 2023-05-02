@@ -15,7 +15,7 @@ export default function Profile({ metadata }) {
   const router = useRouter();
   const { nprofile } = router.query;
   const { pubkey, relays } = decodeNpubOrNprofile(nprofile) ?? {};
-  const title = metadata?.display_name ?? "Habla";
+  const title = metadata?.name ?? "Habla";
   const description = metadata?.about ?? "Speak your mind";
   return (
     <>

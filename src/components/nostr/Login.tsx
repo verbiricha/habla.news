@@ -31,7 +31,7 @@ function ProfileLink({ profile, pubkey, relays }) {
     <Link href={`/p/${nprofile}`}>
       <Flex gap="2" ml="auto">
         <Avatar
-          name={profile?.display_name || profile?.name || pubkey}
+          name={profile?.name || pubkey}
           size="xs"
           src={profile?.picture || profile?.image}
         />

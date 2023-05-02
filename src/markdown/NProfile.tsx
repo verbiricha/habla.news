@@ -7,7 +7,7 @@ export default function NProfile({ pubkey, relays, nprofile }) {
   const profile = useUser(pubkey);
   return (
     <Link href={`/p/${nprofile}`}>
-      {profile?.displayName || profile?.name || shortenString(pubkey, 8)}
+      {profile?.name || shortenString(pubkey, 8)}
     </Link>
   );
 }

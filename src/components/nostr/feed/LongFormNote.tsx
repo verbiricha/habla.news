@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { useAtom } from "jotai";
+import { useInView } from "react-intersection-observer";
 
 import { nip19 } from "nostr-tools";
 import {
@@ -62,6 +63,9 @@ function LongFormTime({ content, publishedAt, updatedAt }) {
 }
 
 export default function LongFormNote({ event, excludeAuthor }) {
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
   const [defaultRelays] = useAtom(relaysAtom);
   const {
     identifier,
@@ -82,7 +86,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
     });
   }, [event]);
   return (
-    <Card variant="unstyled">
+    <Card variant="unstyled" ref={ref}>
       {!excludeAuthor && (
         <CardHeader>
           <User pubkey={event.pubkey} size="xs" />
@@ -127,7 +131,7 @@ export default function LongFormNote({ event, excludeAuthor }) {
         </Stack>
       </CardBody>
       <CardFooter>
-        <Reactions event={event} />
+        <Reactions event={event} live={inView} />
       </CardFooter>
     </Card>
   );

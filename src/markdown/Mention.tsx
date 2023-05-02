@@ -9,7 +9,7 @@ export default function Mention({ pubkey }) {
   const profile = useUser(pubkey);
   return (
     <Link href={`https://snort.social/p/${nip19.npubEncode(pubkey)}`}>
-      {profile?.displayName || profile?.name || shortenString(pubkey, 8)}
+      {profile?.name || shortenString(pubkey, 8)}
     </Link>
   );
 }

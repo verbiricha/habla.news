@@ -24,17 +24,12 @@ export default function User({ pubkey, size = "sm", ...rest }) {
       {...rest}
     >
       <Avatar
-        name={user?.display_name || user?.name || pubkey}
+        name={user?.name || pubkey}
         size={size}
         src={user?.picture || user?.image}
       />
 
-      <Text>
-        {user?.display_name ||
-          user?.displayName ||
-          user?.name ||
-          shortenString(pubkey, 8)}
-      </Text>
+      <Text>{user?.name || shortenString(pubkey, 8)}</Text>
     </Flex>
   );
 }

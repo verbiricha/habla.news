@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useRouter } from "next/router";
+import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
@@ -21,6 +22,9 @@ import Reactions from "@habla/components/nostr/LazyReactions";
 import User from "./User";
 
 export default function Note({ event }) {
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
   const router = useRouter();
   const seenOn = useSeenOn(event);
   const nevent = useMemo(() => {
@@ -31,7 +35,7 @@ export default function Note({ event }) {
     });
   }, [event, seenOn]);
   return (
-    <Card variant="outline" my={4}>
+    <Card variant="outline" my={4} ref={ref}>
       <CardHeader>
         <User pubkey={event.pubkey} size="sm" />
       </CardHeader>
@@ -45,7 +49,7 @@ export default function Note({ event }) {
         </Prose>
       </CardBody>
       <CardFooter pl={10}>
-        <Reactions event={event} kinds={[ZAP, REACTION]} />
+        <Reactions event={event} kinds={[ZAP, REACTION]} live={inView} />
       </CardFooter>
     </Card>
   );
