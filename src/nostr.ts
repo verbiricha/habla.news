@@ -20,6 +20,9 @@ export function useNdk(options) {
 
 export function decodeNaddr(naddr) {
   try {
+    if (!naddr) {
+      return;
+    }
     const decoded = nip19.decode(naddr);
     if (decoded.type === "naddr") {
       return decoded.data;
@@ -31,6 +34,9 @@ export function decodeNaddr(naddr) {
 
 export function decodeNpubOrNprofile(s) {
   try {
+    if (!s) {
+      return;
+    }
     const decoded = nip19.decode(s);
     if (decoded.type === "nprofile") {
       return decoded.data;
@@ -45,6 +51,9 @@ export function decodeNpubOrNprofile(s) {
 
 export function decodeNrelay(s) {
   try {
+    if (!s) {
+      return;
+    }
     const decoded = nip19.decode(s);
     if (decoded.type === "nrelay") {
       return decoded.data;
@@ -56,6 +65,9 @@ export function decodeNrelay(s) {
 
 export function decodeNevent(nevent) {
   try {
+    if (!nevent) {
+      return;
+    }
     const decoded = nip19.decode(nevent);
     if (decoded.type === "nevent") {
       return decoded.data;

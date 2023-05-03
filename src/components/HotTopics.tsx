@@ -4,7 +4,7 @@ import Hashtags from "@habla/components/Hashtags";
 import useTopTags from "@habla/hooks/useTopTags";
 
 export default function HotTopics() {
-  const tags = useTopTags(12);
+  const tags = useTopTags(21);
   return tags.length > 0 ? (
     <>
       <Heading fontSize="3xl" fontWeight={500}>

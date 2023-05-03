@@ -28,8 +28,8 @@ export default function HomeFeeds() {
   ];
   return (
     <>
-      <HotTopics />
       <FeaturedArticles />
+      <HotTopics />
       <Tabs tabs={tabs} />
     </>
   );

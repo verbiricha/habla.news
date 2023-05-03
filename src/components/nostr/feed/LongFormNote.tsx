@@ -62,7 +62,11 @@ function LongFormTime({ content, publishedAt, updatedAt }) {
   );
 }
 
-export default function LongFormNote({ event, excludeAuthor }) {
+export default function LongFormNote({
+  event,
+  excludeAuthor,
+  excludeReactions,
+}) {
   const { ref, inView } = useInView({
     threshold: 0,
   });
@@ -130,9 +134,11 @@ export default function LongFormNote({ event, excludeAuthor }) {
           )}
         </Stack>
       </CardBody>
-      <CardFooter>
-        <Reactions event={event} live={inView} />
-      </CardFooter>
+      {!excludeReactions && (
+        <CardFooter>
+          <Reactions event={event} live={inView} />
+        </CardFooter>
+      )}
     </Card>
   );
 }

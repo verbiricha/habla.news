@@ -4,15 +4,27 @@ import Address from "@habla/components/nostr/feed/Address";
 
 function Featured({ naddr, kind, pubkey, identifier }) {
   return (
-    <Flex flexDirection="column">
-      <Address
-        fontSize="2xl"
-        naddr={naddr}
-        kind={kind}
-        pubkey={pubkey}
-        identifier={identifier}
-      />
-    </Flex>
+    <Address
+      fontSize="2xl"
+      naddr={naddr}
+      kind={kind}
+      pubkey={pubkey}
+      identifier={identifier}
+      excludeReactions
+    />
+  );
+}
+
+function WelcomeToNostr() {
+  return (
+    <Featured
+      naddr={
+        "naddr1qqxnzd3cxy6rjv3hx5cnyde5qy88wumn8ghj7mn0wvhxcmmv9uq3uamnwvaz7tmwdaehgu3dwp6kytnhv4kxcmmjv3jhytnwv46z7qg3waehxw309ahx7um5wgh8w6twv5hszymhwden5te0danxvcmgv95kutnsw43z7qglwaehxw309ahx7um5wgkhyetvv9ujumn0ddhhgctjduhxxmmd9upzql6u9d8y3g8flm9x8frtz0xmsfyf7spq8xxkpgs8p2tge25p346aqvzqqqr4gukz494x"
+      }
+      kind={30023}
+      pubkey="7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d"
+      identifier="1681492751274"
+    />
   );
 }
 
@@ -29,29 +41,29 @@ function NativeInternetProtocolForSocialMedia() {
   );
 }
 
+function PurpleText() {
+  return (
+    <Featured
+      naddr={
+        "naddr1qqxnzd3cxqmrzv3exgmr2wfeqgsxu35yyt0mwjjh8pcz4zprhxegz69t4wr9t74vk6zne58wzh0waycrqsqqqa28pjfdhz"
+      }
+      kind={30023}
+      pubkey="6e468422dfb74a5738702a8823b9b28168abab8655faacb6853cd0ee15deee93"
+      identifier="1680612926599"
+    />
+  );
+}
+
 export default function FeaturedArticles() {
   return (
     <>
       <Heading fontSize="3xl" fontWeight={500}>
         ✨ Featured
       </Heading>
-      <Stack spacing={2}>
-        <Featured
-          naddr={
-            "naddr1qqxnzd3cxy6rjv3hx5cnyde5qy88wumn8ghj7mn0wvhxcmmv9uq3uamnwvaz7tmwdaehgu3dwp6kytnhv4kxcmmjv3jhytnwv46z7qg3waehxw309ahx7um5wgh8w6twv5hszymhwden5te0danxvcmgv95kutnsw43z7qglwaehxw309ahx7um5wgkhyetvv9ujumn0ddhhgctjduhxxmmd9upzql6u9d8y3g8flm9x8frtz0xmsfyf7spq8xxkpgs8p2tge25p346aqvzqqqr4gukz494x"
-          }
-          kind={30023}
-          pubkey="7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d"
-          identifier="1681492751274"
-        />
-        <Featured
-          naddr={
-            "naddr1qqxnzd3cxqmrzv3exgmr2wfeqgsxu35yyt0mwjjh8pcz4zprhxegz69t4wr9t74vk6zne58wzh0waycrqsqqqa28pjfdhz"
-          }
-          kind={30023}
-          pubkey="6e468422dfb74a5738702a8823b9b28168abab8655faacb6853cd0ee15deee93"
-          identifier="1680612926599"
-        />
+      <Stack>
+        <WelcomeToNostr />
+        <PurpleText />
+        <NativeInternetProtocolForSocialMedia />
       </Stack>
     </>
   );
