@@ -22,6 +22,7 @@
     "next": "latest",
     "nostr-tools": "^1.10.0",
     "prettier": "^2.8.7",
+    "qr-code-styling": "^1.6.0-rc.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.4.3",

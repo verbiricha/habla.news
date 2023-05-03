@@ -19,15 +19,17 @@ import {
   ModalCloseButton,
   Tooltip,
   Input,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderMark,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 
 import useWebln from "@habla/hooks/useWebln";
+import QrCode from "@habla/components/QrCode";
+import InputCopy from "@habla/components/InputCopy";
 import { relaysAtom } from "@habla/state";
 import { useUser } from "@habla/nostr/hooks";
 import { loadService, loadInvoice } from "@habla/lnurl";
@@ -35,7 +37,9 @@ import { formatShortNumber } from "@habla/format";
 import User from "@habla/components/nostr/User";
 
 function valueToEmoji(sats) {
-  if (sats === 420) {
+  if (sats < 420) {
+    return "👍";
+  } else if (sats === 420) {
     return "😏";
   } else if (sats <= 1000) {
     return "🤙";
@@ -51,72 +55,97 @@ function valueToEmoji(sats) {
     return "🚀";
   } else if (sats < 1000000) {
     return "🔥";
-  } else {
+  } else if (sats < 1500000) {
     return "🤯";
+  } else {
+    return "🏆";
   }
 }
 
-function SatSlider({ minSendable, maxSendable, onSelect }) {
-  const [sliderValue, setSliderValue] = useState(minSendable);
-  const [showTooltip, setShowTooltip] = useState(false);
+const defaultZapAmount = 21;
 
+function SatSlider({ minSendable, maxSendable, onSelect }) {
+  const [amount, setAmount] = useState(defaultZapAmount);
+  const [showTooltip, setShowTooltip] = useState(false);
   const min = Math.max(1, Math.floor(minSendable / 1000));
   const max = Math.min(Math.floor(maxSendable / 1000), 2e6);
+  const amounts = [
+    defaultZapAmount,
+    1_000,
+    5_000,
+    10_000,
+    20_000,
+    50_000,
+    100_000,
+    1_000_000,
+    2_000_000,
+  ];
 
-  function onInputChange(e) {
-    const v = Number(e.target.value);
-    if (v >= min && v <= max) {
-      setSliderValue(v);
-      onSelect(v);
+  function selectAmount(a) {
+    setAmount(a);
+    onSelect(a);
+  }
+
+  function onInputChange(changed) {
+    const v = Number(changed);
+    if (changed < min) {
+      selectAmount(min);
+    } else if (changed > max) {
+      selectAmount(max);
+    } else {
+      selectAmount(changed);
     }
   }
 
   return (
-    <>
+    <Stack gap={1} width="100%">
       <Stack align="center" gap={2}>
-        <Text fontSize="2xl">{valueToEmoji(sliderValue)}</Text>
+        <Text fontSize="2xl">{valueToEmoji(amount)}</Text>
         <Heading sx={{ fontFeatureSettings: '"tnum"' }}>
-          {formatShortNumber(sliderValue)}
+          {formatShortNumber(amount)}
         </Heading>
       </Stack>
-      <Slider
-        id="slider"
-        defaultValue={minSendable}
-        min={min}
-        max={max}
-        colorScheme="orange"
-        value={sliderValue}
-        focusThumbOnChange={false}
-        onChange={(v) => setSliderValue(v)}
-        onChangeEnd={onSelect}
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-      >
-        <SliderTrack>
-          <SliderFilledTrack />
-        </SliderTrack>
-        <SliderThumb />
-      </Slider>
-      <Input
-        value={sliderValue}
-        type="number"
+      <Flex flexWrap="wrap" gap={3}>
+        {amounts
+          .filter((a) => a >= min && a <= max)
+          .map((a) => (
+            <Button
+              key={a}
+              flexGrow="1"
+              colorScheme={amount === a ? "orange" : "gray"}
+              onClick={() => selectAmount(a)}
+            >
+              {valueToEmoji(a)} {formatShortNumber(a)}
+            </Button>
+          ))}
+      </Flex>
+      <NumberInput
+        defaultValue={defaultZapAmount}
+        value={amount}
         min={min}
         max={max}
         onChange={onInputChange}
-      />
-    </>
+      >
+        <NumberInputField />
+        <NumberInputStepper>
+          <NumberIncrementStepper />
+          <NumberDecrementStepper />
+        </NumberInputStepper>
+      </NumberInput>
+    </Stack>
   );
 }
 
 export default function ZapModal({ event, isOpen, onClose }) {
   const toast = useToast();
   const [relays] = useAtom(relaysAtom);
+  const [isFetchingInvoice, setIsFetchingInvoice] = useState(false);
   const webln = useWebln(isOpen);
   const [lnurl, setLnurl] = useState();
   const profile = useUser(event.pubkey);
   const [invoice, setInvoice] = useState();
   const [comment, setComment] = useState("");
-  const [sats, setSats] = useState();
+  const [sats, setSats] = useState(defaultZapAmount);
 
   useEffect(() => {
     if (isOpen && profile.lud16) {
@@ -145,8 +174,8 @@ export default function ZapModal({ event, isOpen, onClose }) {
   }
 
   function closeModal() {
+    setSats(defaultZapAmount);
     setComment();
-    setSats();
     setInvoice();
     setLnurl();
     onClose();
@@ -154,13 +183,14 @@ export default function ZapModal({ event, isOpen, onClose }) {
 
   async function onZap() {
     try {
+      setIsFetchingInvoice(true);
       const zr = await zapRequest();
       const invoice = await loadInvoice(lnurl, sats, comment, zr);
-      if (webln?.enabled) {
+      if (webln?.enabled && invoice?.pr) {
         try {
           await webln.sendPayment(invoice.pr);
           toast({
-            title: "Paid",
+            title: "Zapped ⚡️",
             status: "success",
           });
           closeModal();
@@ -178,10 +208,13 @@ export default function ZapModal({ event, isOpen, onClose }) {
         }
       }
     } catch (error) {
+      console.error(error);
       toast({
         title: "Could not get invoice",
         status: "error",
       });
+    } finally {
+      setIsFetchingInvoice(false);
     }
   }
 
@@ -199,7 +232,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
         <ModalBody>
           <Stack alignItems="center" minH="4rem">
             {!lnurl && <Spinner />}
-            {lnurl && (
+            {lnurl && !invoice && (
               <>
                 <SatSlider
                   minSendable={lnurl.minSendable}
@@ -214,6 +247,22 @@ export default function ZapModal({ event, isOpen, onClose }) {
                 />
               </>
             )}
+            {lnurl && invoice && (
+              <>
+                <Box cursor="pointer">
+                  <QrCode data={invoice} link={`lightning:${invoice}`} />
+                </Box>
+                <Stack>
+                  <InputCopy text={invoice} />
+                  <Button
+                    colorScheme="orange"
+                    onClick={() => window.open(`lightning:${invoice}`)}
+                  >
+                    Open in wallet
+                  </Button>
+                </Stack>
+              </>
+            )}
           </Stack>
         </ModalBody>
 
@@ -221,7 +270,12 @@ export default function ZapModal({ event, isOpen, onClose }) {
           <Button variant="ghost" mr={3} onClick={closeModal}>
             Close
           </Button>
-          <Button isDisabled={!lnurl} colorScheme="orange" onClick={onZap}>
+          <Button
+            isDisabled={!lnurl || invoice}
+            isLoading={isFetchingInvoice}
+            colorScheme="orange"
+            onClick={onZap}
+          >
             Zap
           </Button>
         </ModalFooter>
