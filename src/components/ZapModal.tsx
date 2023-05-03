@@ -1,4 +1,4 @@
-// todo: QR
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
 import {
@@ -28,13 +28,16 @@ import {
 import { useAtom } from "jotai";
 
 import useWebln from "@habla/hooks/useWebln";
-import QrCode from "@habla/components/QrCode";
 import InputCopy from "@habla/components/InputCopy";
 import { relaysAtom } from "@habla/state";
 import { useUser } from "@habla/nostr/hooks";
 import { loadService, loadInvoice } from "@habla/lnurl";
 import { formatShortNumber } from "@habla/format";
 import User from "@habla/components/nostr/User";
+
+const QrCode = dynamic(() => import("@habla/components/QrCode"), {
+  ssr: false,
+});
 
 function valueToEmoji(sats) {
   if (sats < 420) {

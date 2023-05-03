@@ -23,7 +23,7 @@ export async function getHandle(pubkey) {
 }
 
 export async function getRelays(pubkey) {
-  return ["wss://nos.lol", "wss://nostr.wine"];
+  return ["wss://relay.nostr.band", "wss://nos.lol", "wss://nostr.wine"];
 }
 
 export async function getPost(pubkey, slug) {
@@ -50,9 +50,11 @@ export async function getPosts(pubkey) {
 }
 
 export async function getProfile(pubkey) {
-  const ev = await pool.get(["wss://purplepag.es", "wss://relay.damus.io"], {
+  const relays = await getRelays(pubkey);
+  const filter = {
     kinds: [0],
     authors: [pubkey],
-  });
-  return ev ? JSON.parse(ev.content) : {};
+  };
+  const ev = await pool.get(relays, filter);
+  return JSON.parse(ev.content);
 }
