@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 
 export default function useWebln(enable = true) {
-  const maybeWebLn = "webln" in window ? window.webln : null;
+  const maybeWebLn =
+    typeof window !== "undefined" && "webln" in window ? window.webln : null;
 
   useEffect(() => {
     if (maybeWebLn && !maybeWebLn.enabled && enable) {

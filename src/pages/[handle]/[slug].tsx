@@ -13,13 +13,7 @@ import {
 import { useNdk } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Layout from "@habla/layouts/Layout";
-
-const LongFormNote = dynamic(
-  () => import("@habla/components/nostr/LongFormNote"),
-  {
-    ssr: false,
-  }
-);
+import LongFormNote from "@habla/components/nostr/LongFormNote";
 
 export default function Post({ event }) {
   const { title, summary, image } = getMetadata(event);
