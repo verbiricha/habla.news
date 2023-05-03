@@ -4,11 +4,14 @@ const pool = new SimplePool([]);
 
 const handleToPubkey = {
   tony: "7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d",
+  verbiricha:
+    "7fa56f5d6962ab1e3cd424e758c3002b8665f7b0d8dcee9fe9e288d7751ac194",
 };
 
-const pubkeyToHandle = {
-  "7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d": "tony",
-};
+const pubkeyToHandle = Object.entries(handleToPubkey).reduce((acc, item) => {
+  const [k, v] = item;
+  return { ...acc, [v]: k };
+}, {});
 
 export async function getHandles() {
   return Object.keys(handleToPubkey);

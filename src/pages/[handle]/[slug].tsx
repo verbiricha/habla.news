@@ -30,7 +30,7 @@ export default function Post({ event }) {
       <Head>
         <title>{title}</title>
         <meta name="og:title" content={title} />
-        <meta property="og:type" content="article">
+        <meta property="og:type" content="article" />
         <meta name="og:description" content={summary} />
         {image && <meta name="og:image" content={image} />}
       </Head>
