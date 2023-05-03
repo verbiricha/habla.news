@@ -4,27 +4,32 @@ import Link from "next/link";
 
 import {
   Flex,
+  Stack,
   Box,
-  Tag,
   Heading,
   Text,
   List,
   ListItem,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
 } from "@chakra-ui/react";
+import {
+  CheckIcon,
+  DeleteIcon,
+  SearchIcon,
+  LockIcon,
+  RepeatIcon,
+} from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
+import CommentIcon from "@habla/icons/Comment";
 
 import User from "@habla/components/nostr/User";
+import RelayFavicon from "./RelayFavicon";
 
 function Description({ info }) {
   const { description } = info;
-  return description?.length > 0 ? (
-    <Flex flexDirection="column" my={2}>
-      <Heading fontSize="xl" mb={2}>
-        Description
-      </Heading>
-      <Text>{description}</Text>
-    </Flex>
-  ) : null;
+  return description?.length > 0 ? <Text>{description}</Text> : null;
 }
 
 function PayToRelay({ info }) {
@@ -60,19 +65,54 @@ function PayToRelay({ info }) {
 
 function Nips({ info }) {
   const { supported_nips } = info;
+  const hasDeletes = supported_nips?.includes(9);
+  const hasMarkets = supported_nips?.includes(15);
+  const hasPublicChat = supported_nips?.includes(28);
+  const hasReplaceable = supported_nips?.includes(33);
+  const hasAuth = supported_nips?.includes(42);
+  const hasSearch = supported_nips?.includes(50);
+  const hasFilestorage = supported_nips?.includes(95);
   return (
     <>
       {supported_nips && (
-        <Flex flexDirection="column" my={2}>
-          <Heading fontSize="xl" mb={2}>
-            NIPs
-          </Heading>
-          <Flex flexWrap="wrap">
-            {supported_nips.map((n) => (
-              <Box key={n} mr={2} mb={2}>
-                <Link href={`https://nips.be/${n}`}>{n}</Link>
-              </Box>
-            ))}
+        <Flex flexDirection="column" my={4}>
+          <Flex direction="row" flexWrap="wrap" gap={2}>
+            {hasReplaceable && (
+              <Tag size="md" variant="solid" colorScheme="green" maxW="10em">
+                <TagLeftIcon as={CheckIcon} />
+                <TagLabel>Blog</TagLabel>
+              </Tag>
+            )}
+            {hasMarkets && (
+              <Tag size="md" variant="solid" colorScheme="yellow" maxW="10em">
+                <TagLeftIcon as={RepeatIcon} />
+                <TagLabel>Markets</TagLabel>
+              </Tag>
+            )}
+            {hasPublicChat && (
+              <Tag size="md" variant="solid" colorScheme="pink" maxW="10em">
+                <TagLeftIcon as={CommentIcon} />
+                <TagLabel>Chat</TagLabel>
+              </Tag>
+            )}
+            {hasDeletes && (
+              <Tag size="md" variant="solid" colorScheme="red" maxW="10em">
+                <TagLeftIcon as={DeleteIcon} />
+                <TagLabel>Delete</TagLabel>
+              </Tag>
+            )}
+            {hasSearch && (
+              <Tag size="md" variant="solid" colorScheme="purple" maxW="10em">
+                <TagLeftIcon as={SearchIcon} />
+                <TagLabel>Search</TagLabel>
+              </Tag>
+            )}
+            {hasAuth && (
+              <Tag size="md" variant="solid" colorScheme="blue" maxW="10em">
+                <TagLeftIcon as={LockIcon} />
+                <TagLabel>Auth</TagLabel>
+              </Tag>
+            )}
           </Flex>
         </Flex>
       )}
@@ -131,20 +171,9 @@ function isHexString(str) {
   return hexRegex.test(str);
 }
 
-function Operator({ info, relays }) {
+export function Operator({ info }) {
   const { pubkey, contact } = info;
-  return (
-    <>
-      {isHexString(pubkey) && (
-        <Flex flexDirection="column" my={2}>
-          <Heading fontSize="xl" mb={2}>
-            Operator
-          </Heading>
-          <User pubkey={pubkey} />
-        </Flex>
-      )}
-    </>
-  );
+  return isHexString(pubkey) && <User size="xs" pubkey={pubkey} />;
 }
 
 function getLanguageName(languageTag) {
@@ -196,22 +225,17 @@ function CommunityPreferences({ info }) {
 
 export default function RelaySummaryInfo({ url, info }) {
   return (
-    <>
-      <Flex flexDirection="column">
-        <Flex flexDirection="column" my={2}>
-          <Heading fontSize="xl" mb={2}>
-            URL
-          </Heading>
-          <Link href={`/r/${nip19.nrelayEncode(url)}`}>
-            <Text>{url}</Text>
-          </Link>
-        </Flex>
-        <Description info={info} />
-        <Operator info={info} relays={[url]} />
-        <Nips info={info} />
-        <Countries info={info} />
-        <CommunityPreferences info={info} />
-      </Flex>
-    </>
+    <Stack gap={2}>
+      <Link href={`/r/${nip19.nrelayEncode(url)}`}>
+        <Stack align="center" direction="row">
+          <RelayFavicon url={url} />
+          <Text fontWeight={500}>{url}</Text>
+        </Stack>
+      </Link>
+      <Description info={info} />
+      <Nips info={info} />
+      <Countries info={info} />
+      <CommunityPreferences info={info} />
+    </Stack>
   );
 }

@@ -63,7 +63,6 @@ export default function FeaturedArticles() {
       <Stack>
         <WelcomeToNostr />
         <PurpleText />
-        <NativeInternetProtocolForSocialMedia />
       </Stack>
     </>
   );

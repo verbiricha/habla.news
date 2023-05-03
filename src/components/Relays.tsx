@@ -15,21 +15,18 @@ import { useAtom } from "jotai";
 
 import { relaysAtom } from "@habla/state";
 import useRelayMetadata from "@habla/hooks/useRelayMetadata";
-import RelayFavicon from "./RelayFavicon";
-import RelaySummary from "./RelaySummary";
+import RelaySummary, { Operator } from "./RelaySummary";
 
 function RelayCard({ url }) {
   const { data, isError } = useRelayMetadata(url);
   return (
     <Card variant="outline">
       <CardHeader>
-        <Flex alignItems="center" gap="2">
-          <RelayFavicon url={url} />
-          <Link href={`/r/${nip19.nrelayEncode(url)}`}>
-            <Heading fontSize="md" sx={{ wordBreak: "break-word" }}>
-              {data?.name || url}
-            </Heading>
-          </Link>
+        <Flex alignItems="center" justifyContent="space-between">
+          <Heading fontSize="2xl" sx={{ wordBreak: "break-word" }}>
+            {data?.name || url}
+          </Heading>
+          {data && <Operator info={data} />}
         </Flex>
       </CardHeader>
       <CardBody>
