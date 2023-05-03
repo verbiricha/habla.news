@@ -3,9 +3,11 @@ import { SimplePool } from "nostr-tools";
 const pool = new SimplePool([]);
 
 const handleToPubkey = {
-  tony: "7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d",
   verbiricha:
     "7fa56f5d6962ab1e3cd424e758c3002b8665f7b0d8dcee9fe9e288d7751ac194",
+  tony: "7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d",
+  moon: "5df413d4c5e5035ff508fd99b38b21ea9a0ac0b9ecc34f3312aba9aa2add4f5b",
+  gzuuus: "40b9c85fffeafc1cadf8c30a4e5c88660ff6e4971a0dc723d5ab674b5e61b451",
 };
 
 const pubkeyToHandle = Object.entries(handleToPubkey).reduce((acc, item) => {
@@ -26,7 +28,14 @@ export async function getHandle(pubkey) {
 }
 
 export async function getRelays(pubkey) {
-  return ["wss://relay.nostr.band", "wss://nos.lol", "wss://nostr.wine"];
+  return [
+    "wss://nostr.wine/",
+    "wss://nos.lol/",
+    "wss://nostr-pub.wellorder.net/",
+    "wss://offchain.pub/",
+    "wss://relay.nostr.band/",
+    "wss://relay.damus.io/",
+  ];
 }
 
 export async function getPost(pubkey, slug) {
