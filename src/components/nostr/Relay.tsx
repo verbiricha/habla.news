@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { nip19 } from "nostr-tools";
 
-import { Flex, Heading, Text, Stack } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/react";
 
 import { LONG_FORM, HIGHLIGHT, DAY } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
@@ -11,6 +11,7 @@ import Events from "@habla/components/nostr/feed/Events";
 import RelayFavicon from "@habla/components/RelayFavicon";
 import Tabs from "@habla/components/Tabs";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
+import InputCopy from "@habla/components/InputCopy";
 import useRelayMetadata from "@habla/hooks/useRelayMetadata";
 import Search from "@habla/components/Search";
 
@@ -61,15 +62,8 @@ export default function Relay({ relay }) {
       <Flex alignItems="center" gap="2" wordBreak="break-word">
         <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
       </Flex>
-
-      <Stack direction="row" spacing={1}>
-        <RelayFavicon url={relay} />
-        <Link href={`/r/${nip19.nrelayEncode(relay)}`}>
-          <Text>{relay}</Text>
-        </Link>
-      </Stack>
-
       <Text>{data?.description}</Text>
+      <InputCopy text={relay} />
       <Tabs tabs={tabs} />
     </>
   );

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import Link from "next/link";
-import { nip19 } from "nostr-tools";
 import { Flex, Text } from "@chakra-ui/react";
 
 import RelayFavicon from "./RelayFavicon";
+import RelayLink from "./RelayLink";
 
 function sorted(s: Set<any>) {
   const sorted = Array.from(s);
@@ -22,13 +21,13 @@ export default function RelayList({
     <Flex flexWrap="wrap" {...props}>
       {urls.map((url) => {
         return (
-          <Link key={url} href={`/r/${nip19.nrelayEncode(url)}`}>
+          <RelayLink url={url}>
             <RelayFavicon
               url={url}
               mr={-1}
               sx={{ filter: "grayscale(.6)", ":hover": { filter: "none" } }}
             />
-          </Link>
+          </RelayLink>
         );
       })}
     </Flex>

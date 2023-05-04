@@ -15,6 +15,7 @@ import {
   TagLeftIcon,
 } from "@chakra-ui/react";
 import {
+  AttachmentIcon,
   CheckIcon,
   DeleteIcon,
   SearchIcon,
@@ -23,13 +24,17 @@ import {
 } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 import CommentIcon from "@habla/icons/Comment";
+import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import User from "@habla/components/nostr/User";
-import RelayFavicon from "./RelayFavicon";
 
 function Description({ info }) {
   const { description } = info;
-  return description?.length > 0 ? <Text>{description}</Text> : null;
+  return description?.length > 0 ? (
+    <Box my={3}>
+      <Text>{description}</Text>
+    </Box>
+  ) : null;
 }
 
 function PayToRelay({ info }) {
@@ -113,6 +118,12 @@ function Nips({ info }) {
                 <TagLabel>Auth</TagLabel>
               </Tag>
             )}
+            {hasFilestorage && (
+              <Tag size="md" variant="solid" colorScheme="teal" maxW="10em">
+                <TagLeftIcon as={AttachmentIcon} />
+                <TagLabel>Files</TagLabel>
+              </Tag>
+            )}
           </Flex>
         </Flex>
       )}
@@ -172,8 +183,17 @@ function isHexString(str) {
 }
 
 export function Operator({ info }) {
-  const { pubkey, contact } = info;
-  return isHexString(pubkey) && <User size="xs" pubkey={pubkey} />;
+  const { pubkey } = info;
+  return (
+    isHexString(pubkey) && (
+      <Stack direction="row" gap={1}>
+        <Text fontSize="xs" color="gray.500">
+          by
+        </Text>
+        <User size="xs" pubkey={pubkey} />
+      </Stack>
+    )
+  );
 }
 
 function getLanguageName(languageTag) {
@@ -226,16 +246,8 @@ function CommunityPreferences({ info }) {
 export default function RelaySummaryInfo({ url, info }) {
   return (
     <Stack gap={2}>
-      <Link href={`/r/${nip19.nrelayEncode(url)}`}>
-        <Stack align="center" direction="row">
-          <RelayFavicon url={url} />
-          <Text fontWeight={500}>{url}</Text>
-        </Stack>
-      </Link>
       <Description info={info} />
       <Nips info={info} />
-      <Countries info={info} />
-      <CommunityPreferences info={info} />
     </Stack>
   );
 }

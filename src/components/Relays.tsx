@@ -16,29 +16,41 @@ import { useAtom } from "jotai";
 import { relaysAtom } from "@habla/state";
 import useRelayMetadata from "@habla/hooks/useRelayMetadata";
 import RelaySummary, { Operator } from "./RelaySummary";
+import RelayFavicon from "./RelayFavicon";
+import InputCopy from "@habla/components/InputCopy";
+import RelayLink from "@habla/components/RelayLink";
 
 function RelayCard({ url }) {
   const { data, isError } = useRelayMetadata(url);
   return (
     <Card variant="outline">
       <CardHeader>
-        <Flex alignItems="center" justifyContent="space-between">
-          <Heading fontSize="2xl" sx={{ wordBreak: "break-word" }}>
-            {data?.name || url}
-          </Heading>
-          {data && <Operator info={data} />}
-        </Flex>
+        <Stack>
+          <RelayLink url={url}>
+            <Stack align="center" direction="row">
+              <RelayFavicon size="xs" url={url} />
+              <Heading fontSize="2xl" sx={{ wordBreak: "break-word" }}>
+                {data?.name || url}
+              </Heading>
+            </Stack>
+          </RelayLink>
+          {data?.pubkey && <Operator info={data} />}
+        </Stack>
       </CardHeader>
-      <CardBody>
-        {isError ? (
-          <Text color="gray.400">
-            Could not fetch <Link href={`https://nips.be/11`}>NIP-11</Link>{" "}
-            metadata
-          </Text>
-        ) : data ? (
-          <RelaySummary url={url} info={data} />
-        ) : null}
-      </CardBody>
+      <RelayLink url={url}>
+        <CardBody>
+          {isError ? (
+            <Text color="gray.400">
+              Could not fetch <Link href={`https://nips.be/11`}>NIP-11</Link>{" "}
+              metadata
+            </Text>
+          ) : data ? (
+            <>
+              <RelaySummary url={url} info={data} />
+            </>
+          ) : null}
+        </CardBody>
+      </RelayLink>
     </Card>
   );
 }

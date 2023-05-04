@@ -18,6 +18,7 @@ export default function User({ pubkey, size = "sm", ...rest }) {
       alignItems="center"
       flexWrap="wrap"
       cursor="pointer"
+      wordBreak="break-word"
       onClick={() =>
         router.push(`/p/${nip19.nprofileEncode({ pubkey, relays })}`)
       }

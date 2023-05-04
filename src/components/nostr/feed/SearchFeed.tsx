@@ -6,7 +6,7 @@ export default function SearchFeed({ query, relays }) {
   const filter = {
     kinds: [LONG_FORM],
     search: query,
-    limit: 100,
+    limit: 21,
   };
   const options = {
     relays,
