@@ -5,11 +5,10 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import User from "./nostr/User";
 
-import useSeenOn from "@habla/hooks/useSeenOn";
-import SeenIn from "@habla/components/SeenIn";
-import { getMetadata } from "@habla/nip23";
-import Markdown from "@habla/markdown/Markdown";
 import { ZAP, HIGHLIGHT, REACTION } from "@habla/const";
+import { getMetadata } from "@habla/nip23";
+import SeenIn from "@habla/components/SeenIn";
+import Markdown from "@habla/markdown/Markdown";
 import Zaps from "./Zaps";
 import Highlights from "./Highlights";
 import Reactions from "./Reactions";
@@ -28,7 +27,6 @@ export default function LongFormNote({
     () => getMetadata(event),
     [event]
   );
-  const relays = useSeenOn(event);
   return (
     <>
       {!excludeAuthor && <User pubkey={event.pubkey} />}
@@ -59,12 +57,7 @@ export default function LongFormNote({
               <Reactions event={event} reactions={reactions} />
               <Zaps event={event} zaps={zaps} />
             </Flex>
-            {relays.length > 0 && (
-              <Flex alignItems="center" color="gray.500" gap={2}>
-                <Text fontSize="sm">seen in</Text>
-                <SeenIn relays={relays} />
-              </Flex>
-            )}
+            <SeenIn event={event} />
           </Flex>
         )}
       </Box>
