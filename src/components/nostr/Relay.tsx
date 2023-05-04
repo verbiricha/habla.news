@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { nip19 } from "nostr-tools";
 
-import { Flex, Heading, Text } from "@chakra-ui/react";
+import { Stack, Heading, Text } from "@chakra-ui/react";
 
 import { LONG_FORM, HIGHLIGHT, DAY } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
@@ -59,9 +59,10 @@ export default function Relay({ relay }) {
   }, [data]);
   return (
     <>
-      <Flex alignItems="center" gap="2" wordBreak="break-word">
+      <Stack align="center" direction="row" gap={1} wordBreak="break-word">
+        <RelayFavicon url={relay} size="sm" />
         <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
-      </Flex>
+      </Stack>
       <Text>{data?.description}</Text>
       <InputCopy text={relay} />
       <Tabs tabs={tabs} />

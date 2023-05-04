@@ -58,7 +58,7 @@ function RelayCard({ url }) {
 export default function Relays() {
   const [relays] = useAtom(relaysAtom);
   return (
-    <Stack spacing="4">
+    <Stack spacing={4}>
       {relays.map((url) => (
         <RelayCard key={url} url={url} />
       ))}
