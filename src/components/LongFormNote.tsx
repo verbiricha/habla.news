@@ -10,7 +10,7 @@ import { getMetadata } from "@habla/nip23";
 import SeenIn from "@habla/components/SeenIn";
 import Markdown from "@habla/markdown/Markdown";
 import Zaps from "./Zaps";
-import Highlights from "./Highlights";
+import Highlights from "@habla/components/reactions/Highlights";
 import Reactions from "./Reactions";
 import Comments from "./Comments";
 

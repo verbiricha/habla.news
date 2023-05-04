@@ -1,21 +1,30 @@
+import { useMemo } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { Stack } from "@chakra-ui/react";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import Markdown from "@habla/markdown/Markdown";
 import Layout from "@habla/layouts/Layout";
-import { getHandles, getPubkey, getProfile } from "@habla/nip05";
+import { getHandles, getPubkey, getProfile, getEvents } from "@habla/nip05";
 import User from "@habla/components/User";
+import { useNdk } from "@habla/nostr/hooks";
 
-const UserContent = dynamic(
-  () => import("@habla/components/nostr/UserContent"),
-  {
-    ssr: false,
-  }
-);
+import UserContent from "@habla/components/nostr/UserContent";
 
-export default function Profile({ handle, pubkey, profile, relays = [] }) {
+export default function Profile({
+  handle,
+  pubkey,
+  profile,
+  events,
+  relays = [],
+}) {
+  const ndk = useNdk();
+  const ndkEvents = useMemo(
+    () => events.map((e) => new NDKEvent(ndk, e)),
+    [events]
+  );
   return (
     <>
       <Head>
@@ -35,7 +44,7 @@ export default function Profile({ handle, pubkey, profile, relays = [] }) {
           />
           {profile?.about && <Markdown content={profile?.about} />}
         </Stack>
-        <UserContent pubkey={pubkey} />
+        <UserContent events={ndkEvents} pubkey={pubkey} />
       </Layout>
     </>
   );
@@ -44,11 +53,13 @@ export default function Profile({ handle, pubkey, profile, relays = [] }) {
 export async function getStaticProps(context) {
   const { handle } = context.params;
   const pubkey = await getPubkey(handle);
+  const events = await getEvents(pubkey);
   const profile = await getProfile(pubkey);
   return {
     props: {
       handle,
       pubkey,
+      events,
       profile,
     },
   };

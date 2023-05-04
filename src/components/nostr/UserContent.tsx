@@ -2,19 +2,11 @@ import { useMemo } from "react";
 import { Stack } from "@chakra-ui/react";
 
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
-import { useEvents } from "@habla/nostr/hooks";
 import Tabs from "@habla/components/Tabs";
 import Highlights from "@habla/components/nostr/Highlights";
 import LongFormNote from "./feed/LongFormNote";
 
-export default function UserContent({ pubkey, relays }) {
-  const { events } = useEvents(
-    {
-      kinds: [LONG_FORM, HIGHLIGHT],
-      authors: [pubkey],
-    },
-    { relays, cacheUsage: "PARALLEL" }
-  );
+export default function UserContent({ pubkey, events }) {
   const posts = useMemo(() => {
     return events.filter((e) => e.kind === LONG_FORM);
   }, [events]);

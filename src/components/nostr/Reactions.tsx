@@ -7,7 +7,7 @@ import { useReactions } from "@habla/nostr/hooks";
 import Tabs from "@habla/components/Tabs";
 import Zaps from "../Zaps";
 import TextReactions from "../Reactions";
-import Highlights from "../Highlights";
+import Highlights from "@habla/components/reactions/Highlights";
 import Comments from "../Comments";
 
 export default function Reactions({

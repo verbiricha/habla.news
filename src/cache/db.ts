@@ -1,6 +1,7 @@
 import { NDKEvent, NDKFilter, NDKSubscription } from "@nostr-dev-kit/ndk";
 import Dexie, { type Table } from "dexie";
 import { combineLists } from "@habla/util";
+import { findTag, findTags } from "@habla/tags";
 
 interface Event {
   id: string;
@@ -43,7 +44,7 @@ export class HablaDatabase extends Dexie {
   }
 }
 
-export async function filterEvents(db: HablaDatabase, filter: NDKFilter) {
+export function filterEvents(db: HablaDatabase, filter: NDKFilter) {
   const { ids = [], authors = [], kinds = [], since, until, limit } = filter;
   const addresses = filter["#a"] ?? [];
   const identifiers = filter["#d"] ?? [];

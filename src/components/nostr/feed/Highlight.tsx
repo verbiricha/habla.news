@@ -50,7 +50,7 @@ export default function Highlight({ event, showHeader = true }) {
     }
   }, [kind, pubkey, identifier]);
   return event.content.length < 4200 ? (
-    <Card variant="unstyled" ref={ref} my={4}>
+    <Card variant="unstyled" key={event.id} ref={ref} my={4}>
       {showHeader && (
         <CardHeader>
           {naddr && (

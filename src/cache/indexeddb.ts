@@ -11,7 +11,6 @@ import db, {
 } from "@habla/cache/db";
 
 import { LONG_FORM } from "@habla/const";
-import { findTag, findTags } from "@habla/tags";
 
 interface CacheOptions {
   db: HablaDatabase;

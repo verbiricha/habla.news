@@ -1,6 +1,5 @@
+import Link from "next/link";
 import { Text, Flex, type FlexProps } from "@chakra-ui/react";
-
-import DarkModeSwitch from "./DarkModeSwitch";
 
 export const Footer = (props: FlexProps) => (
   <Flex
@@ -11,6 +10,8 @@ export const Footer = (props: FlexProps) => (
     mt={20}
     {...props}
   >
-    <DarkModeSwitch />
+    <Text>
+      Made with 💜 by <Link href="/verbiricha">verbiricha</Link>
+    </Text>
   </Flex>
 );

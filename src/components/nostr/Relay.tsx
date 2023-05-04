@@ -59,9 +59,11 @@ export default function Relay({ relay }) {
   }, [data]);
   return (
     <>
-      <Stack align="center" direction="row" gap={1} wordBreak="break-word">
-        <RelayFavicon url={relay} size="sm" />
-        <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
+      <Stack>
+        <Stack align="center" direction="row" gap={1} wordBreak="break-word">
+          <RelayFavicon url={relay} size="sm" />
+          <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
+        </Stack>
       </Stack>
       <Text>{data?.description}</Text>
       <InputCopy text={relay} />

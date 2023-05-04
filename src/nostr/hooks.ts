@@ -67,6 +67,7 @@ async function updateIdUrls(id, url) {
 export function useEvents(filter, options = {}) {
   const { ndk } = useContext(NostrContext);
   const [defaultRelays] = useAtom(relaysAtom);
+  const [eose, setEose] = useState(false);
   const [events, setEvents] = useState([]);
   const { relays, ...rest } = options;
 
@@ -102,13 +103,17 @@ export function useEvents(filter, options = {}) {
         }
       });
 
+      sub.on("eose", () => {
+        setEose(true);
+      });
+
       return () => {
         sub.stop();
       };
     }
   }, []);
 
-  return { events, opts };
+  return { eose, events, opts };
 }
 
 export function useEvent(filter, opts = defaultOpts) {
@@ -137,13 +142,7 @@ export function useEvent(filter, opts = defaultOpts) {
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
-  const user = useLiveQuery(async () => {
-    if (pubkey) {
-      return db.profile.get(pubkey);
-    } else {
-      return null;
-    }
-  }, [pubkey]);
+  const user = useLiveQuery(() => db.profile.get(pubkey), [pubkey]);
 
   useEffect(() => {
     if (pubkey) {
@@ -159,7 +158,7 @@ export function useUser(pubkey) {
     }
   }, [pubkey]);
 
-  return user ?? {};
+  return user;
 }
 
 function eventToFilter(ev: NDKEvent) {

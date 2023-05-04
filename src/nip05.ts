@@ -1,5 +1,7 @@
 import { SimplePool } from "nostr-tools";
 
+import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+
 const pool = new SimplePool([]);
 
 const handleToPubkey = {
@@ -45,12 +47,22 @@ export async function getPosts(pubkey) {
   const relays = await getRelays(pubkey);
   const filters = [
     {
-      kinds: [30023],
+      kinds: [LONG_FORM],
       authors: [pubkey],
     },
   ];
-  const events = await pool.list(relays, filters);
-  return events;
+  return pool.list(relays, filters);
+}
+
+export async function getEvents(pubkey) {
+  const relays = await getRelays(pubkey);
+  const filters = [
+    {
+      kinds: [LONG_FORM, HIGHLIGHT],
+      authors: [pubkey],
+    },
+  ];
+  return pool.list(relays, filters);
 }
 
 export async function getProfile(pubkey) {

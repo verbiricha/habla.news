@@ -12,7 +12,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.9.0",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@nostr-dev-kit/ndk": "0.1.17",
+    "@nostr-dev-kit/ndk": "0.3.10",
     "bech32": "^2.0.0",
     "dexie": "^3.2.3",
     "dexie-react-hooks": "^1.1.3",

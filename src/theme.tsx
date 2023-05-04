@@ -16,6 +16,8 @@ const breakpoints = {
 
 const theme = extendTheme(
   {
+    initialColorMode: "system",
+    useSystemColorMode: true,
     styles: {
       global: {
         mark: {

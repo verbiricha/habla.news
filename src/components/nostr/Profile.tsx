@@ -1,7 +1,8 @@
 import { Stack } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
-import { useUser } from "@habla/nostr/hooks";
+import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+import { useEvents, useUser } from "@habla/nostr/hooks";
 import Markdown from "@habla/markdown/Markdown";
 
 import User from "./User";
@@ -9,6 +10,13 @@ import UserContent from "./UserContent";
 
 export default function Profile({ pubkey, relays }) {
   const profile = useUser(pubkey);
+  const { events } = useEvents(
+    {
+      kinds: [LONG_FORM, HIGHLIGHT],
+      authors: [pubkey],
+    },
+    { relays, cacheUsage: "PARALLEL" }
+  );
   return (
     <Stack>
       <Stack alignItems="center" spacing="2">
@@ -19,7 +27,7 @@ export default function Profile({ pubkey, relays }) {
           </Prose>
         )}
       </Stack>
-      <UserContent pubkey={pubkey} />
+      <UserContent pubkey={pubkey} events={events} />
     </Stack>
   );
 }
