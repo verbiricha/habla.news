@@ -34,12 +34,14 @@ export class HablaDatabase extends Dexie {
   profile!: Table<Profile>;
 
   constructor() {
-    super("new-db");
+    super("news");
     this.version(1).stores({
       event:
         "id,created_at,kind,pubkey,[kind+pubkey],[kind+pubkey+d],[kind+a],[kind+e],[kind+p],t",
       relaySet: "id,urls",
       profile: "id,name,display_name,about,picture,nip05,lud16,banner",
+      relayMetadata:
+        "id,name,description,pubkey,contact,supported_nips,software,version",
     });
   }
 }

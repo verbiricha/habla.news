@@ -15,15 +15,36 @@ import { useAtom } from "jotai";
 
 import { relaysAtom } from "@habla/state";
 import useRelayMetadata from "@habla/hooks/useRelayMetadata";
-import RelaySummary, { Operator } from "./RelaySummary";
+import RelaySummary, { Operator, Nips } from "./RelaySummary";
 import RelayFavicon from "./RelayFavicon";
 import InputCopy from "@habla/components/InputCopy";
 import RelayLink from "@habla/components/RelayLink";
 
-function RelayCard({ url }) {
+export function RelayItem({ url }) {
   const { data, isError } = useRelayMetadata(url);
   return (
-    <Card variant="outline">
+    <Stack spacing={4}>
+      <Flex alignItems="center" justifyContent="space-between">
+        <RelayLink url={url}>
+          <Stack align="center" direction="row">
+            <RelayFavicon size="xs" url={url} />
+            <Heading fontSize="2xl" sx={{ wordBreak: "break-word" }}>
+              {data?.name || url}
+            </Heading>
+          </Stack>
+        </RelayLink>
+        {data?.pubkey && <Operator info={data} />}
+      </Flex>
+      {data?.description && <Text>{data.description}</Text>}
+      {data && <Nips info={data} />}
+    </Stack>
+  );
+}
+
+export function RelayCard({ url, ...props }) {
+  const { data, isError } = useRelayMetadata(url);
+  return (
+    <Card variant="outline" {...props}>
       <CardHeader>
         <Stack>
           <RelayLink url={url}>

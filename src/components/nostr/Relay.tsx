@@ -11,13 +11,12 @@ import Events from "@habla/components/nostr/feed/Events";
 import RelayFavicon from "@habla/components/RelayFavicon";
 import Tabs from "@habla/components/Tabs";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
-import InputCopy from "@habla/components/InputCopy";
+import { Nips } from "@habla/components/RelaySummary";
 import useRelayMetadata from "@habla/hooks/useRelayMetadata";
 import Search from "@habla/components/Search";
 
 export default function Relay({ relay }) {
   const { data, isError } = useRelayMetadata(relay);
-  // search
   const tabs = useMemo(() => {
     const result = [
       {
@@ -66,7 +65,7 @@ export default function Relay({ relay }) {
         </Stack>
       </Stack>
       <Text>{data?.description}</Text>
-      <InputCopy text={relay} />
+      {data && <Nips info={data} />}
       <Tabs tabs={tabs} />
     </>
   );

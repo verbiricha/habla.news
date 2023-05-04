@@ -68,7 +68,7 @@ function PayToRelay({ info }) {
   );
 }
 
-function Nips({ info }) {
+export function Nips({ info }) {
   const { supported_nips } = info;
   const hasDeletes = supported_nips?.includes(9);
   const hasMarkets = supported_nips?.includes(15);
