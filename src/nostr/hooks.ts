@@ -144,7 +144,7 @@ export function useUser(pubkey) {
     }
   }, [pubkey]);
 
-  return user;
+  return user ?? {};
 }
 
 function eventToFilter(ev: NDKEvent) {
