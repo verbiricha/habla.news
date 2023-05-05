@@ -43,7 +43,13 @@ export default function Relays() {
             ))}
           </Stack>
         ) : (
-          <Flex alignItems="center" justifyContent="center" height="20em">
+          <Flex
+            flexDirection="column"
+            gap={4}
+            alignItems="center"
+            justifyContent="center"
+            height="20em"
+          >
             <Text>Fetching relay list</Text>
             <Spinner size="xl" />
           </Flex>
