@@ -24,7 +24,11 @@ export function RelayItem({ url }) {
   const { data, isError } = useRelayMetadata(url);
   return (
     <Stack spacing={4}>
-      <Flex alignItems="center" justifyContent="space-between">
+      <Flex
+        flexDirection={["column", "row"]}
+        alignItems={["flex-start", "center"]}
+        justifyContent="space-between"
+      >
         <RelayLink url={url}>
           <Stack align="center" direction="row">
             <RelayFavicon size="xs" url={url} />

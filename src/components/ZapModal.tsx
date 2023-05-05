@@ -151,7 +151,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
   const [sats, setSats] = useState(defaultZapAmount);
 
   useEffect(() => {
-    if (isOpen && profile.lud16) {
+    if (isOpen && profile?.lud16) {
       loadService(profile.lud16).then(setLnurl);
     }
   }, [event, profile, isOpen]);
