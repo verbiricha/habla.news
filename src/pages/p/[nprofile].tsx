@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 import { Text } from "@chakra-ui/react";
 
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 import { decodeNpubOrNprofile } from "@habla/nostr";
 
 const NProfile = dynamic(() => import("@habla/components/nostr/Profile"), {

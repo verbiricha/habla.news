@@ -191,10 +191,14 @@ export default function MyEditor({ event, showPreview }) {
         />
 
         <Flex my={4} justifyContent="space-between" width="100%">
-          <Button isDisabled={event?.kind === 30023} onClick={() => onSave()}>
+          <Button
+            variant="solid"
+            isDisabled={event?.kind === 30023}
+            onClick={() => onSave()}
+          >
             Save draft
           </Button>
-          <Button colorScheme="orange" onClick={() => onPost()}>
+          <Button variant="solid" colorScheme="orange" onClick={() => onPost()}>
             {event?.kind === 30023 && event?.sig ? "Update" : "Post"}
           </Button>
         </Flex>

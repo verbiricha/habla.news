@@ -2,15 +2,14 @@ import { useRouter } from "next/router";
 
 import { nip19 } from "nostr-tools";
 import { useAtom } from "jotai";
-import { Box, Flex, Stack, Avatar, Heading, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
 import { relaysAtom } from "@habla/state";
-import { shortenString } from "@habla/format";
-import { useUser } from "@habla/nostr/hooks";
+import Avatar from "@habla/components/nostr/Avatar";
+import Username from "@habla/components/nostr/Username";
 
 export default function User({ pubkey, size = "sm", ...rest }) {
   const [relays] = useAtom(relaysAtom);
-  const user = useUser(pubkey);
   const router = useRouter();
   return (
     <Flex
@@ -24,13 +23,8 @@ export default function User({ pubkey, size = "sm", ...rest }) {
       }
       {...rest}
     >
-      <Avatar
-        name={user?.name || pubkey}
-        size={size}
-        src={user?.picture || user?.image}
-      />
-
-      <Text>{user?.name || shortenString(pubkey, 8)}</Text>
+      <Avatar pubkey={pubkey} />
+      <Username pubkey={pubkey} />
     </Flex>
   );
 }

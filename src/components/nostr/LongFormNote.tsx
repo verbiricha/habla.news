@@ -6,7 +6,6 @@ import { useReactions } from "@habla/nostr/hooks";
 import BaseLongFormNote from "@habla/components/LongFormNote";
 import Highlights from "@habla/components/nostr/Highlights";
 import Comments from "@habla/components/nostr/Comments";
-import TextReactions from "@habla/components/nostr/TextReactions";
 import Zaps from "@habla/components/nostr/Zaps";
 
 import HighlightIcon from "@habla/icons/Highlight";
@@ -35,13 +34,6 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
       });
     }
 
-    if (reactions.length > 0) {
-      result.push({
-        name: <HeartIcon />,
-        panel: <TextReactions reactions={reactions} />,
-      });
-    }
-
     if (zaps.length > 0) {
       result.push({
         name: <ZapIcon />,
@@ -53,17 +45,14 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
   }, [reactions, notes, zaps, highlights]);
 
   return (
-    <>
-      <BaseLongFormNote
-        excludeAuthor={excludeAuthor}
-        event={event}
-        relays={relays}
-        notes={notes}
-        reactions={reactions}
-        highlights={highlights}
-        zaps={zaps}
-      />
-      {tabs.length > 0 && <Tabs tabs={tabs} />}
-    </>
+    <BaseLongFormNote
+      excludeAuthor={excludeAuthor}
+      event={event}
+      relays={relays}
+      notes={notes}
+      reactions={reactions}
+      highlights={highlights}
+      zaps={zaps}
+    />
   );
 }

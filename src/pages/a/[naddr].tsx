@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import { Text } from "@chakra-ui/react";
+import { Text, Box } from "@chakra-ui/react";
 
 import { decodeNaddr } from "@habla/nostr";
 import { getMetadata } from "@habla/nip23";
 import Layout from "@habla/layouts/Layout";
+import ArticleAside from "@habla/components/ArticleAside";
 
 const Address = dynamic(() => import("@habla/components/nostr/Address"), {
   ssr: false,
@@ -28,7 +29,13 @@ export default function Article({ metadata }) {
         <meta name="og:description" content={summary} />
         {image && <meta name="og:image" content={image} />}
       </Head>
-      <Layout>
+      <Layout
+        aside={
+          kind ? (
+            <ArticleAside pubkey={pubkey} kind={kind} identifier={identifier} />
+          ) : null
+        }
+      >
         {kind ? (
           <Address
             kind={kind}

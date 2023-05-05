@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 import { decodeNevent } from "@habla/nostr";
 import { useEvent } from "@habla/nostr/hooks";
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 
 const NEvent = dynamic(() => import("@habla/components/nostr/NEvent"), {
   ssr: false,

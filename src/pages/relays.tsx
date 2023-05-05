@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Flex, Stack, Heading, Text, Spinner } from "@chakra-ui/react";
 
 import { RelayItem } from "@habla/components/Relays";
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 
 export default function Relays() {
   const [compatibleRelays, setCompatibleRelays] = useState();

@@ -5,7 +5,7 @@ import Head from "next/head";
 import { Text } from "@chakra-ui/react";
 
 import { decodeNrelay } from "@habla/nostr";
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 
 const Relay = dynamic(() => import("@habla/components/nostr/Relay"), {
   ssr: false,

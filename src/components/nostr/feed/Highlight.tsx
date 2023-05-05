@@ -15,7 +15,7 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { nip19 } from "nostr-tools";
 
-import { ZAP, REACTION, NOTE } from "@habla/const";
+import { ZAP, NOTE } from "@habla/const";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import NAddr from "@habla/markdown/Naddr";
 import { useEvent } from "@habla/nostr/hooks";
@@ -50,37 +50,45 @@ export default function Highlight({ event, showHeader = true }) {
     }
   }, [kind, pubkey, identifier]);
   return event.content.length < 4200 ? (
-    <Card variant="unstyled" key={event.id} ref={ref} my={4}>
+    <Card variant="highlight" key={event.id} ref={ref} my={4}>
       {showHeader && (
         <CardHeader>
-          {naddr && (
-            <Stack direction="column" spacing="1">
-              <ArticleTitle
-                naddr={naddr}
-                kind={Number(kind)}
-                identifier={identifier}
-                pubkey={pubkey}
-              />
-              <User pubkey={pubkey} />
-            </Stack>
-          )}
-          {r && !naddr && !r.startsWith("https://habla.news") && (
-            <Link href={r}>
-              <Heading fontSize="2xl">{r}</Heading>
-            </Link>
-          )}
+          <User pubkey={event.pubkey} />
         </CardHeader>
       )}
       <CardBody>
-        <Link shallow={true} href={`/e/${nevent}`}>
-          <Prose mt={-6} mb={-2}>
-            <Text as="blockquote">{event.content}</Text>
-          </Prose>
-        </Link>
-        <User pubkey={event.pubkey} />
+        <Stack gap="1">
+          <Link shallow={true} href={`/e/${nevent}`}>
+            <Text>{event.content}</Text>
+          </Link>
+          {naddr && (
+            <ArticleTitle
+              naddr={naddr}
+              kind={Number(kind)}
+              identifier={identifier}
+              pubkey={pubkey}
+              fontFamily="'Inter'"
+              fontWeight={600}
+              fontSize="sm"
+              color="secondary"
+            />
+          )}
+          {r && !naddr && !r.startsWith("https://habla.news") && (
+            <Link href={r}>
+              <Text
+                fontFamily="'Inter'"
+                fontWeight={600}
+                fontSize="sm"
+                color="secondary"
+              >
+                {r}
+              </Text>
+            </Link>
+          )}
+        </Stack>
       </CardBody>
       <CardFooter>
-        <Reactions event={event} kinds={[ZAP, NOTE, REACTION]} live={inView} />
+        <Reactions event={event} kinds={[ZAP, NOTE]} live={inView} />
       </CardFooter>
     </Card>
   ) : null;

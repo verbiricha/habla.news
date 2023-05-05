@@ -36,17 +36,17 @@ export default function Reactions({ event, reactions, highlights }) {
     }
   }
   return (
-    <Flex alignItems="center" gap="2">
+    <Flex alignItems="center" color="secondary" fontFamily="'Inter'">
       <IconButton
         variant="unstyled"
         onClick={react}
         cursor={liked ? "auto" : "pointer"}
         variant="unstyled"
-        color={liked ? "purple.500" : "secondary"}
+        color={liked ? "highlight" : "secondary"}
         as={Heart}
-        size={5}
+        boxSize={3}
       />
-      <Text fontSize="xl">{formatShortNumber(likes.length)}</Text>
+      <Text fontSize="sm">{formatShortNumber(likes.length)}</Text>
     </Flex>
   );
 }

@@ -5,7 +5,7 @@ import { Text } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 
 import { pubkeyAtom } from "@habla/state";
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 
 const Write = dynamic(() => import("@habla/components/Write"), {
   ssr: false,

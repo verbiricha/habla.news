@@ -18,54 +18,22 @@ import {
 
 import { relaysAtom } from "@habla/state";
 import { getMetadata } from "@habla/nip23";
-import { formatReadingTime, formatDay } from "@habla/format";
+import { formatDay } from "@habla/format";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import SeenIn from "@habla/components/SeenIn";
 import User from "../User";
 import Hashtags from "../../Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
 
-function LongFormTitle({ title, content, publishedAt, updatedAt }) {
-  return (
-    <>
-      <Heading fontSize="3xl" wordBreak="keep-all">
-        {title}
-      </Heading>
-      <LongFormTime
-        publishedAt={publishedAt}
-        updatedAt={updatedAt}
-        content={content}
-      />
-    </>
-  );
-}
-
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
-  const updated = useMemo(() => {
-    return formatDay(updatedAt);
-  }, [publishedAt, updatedAt]);
-  const readingTime = useMemo(() => formatReadingTime(content), [content]);
-  return (
-    <Flex alignItems="center" gap="2" color="secondary" fontSize="xs">
-      <Text>
-        {day}
-        {updated != day && `, updated ${updated}`}
-      </Text>
-      {readingTime && (
-        <>
-          <Text>–</Text>
-          <Text>{readingTime}</Text>
-        </>
-      )}
-    </Flex>
-  );
+  return <Text color="secondary">{day}</Text>;
 }
 
 export default function LongFormNote({
   event,
   excludeAuthor,
-  excludeReactions,
+  excludeReactions = true,
 }) {
   const { ref, inView } = useInView({
     threshold: 0,
@@ -90,49 +58,58 @@ export default function LongFormNote({
     });
   }, [event]);
   return (
-    <Card variant="unstyled" ref={ref}>
+    <Card ref={ref} variant="article">
       {!excludeAuthor && (
         <CardHeader>
-          <User pubkey={event.pubkey} size="xs" />
+          <Flex align="center" direction="row" gap={2} fontFamily="Inter">
+            <User pubkey={event.pubkey} size="sm" />
+            <LongFormTime
+              publishedAt={publishedAt}
+              updatedAt={event.created_at}
+              content={event.content}
+            />
+          </Flex>
         </CardHeader>
       )}
       <CardBody>
-        <Stack
-          alignItems="flex-start"
-          direction={["column", "row"]}
-          spacing={6}
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          direction={["column-reverse", "row"]}
+          gap="4"
         >
-          <Flex flexDirection="column" flexGrow="1" gap="1">
+          <Flex flexDirection="column">
             <Link href={`/a/${naddr}`}>
-              <LongFormTitle
-                title={title}
-                publishedAt={publishedAt}
-                updatedAt={event.created_at}
-                content={event.content}
-              />
-              {summary?.length > 0 && (
-                <Text py={1} wordBreak="keep-all">
-                  {summary}
-                </Text>
-              )}
+              <Heading
+                wordBreak="keep-all"
+                mb={3}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "24px",
+                  lineHeight: "30px",
+                }}
+              >
+                {title}
+              </Heading>
             </Link>
-            {hashtags.length > 0 && (
-              <Hashtags hashtags={hashtags.slice(0, 3)} />
+            {summary?.length > 0 && (
+              <Text color="secondary" py={1} wordBreak="keep-all">
+                {summary}
+              </Text>
             )}
+            {hashtags.length > 0 && <Hashtags mt={4} hashtags={hashtags} />}
           </Flex>
           {image?.length > 0 && summary?.length > 0 && (
-            <Link href={`/a/${naddr}`}>
-              <Image
-                src={image}
-                objectFit="contain"
-                maxH="130px"
-                maxW="200px"
-                alt={title}
-                display={["none", "block"]}
-              />
-            </Link>
+            <Image
+              src={image}
+              alt={title}
+              maxHeight="160px"
+              my={[2, 0]}
+              width="100%"
+              maxWidth={["none", "none", "240px"]}
+            />
           )}
-        </Stack>
+        </Flex>
       </CardBody>
       {!excludeReactions && (
         <CardFooter>

@@ -8,6 +8,7 @@ import { getZapRequest, getZapAmount } from "@habla/nip57";
 import { ZAP } from "@habla/const";
 import { formatShortNumber } from "@habla/format";
 import ZapModal from "@habla/components/ZapModal";
+import ReactionCount from "@habla/components/reactions/ReactionCount";
 
 export default function Zaps({ event, zaps }) {
   const [pubkey] = useAtom(pubkeyAtom);
@@ -28,17 +29,18 @@ export default function Zaps({ event, zaps }) {
 
   return (
     <>
-      <Flex alignItems="center" gap="3">
+      <Flex alignItems="center" color="secondary" fontFamily="'Inter'">
         <IconButton
           cursor="pointer"
           variant="unstyled"
           onClick={onOpen}
-          size={5}
-          color={zapped ? "purple.500" : "secondary"}
+          boxSize={3}
+          color={zapped ? "highlight" : "secondary"}
           as={ZapIcon}
         />
-        <Text fontSize="xl">{formatShortNumber(zapsTotal)}</Text>
+        <Text fontSize="sm">{formatShortNumber(zapsTotal)}</Text>
       </Flex>
+
       <ZapModal isOpen={isOpen} onClose={onClose} event={event} />
     </>
   );

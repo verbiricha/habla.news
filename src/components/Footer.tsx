@@ -10,8 +10,8 @@ export const Footer = (props: FlexProps) => (
     mt={20}
     {...props}
   >
-    <Text>
-      Made with 💜 by <Link href="/verbiricha">verbiricha</Link>
+    <Text color="secondary" fontSize="xl">
+      ❦
     </Text>
   </Flex>
 );

@@ -6,7 +6,7 @@ import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import Markdown from "@habla/markdown/Markdown";
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 import { getHandles, getPubkey, getProfile, getEvents } from "@habla/nip05";
 import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";

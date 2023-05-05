@@ -1,6 +1,9 @@
-import { Flex, Stack, Text, Heading } from "@chakra-ui/react";
+import { Flex, Stack, Text, Button } from "@chakra-ui/react";
 
+import SectionHeading from "@habla/components/SectionHeading";
+import User from "@habla/components/nostr/User";
 import Address from "@habla/components/nostr/feed/Address";
+import FollowButton from "@habla/components/nostr/FollowButton";
 
 function Featured({ naddr, kind, pubkey, identifier }) {
   return (
@@ -54,12 +57,34 @@ function PurpleText() {
   );
 }
 
+const featuredAuthors = [
+  "7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d",
+  "6e468422dfb74a5738702a8823b9b28168abab8655faacb6853cd0ee15deee93",
+  "5df413d4c5e5035ff508fd99b38b21ea9a0ac0b9ecc34f3312aba9aa2add4f5b",
+];
+
+export function FeaturedAuthors() {
+  return (
+    <>
+      <SectionHeading>Popular authors</SectionHeading>
+      <Stack gap={2}>
+        {featuredAuthors.map((pubkey) => {
+          return (
+            <Flex alignItems="center" justifyContent="space-between">
+              <User pubkey={pubkey} />
+              <FollowButton pubkey={pubkey} />
+            </Flex>
+          );
+        })}
+      </Stack>
+    </>
+  );
+}
+
 export default function FeaturedArticles() {
   return (
     <>
-      <Heading fontSize="3xl" fontWeight={500}>
-        ✨ Featured
-      </Heading>
+      <SectionHeading>Popular</SectionHeading>
       <Stack>
         <WelcomeToNostr />
         <PurpleText />

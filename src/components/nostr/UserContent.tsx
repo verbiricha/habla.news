@@ -17,7 +17,7 @@ export default function UserContent({ pubkey, events }) {
     {
       name: "Posts",
       panel: (
-        <Stack spacing="2">
+        <Stack spacing="4">
           {posts.map((e) => (
             <LongFormNote key={e.id} event={e} excludeAuthor />
           ))}
@@ -27,8 +27,8 @@ export default function UserContent({ pubkey, events }) {
     {
       name: "Highlights",
       panel: (
-        <Stack spacing="2">
-          <Highlights highlights={highlights} />
+        <Stack spacing="4">
+          <Highlights highlights={highlights} showHeader={false} />
         </Stack>
       ),
     },

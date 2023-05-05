@@ -4,15 +4,8 @@ import { NDKUser } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
-import {
-  Avatar,
-  Flex,
-  Button,
-  Text,
-  IconButton,
-  Stack,
-} from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
+import { Avatar, Flex, Button, Text, Icon, Stack } from "@chakra-ui/react";
+import WriteIcon from "@habla/icons/Write";
 import { useNdk, useUser } from "@habla/nostr/hooks";
 
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
@@ -32,7 +25,7 @@ function ProfileLink({ profile, pubkey, relays }) {
       <Flex gap="2" ml="auto">
         <Avatar
           name={profile?.name || pubkey}
-          size="xs"
+          size="md"
           src={profile?.picture || profile?.image}
         />
       </Flex>
@@ -81,9 +74,15 @@ export default function Login() {
   }, [pubkey]);
 
   return pubkey ? (
-    <Stack align="center" direction="row" spacing={1}>
+    <Stack align="center" direction="row" spacing={2}>
       <Link href="/write">
-        <IconButton icon={<EditIcon />} color="secondary" variant="unstyled" />
+        <Button
+          variant="write"
+          aria-label="Write"
+          leftIcon={<Icon as={WriteIcon} boxSize={5} />}
+        >
+          Write
+        </Button>
       </Link>
       <ProfileLink profile={profile} pubkey={pubkey} relays={relays} />
     </Stack>

@@ -4,6 +4,7 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import Markdown from "@habla/markdown/Markdown";
+import FollowButton from "@habla/components/nostr/FollowButton";
 
 import User from "./User";
 import UserContent from "./UserContent";
@@ -21,8 +22,9 @@ export default function Profile({ pubkey, relays }) {
     <Stack>
       <Stack alignItems="center" spacing="2">
         <User pubkey={pubkey} size="xl" flexDirection="column" />
+        <FollowButton pubkey={pubkey} />
         {profile?.about && (
-          <Prose textAlign="center">
+          <Prose>
             <Markdown content={profile?.about} />
           </Prose>
         )}

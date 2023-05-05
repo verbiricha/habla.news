@@ -11,8 +11,10 @@ import {
   HIGHLIGHT,
   REACTION,
   BADGE,
+  LISTS,
 } from "@habla/const";
 import Badge from "@habla/components/nostr/Badge";
+import List from "@habla/components/nostr/List";
 
 export default function Naddr({
   naddr,
@@ -44,6 +46,10 @@ export default function Naddr({
 
   if (event && kind === BADGE) {
     return <Badge naddr={naddr} event={event} relays={relays} />;
+  }
+
+  if (event && LISTS.includes(kind)) {
+    return <List event={event} />;
   }
 
   return (

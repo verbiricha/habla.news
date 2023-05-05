@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useMemo, useCallback } from "react";
 import ReactMarkdown, { uriTransformer } from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -12,12 +13,25 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import HyperText from "./HyperText";
 import Hashtag from "./Hashtag";
-import NEvent from "./NEvent";
-import NRelay from "./NRelay";
-import NProfile from "./NProfile";
-import NAddr from "./NAddr";
-import EventId from "./EventId";
-import Mention from "./Mention";
+
+const NEvent = dynamic(() => import("./NEvent"), {
+  ssr: false,
+});
+const NRelay = dynamic(() => import("./NRelay"), {
+  ssr: false,
+});
+const NProfile = dynamic(() => import("./NProfile"), {
+  ssr: false,
+});
+const NAddr = dynamic(() => import("./NAddr"), {
+  ssr: false,
+});
+const EventId = dynamic(() => import("./EventId"), {
+  ssr: false,
+});
+const Mention = dynamic(() => import("./Mention"), {
+  ssr: false,
+});
 
 const MentionRegex = /(#\[\d+\])/gi;
 const NostrPrefixRegex = /^nostr:/;
@@ -351,7 +365,7 @@ export default function Markdown({
         return <HyperText link={props.href}>{props.children}</HyperText>;
       },
     };
-  }, [tags, highlights]);
+  }, [tags]);
 
   return (
     <ReactMarkdown

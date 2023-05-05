@@ -1,6 +1,13 @@
 import { useEvent, useReactions } from "@habla/nostr/hooks";
-import { LONG_FORM, LONG_FORM_DRAFT, BADGE, REACTION } from "@habla/const";
+import {
+  LONG_FORM,
+  LONG_FORM_DRAFT,
+  BADGE,
+  REACTION,
+  LISTS,
+} from "@habla/const";
 import LongFormNote from "./LongFormNote";
+import List from "@habla/components/nostr/List";
 import Badge from "../Badge";
 
 export default function Address({
@@ -23,6 +30,10 @@ export default function Address({
 
   if (event && kind === BADGE) {
     return <Badge event={event} relays={relays} {...props} />;
+  }
+
+  if (event && LISTS.includes(kind)) {
+    return <List event={event} />;
   }
 
   return <code>{JSON.stringify(event, null, 2)}</code>;

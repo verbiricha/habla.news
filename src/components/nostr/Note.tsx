@@ -15,10 +15,8 @@ import {
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { nip19 } from "nostr-tools";
 
-import { REACTION, ZAP } from "@habla/const";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import Markdown from "@habla/markdown/Markdown";
-import Reactions from "@habla/components/nostr/LazyReactions";
 import User from "./User";
 
 export default function Note({ event }) {
@@ -48,9 +46,6 @@ export default function Note({ event }) {
           <Markdown content={event.content} tags={event.tags} />
         </Prose>
       </CardBody>
-      <CardFooter pl={10}>
-        <Reactions event={event} kinds={[ZAP, REACTION]} live={inView} />
-      </CardFooter>
     </Card>
   );
 }

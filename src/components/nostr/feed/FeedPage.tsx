@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { Button } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useEvents } from "@habla/nostr/hooks";
 import Events from "@habla/components/nostr/feed/Events";
 
@@ -37,7 +37,7 @@ export default function FeedPage({ filter, until, offset, options = {} }) {
   }, [inView]);
 
   return (
-    <>
+    <Stack gap={4}>
       <Events events={events} />
       {events.length > 0 && !showNext && <div ref={ref}></div>}
       {showNext && (
@@ -48,6 +48,6 @@ export default function FeedPage({ filter, until, offset, options = {} }) {
           options={options}
         />
       )}
-    </>
+    </Stack>
   );
 }

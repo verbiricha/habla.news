@@ -154,7 +154,7 @@ function eventToFilter(ev: NDKEvent) {
 
 export function useReactions(
   event: NDKEvent,
-  kinds = [ZAP, HIGHLIGHT, NOTE, REACTION],
+  kinds = [ZAP, HIGHLIGHT, NOTE],
   opts = {}
 ) {
   const { events } = useEvents(

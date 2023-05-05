@@ -1,11 +1,13 @@
 import { extendTheme } from "@chakra-ui/react";
 import { withProse } from "@nikolovlazar/chakra-ui-prose";
 
-import Card from "./theme/card";
-
-const fonts = { mono: `'Menlo', monospace` };
-
-const components = { Card };
+import Tag from "@habla/theme/components/tag";
+import Card from "@habla/theme/components/card";
+import Button from "@habla/theme/components/button";
+import colors from "@habla/theme/colors";
+import styles from "@habla/theme/styles";
+import semanticTokens from "@habla/theme/tokens";
+import fonts from "@habla/theme/fonts";
 
 const breakpoints = {
   sm: "40em",
@@ -14,48 +16,26 @@ const breakpoints = {
   xl: "80em",
 };
 
+const components = { Tag, Card, Button };
+
 const theme = extendTheme(
   {
-    initialColorMode: "system",
-    useSystemColorMode: true,
-    styles: {
-      global: {
-        mark: {
-          bg: "#FFF2CC",
-        },
-        img: {
-          borderRadius: "12px",
-          objectFit: "cover",
-        },
-        "::selection": {
-          color: "#16161D",
-          bg: "#FFD1DC",
-        },
-      },
-    },
-    semanticTokens: {
-      colors: {
-        highlight: {
-          default: "#A966FF",
-          _dark: "#A966FF",
-        },
-        secondary: {
-          default: "#757575",
-          _dark: "#A5A5A5",
-        },
-      },
-      radii: {
-        button: "12px",
-      },
-    },
-    colors: {
-      black: "#16161D",
-    },
-    fonts,
+    initialColorMode: "light",
+    useSystemColorMode: false,
     breakpoints,
+    styles,
+    colors,
+    semanticTokens,
+    fonts,
     components,
   },
-  withProse()
+  withProse({
+    baseStyle: {
+      a: {
+        textDecoration: "underline",
+      },
+    },
+  })
 );
 
 export default theme;

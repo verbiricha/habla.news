@@ -4,7 +4,7 @@ import Event from "./Event";
 
 export default function Events({ events }) {
   return (
-    <Stack spacing={4}>
+    <Stack gap={4}>
       {events.map((event, idx) => (
         <Event key={event.id} event={event} />
       ))}

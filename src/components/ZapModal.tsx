@@ -103,7 +103,6 @@ function SatSlider({ minSendable, maxSendable, onSelect }) {
   return (
     <Stack gap={1} width="100%">
       <Stack align="center" gap={2}>
-        <Text fontSize="2xl">{valueToEmoji(amount)}</Text>
         <Heading sx={{ fontFeatureSettings: '"tnum"' }}>
           {formatShortNumber(amount)}
         </Heading>
@@ -227,7 +226,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
       <ModalContent>
         <ModalHeader>
           <Stack direction="row" gap={1}>
-            <Text>Zap</Text>
+            <Text fontFamily="'Inter'">Zap</Text>
             <User pubkey={event.pubkey} size="xs" />
           </Stack>
         </ModalHeader>
@@ -270,7 +269,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="ghost" mr={3} onClick={closeModal}>
+          <Button variant="outline" mr={3} onClick={closeModal}>
             Close
           </Button>
           <Button

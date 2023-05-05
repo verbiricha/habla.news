@@ -4,10 +4,11 @@ import {
   LONG_FORM_DRAFT,
   ZAP,
   HIGHLIGHT,
-  REACTION,
+  LISTS,
 } from "@habla/const";
 import LongFormNote from "./LongFormNote";
 import Feed from "./Feed";
+import List from "./List";
 
 export default function Address({
   naddr,
@@ -28,6 +29,10 @@ export default function Address({
 
   if (event && (kind === LONG_FORM || kind === LONG_FORM_DRAFT)) {
     return <LongFormNote event={event} relays={relays} {...props} />;
+  }
+
+  if (event && LISTS.includes(kind)) {
+    return <List event={event} />;
   }
 
   return <code>{JSON.stringify(event, null, 2)}</code>;

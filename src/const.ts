@@ -6,6 +6,11 @@ export const REACTION = 7;
 export const BADGE = 30009;
 export const ZAP = 9735;
 export const PROFILE = 0;
+export const MUTED = 10000;
+export const PINNED = 10001;
+export const PEOPLE = 30000;
+export const BOOKMARKS = 30001;
+export const LISTS = [MUTED, PINNED, PEOPLE, BOOKMARKS];
 
 export const HOUR = 60 * 60;
 export const DAY = 24 * HOUR;
