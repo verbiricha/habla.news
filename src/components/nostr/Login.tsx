@@ -37,10 +37,9 @@ export default function Login() {
 
   function loginWithExtension() {
     try {
-      window.nostr.getPublicKey().then((pk) => {
-        setPubkey(pk);
-        const user = new NDKUser({ hexpubkey: pk });
+      ndk.signer.user().then((user) => {
         user.ndk = ndk;
+        setPubkey(user.hexpubkey());
         // User profile
         user.fetchProfile();
       });
@@ -48,6 +47,12 @@ export default function Login() {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      loginWithExtension();
+    }
+  }, []);
 
   useEffect(() => {
     if (pubkey) {
