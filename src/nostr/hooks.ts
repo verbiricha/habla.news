@@ -128,7 +128,13 @@ export function useEvent(filter, opts = defaultOpts) {
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
-  const user = useLiveQuery(() => db.profile.get(pubkey), [pubkey]);
+  const user = useLiveQuery(async () => {
+    try {
+      return await db.profile.get(pubkey);
+    } catch (error) {
+      return {};
+    }
+  }, [pubkey]);
 
   useEffect(() => {
     if (pubkey) {
