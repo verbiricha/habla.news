@@ -25,7 +25,7 @@ export default function Layout({ aside, children }) {
              "nav main aside"`,
         }}
         gridTemplateRows={{
-          base: "1fr ",
+          base: "80px 20px 20px 1fr",
           md: "80px 1fr 30px",
         }}
         gridTemplateColumns={{

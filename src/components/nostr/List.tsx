@@ -7,7 +7,7 @@ import FollowButton from "@habla/components/nostr/FollowButton";
 import EventId from "@habla/markdown/EventId";
 import Hashtags from "@habla/components/Hashtags";
 
-function ListTag({ tag }) {
+export function ListTag({ tag }) {
   const [t, value] = tag;
   if (t === "p") {
     return (
