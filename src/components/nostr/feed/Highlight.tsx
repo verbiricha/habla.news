@@ -11,7 +11,6 @@ import {
   CardFooter,
   Stack,
 } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { nip19 } from "nostr-tools";
 
@@ -21,6 +20,7 @@ import NAddr from "@habla/markdown/Naddr";
 import { useEvent } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
+import Blockquote from "@habla/components/Blockquote";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 
@@ -58,9 +58,7 @@ export default function Highlight({ event, showHeader = true }) {
       )}
       <CardBody>
         <Stack gap="1">
-          <Link shallow={true} href={`/e/${nevent}`}>
-            <Text>{event.content}</Text>
-          </Link>
+          <Blockquote>{event.content}</Blockquote>
           {naddr && (
             <ArticleTitle
               naddr={naddr}

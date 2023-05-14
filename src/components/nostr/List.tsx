@@ -30,7 +30,12 @@ export default function List({ event }) {
   const hashtags = findTags(event, "t");
   return (
     <>
-      <Flex alignItems="center" justifyContent="space-between">
+      <Flex
+        flexDirection={["column", "row"]}
+        alignItems={["flex-start", "center"]}
+        justifyContent="space-between"
+        my={4}
+      >
         <Heading as="h5">{identifier}</Heading>
         <Flex alignItems="center" gap={2}>
           <Text as="span" fontSize="lg" color="secondary">

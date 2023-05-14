@@ -4,14 +4,12 @@ import { useInView } from "react-intersection-observer";
 
 import {
   Heading,
-  Text,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
   Stack,
 } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { nip19 } from "nostr-tools";
 
@@ -21,6 +19,7 @@ import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import User from "@habla/components/nostr/User";
+import Blockquote from "@habla/components/Blockquote";
 
 export default function Highlight({ event }) {
   const { ref, inView } = useInView({
@@ -72,11 +71,7 @@ export default function Highlight({ event }) {
         )}
       </CardHeader>
       <CardBody>
-        <Link href={`/e/${nevent}`}>
-          <Prose mt={-6} mb={-2}>
-            <Text as="blockquote">{event.content}</Text>
-          </Prose>
-        </Link>
+        <Blockquote>{event.content}</Blockquote>
         <User pubkey={event.pubkey} />
       </CardBody>
       <CardFooter>

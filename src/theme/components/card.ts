@@ -28,7 +28,7 @@ const variants = {
   }),
   highlight: definePartsStyle({
     header: {
-      py: 0,
+      py: 1,
       px: 0,
     },
     body: {

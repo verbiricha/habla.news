@@ -34,13 +34,13 @@ export default function Note({ event }) {
   }, [event, seenOn]);
   return (
     <Card variant="outline" my={4} ref={ref}>
-      <CardHeader>
+      <CardHeader py={0} mb={-10}>
         <User pubkey={event.pubkey} size="sm" />
       </CardHeader>
       <CardBody
-        pl={10}
+        px={16}
         cursor="pointer"
-        onClick={() => router.push(`/e/${nevent}`)}
+        onClick={() => router.push(`https://snort.social/e/${nevent}`)}
       >
         <Prose>
           <Markdown content={event.content} tags={event.tags} />
