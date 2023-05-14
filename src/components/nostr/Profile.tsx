@@ -29,7 +29,13 @@ export default function Profile({ pubkey, relays }) {
   );
   return (
     <Stack align="center">
-      <Flex gap="4" alignItems="flex-start" mb={5} width="100%">
+      <Flex
+        gap="4"
+        flexDirection={["column", "row"]}
+        alignItems={["center", "flex-start"]}
+        mb={5}
+        width="100%"
+      >
         <Avatar pubkey={pubkey} size="xl" />
         <Stack flex={1}>
           <Flex alignItems="center" justifyContent="space-between">

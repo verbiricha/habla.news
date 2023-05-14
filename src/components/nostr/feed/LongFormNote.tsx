@@ -73,7 +73,7 @@ export default function LongFormNote({
       )}
       <CardBody>
         <Flex
-          alignItems="center"
+          alignItems={["flex-start", "center"]}
           justifyContent="space-between"
           direction={["column-reverse", "row"]}
           gap="4"
