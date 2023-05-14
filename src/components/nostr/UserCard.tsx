@@ -6,6 +6,10 @@ import { useUser } from "@habla/nostr/hooks";
 import User from "./User";
 import FollowButton from "@habla/components/nostr/FollowButton";
 
+function Bio({ profile }) {
+  return profile?.about ? <Markdown content={profile?.about} /> : null;
+}
+
 export default function UserCard({ pubkey, size = "sm", ...rest }) {
   const user = useUser(pubkey);
   return (
@@ -13,7 +17,7 @@ export default function UserCard({ pubkey, size = "sm", ...rest }) {
       <CardHeader>
         <User size="md" pubkey={pubkey} />
       </CardHeader>
-      <CardBody>{user?.about && <Markdown content={user?.about} />}</CardBody>
+      <CardBody>{user?.about && <Bio profile={user} />}</CardBody>
       <CardFooter>
         <FollowButton pubkey={pubkey} />
       </CardFooter>

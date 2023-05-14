@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import {
   Avatar,
   Flex,
+  Stack,
   Text,
   Heading,
   Card,
@@ -22,19 +23,16 @@ export default function Badge({ naddr, event }) {
   const seenOn = useSeenOn(event);
   return (
     <Card variant="outline" my={4}>
-      <CardHeader>
-        <Flex alignItems="center" justifyContent="space-between">
-          <Text>{name}</Text>
-          <User pubkey={event.pubkey} />
-        </Flex>
-      </CardHeader>
       <CardBody
         cursor="pointer"
         onClick={() => router.push(`https://badges.page/b/${naddr}`)}
       >
         <Flex alignItems="center" gap="6">
           <Avatar src={image} alt={name} size="xl" />
-          {description && <Text>{description}</Text>}
+          <Stack>
+            <Text>{name}</Text>
+            {description && <Text>{description}</Text>}
+          </Stack>
         </Flex>
       </CardBody>
     </Card>

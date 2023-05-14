@@ -58,19 +58,18 @@ export function useEvents(filter, options = {}) {
   const { relays, ...rest } = options;
 
   let opts = { ...defaultOpts, ...rest };
+  let relaySet = new Set();
   if (relays?.length > 0) {
     const ndkRelays = new Set(relays.map((url) => new NDKRelay(url)));
-    const relaySet = new NDKRelaySet(ndkRelays, ndk);
-    opts = { ...opts, relaySet };
+    relaySet = new NDKRelaySet(ndkRelays, ndk);
   } else if (defaultRelays) {
     const ndkRelays = new Set(defaultRelays.map((url) => new NDKRelay(url)));
-    const relaySet = new NDKRelaySet(ndkRelays, ndk);
-    opts = { ...opts, relaySet };
+    relaySet = new NDKRelaySet(ndkRelays, ndk);
   }
 
   useEffect(() => {
     if (filter) {
-      const sub = ndk.subscribe(filter, opts);
+      const sub = ndk.subscribe(filter, opts, relaySet);
 
       sub.on("event", (ev, relay) => {
         setEvents((evs) =>

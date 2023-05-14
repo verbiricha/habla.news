@@ -4,9 +4,10 @@ import { NDKUser } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
-import { Avatar, Flex, Button, Text, Icon, Stack } from "@chakra-ui/react";
+import { Flex, Button, Text, Icon, Stack } from "@chakra-ui/react";
 import WriteIcon from "@habla/icons/Write";
 import { useNdk, useUser } from "@habla/nostr/hooks";
+import Avatar from "@habla/components/nostr/Avatar";
 
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 
@@ -22,13 +23,7 @@ function ProfileLink({ profile, pubkey, relays }) {
 
   return (
     <Link href={`/p/${nprofile}`}>
-      <Flex gap="2" ml="auto">
-        <Avatar
-          name={profile?.name || pubkey}
-          size="md"
-          src={profile?.picture || profile?.image}
-        />
-      </Flex>
+      <Avatar size="md" pubkey={pubkey} />
     </Link>
   );
 }

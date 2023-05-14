@@ -34,7 +34,7 @@ export default function Note({ event }) {
   }, [event, seenOn]);
   return (
     <Card variant="outline" my={4} ref={ref}>
-      <CardHeader py={0} mb={-6}>
+      <CardHeader>
         <User pubkey={event.pubkey} size="sm" />
       </CardHeader>
       <CardBody

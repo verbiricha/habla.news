@@ -11,19 +11,16 @@ const Bookmarks = dynamic(() => import("@habla/components/nostr/Bookmarks"), {
   ssr: false,
 });
 
-export default function WritePage() {
+export default function BookmarksPage() {
   const [pubkey] = useAtom(pubkeyAtom);
   return (
     <>
       <Head>
-        <title>Habla</title>
+        <title>Bookmarks</title>
         <meta name="og:title" content="Habla" />
         <meta name="og:description" content="Speak your mind" />
       </Head>
-      <Layout>
-        {!pubkey && <Text>Log in to see bookmarks</Text>}
-        {pubkey && <Bookmarks />}
-      </Layout>
+      <Layout>{pubkey && <Bookmarks pubkey={pubkey} />}</Layout>
     </>
   );
 }
