@@ -23,7 +23,12 @@ export default function Nav() {
       my={[0, 0, 4]}
     >
       <IconButton {...activeNav} icon={<ReadIcon />} aria-label="Read" />
-      <IconButton {...nav} icon={<BookmarkIcon />} aria-label="Bookmarks" />
+      <IconButton
+        isDisabled
+        {...nav}
+        icon={<BookmarkIcon />}
+        aria-label="Bookmarks"
+      />
     </Flex>
   );
 }

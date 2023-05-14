@@ -27,7 +27,7 @@ export default function LongFormNote({
   );
   return (
     <>
-      <Box as="article">
+      <Box as="article" sx={{ wordBreak: "break-word" }}>
         <Flex align="center" gap={3} fontFamily="Inter">
           {event.pubkey && <User pubkey={event.pubkey} />}
           <Text color="secondary" fontSize="xs">

@@ -55,7 +55,6 @@ const variants = {
       px: 4,
       py: 2,
       bg: "transparent",
-      border: "1px solid #EEE",
       borderRadius: "20px",
     },
   }),

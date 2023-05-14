@@ -21,7 +21,7 @@ const components = { Tag, Card, Button };
 const theme = extendTheme(
   {
     initialColorMode: "light",
-    useSystemColorMode: false,
+    useSystemColorMode: true,
     breakpoints,
     styles,
     colors,
