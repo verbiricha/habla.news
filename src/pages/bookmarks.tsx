@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useAtom } from "jotai";
 
 import { pubkeyAtom } from "@habla/state";
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 
 const Bookmarks = dynamic(() => import("@habla/components/nostr/Bookmarks"), {
   ssr: false,

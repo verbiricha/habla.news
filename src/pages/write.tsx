@@ -7,7 +7,7 @@ import { useAtom } from "jotai";
 import { pubkeyAtom } from "@habla/state";
 import Layout from "@habla/layouts/Wide";
 
-const Bookmarks = dynamic(() => import("@habla/components/nostr/Bookmarks"), {
+const Write = dynamic(() => import("@habla/components/Write"), {
   ssr: false,
 });
 
@@ -22,7 +22,7 @@ export default function WritePage() {
       </Head>
       <Layout>
         {!pubkey && <Text>Log in to see bookmarks</Text>}
-        {pubkey && <Bookmarks />}
+        {pubkey && <Write pubkey={pubkey} />}
       </Layout>
     </>
   );

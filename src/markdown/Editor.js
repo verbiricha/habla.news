@@ -22,7 +22,6 @@ import { nip19 } from "nostr-tools";
 import { urlsToNip27 } from "@habla/nip27";
 import { LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
 import { useNdk } from "@habla/nostr/hooks";
-import { useSigner } from "@habla/nostr";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
@@ -78,8 +77,9 @@ export default function MyEditor({ event, showPreview }) {
     try {
       setIsPublishing(true);
       // todo: mention tags
-      const s = await window.nostr.signEvent(ev);
-      await ndk.publish(new NDKEvent(ndk, s));
+      const ev = new NDKEvent(ndk, s);
+      await ev.sign();
+      await ndk.publish(ev);
       toast({
         title: "Posted",
         status: "success",
@@ -105,11 +105,13 @@ export default function MyEditor({ event, showPreview }) {
     try {
       setIsPublishing(true);
       // todo: mention tags
-      const s = await window.nostr.signEvent({
+      const s = {
         ...ev,
         kind: LONG_FORM_DRAFT,
-      });
-      await ndk.publish(new NDKEvent(ndk, s));
+      };
+      const ev = new NDKEvent(ndk, s);
+      await ev.sign();
+      await ndk.publish(ev);
       toast({
         title: "Draft saved",
         status: "success",

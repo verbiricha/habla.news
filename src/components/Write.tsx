@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAtom } from "jotai";
 
 import {
   Flex,
@@ -17,13 +16,11 @@ import { AddIcon, HamburgerIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 
 import { getMetadata } from "@habla/nip23";
 import { LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
-import { pubkeyAtom } from "@habla/state";
 import { useEvents } from "@habla/nostr/hooks";
 import Events from "@habla/components/nostr/feed/Events";
 import Editor from "@habla/markdown/Editor";
 
-export default function Write() {
-  const [pubkey] = useAtom(pubkeyAtom);
+export default function Write({ pubkey }) {
   const [showPreview, setShowPreview] = useState(false);
   const [event, setEvent] = useState();
   const { events } = useEvents(
