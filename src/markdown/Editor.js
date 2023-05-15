@@ -77,9 +77,9 @@ export default function MyEditor({ event, showPreview }) {
     try {
       setIsPublishing(true);
       // todo: mention tags
-      const ev = new NDKEvent(ndk, s);
-      await ev.sign();
-      await ndk.publish(ev);
+      const ndkEvent = new NDKEvent(ndk, ev);
+      await ndkEvent.sign();
+      await ndk.publish(ndkEvent);
       toast({
         title: "Posted",
         status: "success",
@@ -109,9 +109,9 @@ export default function MyEditor({ event, showPreview }) {
         ...ev,
         kind: LONG_FORM_DRAFT,
       };
-      const ev = new NDKEvent(ndk, s);
-      await ev.sign();
-      await ndk.publish(ev);
+      const ndkEvent = new NDKEvent(ndk, s);
+      await ndkEvent.sign();
+      await ndk.publish(ndkEvent);
       toast({
         title: "Draft saved",
         status: "success",

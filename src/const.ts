@@ -10,6 +10,7 @@ export const MUTED = 10000;
 export const PINNED = 10001;
 export const PEOPLE = 30000;
 export const BOOKMARKS = 30001;
+export const ZAPSTR_TRACK = 31337;
 export const LISTS = [MUTED, PINNED, PEOPLE, BOOKMARKS];
 
 export const HOUR = 60 * 60;

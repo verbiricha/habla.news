@@ -23,8 +23,8 @@ export default function User({ pubkey, size = "sm", ...rest }) {
       }
       {...rest}
     >
-      <Avatar pubkey={pubkey} />
-      <Username pubkey={pubkey} />
+      <Avatar size={size} pubkey={pubkey} />
+      <Username pubkey={pubkey} {...rest} />
     </Flex>
   );
 }

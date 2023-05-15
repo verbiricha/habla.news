@@ -12,9 +12,11 @@ import {
   REACTION,
   BADGE,
   LISTS,
+  ZAPSTR_TRACK,
 } from "@habla/const";
 import Badge from "@habla/components/nostr/Badge";
 import List from "@habla/components/nostr/List";
+import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
 
 export default function Naddr({
   naddr,
@@ -52,10 +54,14 @@ export default function Naddr({
     return <List event={event} />;
   }
 
+  if (event && kind === ZAPSTR_TRACK) {
+    return <ZapstrTrack event={event} />;
+  }
+
   return (
     <Link href={`/a/${naddr}`}>
       <Text as="span" fontWeight={500} {...rest}>
-        {naddr}
+        {`${kind}:${pubkey}:${identifier}`}
       </Text>
     </Link>
   );
