@@ -26,6 +26,7 @@ interface Profile {
   banner?: string;
   nip05?: string;
   lud16?: string;
+  emoji: string[];
 }
 
 export class HablaDatabase extends Dexie {
@@ -34,12 +35,12 @@ export class HablaDatabase extends Dexie {
   profile!: Table<Profile>;
 
   constructor() {
-    super("news");
+    super("habla.news");
     this.version(1).stores({
       event:
         "id,created_at,kind,pubkey,[kind+pubkey],[kind+pubkey+d],[kind+a],[kind+e],[kind+p],t",
       relaySet: "id,urls",
-      profile: "id,name,display_name,about,picture,nip05,lud16,banner",
+      profile: "id,name,display_name,about,picture,nip05,lud16,banner,emoji",
       relayMetadata:
         "id,name,description,pubkey,contact,supported_nips,software,version",
     });
@@ -113,11 +114,7 @@ export async function storeEvent(db: HablaDatabase, event: NDKEvent) {
   return db
     .transaction("rw", db.profile, db.event, async () => {
       const id = event.tagId();
-      if (
-        event.kind === 0 ||
-        event.isParamReplaceable() ||
-        event.isReplaceable()
-      ) {
+      if (event.isParamReplaceable() || event.isReplaceable()) {
         const existing = await db.event.get(id);
         if (existing && existing.created_at >= event.created_at) {
           return;
@@ -128,6 +125,7 @@ export async function storeEvent(db: HablaDatabase, event: NDKEvent) {
         await db.profile.put({
           id: event.pubkey,
           ...JSON.parse(event.content),
+          emoji: event.tags.filter((t) => t.at(0) === "emoji"),
         });
       }
       const d = findTag(event, "d");
