@@ -6,13 +6,12 @@ import { nip19 } from "nostr-tools";
 
 import { Flex, Button, Text, Icon, Stack } from "@chakra-ui/react";
 import WriteIcon from "@habla/icons/Write";
-import { useNdk, useUser } from "@habla/nostr/hooks";
+import { useNdk } from "@habla/nostr/hooks";
 import Avatar from "@habla/components/nostr/Avatar";
 
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 
 function ProfileLink({ pubkey, relays }) {
-  const profile = useUser(pubkey);
   const nprofile = useMemo(() => {
     if (pubkey) {
       return nip19.nprofileEncode({
@@ -86,7 +85,7 @@ export default function Login() {
           Write
         </Button>
       </Link>
-      <ProfileLink profile={profile} pubkey={pubkey} relays={relays} />
+      <ProfileLink pubkey={pubkey} relays={relays} />
     </Stack>
   ) : (
     <Button colorScheme="orange" onClick={loginWithExtension}>
