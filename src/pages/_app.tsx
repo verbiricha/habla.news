@@ -8,7 +8,6 @@ import { useMemo, useEffect } from "react";
 import { AppProps } from "next/app";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
-import { NDKNip07Signer } from "@nostr-dev-kit/ndk";
 
 import { ChakraProvider } from "@chakra-ui/react";
 
@@ -27,7 +26,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       : {
           explicitRelayUrls,
           cacheAdapter,
-          signer: new NDKNip07Signer(),
         };
   const ndk = useNdk(options);
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import Link from "next/link";
-import { NDKUser } from "@nostr-dev-kit/ndk";
+import { NDKUser, NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
@@ -37,7 +37,9 @@ export default function Login() {
 
   function loginWithExtension() {
     try {
-      ndk.signer.user().then((user) => {
+      const signer = new NDKNip07Signer();
+      ndk.signer = signer;
+      signer.user().then((user) => {
         user.ndk = ndk;
         setPubkey(user.hexpubkey());
         // User profile

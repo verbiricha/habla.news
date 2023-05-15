@@ -26,11 +26,12 @@ import {
   NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import useWebln from "@habla/hooks/useWebln";
 import InputCopy from "@habla/components/InputCopy";
 import { relaysAtom } from "@habla/state";
-import { useUser } from "@habla/nostr/hooks";
+import { useNdk, useUser } from "@habla/nostr/hooks";
 import { loadService, loadInvoice } from "@habla/lnurl";
 import { formatShortNumber } from "@habla/format";
 import User from "@habla/components/nostr/User";
@@ -139,6 +140,7 @@ function SatSlider({ minSendable, maxSendable, onSelect }) {
 }
 
 export default function ZapModal({ event, isOpen, onClose }) {
+  const ndk = useNdk();
   const toast = useToast();
   const [relays] = useAtom(relaysAtom);
   const [isFetchingInvoice, setIsFetchingInvoice] = useState(false);
@@ -169,7 +171,9 @@ export default function ZapModal({ event, isOpen, onClose }) {
           ["relays", ...relays],
         ],
       };
-      return await window.nostr.signEvent(zr);
+      const signed = new NDKEvent(ndk, zr);
+      await signed.sign();
+      return signed.toNostrEvent();
     } catch (error) {
       console.error("Could not create zap request");
     }
@@ -231,7 +235,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
           </Stack>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody fontFamily="'Inter'">
           <Stack alignItems="center" minH="4rem">
             {!lnurl && <Spinner />}
             {lnurl && !invoice && (
