@@ -5,10 +5,12 @@ import {
   BADGE,
   REACTION,
   LISTS,
+  ZAPSTR_TRACK,
 } from "@habla/const";
 import LongFormNote from "./LongFormNote";
 import List from "@habla/components/nostr/List";
 import Badge from "../Badge";
+import ZapstrTrack from "../ZapstrTrack";
 
 export default function Address({
   naddr,
@@ -36,5 +38,9 @@ export default function Address({
     return <List event={event} />;
   }
 
-  return <code>{JSON.stringify(event, null, 2)}</code>;
+  if (event && kind === ZAPSTR_TRACK) {
+    return <ZapstrTrack event={event} />;
+  }
+
+  return event ? <code>{event.content}</code> : null;
 }

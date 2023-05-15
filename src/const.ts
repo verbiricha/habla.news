@@ -11,7 +11,8 @@ export const PINNED = 10001;
 export const PEOPLE = 30000;
 export const BOOKMARKS = 30001;
 export const ZAPSTR_TRACK = 31337;
-export const LISTS = [MUTED, PINNED, PEOPLE, BOOKMARKS];
+export const ZAPSTR_LIST = 31338;
+export const LISTS = [MUTED, PINNED, PEOPLE, BOOKMARKS, ZAPSTR_LIST];
 
 export const HOUR = 60 * 60;
 export const DAY = 24 * HOUR;
