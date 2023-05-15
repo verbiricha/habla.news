@@ -11,7 +11,8 @@ import Avatar from "@habla/components/nostr/Avatar";
 
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 
-function ProfileLink({ profile, pubkey, relays }) {
+function ProfileLink({ pubkey, relays }) {
+  const profile = useUser(pubkey);
   const nprofile = useMemo(() => {
     if (pubkey) {
       return nip19.nprofileEncode({
@@ -32,7 +33,6 @@ export default function Login() {
   const ndk = useNdk();
   const [relays, setRelays] = useAtom(relaysAtom);
   const [pubkey, setPubkey] = useAtom(pubkeyAtom);
-  const profile = useUser(pubkey);
   const [, setFollows] = useAtom(followsAtom);
 
   function loginWithExtension() {
