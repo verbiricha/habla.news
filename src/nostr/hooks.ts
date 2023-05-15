@@ -69,7 +69,8 @@ export function useEvents(filter, options = {}) {
 
   useEffect(() => {
     if (filter) {
-      const sub = ndk.subscribe(filter, opts, relaySet);
+      // todo: check this
+      const sub = ndk.subscribe(filter, opts);
 
       sub.on("event", (ev, relay) => {
         setEvents((evs) =>
@@ -111,11 +112,11 @@ export function useEvent(filter, opts = defaultOpts) {
   if (relays?.length > 0) {
     const ndkRelays = new Set(relays.map((url) => new NDKRelay(url)));
     const relaySet = new NDKRelaySet(ndkRelays, ndk);
-    options = { ...options, relaySet };
+    options = { ...options };
   } else if (defaultRelays) {
     const ndkRelays = new Set(defaultRelays.map((url) => new NDKRelay(url)));
     const relaySet = new NDKRelaySet(ndkRelays, ndk);
-    options = { ...options, relaySet };
+    options = { ...options };
   }
 
   useEffect(() => {
