@@ -2,6 +2,7 @@ const styles = {
   global: {
     mark: {
       bg: "#ffefd8",
+      cursor: "pointer",
     },
     img: {
       borderRadius: "20px",

@@ -291,11 +291,16 @@ function processHighlights(content, hs) {
   return result;
 }
 
+function Mark({ onClick, children }) {
+  return <mark onClick={() => onClick(children)}>{children}</mark>;
+}
+
 export default function Markdown({
   tags = [],
   content,
   highlights = [],
   pTag = true,
+  onHighlightClick,
 }) {
   const highlighted = useMemo(
     () => processHighlights(content, highlights),
@@ -363,6 +368,9 @@ export default function Markdown({
           {children}
         </h6>
       ),
+      mark: ({ children }) => {
+        return <Mark onClick={onHighlightClick}>{children}</Mark>;
+      },
       img: ({ alt, src }) => {
         return (
           <Image
