@@ -9,7 +9,7 @@ import { AppProps } from "next/app";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
-import { ChakraProvider } from "@chakra-ui/react";
+import { createLocalStorageManager, ChakraProvider } from "@chakra-ui/react";
 
 import NostrContext from "@habla/nostr/provider";
 import cacheAdapter from "@habla/cache/indexeddb";
@@ -17,6 +17,9 @@ import cacheAdapter from "@habla/cache/indexeddb";
 import theme from "@habla/theme";
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 import { useNdk } from "@habla/nostr";
+
+// this changes the default local storage key name to ensure that no user has light mode cached in
+const colorModeManager = createLocalStorageManager("habla-ui-color");
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [explicitRelayUrls] = useAtom(relaysAtom);
@@ -30,7 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const ndk = useNdk(options);
   return (
     <NostrContext.Provider value={{ ndk }}>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={theme} colorModeManager={colorModeManager}>
         <Component {...pageProps} />
       </ChakraProvider>
     </NostrContext.Provider>

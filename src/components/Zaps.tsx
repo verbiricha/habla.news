@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useDisclosure, Flex, Text, IconButton } from "@chakra-ui/react";
+import { useDisclosure, Flex, Text, Icon } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 
 import { pubkeyAtom } from "@habla/state";
@@ -29,8 +29,8 @@ export default function Zaps({ event, zaps }) {
 
   return (
     <>
-      <Flex alignItems="center" color="secondary" fontFamily="'Inter'">
-        <IconButton
+      <Flex alignItems="center" color="secondary" fontFamily="'Inter'" gap={3}>
+        <Icon
           cursor="pointer"
           variant="unstyled"
           onClick={onOpen}

@@ -9,4 +9,5 @@ const colors = {
     500: "rgba(94, 48, 224)",
   },
 };
+
 export default colors;

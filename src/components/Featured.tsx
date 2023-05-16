@@ -98,7 +98,7 @@ export default function FeaturedArticles() {
   return (
     <>
       <SectionHeading>Popular</SectionHeading>
-      <Stack>
+      <Stack spacing={4}>
         <WelcomeToNostr />
         <Faq />
         <PurpleText />

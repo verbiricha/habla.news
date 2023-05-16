@@ -18,10 +18,14 @@ const breakpoints = {
 
 const components = { Tag, Card, Button };
 
+const config = {
+  initialColorMode: "system",
+  useSystemColorMode: true,
+};
+
 const theme = extendTheme(
   {
-    initialColorMode: "light",
-    useSystemColorMode: true,
+    config,
     breakpoints,
     styles,
     colors,
@@ -33,6 +37,7 @@ const theme = extendTheme(
     baseStyle: {
       a: {
         textDecoration: "underline",
+        textDecorationStyle: "dotted",
       },
     },
   })

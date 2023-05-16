@@ -9,7 +9,7 @@ const baseStyle = definePartsStyle({
     fontFamily: "Inter",
     bg: "#F3F3F3",
     _dark: {
-      bg: "orange.500",
+      bg: "teal.700",
     },
     borderRadius: "46px",
     py: "8px",
