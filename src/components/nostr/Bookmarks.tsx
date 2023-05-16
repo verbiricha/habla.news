@@ -30,9 +30,5 @@ export default function Bookmarks({ pubkey }) {
     };
   });
 
-  return (
-    <Stack width="100%">
-      <Tabs tabs={tabs} />
-    </Stack>
-  );
+  return <Tabs tabs={tabs} />;
 }

@@ -4,6 +4,7 @@ import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
+  IconButton,
   Box,
   Heading,
   Text,
@@ -12,7 +13,7 @@ import {
   CardBody,
   CardFooter,
 } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import { LinkIcon } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 
 import useSeenOn from "@habla/hooks/useSeenOn";
@@ -33,18 +34,22 @@ export default function Note({ event }) {
     });
   }, [event, seenOn]);
   return (
-    <Card variant="outline" my={4} ref={ref}>
+    <Card variant="outline" my={4} ref={ref} maxW="586px">
       <CardHeader>
-        <User pubkey={event.pubkey} size="sm" />
+        <Flex alignItems="center" justifyContent="space-between">
+          <User pubkey={event.pubkey} size="sm" />
+          <IconButton
+            cursor="pointer"
+            variant="unstyled"
+            boxSize={3}
+            color="secondary"
+            as={LinkIcon}
+            onClick={() => router.push(`https://snort.social/e/${nevent}`)}
+          />
+        </Flex>
       </CardHeader>
-      <CardBody
-        px={16}
-        cursor="pointer"
-        onClick={() => router.push(`https://snort.social/e/${nevent}`)}
-      >
-        <Prose>
-          <Markdown content={event.content} tags={event.tags} />
-        </Prose>
+      <CardBody px={16}>
+        <Markdown content={event.content} tags={event.tags} />
       </CardBody>
     </Card>
   );

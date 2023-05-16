@@ -6,7 +6,6 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import Main from "@habla/components/Main";
 import Nav from "@habla/components/Nav";
 import Header from "@habla/components/Header";
 
@@ -25,7 +24,7 @@ export default function Layout({ aside, children }) {
              "nav main aside"`,
         }}
         gridTemplateRows={{
-          base: "80px 20px 20px 1fr",
+          base: "80px 40px 0 1fr",
           md: "80px 1fr 30px",
         }}
         gridTemplateColumns={{
@@ -42,7 +41,11 @@ export default function Layout({ aside, children }) {
           <Nav />
         </GridItem>
         <GridItem area={"main"}>
-          <Main>{children}</Main>
+          <Flex align="center" justifyContent="center">
+            <Stack spacing="1.5rem" maxWidth="52rem" px="1rem">
+              {children}
+            </Stack>
+          </Flex>
         </GridItem>
         <GridItem area={"aside"}>
           <Flex maxWidth={["100%", "100%", "28rem"]}>

@@ -1,13 +1,11 @@
 import Link from "next/link";
 
-import { shortenString } from "../format";
-import { useUser } from "../nostr/hooks";
+import Username from "@habla/components/nostr/Username";
 
 export default function NProfile({ pubkey, relays, nprofile }) {
-  const profile = useUser(pubkey);
   return (
-    <Link href={`/p/${nprofile}`}>
-      {profile?.name || shortenString(pubkey, 8)}
+    <Link href={`https://snort.social/p/${nprofile}`}>
+      <Username as="span" pubkey={pubkey} fontFamily="'Source Serif Pro'" />
     </Link>
   );
 }

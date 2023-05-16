@@ -6,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 import { nip19 } from "nostr-tools";
 import {
   Flex,
+  Box,
   Text,
   Heading,
   Card,
@@ -103,10 +104,11 @@ export default function LongFormNote({
             <Image
               src={image}
               alt={title}
-              maxHeight="160px"
-              my={[2, 0]}
+              mt={[2, 0]}
+              fit={["contain", "cover"]}
+              maxWidth={["none", "240px"]}
               width="100%"
-              maxWidth={["none", "none", "240px"]}
+              maxHeight="160px"
             />
           )}
         </Flex>

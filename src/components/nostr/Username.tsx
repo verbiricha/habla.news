@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import Link from "next/link";
-import { Image } from "@chakra-ui/react";
 
 import { nip19 } from "nostr-tools";
 import { useAtom } from "jotai";
@@ -10,6 +9,7 @@ import { Text } from "@chakra-ui/react";
 import { relaysAtom } from "@habla/state";
 import { shortenString } from "@habla/format";
 import { useUser } from "@habla/nostr/hooks";
+import Emoji from "@habla/components/Emoji";
 
 export default function Username({ pubkey, renderLink, ...rest }) {
   const [relays] = useAtom(relaysAtom);
@@ -29,17 +29,7 @@ export default function Username({ pubkey, renderLink, ...rest }) {
       const splitted = result.split(`:${e}:`);
       if (splitted.length > 1) {
         result = splitted.reduce((acc, val) =>
-          [].concat(
-            acc,
-            <Image
-              borderRadius="none"
-              display="inline"
-              boxSize={5}
-              fit="contain"
-              src={img}
-            />,
-            val
-          )
+          [].concat(acc, <Emoji src={img} />, val)
         );
         break;
       }

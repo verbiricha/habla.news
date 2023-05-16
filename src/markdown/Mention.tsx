@@ -2,14 +2,12 @@ import Link from "next/link";
 
 import { nip19 } from "nostr-tools";
 
-import { shortenString } from "../format";
-import { useUser } from "../nostr/hooks";
+import Username from "@habla/components/nostr/Username";
 
 export default function Mention({ pubkey }) {
-  const profile = useUser(pubkey);
   return (
     <Link href={`https://snort.social/p/${nip19.npubEncode(pubkey)}`}>
-      {profile?.name || shortenString(pubkey, 8)}
+      <Username as="span" pubkey={pubkey} fontFamily="'Source Serif Pro'" />
     </Link>
   );
 }

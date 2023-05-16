@@ -13,6 +13,7 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import HyperText from "./HyperText";
 import Hashtag from "./Hashtag";
+import Emoji from "@habla/components/Emoji";
 
 const NEvent = dynamic(() => import("./NEvent"), {
   ssr: false,
@@ -35,6 +36,24 @@ const Mention = dynamic(() => import("./Mention"), {
 
 const MentionRegex = /(#\[\d+\])/gi;
 const NostrPrefixRegex = /^nostr:/;
+
+function extractCustomEmoji(fragments, tags) {
+  return fragments
+    .map((f) => {
+      if (typeof f === "string") {
+        return f.split(/:(\w+):/g).map((i) => {
+          const t = tags.find((a) => a[0] === "emoji" && a[1] === i);
+          if (t) {
+            return <Emoji src={t[2]} />;
+          } else {
+            return i;
+          }
+        });
+      }
+      return f;
+    })
+    .flat();
+}
 
 function extractMentions(fragments, tags) {
   return fragments
@@ -245,6 +264,8 @@ function transformText(ps, tags, transform, alwaysTransform) {
   fragments = extractNaddrs(fragments);
   fragments = extractNoteIds(fragments);
   fragments = extractNpubs(fragments);
+  fragments = extractCustomEmoji(fragments, tags);
+
   if (alwaysTransform || fragments.every((f) => typeof f === "string")) {
     return transform(fragments);
   }
