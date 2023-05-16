@@ -4,6 +4,8 @@ import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(cardAnatomy.keys);
 
+const wordBreak = "break-word";
+
 // define custom styles for funky variant
 const variants = {
   article: definePartsStyle({
@@ -12,7 +14,7 @@ const variants = {
       px: 0,
     },
     body: {
-      wordBreak: "break-all",
+      wordBreak,
       overflow: "hidden",
       px: 0,
       py: 0,
@@ -32,7 +34,7 @@ const variants = {
       px: 0,
     },
     body: {
-      wordBreak: "break-all",
+      wordBreak,
       overflow: "hidden",
       px: 0,
       py: 1,
@@ -48,7 +50,7 @@ const variants = {
   }),
   user: definePartsStyle({
     body: {
-      wordBreak: "break-all",
+      wordBreak,
       overflow: "hidden",
     },
     container: {
