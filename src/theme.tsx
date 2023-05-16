@@ -35,6 +35,13 @@ const theme = extendTheme(
   },
   withProse({
     baseStyle: {
+      fontSize: "lg",
+      p: {
+        fontSize: "lg",
+      },
+      blockquote: {
+        fontSize: "lg",
+      },
       a: {
         textDecoration: "underline",
         textDecorationStyle: "dotted",

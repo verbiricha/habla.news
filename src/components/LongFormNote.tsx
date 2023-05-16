@@ -61,7 +61,9 @@ export default function LongFormNote({
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
           )}
           <Heading as="h1">{title}</Heading>
-          {summary?.length > 0 && <Blockquote>{summary}</Blockquote>}
+          {summary?.length > 0 && (
+            <Blockquote fontSize="lg">{summary}</Blockquote>
+          )}
           <Hashtags hashtags={hashtags} />
           {reactions}
           <Flex align="center" gap={3} fontFamily="Inter">

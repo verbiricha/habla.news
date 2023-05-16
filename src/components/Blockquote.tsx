@@ -1,6 +1,6 @@
 import { Text } from "@chakra-ui/react";
 
-export default function Blockquote({ children }) {
+export default function Blockquote({ children, ...rest }) {
   return (
     <Text
       as="blockquote"
@@ -13,6 +13,7 @@ export default function Blockquote({ children }) {
           borderStartColor: "gray.600",
         },
       }}
+      {...rest}
     >
       {children}
     </Text>
