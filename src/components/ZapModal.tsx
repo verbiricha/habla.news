@@ -28,6 +28,7 @@ import {
 import { useAtom } from "jotai";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
+import { ZAP_REQUEST } from "@habla/const";
 import useWebln from "@habla/hooks/useWebln";
 import InputCopy from "@habla/components/InputCopy";
 import { relaysAtom } from "@habla/state";
@@ -161,7 +162,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
     try {
       const amount = sats * 1000;
       const zr = {
-        kind: 9734,
+        kind: ZAP_REQUEST,
         created_at: Math.round(Date.now() / 1000),
         content: comment,
         tags: [
@@ -196,7 +197,8 @@ export default function ZapModal({ event, isOpen, onClose }) {
         try {
           await webln.sendPayment(invoice.pr);
           toast({
-            title: "Zapped ⚡️",
+            title: "⚡️ Zapped",
+            description: `${sats} sats sent to ${profile.lud16}`,
             status: "success",
           });
           closeModal();

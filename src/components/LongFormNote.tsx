@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useRef, useMemo } from "react";
+import { useTextSelection } from "use-text-selection";
 import {
   useDisclosure,
   Flex,
@@ -7,6 +8,7 @@ import {
   Heading,
   Text,
   Image,
+  IconButton,
   Drawer,
   DrawerBody,
   DrawerHeader,
@@ -24,9 +26,11 @@ import Blockquote from "@habla/components/Blockquote";
 import Markdown from "@habla/markdown/Markdown";
 import Hashtags from "@habla/components/Hashtags";
 import { formatDay } from "@habla/format";
+import Highlighter from "@habla/icons/Highlighter";
 import HighlightList from "@habla/components/nostr/Highlights";
-import Zaps from "./Zaps";
 import Highlights from "@habla/components/reactions/Highlights";
+import HighlightModal from "@habla/components/HighlightModal";
+import Zaps from "./Zaps";
 import Comments from "./Comments";
 
 export default function LongFormNote({
@@ -36,10 +40,15 @@ export default function LongFormNote({
   notes = [],
   highlights = [],
 }) {
+  const ref = useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const highlightModal = useDisclosure();
   const { title, summary, image, hashtags, publishedAt } = useMemo(
     () => getMetadata(event),
     [event]
+  );
+  const { textContent, isCollapsed, clientRect } = useTextSelection(
+    ref.current
   );
 
   function onHighlightClick(content: string) {
@@ -55,7 +64,7 @@ export default function LongFormNote({
   );
   return (
     <>
-      <Box sx={{ wordBreak: "break-word" }}>
+      <Box sx={{ wordBreak: "break-word" }} ref={ref}>
         <Stack gap={2} mb={6}>
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
@@ -84,6 +93,17 @@ export default function LongFormNote({
           />
         </Prose>
       </Box>
+
+      {textContent && (
+        <Box sx={{ position: "fixed", bottom: 4, right: 4 }}>
+          <IconButton
+            colorScheme="orange"
+            icon={<Highlighter />}
+            onClick={highlightModal.onOpen}
+          />
+        </Box>
+      )}
+      <HighlightModal event={event} content={textContent} {...highlightModal} />
 
       <Box mt={4}>{reactions}</Box>
       <Box mt="120px">

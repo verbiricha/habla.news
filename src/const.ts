@@ -5,6 +5,7 @@ export const NOTE = 1;
 export const REACTION = 7;
 export const BADGE = 30009;
 export const ZAP = 9735;
+export const ZAP_REQUEST = 9734;
 export const PROFILE = 0;
 export const MUTED = 10000;
 export const PINNED = 10001;
