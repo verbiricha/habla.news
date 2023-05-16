@@ -60,7 +60,9 @@ export default function LongFormNote({
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
           )}
-          <Heading as="h1">{title}</Heading>
+          <Heading as="h1" fontSize="4xl">
+            {title}
+          </Heading>
           {summary?.length > 0 && (
             <Blockquote fontSize="lg">{summary}</Blockquote>
           )}
