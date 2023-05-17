@@ -5,8 +5,11 @@ import { Text, Box } from "@chakra-ui/react";
 
 import { decodeNaddr } from "@habla/nostr";
 import { getMetadata } from "@habla/nip23";
-import Layout from "@habla/layouts/Layout";
-import ArticleAside from "@habla/components/ArticleAside";
+import Layout from "@habla/layouts/Wide";
+
+const UserCard = dynamic(() => import("@habla/components/nostr/UserCard"), {
+  ssr: false,
+});
 
 const Address = dynamic(() => import("@habla/components/nostr/Address"), {
   ssr: false,
@@ -29,21 +32,18 @@ export default function Article({ metadata }) {
         <meta name="og:description" content={summary} />
         {image && <meta name="og:image" content={image} />}
       </Head>
-      <Layout
-        aside={
-          kind ? (
-            <ArticleAside pubkey={pubkey} kind={kind} identifier={identifier} />
-          ) : null
-        }
-      >
+      <Layout>
         {kind ? (
-          <Address
-            kind={kind}
-            identifier={identifier}
-            pubkey={pubkey}
-            relays={relays}
-            naddr={naddr}
-          />
+          <>
+            <Address
+              kind={kind}
+              identifier={identifier}
+              pubkey={pubkey}
+              relays={relays}
+              naddr={naddr}
+            />
+            <UserCard pubkey={pubkey} />
+          </>
         ) : null}
       </Layout>
     </>

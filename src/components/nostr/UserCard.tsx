@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+import { Flex, Card, CardHeader, CardBody } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import Markdown from "@habla/markdown/Markdown";
@@ -15,12 +15,12 @@ export default function UserCard({ pubkey, size = "sm", ...rest }) {
   return (
     <Card variant="user" size={size}>
       <CardHeader>
-        <User size="md" pubkey={pubkey} />
+        <Flex alignItems="center" justifyContent="space-between">
+          <User size="md" pubkey={pubkey} />
+          <FollowButton pubkey={pubkey} />
+        </Flex>
       </CardHeader>
       <CardBody>{user?.about && <Bio profile={user} />}</CardBody>
-      <CardFooter>
-        <FollowButton pubkey={pubkey} />
-      </CardFooter>
     </Card>
   );
 }

@@ -1,23 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 
-import { HIGHLIGHT } from "@habla/const";
-import { useEvents } from "@habla/nostr/hooks";
+import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import UserCard from "@habla/components/nostr/UserCard";
 
-export default function ArticleAside({ pubkey, kind, identifier }) {
-  const { events } = useEvents(
-    {
-      kinds: [HIGHLIGHT],
-      "#a": [`${kind}:${pubkey}:${identifier}`],
-    },
-    {
-      cacheUsage: "PARALLEL",
-      closeOnEose: false,
-    }
-  );
-  return (
-    <Box display={["none", "none", "block"]}>
-      <UserCard pubkey={pubkey} />
-    </Box>
-  );
+export default function ArticleAside({ pubkey }) {
+  return <UserCard pubkey={pubkey} />;
 }
