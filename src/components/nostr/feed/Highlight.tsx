@@ -85,7 +85,7 @@ export default function Highlight({ event, showHeader = true }) {
           )}
         </Stack>
       </CardBody>
-      <CardFooter>
+      <CardFooter dir="auto">
         <Reactions event={event} kinds={[ZAP, NOTE]} live={inView} />
       </CardFooter>
     </Card>

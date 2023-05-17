@@ -74,7 +74,7 @@ export default function Highlight({ event }) {
         <Blockquote>{event.content}</Blockquote>
         <User pubkey={event.pubkey} />
       </CardBody>
-      <CardFooter>
+      <CardFooter dir="auto">
         <Reactions event={event} live={inView} />
       </CardFooter>
     </Card>

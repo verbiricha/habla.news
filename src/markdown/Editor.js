@@ -134,6 +134,7 @@ export default function MyEditor({ event, showPreview }) {
       <Flex flexDirection="column" alignItems="flex-start">
         <FormLabel htmlFor="title">Title</FormLabel>
         <Input
+          dir="auto"
           id="title"
           value={title}
           placeholder="Title for your article"
@@ -175,6 +176,7 @@ export default function MyEditor({ event, showPreview }) {
         <FormLabel htmlFor="summary">Summary</FormLabel>
         <Textarea
           id="summary"
+          dir="auto"
           placeholder="A brief summary of what your article is about"
           value={summary}
           onChange={(ev) => setSummary(ev.target.value)}
@@ -185,6 +187,7 @@ export default function MyEditor({ event, showPreview }) {
         </FormLabel>
         <Input
           id="tags"
+          dir="auto"
           value={hashtags}
           placeholder="List of tags separated by comma: nostr, markdown"
           onChange={(ev) => setHashtags(ev.target.value)}
