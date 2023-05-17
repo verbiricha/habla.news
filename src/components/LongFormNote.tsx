@@ -53,7 +53,9 @@ export default function LongFormNote({
   );
 
   useEffect(() => {
-    setTextSelection(textContent);
+    if (!highlightModal.isOpen) {
+      setTextSelection(textContent);
+    }
   }, [textContent]);
 
   function onHighlightClick(content: string) {
