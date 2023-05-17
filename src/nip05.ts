@@ -4,7 +4,8 @@ import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 
 const pool = new SimplePool([]);
 
-const handleToPubkey = {
+export const names = {
+  _: "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c",
   verbiricha:
     "7fa56f5d6962ab1e3cd424e758c3002b8665f7b0d8dcee9fe9e288d7751ac194",
   tony: "7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d",
@@ -12,17 +13,17 @@ const handleToPubkey = {
   dergigi: "6e468422dfb74a5738702a8823b9b28168abab8655faacb6853cd0ee15deee93",
 };
 
-const pubkeyToHandle = Object.entries(handleToPubkey).reduce((acc, item) => {
+const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
   const [k, v] = item;
   return { ...acc, [v]: k };
 }, {});
 
 export async function getHandles() {
-  return Object.keys(handleToPubkey);
+  return Object.keys(names).filter((h) => h !== "_");
 }
 
 export async function getPubkey(handle) {
-  return handleToPubkey[handle];
+  return names[handle];
 }
 
 export async function getHandle(pubkey) {
