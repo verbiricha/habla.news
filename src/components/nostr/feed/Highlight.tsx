@@ -56,7 +56,7 @@ export default function Highlight({ event, showHeader = true }) {
           <User pubkey={event.pubkey} />
         </CardHeader>
       )}
-      <CardBody>
+      <CardBody dir="auto">
         <Stack gap="1">
           <Blockquote>{event.content}</Blockquote>
           {naddr && (

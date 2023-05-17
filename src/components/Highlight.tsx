@@ -70,7 +70,7 @@ export default function Highlight({ event }) {
           </Stack>
         )}
       </CardHeader>
-      <CardBody>
+      <CardBody dir="auto">
         <Blockquote>{event.content}</Blockquote>
         <User pubkey={event.pubkey} />
       </CardBody>

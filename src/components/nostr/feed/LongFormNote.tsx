@@ -78,6 +78,7 @@ export default function LongFormNote({
           justifyContent="space-between"
           direction={["column-reverse", "row"]}
           gap="4"
+          dir="auto"
         >
           <Flex flexDirection="column">
             <Link href={`/a/${naddr}`}>

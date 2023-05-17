@@ -48,7 +48,7 @@ export default function Note({ event }) {
           />
         </Flex>
       </CardHeader>
-      <CardBody px={16}>
+      <CardBody px={16} dir="auto">
         <Markdown content={event.content} tags={event.tags} />
       </CardBody>
     </Card>

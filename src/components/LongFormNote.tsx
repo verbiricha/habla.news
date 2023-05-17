@@ -71,7 +71,7 @@ export default function LongFormNote({
   );
   return (
     <>
-      <Box sx={{ wordBreak: "break-word" }} ref={ref}>
+      <Box sx={{ wordBreak: "break-word" }} ref={ref} dir="auto">
         <Stack gap={2} mb={6}>
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
