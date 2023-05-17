@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useTextSelection } from "use-text-selection";
 import {
   useDisclosure,
@@ -47,9 +47,14 @@ export default function LongFormNote({
     () => getMetadata(event),
     [event]
   );
+  const [textSelection, setTextSelection] = useState();
   const { textContent, isCollapsed, clientRect } = useTextSelection(
     ref.current
   );
+
+  useEffect(() => {
+    setTextSelection(textContent);
+  }, [textContent]);
 
   function onHighlightClick(content: string) {
     onOpen();
@@ -94,7 +99,7 @@ export default function LongFormNote({
         </Prose>
       </Box>
 
-      {textContent && (
+      {textSelection?.length && (
         <Box sx={{ position: "fixed", bottom: 4, right: 4 }}>
           <IconButton
             colorScheme="orange"
@@ -103,7 +108,16 @@ export default function LongFormNote({
           />
         </Box>
       )}
-      <HighlightModal event={event} content={textContent} {...highlightModal} />
+
+      <HighlightModal
+        event={event}
+        content={textSelection}
+        {...highlightModal}
+        onClose={() => {
+          setTextSelection("");
+          highlightModal.onClose();
+        }}
+      />
 
       <Box mt={4}>{reactions}</Box>
       <Box mt="120px">
