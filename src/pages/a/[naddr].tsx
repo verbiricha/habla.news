@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import Head from "next/head";
+import { Helmet } from "react-helmet";
 import dynamic from "next/dynamic";
 import { Text, Box } from "@chakra-ui/react";
 
@@ -25,13 +25,13 @@ export default function Article({ metadata }) {
   const { kind, identifier, pubkey, relays } = decodeNaddr(naddr) ?? {};
   return (
     <>
-      <Head>
+      <Helmet>
         <title>{title}</title>
         <meta name="og:title" content={title} />
         <meta property="og:type" content="article" />
         <meta name="og:description" content={summary} />
         {image && <meta name="og:image" content={image} />}
-      </Head>
+      </Helmet>
       <Layout>
         {kind ? (
           <>

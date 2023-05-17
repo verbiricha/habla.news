@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import Head from "next/head";
+import { Helmet } from "react-helmet";
 import dynamic from "next/dynamic";
 
 import { Text } from "@chakra-ui/react";
@@ -19,14 +19,14 @@ export default function Profile({ metadata }) {
   const description = metadata?.about ?? "Speak your mind";
   return (
     <>
-      <Head>
+      <Helmet>
         <title>{title}</title>
         <meta name="og:title" content={title} />
         <meta name="og:description" content={description} />
         {metadata?.picture && (
           <meta name="og:image" content={metadata.picture} />
         )}
-      </Head>
+      </Helmet>
       <Layout>
         {!pubkey ? (
           <Text>Could not find user</Text>

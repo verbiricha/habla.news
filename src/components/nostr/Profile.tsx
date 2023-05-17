@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { Flex, Box, Stack, Text } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
@@ -28,24 +29,29 @@ export default function Profile({ pubkey, relays }) {
     { relays, cacheUsage: "PARALLEL" }
   );
   return (
-    <Stack align="center">
-      <Flex
-        gap="4"
-        flexDirection={["column", "row"]}
-        alignItems={["center", "flex-start"]}
-        mb={5}
-        width="100%"
-      >
-        <Avatar pubkey={pubkey} size="xl" />
-        <Stack flex={1}>
-          <Flex alignItems="center" justifyContent="space-between">
-            <Username pubkey={pubkey} fontSize="2xl" fontWeight="500" />
-            <FollowButton pubkey={pubkey} />
-          </Flex>
-          <Bio profile={profile} />
-        </Stack>
-      </Flex>
-      <UserContent pubkey={pubkey} events={events} />
-    </Stack>
+    <>
+      <Helmet>
+        <title>{profile.name || pubkey}</title>
+      </Helmet>
+      <Stack align="center">
+        <Flex
+          gap="4"
+          flexDirection={["column", "row"]}
+          alignItems={["center", "flex-start"]}
+          mb={5}
+          width="100%"
+        >
+          <Avatar pubkey={pubkey} size="xl" />
+          <Stack flex={1}>
+            <Flex alignItems="center" justifyContent="space-between">
+              <Username pubkey={pubkey} fontSize="2xl" fontWeight="500" />
+              <FollowButton pubkey={pubkey} />
+            </Flex>
+            <Bio profile={profile} />
+          </Stack>
+        </Flex>
+        <UserContent pubkey={pubkey} events={events} />
+      </Stack>
+    </>
   );
 }

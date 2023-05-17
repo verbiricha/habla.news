@@ -1,5 +1,7 @@
 import { useMemo } from "react";
+import { Helmet } from "react-helmet";
 
+import { getMetadata } from "@habla/nip23";
 import { ZAP, HIGHLIGHT, NOTE, REACTION } from "@habla/const";
 import Tabs from "@habla/components/Tabs";
 import { useReactions } from "@habla/nostr/hooks";
@@ -7,13 +9,13 @@ import BaseLongFormNote from "@habla/components/LongFormNote";
 import Highlights from "@habla/components/nostr/Highlights";
 import Comments from "@habla/components/nostr/Comments";
 import Zaps from "@habla/components/nostr/Zaps";
-
 import HighlightIcon from "@habla/icons/Highlight";
 import CommentIcon from "@habla/icons/Comment";
 import HeartIcon from "@habla/icons/Heart";
 import ZapIcon from "@habla/icons/Zap";
 
 export default function LongFormNote({ event, relays, excludeAuthor }) {
+  const { title, summary, image } = getMetadata(event);
   const { reactions, notes, zaps, highlights } = useReactions(
     event,
     [ZAP, HIGHLIGHT, NOTE, REACTION],
@@ -45,14 +47,23 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
   }, [reactions, notes, zaps, highlights]);
 
   return (
-    <BaseLongFormNote
-      excludeAuthor={excludeAuthor}
-      event={event}
-      relays={relays}
-      notes={notes}
-      reactions={reactions}
-      highlights={highlights}
-      zaps={zaps}
-    />
+    <>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="og:title" content={title} />
+        <meta property="og:type" content="article" />
+        <meta name="og:description" content={summary} />
+        {image && <meta name="og:image" content={image} />}
+      </Helmet>
+      <BaseLongFormNote
+        excludeAuthor={excludeAuthor}
+        event={event}
+        relays={relays}
+        notes={notes}
+        reactions={reactions}
+        highlights={highlights}
+        zaps={zaps}
+      />
+    </>
   );
 }

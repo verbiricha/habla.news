@@ -88,6 +88,7 @@ export default function FeaturedArticles() {
       <Stack spacing={4}>
         <WelcomeToNostr />
         <PurpleText />
+        <NativeInternetProtocolForSocialMedia />
       </Stack>
     </>
   );
