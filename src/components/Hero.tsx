@@ -15,9 +15,16 @@ export default function Hero() {
         Habla is a nostr-based web app that enables anyone to earn from their
         writing.
       </Text>
-      <Button variant="solid" color="white" colorScheme="brand" maxWidth="8rem">
-        2 min intro
-      </Button>
+      <Link href={`/faq`}>
+        <Button
+          variant="solid"
+          color="white"
+          colorScheme="brand"
+          maxWidth="8rem"
+        >
+          2 min intro
+        </Button>
+      </Link>
     </Flex>
   );
 }
