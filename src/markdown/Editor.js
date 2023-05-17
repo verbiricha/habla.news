@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import {
@@ -34,6 +34,7 @@ function dateToUnix() {
 export default function MyEditor({ event, showPreview }) {
   const toast = useToast();
   const ndk = useNdk();
+  const ref = useRef();
   const router = useRouter();
   const metadata = event && getMetadata(event);
   const [isPublishing, setIsPublishing] = useState(false);
@@ -127,6 +128,12 @@ export default function MyEditor({ event, showPreview }) {
     }
   }
 
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.nodeMdText.current.dir = "auto";
+    }
+  }, [ref, showPreview]);
+
   return showPreview ? (
     <LongFormNote event={ev} isDraft excludeAuthor />
   ) : (
@@ -144,6 +151,7 @@ export default function MyEditor({ event, showPreview }) {
         />
         <FormLabel>Content</FormLabel>
         <MdEditor
+          ref={ref}
           placeholder="Speak your mind"
           value={content}
           renderHTML={(text) => (
