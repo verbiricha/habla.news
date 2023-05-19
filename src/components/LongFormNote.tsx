@@ -124,7 +124,7 @@ export default function LongFormNote({
         </Prose>
       </Box>
 
-      {textSelection?.length && (
+      {textSelection?.length ? (
         <Box sx={{ position: "fixed", bottom: 4, right: 4 }}>
           <IconButton
             colorScheme="orange"
@@ -132,7 +132,7 @@ export default function LongFormNote({
             onClick={onHighlightOpen}
           />
         </Box>
-      )}
+      ) : null}
 
       <HighlightModal
         event={event}
