@@ -10,7 +10,7 @@ export default function HotTopics() {
     <>
       <SectionHeading>Topics</SectionHeading>
       <Stack spacing={4}>
-        <Hashtags hashtags={tags} colorScheme="orange" variant="solid" />
+        <Hashtags hashtags={tags} variant="solid" />
       </Stack>
     </>
   ) : null;

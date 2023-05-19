@@ -70,7 +70,11 @@ export function FeaturedAuthors() {
       <Stack gap={2}>
         {featuredAuthors.map((pubkey) => {
           return (
-            <Flex alignItems="center" justifyContent="space-between">
+            <Flex
+              key={pubkey}
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <User pubkey={pubkey} />
               <FollowButton pubkey={pubkey} />
             </Flex>

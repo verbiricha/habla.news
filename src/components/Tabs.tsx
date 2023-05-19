@@ -6,7 +6,7 @@ export default function HablaTabs({ tabs }) {
       <TabList>
         {tabs.map(({ name }) => {
           return (
-            <Tab fontFamily="'Inter'" fontWeight={400}>
+            <Tab key={name} fontFamily="'Inter'" fontWeight={400}>
               {name}
             </Tab>
           );

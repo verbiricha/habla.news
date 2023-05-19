@@ -33,6 +33,23 @@ import HighlightModal from "@habla/components/HighlightModal";
 import Zaps from "./Zaps";
 import Comments from "./Comments";
 
+function deselect() {
+  if (window.getSelection) {
+    if (window.getSelection().empty) {
+      // Chrome
+      window.getSelection().empty();
+    } else if (window.getSelection().removeAllRanges) {
+      // Firefox
+      window.getSelection().removeAllRanges();
+    }
+  } else if (document.selection) {
+    // IE?
+    document.selection.empty();
+  } else {
+    console.log("Can't deselect");
+  }
+}
+
 export default function LongFormNote({
   event,
   isDraft,
@@ -62,6 +79,11 @@ export default function LongFormNote({
     onOpen();
   }
 
+  function onHighlightOpen() {
+    highlightModal.onOpen();
+    deselect();
+  }
+
   const reactions = isDraft ? null : (
     <Flex alignItems="center" gap={6}>
       <Zaps event={event} zaps={zaps} />
@@ -69,6 +91,7 @@ export default function LongFormNote({
       <Comments event={event} comments={notes} />
     </Flex>
   );
+
   return (
     <>
       <Box sx={{ wordBreak: "break-word" }} ref={ref} dir="auto">
@@ -106,7 +129,7 @@ export default function LongFormNote({
           <IconButton
             colorScheme="orange"
             icon={<Highlighter />}
-            onClick={highlightModal.onOpen}
+            onClick={onHighlightOpen}
           />
         </Box>
       )}

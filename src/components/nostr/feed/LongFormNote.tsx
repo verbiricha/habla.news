@@ -83,7 +83,7 @@ export default function LongFormNote({
           <Flex flexDirection="column">
             <Link href={`/a/${naddr}`}>
               <Heading
-                wordBreak="keep-all"
+                wordBreak="break-word"
                 mb={3}
                 sx={{
                   fontWeight: 600,
