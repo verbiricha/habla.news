@@ -4,7 +4,7 @@ import { NDKUser, NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
-import { Flex, Button, Text, Icon, Stack } from "@chakra-ui/react";
+import { useToast, Flex, Button, Text, Icon, Stack } from "@chakra-ui/react";
 import WriteIcon from "@habla/icons/Write";
 import { useNdk } from "@habla/nostr/hooks";
 import Avatar from "@habla/components/nostr/Avatar";
@@ -30,6 +30,7 @@ function ProfileLink({ pubkey, relays }) {
 
 export default function Login() {
   const ndk = useNdk();
+  const toast = useToast();
   const [relays, setRelays] = useAtom(relaysAtom);
   const [pubkey, setPubkey] = useAtom(pubkeyAtom);
   const [, setFollows] = useAtom(followsAtom);
@@ -45,6 +46,10 @@ export default function Login() {
         user.fetchProfile();
       });
     } catch (error) {
+      toast({
+        title: "Could not sign in with extension",
+        status: "error",
+      });
       console.error(error);
     }
   }
@@ -89,7 +94,7 @@ export default function Login() {
     </Stack>
   ) : (
     <Button colorScheme="orange" onClick={loginWithExtension}>
-      Log in
+      Log in (NIP-07)
     </Button>
   );
 }
