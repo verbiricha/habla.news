@@ -43,7 +43,7 @@ export function ListTag({ tag }) {
     );
   } else if (t === "emoji") {
     return (
-      <Flex align="center" gap={3}>
+      <Flex align="center" gap={3} height="42px">
         <Emoji src={relay} />
         <Text>{value}</Text>
       </Flex>
