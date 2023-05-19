@@ -7,6 +7,7 @@ import { findTag, findTags } from "@habla/tags";
 import Username from "./Username";
 import User from "./User";
 import FollowButton from "@habla/components/nostr/FollowButton";
+import Emoji from "@habla/components/Emoji";
 import EventId from "@habla/markdown/EventId";
 import Hashtags from "@habla/components/Hashtags";
 import Address from "@habla/components/nostr/Address";
@@ -39,6 +40,13 @@ export function ListTag({ tag }) {
         pubkey={pubkey}
         relays={relays}
       />
+    );
+  } else if (t === "emoji") {
+    return (
+      <Flex align="center" gap={3}>
+        <Emoji src={relay} />
+        <Text>{value}</Text>
+      </Flex>
     );
   } else if (t === "r") {
     return <Link href={value}>{value}</Link>;
