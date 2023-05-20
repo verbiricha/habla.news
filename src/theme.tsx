@@ -46,6 +46,10 @@ const theme = extendTheme(
         textDecoration: "underline",
         textDecorationStyle: "dotted",
       },
+      iframe: {
+        margin: "20px auto",
+        borderRadius: "12px",
+      },
       ".twitter-tweet": {
         margin: "0 auto",
       },
