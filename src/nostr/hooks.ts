@@ -5,7 +5,14 @@ import { NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
 import { useLiveQuery } from "dexie-react-hooks";
 import { utils } from "nostr-tools";
 
-import { ZAP, HIGHLIGHT, REACTION, LONG_FORM, NOTE } from "@habla/const";
+import {
+  ZAP,
+  HIGHLIGHT,
+  REACTION,
+  REPOST,
+  LONG_FORM,
+  NOTE,
+} from "@habla/const";
 import db from "@habla/cache/db";
 import { relaysAtom } from "@habla/state";
 
@@ -160,7 +167,7 @@ function eventToFilter(ev: NDKEvent) {
 
 export function useReactions(
   event: NDKEvent,
-  kinds = [ZAP, HIGHLIGHT, NOTE],
+  kinds = [ZAP, HIGHLIGHT, REPOST, NOTE],
   opts = {}
 ) {
   const { events } = useEvents(
@@ -171,9 +178,10 @@ export function useReactions(
   const zaps = events.filter((e) => e.kind === ZAP);
   const highlights = events.filter((e) => e.kind === HIGHLIGHT);
   const reactions = events.filter((e) => e.kind === REACTION);
+  const reposts = events.filter((e) => e.kind === REPOST);
   const notes = events.filter((e) => e.kind === NOTE);
 
-  return { zaps, reactions, highlights, notes };
+  return { zaps, reactions, highlights, reposts, notes };
 }
 
 export function useNdk() {

@@ -44,9 +44,13 @@ export default function Wide({ children }) {
             alignItems="center"
             justifyContent="center"
             flexDirection="column"
-            width="100%"
           >
-            <Stack gap={4} px={4} maxWidth={["100%", "100%", "48rem"]}>
+            <Stack
+              gap={4}
+              px={4}
+              maxWidth={["100%", "100%", "48rem"]}
+              width="100%"
+            >
               {children}
             </Stack>
           </Flex>

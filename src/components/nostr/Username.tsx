@@ -29,7 +29,7 @@ export default function Username({ pubkey, renderLink, ...rest }) {
       const splitted = result.split(`:${e}:`);
       if (splitted.length > 1) {
         result = splitted.reduce((acc, val) =>
-          [].concat(acc, <Emoji src={img} />, val)
+          [].concat(acc, <Emoji src={img} boxSize={3} />, val)
         );
         break;
       }

@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useRouter } from "next/router";
-import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
@@ -21,9 +20,6 @@ import Markdown from "@habla/markdown/Markdown";
 import User from "./User";
 
 export default function Note({ event }) {
-  const { ref, inView } = useInView({
-    threshold: 0,
-  });
   const router = useRouter();
   const seenOn = useSeenOn(event);
   const nevent = useMemo(() => {
@@ -34,8 +30,8 @@ export default function Note({ event }) {
     });
   }, [event, seenOn]);
   return (
-    <Card variant="outline" my={4} ref={ref} maxW="586px">
-      <CardHeader>
+    <Card variant="outline" my={4} maxW="586px">
+      <CardHeader py={1}>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />
           <IconButton
@@ -48,7 +44,7 @@ export default function Note({ event }) {
           />
         </Flex>
       </CardHeader>
-      <CardBody px={16} dir="auto">
+      <CardBody px={"60px"} dir="auto" pt={0} wordBreak="break-word">
         <Markdown content={event.content} tags={event.tags} />
       </CardBody>
     </Card>

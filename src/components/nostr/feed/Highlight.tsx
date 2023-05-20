@@ -14,7 +14,7 @@ import {
 
 import { nip19 } from "nostr-tools";
 
-import { ZAP, NOTE } from "@habla/const";
+import { ZAP, REPOST, NOTE } from "@habla/const";
 import useSeenOn from "@habla/hooks/useSeenOn";
 import NAddr from "@habla/markdown/Naddr";
 import { useEvent } from "@habla/nostr/hooks";
@@ -86,7 +86,7 @@ export default function Highlight({ event, showHeader = true }) {
         </Stack>
       </CardBody>
       <CardFooter dir="auto">
-        <Reactions event={event} kinds={[ZAP, NOTE]} live={inView} />
+        <Reactions event={event} kinds={[ZAP, REPOST, NOTE]} live={inView} />
       </CardFooter>
     </Card>
   ) : null;

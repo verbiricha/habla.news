@@ -1,10 +1,13 @@
 import { useCallback } from "react";
 
 import { Image } from "@chakra-ui/react";
+import { TwitterTweetEmbed } from "react-twitter-embed";
 import Link from "next/link";
 
 // eslint-disable-next-line no-useless-escape
 const FileExtensionRegex = /\.([\w]+)$/i;
+const TweetUrlRegex =
+  /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/;
 
 export default function HyperText({ link, children }) {
   const render = useCallback(() => {
@@ -12,6 +15,7 @@ export default function HyperText({ link, children }) {
       const url = new URL(link);
       const extension =
         FileExtensionRegex.test(url.pathname.toLowerCase()) && RegExp.$1;
+      const tweetId = TweetUrlRegex.test(link) && RegExp.$2;
       if (extension) {
         switch (extension) {
           case "gif":
@@ -49,6 +53,12 @@ export default function HyperText({ link, children }) {
               <Link href={url.toString()}>{children || url.toString()}</Link>
             );
         }
+      } else if (tweetId) {
+        return (
+          <div key={tweetId}>
+            <TwitterTweetEmbed tweetId={tweetId} />
+          </div>
+        );
       } else {
         return <Link href={link}>{children || link}</Link>;
       }

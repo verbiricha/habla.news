@@ -31,6 +31,7 @@ import HighlightList from "@habla/components/nostr/Highlights";
 import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
 import Zaps from "./Zaps";
+import Reposts from "./Reposts";
 import Comments from "./Comments";
 
 function deselect() {
@@ -56,6 +57,7 @@ export default function LongFormNote({
   zaps = [],
   notes = [],
   highlights = [],
+  reposts = [],
 }) {
   const ref = useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -87,6 +89,7 @@ export default function LongFormNote({
   const reactions = isDraft ? null : (
     <Flex alignItems="center" gap={6}>
       <Zaps event={event} zaps={zaps} />
+      <Reposts event={event} reposts={reposts} />
       <Highlights event={event} highlights={highlights} />
       <Comments event={event} comments={notes} />
     </Flex>

@@ -2,50 +2,17 @@ import { useMemo } from "react";
 import { Helmet } from "react-helmet";
 
 import { getMetadata } from "@habla/nip23";
-import { ZAP, HIGHLIGHT, NOTE, REACTION } from "@habla/const";
-import Tabs from "@habla/components/Tabs";
+import { ZAP, HIGHLIGHT, NOTE, REPOST, REACTION } from "@habla/const";
 import { useReactions } from "@habla/nostr/hooks";
 import BaseLongFormNote from "@habla/components/LongFormNote";
-import Highlights from "@habla/components/nostr/Highlights";
-import Comments from "@habla/components/nostr/Comments";
-import Zaps from "@habla/components/nostr/Zaps";
-import HighlightIcon from "@habla/icons/Highlight";
-import CommentIcon from "@habla/icons/Comment";
-import HeartIcon from "@habla/icons/Heart";
-import ZapIcon from "@habla/icons/Zap";
 
 export default function LongFormNote({ event, relays, excludeAuthor }) {
   const { title, summary, image } = getMetadata(event);
-  const { reactions, notes, zaps, highlights } = useReactions(
+  const { reactions, notes, reposts, zaps, highlights } = useReactions(
     event,
-    [ZAP, HIGHLIGHT, NOTE, REACTION],
+    [ZAP, HIGHLIGHT, REPOST, NOTE, REACTION],
     { cacheUsage: "PARALLEL", closeOnEose: false }
   );
-  const tabs = useMemo(() => {
-    const result = [];
-    if (highlights.length > 0) {
-      result.push({
-        name: <HighlightIcon />,
-        panel: <Highlights highlights={highlights} showHeader={false} />,
-      });
-    }
-    if (notes.length > 0) {
-      result.push({
-        name: <CommentIcon />,
-        panel: <Comments event={event} comments={notes} />,
-      });
-    }
-
-    if (zaps.length > 0) {
-      result.push({
-        name: <ZapIcon />,
-        panel: <Zaps event={event} zaps={zaps} />,
-      });
-    }
-
-    return result;
-  }, [reactions, notes, zaps, highlights]);
-
   return (
     <>
       <Helmet>
@@ -62,6 +29,7 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
         notes={notes}
         reactions={reactions}
         highlights={highlights}
+        reposts={reposts}
         zaps={zaps}
       />
     </>

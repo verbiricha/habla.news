@@ -1,6 +1,6 @@
 import { Image } from "@chakra-ui/react";
 
-export default function Emoji({ src }) {
+export default function Emoji({ src, ...rest }) {
   return (
     <Image
       borderRadius="none"
@@ -8,6 +8,7 @@ export default function Emoji({ src }) {
       boxSize={5}
       fit="contain"
       src={src}
+      {...rest}
     />
   );
 }
