@@ -19,10 +19,10 @@ export default function Username({ pubkey, renderLink, ...rest }) {
       return { ...acc, [t.at(1)]: t.at(2) };
     }, {}) ?? {};
   const emojified = useMemo(() => {
-    if (!user?.name) {
+    if (!user && !user.name) {
       return;
     }
-    let result = user.name;
+    let result = user.name || user.display_name;
     //todo: support multiple emoji
     for (const e of Object.keys(emoji)) {
       const img = emoji[e];
@@ -35,7 +35,7 @@ export default function Username({ pubkey, renderLink, ...rest }) {
       }
     }
     return result;
-  }, [user?.name, emoji]);
+  }, [user, emoji]);
   const username = (
     <Text fontFamily="Inter" {...rest}>
       {emojified || shortenString(pubkey, 8)}
