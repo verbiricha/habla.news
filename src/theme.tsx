@@ -46,6 +46,12 @@ const theme = extendTheme(
         textDecoration: "underline",
         textDecorationStyle: "dotted",
       },
+      ".twitter-tweet": {
+        margin: "0 auto",
+      },
+      ".twitter-tweet iframe": {
+        width: "auto",
+      },
     },
   })
 );
