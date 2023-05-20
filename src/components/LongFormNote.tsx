@@ -27,7 +27,7 @@ import Markdown from "@habla/markdown/Markdown";
 import Hashtags from "@habla/components/Hashtags";
 import { formatDay } from "@habla/format";
 import Highlighter from "@habla/icons/Highlighter";
-import HighlightList from "@habla/components/nostr/Highlights";
+import Highlight from "@habla/components/nostr/feed/Highlight";
 import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
 import Zaps from "./Zaps";
@@ -158,6 +158,7 @@ export default function LongFormNote({
         isOpen={isOpen}
         placement="right"
         onClose={onClose}
+        //         initialFocusRef={highlightRef}
         //        finalFocusRef={btnRef}
       >
         <DrawerOverlay />
@@ -168,7 +169,9 @@ export default function LongFormNote({
           </DrawerHeader>
           <DrawerBody>
             <Stack>
-              <HighlightList highlights={highlights} />
+              {highlights.map((event) => (
+                <Highlight key={event.id} event={event} />
+              ))}
             </Stack>
           </DrawerBody>
         </DrawerContent>
