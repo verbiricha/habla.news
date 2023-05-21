@@ -11,12 +11,13 @@ export const names = {
   tony: "7f5c2b4e48a0e9feca63a46b13cdb82489f4020398d60a2070a968caa818d75d",
   moon: "5df413d4c5e5035ff508fd99b38b21ea9a0ac0b9ecc34f3312aba9aa2add4f5b",
   dergigi: "6e468422dfb74a5738702a8823b9b28168abab8655faacb6853cd0ee15deee93",
-  devstr: "700d3de34b2929478652de1a41738ea4b3589831a76d1adfc612bd6f2529fd22"
   corndalorian:
     "f8e6c64342f1e052480630e27e1016dce35fc3a614e60434fef4aa2503328ca9",
   nostreport:
     "2edbcea694d164629854a52583458fd6d965b161e3c48b57d3aff01940558884",
-  everexpanding: "c9dccd5fbf13605415deb3ca03e9154cd77000f3fb1d98361e5cda4edce00d9a",
+  everexpanding:
+    "c9dccd5fbf13605415deb3ca03e9154cd77000f3fb1d98361e5cda4edce00d9a",
+  devstr: "700d3de34b2929478652de1a41738ea4b3589831a76d1adfc612bd6f2529fd22",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
