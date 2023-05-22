@@ -13,8 +13,8 @@ import UserContent from "./UserContent";
 
 function Bio({ profile }) {
   return profile?.about ? (
-    <Prose fontFamily="'Inter'">
-      <Markdown pTag={false} content={profile?.about} />
+    <Prose fontFamily="'Inter'" style={{ wordBreak: "break-word" }}>
+      <Markdown content={profile?.about} />
     </Prose>
   ) : null;
 }
