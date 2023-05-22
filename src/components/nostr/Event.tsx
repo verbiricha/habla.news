@@ -5,21 +5,22 @@ import Note from "./Note";
 import Badge from "./Badge";
 import ZapstrTrack from "./ZapstrTrack";
 
-export default function Event({ event }) {
+export default function Event(props) {
+  const { event } = props;
   if (event.kind === HIGHLIGHT) {
-    return <Highlight event={event} />;
+    return <Highlight {...props} />;
   }
 
   if (event.kind === NOTE) {
-    return <Note event={event} />;
+    return <Note {...props} />;
   }
 
   if (event.kind === BADGE) {
-    return <Badge event={event} />;
+    return <Badge {...props} />;
   }
 
   if (event.kind === ZAPSTR_TRACK) {
-    return <ZapstrTrack event={event} />;
+    return <ZapstrTrack {...props} />;
   }
 
   return event.kind;

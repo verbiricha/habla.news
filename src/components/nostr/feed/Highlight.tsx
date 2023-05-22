@@ -23,12 +23,14 @@ import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
+import EventId from "@habla/markdown/EventId";
 
 export default function Highlight({ event, showHeader = true }) {
   const { ref, inView } = useInView({
     threshold: 0,
   });
   const a = findTag(event, "a");
+  const e = findTag(event, "e");
   const r = findTag(event, "r");
   const seenOn = useSeenOn(event);
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
@@ -58,7 +60,8 @@ export default function Highlight({ event, showHeader = true }) {
       )}
       <CardBody dir="auto">
         <Stack gap="1">
-          <Blockquote>{event.content}</Blockquote>
+          {!e && <Blockquote>{event.content}</Blockquote>}
+          {e && <EventId id={e} highlights={[event]} />}
           {naddr && (
             <ArticleTitle
               naddr={naddr}

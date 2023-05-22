@@ -19,7 +19,7 @@ import useSeenOn from "@habla/hooks/useSeenOn";
 import Markdown from "@habla/markdown/Markdown";
 import User from "./User";
 
-export default function Note({ event }) {
+export default function Note({ event, highlights = [] }) {
   const router = useRouter();
   const seenOn = useSeenOn(event);
   const nevent = useMemo(() => {
@@ -45,7 +45,11 @@ export default function Note({ event }) {
         </Flex>
       </CardHeader>
       <CardBody px={"60px"} dir="auto" pt={0} wordBreak="break-word">
-        <Markdown content={event.content} tags={event.tags} />
+        <Markdown
+          content={event.content}
+          tags={event.tags}
+          highlights={highlights}
+        />
       </CardBody>
     </Card>
   );

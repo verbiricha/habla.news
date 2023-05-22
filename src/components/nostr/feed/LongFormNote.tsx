@@ -14,8 +14,10 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
+  Icon,
   Image,
 } from "@chakra-ui/react";
+import { EditIcon } from "@chakra-ui/icons";
 
 import { relaysAtom } from "@habla/state";
 import { getMetadata } from "@habla/nip23";
@@ -28,7 +30,18 @@ import Reactions from "@habla/components/nostr/LazyReactions";
 
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
-  return <Text color="secondary">{day}</Text>;
+  const updated = useMemo(() => formatDay(updatedAt), [updatedAt]);
+  return (
+    <>
+      <Text color="secondary">{day}</Text>
+      {day !== updated && (
+        <Flex align="center" color="secondary" gap={2}>
+          <Icon as={EditIcon} />
+          <Text>{updated}</Text>
+        </Flex>
+      )}
+    </>
+  );
 }
 
 export default function LongFormNote({
