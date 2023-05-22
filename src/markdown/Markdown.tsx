@@ -291,10 +291,6 @@ function processHighlights(content, hs) {
   return result;
 }
 
-function Mark({ onClick, children }) {
-  return <mark onClick={() => onClick(children)}>{children}</mark>;
-}
-
 export default function Markdown({
   tags = [],
   content,
@@ -306,6 +302,17 @@ export default function Markdown({
     () => processHighlights(content, highlights),
     [content, highlights]
   );
+  const mark = ({ children }) => {
+    const highlight = highlights.find((h) => h.content === children.at(0));
+    return (
+      <mark
+        style={{ cursor: "pointer" }}
+        onClick={() => onHighlightClick(highlight)}
+      >
+        {children}
+      </mark>
+    );
+  };
   const components = useMemo(() => {
     return {
       h1: ({ children }) => (
@@ -368,9 +375,7 @@ export default function Markdown({
           {children}
         </h6>
       ),
-      mark: ({ children }) => {
-        return <Mark onClick={onHighlightClick}>{children}</Mark>;
-      },
+      mark,
       img: ({ alt, src }) => {
         return (
           <Image

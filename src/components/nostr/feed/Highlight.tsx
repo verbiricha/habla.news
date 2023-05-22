@@ -25,6 +25,28 @@ import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import EventId from "@habla/markdown/EventId";
 
+const HighlightSubstring = ({ text, substring }) => {
+  const startIndex = text.indexOf(substring);
+  const endIndex = startIndex + substring.length;
+
+  if (startIndex === -1) {
+    // Substring not found in the text
+    return <>{text}</>;
+  }
+
+  const beforeSubstring = text.slice(0, startIndex);
+  const markedSubstring = text.slice(startIndex, endIndex);
+  const afterSubstring = text.slice(endIndex);
+
+  return (
+    <>
+      {beforeSubstring}
+      <mark>{markedSubstring}</mark>
+      {afterSubstring}
+    </>
+  );
+};
+
 export default function Highlight({ event, showHeader = true }) {
   const { ref, inView } = useInView({
     threshold: 0,
@@ -32,6 +54,7 @@ export default function Highlight({ event, showHeader = true }) {
   const a = findTag(event, "a");
   const e = findTag(event, "e");
   const r = findTag(event, "r");
+  const context = findTag(event, "context");
   const seenOn = useSeenOn(event);
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
   const nevent = useMemo(() => {
@@ -60,7 +83,15 @@ export default function Highlight({ event, showHeader = true }) {
       )}
       <CardBody dir="auto">
         <Stack gap="1">
-          {!e && <Blockquote>{event.content}</Blockquote>}
+          {!e && (
+            <Blockquote>
+              {context ? (
+                <HighlightSubstring text={context} substring={event.content} />
+              ) : (
+                event.content
+              )}
+            </Blockquote>
+          )}
           {e && <EventId id={e} highlights={[event]} my={0} />}
           {naddr && (
             <ArticleTitle

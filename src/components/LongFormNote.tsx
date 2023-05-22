@@ -52,6 +52,41 @@ function deselect() {
   }
 }
 
+function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
+  const stackRef = useRef();
+  const initialFocusRef = useRef();
+  const bg = useColorModeValue("white", "layer");
+
+  //useEffect(() => {
+  //  if (isOpen) {
+  //    if (initialFocusRef.current) {
+  //      stackRef.scrollTo(initialFocusRef.current);
+  //    }
+  //  }
+  //}, [isOpen, initialFocusRef]);
+
+  return (
+    <Drawer size="md" isOpen={isOpen} placement="right" onClose={onClose}>
+      <DrawerOverlay />
+      <DrawerContent bg={bg}>
+        <DrawerCloseButton />
+        <DrawerHeader>
+          <Heading>Highlights</Heading>
+        </DrawerHeader>
+        <DrawerBody>
+          <Stack ref={stackRef}>
+            {highlights.reverse().map((event) => (
+              <Box ref={event.id === selected?.id ? initialFocusRef : null}>
+                <Highlight key={event.id} event={event} />
+              </Box>
+            ))}
+          </Stack>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
 export default function LongFormNote({
   event,
   isDraft,
@@ -61,6 +96,7 @@ export default function LongFormNote({
   reposts = [],
 }) {
   const ref = useRef();
+  const [selected, setSelected] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const highlightModal = useDisclosure();
   const { title, summary, image, hashtags, publishedAt } = useMemo(
@@ -78,7 +114,8 @@ export default function LongFormNote({
     }
   }, [textContent]);
 
-  function onHighlightClick(content: string) {
+  function onHighlightClick(highlight) {
+    setSelected(highlight);
     onOpen();
   }
 
@@ -95,7 +132,6 @@ export default function LongFormNote({
       <Comments event={event} comments={notes} />
     </Flex>
   );
-  const drawerBg = useColorModeValue("white", "layer");
 
   return (
     <>
@@ -149,35 +185,19 @@ export default function LongFormNote({
         }}
       />
 
+      <HighlightsDrawer
+        selected={selected}
+        highlights={highlights}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
+
       <Box mt={4}>{reactions}</Box>
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
           𐡷
         </Text>
       </Box>
-      <Drawer
-        size="md"
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        //         initialFocusRef={highlightRef}
-        //        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent bg={drawerBg}>
-          <DrawerCloseButton />
-          <DrawerHeader>
-            <Heading>Highlights</Heading>
-          </DrawerHeader>
-          <DrawerBody>
-            <Stack>
-              {highlights.map((event) => (
-                <Highlight key={event.id} event={event} />
-              ))}
-            </Stack>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
     </>
   );
 }

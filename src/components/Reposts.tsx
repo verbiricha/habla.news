@@ -17,9 +17,6 @@ export default function Reposts({ event, reposts }) {
   const seenOn = useSeenOn(event);
   const reposted = reposts.some((r) => r.pubkey === pubkey);
 
-  if (reposts.length) {
-    console.log("REPOSTS", reposts);
-  }
   async function onRepost() {
     const rawEvent = await event.toNostrEvent();
 
