@@ -33,7 +33,7 @@ export default function Reposts({ event, reposts }) {
       const ev = {
         kind: REPOST,
         created_at: dateToUnix(),
-        tags: [...evTags, tag, p],
+        tags: [tag, p, ...evTags],
         content: JSON.stringify(rawEvent),
       };
       const signed = new NDKEvent(ndk, ev);
