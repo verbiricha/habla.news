@@ -9,8 +9,6 @@ const outline = defineStyle({
 
 const write = defineStyle({
   borderRadius: "20px",
-  bg: "black",
-  color: "white",
   fontFamily: "'Inter'",
   fontWeight: 500,
 });

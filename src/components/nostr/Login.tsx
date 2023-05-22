@@ -4,7 +4,15 @@ import { NDKUser, NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
-import { useToast, Flex, Button, Text, Icon, Stack } from "@chakra-ui/react";
+import {
+  useColorModeValue,
+  useToast,
+  Flex,
+  Button,
+  Text,
+  Icon,
+  Stack,
+} from "@chakra-ui/react";
 import WriteIcon from "@habla/icons/Write";
 import { useNdk } from "@habla/nostr/hooks";
 import Avatar from "@habla/components/nostr/Avatar";
@@ -34,6 +42,8 @@ export default function Login() {
   const [relays, setRelays] = useAtom(relaysAtom);
   const [pubkey, setPubkey] = useAtom(pubkeyAtom);
   const [, setFollows] = useAtom(followsAtom);
+  const bg = useColorModeValue("black", "white");
+  const fg = useColorModeValue("white", "black");
 
   function loginWithExtension() {
     try {
@@ -85,6 +95,8 @@ export default function Login() {
         <Button
           variant="write"
           aria-label="Write"
+          bg={bg}
+          color={fg}
           leftIcon={<Icon as={WriteIcon} boxSize={5} />}
         >
           Write

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { useAtom } from "jotai";
-import { Flex, IconButton } from "@chakra-ui/react";
+import { useColorModeValue, Flex, IconButton } from "@chakra-ui/react";
 
 import { pubkeyAtom } from "@habla/state";
 import ReadIcon from "@habla/icons/Read";
@@ -12,9 +12,12 @@ export default function Nav() {
   const [pubkey] = useAtom(pubkeyAtom);
   const router = useRouter();
   const path = router.pathname;
+  // todo: extract to theme
+  const bg = useColorModeValue("brand.50", "#3B3B3D");
+  const color = useColorModeValue("brand.500", "#B196FF");
   const activeNav = {
-    bg: "brand.50",
-    color: "brand.500",
+    bg,
+    color,
     borderRadius: "16px",
   };
   const nav = {
