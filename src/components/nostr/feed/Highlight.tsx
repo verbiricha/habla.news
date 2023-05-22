@@ -61,7 +61,7 @@ export default function Highlight({ event, showHeader = true }) {
       <CardBody dir="auto">
         <Stack gap="1">
           {!e && <Blockquote>{event.content}</Blockquote>}
-          {e && <EventId id={e} highlights={[event]} />}
+          {e && <EventId id={e} highlights={[event]} my={0} />}
           {naddr && (
             <ArticleTitle
               naddr={naddr}

@@ -1,29 +1,20 @@
-import { useState, useEffect } from "react";
-
-import Link from "next/link";
+import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useAtom } from "jotai";
-import { Flex, Stack, Heading, Text, Spinner } from "@chakra-ui/react";
 
-import { relaysAtom } from "@habla/state";
-import { RelayItem } from "@habla/components/Relays";
 import Layout from "@habla/layouts/Wide";
 
-export default function Relays() {
-  const [relays] = useAtom(relaysAtom);
+const Relays = dynamic(() => import("@habla/components/nostr/Relays"), {
+  ssr: false,
+});
+
+export default function RelaysPage() {
   return (
     <>
       <Head>
         <title>Relays</title>
       </Head>
       <Layout>
-        {relays && (
-          <Stack gap={4}>
-            {relays.map((url) => (
-              <RelayItem key={url} url={url} />
-            ))}
-          </Stack>
-        )}
+        <Relays />
       </Layout>
     </>
   );
