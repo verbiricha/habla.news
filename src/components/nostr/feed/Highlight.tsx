@@ -3,14 +3,17 @@ import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 
 import {
+  Flex,
   Heading,
   Text,
+  Icon,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
   Stack,
 } from "@chakra-ui/react";
+import { LinkIcon } from "@chakra-ui/icons";
 
 import { nip19 } from "nostr-tools";
 
@@ -47,7 +50,7 @@ const HighlightSubstring = ({ text, substring }) => {
   );
 };
 
-export default function Highlight({ event, showHeader = true }) {
+export default function Highlight({ event, showHeader = true, ...props }) {
   const { ref, inView } = useInView({
     threshold: 0,
   });
@@ -75,7 +78,7 @@ export default function Highlight({ event, showHeader = true }) {
     }
   }, [kind, pubkey, identifier]);
   return event.content.length < 4200 ? (
-    <Card variant="highlight" key={event.id} ref={ref} my={4}>
+    <Card variant="highlight" key={event.id} ref={ref} my={4} {...props}>
       {showHeader && (
         <CardHeader>
           <User pubkey={event.pubkey} />
@@ -84,7 +87,7 @@ export default function Highlight({ event, showHeader = true }) {
       <CardBody dir="auto">
         <Stack gap="1">
           {!e && (
-            <Blockquote>
+            <Blockquote style={{ margin: 0 }}>
               {context ? (
                 <HighlightSubstring text={context} substring={event.content} />
               ) : (
@@ -120,7 +123,17 @@ export default function Highlight({ event, showHeader = true }) {
         </Stack>
       </CardBody>
       <CardFooter dir="auto">
-        <Reactions event={event} kinds={[ZAP, REPOST, NOTE]} live={inView} />
+        <Flex alignItems="center" justifyContent="space-between" width="100%">
+          <Reactions event={event} kinds={[ZAP, REPOST, NOTE]} live={inView} />
+          <Link href={`/e/${nevent}`}>
+            <Icon
+              as={LinkIcon}
+              boxSize={3}
+              color="secondary"
+              cursor="pointer"
+            />
+          </Link>
+        </Flex>
       </CardFooter>
     </Card>
   ) : null;
