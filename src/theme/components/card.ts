@@ -62,4 +62,19 @@ const variants = {
   }),
 };
 
-export default defineMultiStyleConfig({ variants });
+const baseStyle = definePartsStyle({
+  container: {
+    backgroundColor: "transparent",
+  },
+  header: {
+    backgroundColor: "transparent",
+  },
+  body: {
+    backgroundColor: "transparent",
+  },
+  footer: {
+    backgroundColor: "transparent",
+  },
+});
+
+export default defineMultiStyleConfig({ baseStyle, variants });

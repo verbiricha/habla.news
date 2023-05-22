@@ -1,5 +1,11 @@
+import { mode } from "@chakra-ui/theme-tools";
+
 const styles = {
-  global: {
+  global: (props) => ({
+    body: {
+      color: mode("#303030", "white")(props),
+      bg: mode("white", "#1D1D1E")(props),
+    },
     mark: {
       bg: "#ffefd8",
       cursor: "pointer",
@@ -12,7 +18,7 @@ const styles = {
       color: "#16161D",
       bg: "#FFD1DC",
     },
-  },
+  }),
 };
 
 export default styles;

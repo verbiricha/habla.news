@@ -18,8 +18,7 @@ export default function Nav() {
     borderRadius: "16px",
   };
   const nav = {
-    bg: "white",
-    color: "black",
+    bg: "transparent",
     borderRadius: "16px",
   };
   return (
