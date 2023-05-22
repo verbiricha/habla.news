@@ -83,43 +83,43 @@ export function Nips({ info }) {
         <Flex flexDirection="column" my={4}>
           <Flex direction="row" flexWrap="wrap" gap={2}>
             {hasReplaceable && (
-              <Tag size="md" colorScheme="green" maxW="10em">
+              <Tag size="md" maxW="10em">
                 <TagLeftIcon as={EditIcon} />
                 <TagLabel>Blog</TagLabel>
               </Tag>
             )}
             {hasMarkets && (
-              <Tag size="md" colorScheme="yellow" maxW="10em">
+              <Tag size="md" maxW="10em">
                 <TagLeftIcon as={RepeatIcon} />
                 <TagLabel>Markets</TagLabel>
               </Tag>
             )}
             {hasPublicChat && (
-              <Tag size="md" colorScheme="pink" maxW="10em">
+              <Tag size="md" maxW="10em">
                 <TagLeftIcon as={CommentIcon} />
                 <TagLabel>Chat</TagLabel>
               </Tag>
             )}
             {hasDeletes && (
-              <Tag size="md" colorScheme="red" maxW="10em">
+              <Tag size="md" maxW="10em">
                 <TagLeftIcon as={DeleteIcon} />
                 <TagLabel>Delete</TagLabel>
               </Tag>
             )}
             {hasSearch && (
-              <Tag size="md" colorScheme="purple" maxW="10em">
+              <Tag size="md" maxW="10em">
                 <TagLeftIcon as={SearchIcon} />
                 <TagLabel>Search</TagLabel>
               </Tag>
             )}
             {hasAuth && (
-              <Tag size="md" colorScheme="blue" maxW="10em">
+              <Tag size="md" maxW="10em">
                 <TagLeftIcon as={LockIcon} />
                 <TagLabel>Auth</TagLabel>
               </Tag>
             )}
             {hasFilestorage && (
-              <Tag size="md" colorScheme="teal" maxW="10em">
+              <Tag size="md" maxW="10em">
                 <TagLeftIcon as={AttachmentIcon} />
                 <TagLabel>Files</TagLabel>
               </Tag>

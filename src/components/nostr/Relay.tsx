@@ -17,6 +17,7 @@ import Search from "@habla/components/Search";
 
 export default function Relay({ relay }) {
   const { data, isError } = useRelayMetadata(relay);
+  const relays = [relay];
   const tabs = useMemo(() => {
     const result = [
       {
@@ -27,7 +28,7 @@ export default function Relay({ relay }) {
             filter={{ kinds: [LONG_FORM] }}
             offset={DAY}
             options={{
-              relays: [relay],
+              relays,
               cacheUsage: "ONLY_RELAY",
             }}
           />
@@ -41,7 +42,7 @@ export default function Relay({ relay }) {
             filter={{ kinds: [HIGHLIGHT] }}
             offset={DAY}
             options={{
-              relays: [relay],
+              relays,
               cacheUsage: "ONLY_RELAY",
             }}
           />
@@ -51,11 +52,11 @@ export default function Relay({ relay }) {
     if (data?.supported_nips?.includes(50)) {
       result.push({
         name: "Search",
-        panel: <Search relays={[relay]} />,
+        panel: <Search relays={relays} />,
       });
     }
     return result;
-  }, [data]);
+  }, [data, relays]);
   return (
     <>
       <Stack>

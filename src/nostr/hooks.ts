@@ -66,18 +66,16 @@ export function useEvents(filter, options = {}) {
 
   let opts = { ...defaultOpts, ...rest };
   let relaySet = new Set();
+  // todo: doesn't work if not connected
   if (relays?.length > 0) {
-    const ndkRelays = new Set(relays.map((url) => new NDKRelay(url)));
-    relaySet = new NDKRelaySet(ndkRelays, ndk);
-  } else if (defaultRelays) {
-    const ndkRelays = new Set(defaultRelays.map((url) => new NDKRelay(url)));
-    relaySet = new NDKRelaySet(ndkRelays, ndk);
+    relaySet = NDKRelaySet.fromRelayUrls(relays, ndk);
+  } else {
+    relaySet = NDKRelaySet.fromRelayUrls(defaultRelays, ndk);
   }
 
   useEffect(() => {
     if (filter) {
-      // todo: check this
-      const sub = ndk.subscribe(filter, opts);
+      const sub = ndk.subscribe(filter, opts, relaySet);
 
       sub.on("event", (ev, relay) => {
         setEvents((evs) =>
@@ -115,16 +113,7 @@ export function useEvent(filter, opts = defaultOpts) {
   const { relays, ...rest } = opts;
   const [event, setEvent] = useState();
   let options = { ...rest };
-
-  if (relays?.length > 0) {
-    const ndkRelays = new Set(relays.map((url) => new NDKRelay(url)));
-    const relaySet = new NDKRelaySet(ndkRelays, ndk);
-    options = { ...options };
-  } else if (defaultRelays) {
-    const ndkRelays = new Set(defaultRelays.map((url) => new NDKRelay(url)));
-    const relaySet = new NDKRelaySet(ndkRelays, ndk);
-    options = { ...options };
-  }
+  // todo: use relays
 
   useEffect(() => {
     ndk.fetchEvent(filter, options).then(setEvent);
