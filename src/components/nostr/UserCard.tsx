@@ -7,7 +7,11 @@ import User from "./User";
 import FollowButton from "@habla/components/nostr/FollowButton";
 
 function Bio({ profile }) {
-  return profile?.about ? <Markdown content={profile?.about} /> : null;
+  return profile?.about ? (
+    <Prose>
+      <Markdown content={profile?.about} />
+    </Prose>
+  ) : null;
 }
 
 export default function UserCard({ pubkey, size = "sm", ...rest }) {
