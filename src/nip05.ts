@@ -18,6 +18,8 @@ export const names = {
   everexpanding:
     "c9dccd5fbf13605415deb3ca03e9154cd77000f3fb1d98361e5cda4edce00d9a",
   devstr: "700d3de34b2929478652de1a41738ea4b3589831a76d1adfc612bd6f2529fd22",
+  nout: "deba271e547767bd6d8eec75eece5615db317a03b07f459134b03e7236005655",
+  sperry: "11d0b66747887ba9a6d34b23eb31287374b45b1a1b161eac54cb183c53e00ef7",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
