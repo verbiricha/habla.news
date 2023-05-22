@@ -13,10 +13,11 @@ import {
   Icon,
   Stack,
 } from "@chakra-ui/react";
+
+import { CONTACTS } from "@habla/const";
 import WriteIcon from "@habla/icons/Write";
 import { useNdk } from "@habla/nostr/hooks";
 import Avatar from "@habla/components/nostr/Avatar";
-
 import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 
 function ProfileLink({ pubkey, relays }) {
@@ -75,7 +76,7 @@ export default function Login() {
       // Follows & Relays
       ndk
         .fetchEvent({
-          kinds: [3],
+          kinds: [CONTACTS],
           authors: [pubkey],
         })
         .then((contactList) => {
@@ -106,7 +107,7 @@ export default function Login() {
     </Stack>
   ) : (
     <Button colorScheme="orange" onClick={loginWithExtension}>
-      Log in (NIP-07)
+      Log in
     </Button>
   );
 }

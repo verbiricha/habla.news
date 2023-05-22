@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
 import {
+  useColorModeValue,
   useToast,
   Box,
   Button,
@@ -151,6 +152,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
   const [invoice, setInvoice] = useState();
   const [comment, setComment] = useState("");
   const [sats, setSats] = useState(defaultZapAmount);
+  const bg = useColorModeValue("white", "layer");
 
   useEffect(() => {
     if (isOpen && profile?.lud16) {
@@ -229,7 +231,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={closeModal} isCentered>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent bg={bg}>
         <ModalHeader>
           <Stack direction="row" gap={1}>
             <Text fontFamily="'Inter'">Zap</Text>

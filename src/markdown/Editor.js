@@ -19,16 +19,13 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
 
+import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
 import { LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
 import { useNdk } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
-
-function dateToUnix() {
-  return Math.floor(Date.now() / 1000);
-}
 
 // todo: link to markdown reference
 export default function MyEditor({ event, showPreview }) {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useTextSelection } from "use-text-selection";
 import {
+  useColorModeValue,
   useDisclosure,
   Flex,
   Stack,
@@ -94,6 +95,7 @@ export default function LongFormNote({
       <Comments event={event} comments={notes} />
     </Flex>
   );
+  const drawerBg = useColorModeValue("white", "layer");
 
   return (
     <>
@@ -162,7 +164,7 @@ export default function LongFormNote({
         //        finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg={drawerBg}>
           <DrawerCloseButton />
           <DrawerHeader>
             <Heading>Highlights</Heading>
