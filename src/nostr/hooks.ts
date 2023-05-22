@@ -65,11 +65,10 @@ export function useEvents(filter, options = {}) {
   const { relays, ...rest } = options;
 
   let opts = { ...defaultOpts, ...rest };
-  let relaySet = new Set();
-  // todo: doesn't work if not connected
+  let relaySet;
   if (relays?.length > 0) {
     relaySet = NDKRelaySet.fromRelayUrls(relays, ndk);
-  } else {
+  } else if (defaultRelays) {
     relaySet = NDKRelaySet.fromRelayUrls(defaultRelays, ndk);
   }
 
