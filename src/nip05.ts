@@ -20,6 +20,7 @@ export const names = {
   devstr: "700d3de34b2929478652de1a41738ea4b3589831a76d1adfc612bd6f2529fd22",
   nout: "deba271e547767bd6d8eec75eece5615db317a03b07f459134b03e7236005655",
   sperry: "11d0b66747887ba9a6d34b23eb31287374b45b1a1b161eac54cb183c53e00ef7",
+  sikto: "50c59a1cb233d08d5a1fb493f520c6b5d7f77a2ba42e4666801a3e366b0a027e",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
