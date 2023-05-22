@@ -5,7 +5,7 @@ import { Flex, Icon, Text } from "@chakra-ui/react";
 
 import { formatShortNumber } from "@habla/format";
 
-export default function ReactionCount({ icon, reactions }) {
+export default function ReactionCount({ icon, reactions, ...props }) {
   const [pubkey] = useAtom(pubkeyAtom);
   const reacted = reactions.some((r) => r.pubkey === pubkey);
   return (
@@ -15,6 +15,7 @@ export default function ReactionCount({ icon, reactions }) {
         color={reacted && "highlight"}
         as={icon}
         boxSize={3}
+        {...props}
       />
       <Text color="secondary" fontSize="sm">
         {formatShortNumber(reactions.length)}

@@ -58,8 +58,9 @@ export default function Login() {
       });
     } catch (error) {
       toast({
-        title: "Could not sign in with extension",
+        title: "Could not sign in",
         status: "error",
+        description: error.message,
       });
       console.error(error);
     }
