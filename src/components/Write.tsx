@@ -35,11 +35,14 @@ export default function Write({ pubkey }) {
   );
   const posts = events.filter((e) => e.kind === LONG_FORM);
   const published = posts.map((e) => getMetadata(e).identifier);
-  const drafts = events.filter(
-    (e) =>
-      e.kind === LONG_FORM_DRAFT &&
-      !published.includes(getMetadata(e).identifier)
-  );
+  const drafts = events.filter((e) => {
+    const publishedArticle = posts.find(
+      (p) => getMetadata(p).identifier === getMetadata(e).identifier
+    );
+    const shouldShowDraft =
+      !publishedArticle || publishedArticle.created_at < e.created_at;
+    return e.kind === LONG_FORM_DRAFT && shouldShowDraft;
+  });
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between">

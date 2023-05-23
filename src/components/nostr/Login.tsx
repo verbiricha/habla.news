@@ -67,10 +67,10 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined" && !pubkey) {
+    if (typeof window !== "undefined") {
       loginWithExtension();
     }
-  }, [pubkey]);
+  }, []);
 
   useEffect(() => {
     if (pubkey) {
