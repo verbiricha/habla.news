@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { NDKUser, NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
-import { nip19 } from "nostr-tools";
+import { nip05, nip19 } from "nostr-tools";
 
 import {
   useDisclosure,
@@ -33,15 +33,25 @@ import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 
 function LoginModal({ isOpen, onClose }) {
   const ndk = useNdk();
-  const [npub, setNpub] = useState();
+  const [pubkeyLike, setPubkeyLike] = useState();
   const toast = useToast();
   const [, setPubkey] = useAtom(pubkeyAtom);
 
-  function loginWithNpub() {
+  async function loginWithPubkey() {
     try {
-      const decoded = nip19.decode(npub);
-      if (decoded.type === "npub") {
-        setPubkey(decoded.data);
+      if (pubkeyLike.startsWith("npub")) {
+        const decoded = nip19.decode(pubkeyLike);
+        if (decoded.type === "npub") {
+          setPubkey(decoded.data);
+        }
+      } else {
+        const profile = await nip05.queryProfile(pubkeyLike);
+        if (profile) {
+          setPubkey(profile.pubkey);
+          if (profile.relays.lenght) {
+            setRelays(profile.relays);
+          }
+        }
       }
       onClose();
     } catch (error) {
@@ -97,6 +107,23 @@ function LoginModal({ isOpen, onClose }) {
                 colorScheme="orange"
                 isDisabled={typeof window === "undefined" || !window.nostr}
                 onClick={loginWithExtension}
+              >
+                Log In
+              </Button>
+              <Divider />
+              <Heading fontSize="lg">Public key</Heading>
+              <Text>Log in with a public key or nostr address. Read only.</Text>
+              <Input
+                placeholder="npub or nostr address (nip-05)"
+                type="text"
+                value={pubkeyLike}
+                onChange={(e) => setPubkeyLike(e.target.value)}
+              />
+              <Button
+                maxW="12rem"
+                colorScheme="orange"
+                isDisabled={!pubkeyLike}
+                onClick={loginWithPubkey}
               >
                 Log In
               </Button>
@@ -156,8 +183,12 @@ export default function Login() {
             .filter((t) => t.at(0) === "p")
             .map((t) => t.at(1));
           setFollows(follows);
-          const relays = JSON.parse(contactList.content);
-          setRelays(Object.keys(relays));
+          try {
+            const relays = JSON.parse(contactList.content);
+            setRelays(Object.keys(relays));
+          } catch (error) {
+            console.log("Relays not included in contact list");
+          }
         });
     }
   }, [pubkey]);

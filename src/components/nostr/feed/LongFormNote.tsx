@@ -72,7 +72,7 @@ export default function LongFormNote({
     });
   }, [event]);
   return (
-    <Card ref={ref} variant="article">
+    <Card ref={ref} variant="article" my={4}>
       {!excludeAuthor && (
         <CardHeader>
           <Flex align="center" direction="row" gap={2} fontFamily="Inter">

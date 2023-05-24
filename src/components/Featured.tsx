@@ -2,19 +2,20 @@ import { Flex, Stack, Text, Button } from "@chakra-ui/react";
 
 import SectionHeading from "@habla/components/SectionHeading";
 import User from "@habla/components/nostr/User";
-import Address from "@habla/components/nostr/feed/Address";
+import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import FollowButton from "@habla/components/nostr/FollowButton";
 
 function Featured({ naddr, kind, pubkey, identifier }) {
   return (
-    <Address
-      fontSize="2xl"
-      naddr={naddr}
-      kind={kind}
-      pubkey={pubkey}
-      identifier={identifier}
-      excludeReactions
-    />
+    <Stack>
+      <ArticleTitle
+        naddr={naddr}
+        kind={kind}
+        pubkey={pubkey}
+        identifier={identifier}
+      />
+      <User size="xs" pubkey={pubkey} />
+    </Stack>
   );
 }
 
@@ -88,7 +89,7 @@ export function FeaturedAuthors() {
 export default function FeaturedArticles() {
   return (
     <>
-      <SectionHeading>Popular</SectionHeading>
+      <SectionHeading>Popular posts</SectionHeading>
       <Stack spacing={4}>
         <WelcomeToNostr />
         <PurpleText />

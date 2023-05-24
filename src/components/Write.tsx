@@ -76,15 +76,17 @@ export default function Write({ pubkey }) {
             </MenuItem>
             <MenuDivider />
             {drafts.length > 0 && (
-              <MenuGroup title="Drafts">
-                {drafts.map((d) => (
-                  <MenuItem key={d.id} onClick={() => setEvent(d)}>
-                    {getMetadata(d).title}
-                  </MenuItem>
-                ))}
-              </MenuGroup>
+              <>
+                <MenuGroup title="Drafts">
+                  {drafts.map((d) => (
+                    <MenuItem key={d.id} onClick={() => setEvent(d)}>
+                      {getMetadata(d).title}
+                    </MenuItem>
+                  ))}
+                </MenuGroup>
+                <MenuDivider />
+              </>
             )}
-            <MenuDivider />
             <MenuGroup title="Posts">
               {posts.map((p) => (
                 <MenuItem
