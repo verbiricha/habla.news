@@ -1,7 +1,8 @@
 import { useMemo, useEffect, useState, useContext } from "react";
 import { useAtom } from "jotai";
+import { useToast } from "@chakra-ui/react";
 
-import { NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
+import { NDKEvent, NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
 import { useLiveQuery } from "dexie-react-hooks";
 import { utils } from "nostr-tools";
 
@@ -175,4 +176,38 @@ export function useReactions(
 export function useNdk() {
   const { ndk } = useContext(NostrContext);
   return ndk;
+}
+
+export function usePublishEvent() {
+  const ndk = useNdk();
+  const toast = useToast();
+
+  return async (
+    ev,
+    {
+      successTitle = "Success",
+      sucessMessage = "Posted",
+      errorTitle = "Error",
+      errorMessage = "Couldn't sign event, please log in first",
+    }
+  ) => {
+    try {
+      const ndkEvent = new NDKEvent(ndk, ev);
+      await ndkEvent.sign();
+      await ndk.publish(ndkEvent);
+      toast({
+        title: successTitle,
+        description: sucessMessage,
+        status: "success",
+      });
+      return ndkEvent;
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: errorTitle,
+        description: errorMessage,
+        status: "error",
+      });
+    }
+  };
 }

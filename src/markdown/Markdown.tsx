@@ -256,7 +256,7 @@ function extractNoteIds(fragments) {
     .flat();
 }
 
-function transformText(ps, tags, transform, alwaysTransform) {
+function transformText(ps, tags, transform) {
   let fragments = extractMentions(ps, tags);
   fragments = extractNprofiles(fragments);
   fragments = extractNevents(fragments);
@@ -266,10 +266,7 @@ function transformText(ps, tags, transform, alwaysTransform) {
   fragments = extractNpubs(fragments);
   fragments = extractCustomEmoji(fragments, tags);
 
-  if (alwaysTransform || fragments.every((f) => typeof f === "string")) {
-    return transform(fragments);
-  }
-  return <>{fragments}</>;
+  return transform(fragments);
 }
 
 function nostrUriTransformer(uri) {
@@ -295,7 +292,6 @@ export default function Markdown({
   tags = [],
   content,
   highlights = [],
-  pTag = true,
   onHighlightClick,
 }) {
   const highlighted = useMemo(
@@ -315,66 +311,6 @@ export default function Markdown({
   };
   const components = useMemo(() => {
     return {
-      h1: ({ children }) => (
-        <h1
-          id={
-            typeof children?.at(0) === "string" &&
-            slugify(children[0], { lower: true })
-          }
-        >
-          {children}
-        </h1>
-      ),
-      h2: ({ children }) => (
-        <h2
-          id={
-            typeof children?.at(0) === "string" &&
-            slugify(children[0], { lower: true })
-          }
-        >
-          {children}
-        </h2>
-      ),
-      h3: ({ children }) => (
-        <h3
-          id={
-            typeof children?.at(0) === "string" &&
-            slugify(children[0], { lower: true })
-          }
-        >
-          {children}
-        </h3>
-      ),
-      h4: ({ children }) => (
-        <h4
-          id={
-            typeof children?.at(0) === "string" &&
-            slugify(children[0], { lower: true })
-          }
-        >
-          {children}
-        </h4>
-      ),
-      h5: ({ children }) => (
-        <h5
-          id={
-            typeof children?.at(0) === "string" &&
-            slugify(children[0], { lower: true })
-          }
-        >
-          {children}
-        </h5>
-      ),
-      h6: ({ children }) => (
-        <h6
-          id={
-            typeof children?.at(0) === "string" &&
-            slugify(children[0], { lower: true })
-          }
-        >
-          {children}
-        </h6>
-      ),
       mark,
       img: ({ alt, src }) => {
         return (
@@ -388,13 +324,9 @@ export default function Markdown({
           />
         );
       },
-      li: ({ children }) =>
-        children && transformText(children, tags, (t) => <li>{t}</li>, true),
-      td: ({ children }) =>
-        children && transformText(children, tags, (t) => <td>{t}</td>, true),
-      p: ({ children }) =>
-        children &&
-        transformText(children, tags, (t) => (pTag ? <p>{t}</p> : t)),
+      li: ({ children }) => transformText(children, tags, (t) => <li>{t}</li>),
+      td: ({ children }) => transformText(children, tags, (t) => <td>{t}</td>),
+      p: ({ children }) => transformText(children, tags, (t) => <p>{t}</p>),
       a: (props) => {
         return <HyperText link={props.href}>{props.children}</HyperText>;
       },

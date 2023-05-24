@@ -16,13 +16,12 @@ import {
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
-import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
 
 import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
 import { LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
-import { useNdk } from "@habla/nostr/hooks";
+import { usePublishEvent } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
@@ -30,7 +29,7 @@ import LongFormNote from "@habla/components/LongFormNote";
 // todo: link to markdown reference
 export default function MyEditor({ event, showPreview }) {
   const toast = useToast();
-  const ndk = useNdk();
+  const publish = usePublishEvent();
   const ref = useRef();
   const router = useRouter();
   const metadata = event && getMetadata(event);
@@ -74,26 +73,20 @@ export default function MyEditor({ event, showPreview }) {
   async function onPost() {
     try {
       setIsPublishing(true);
-      // todo: mention tags
-      const ndkEvent = new NDKEvent(ndk, ev);
-      await ndkEvent.sign();
-      await ndk.publish(ndkEvent);
-      toast({
-        title: "Posted",
-        status: "success",
+      const signed = await publish(ev, {
+        successTitle: "Posted",
+        sucessMessage: "",
+        errorTitle: "Couldn't sign post",
+        errorMessage: "",
       });
-      const naddr = nip19.naddrEncode({
-        kind: ev.kind,
-        pubkey: ev.pubkey,
-        identifier: getMetadata(ev).identifier,
-      });
-      await router.push(`/a/${naddr}`);
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Couldn't sign post",
-        status: "error",
-      });
+      if (signed) {
+        const naddr = nip19.naddrEncode({
+          kind: signed.kind,
+          pubkey: signed.pubkey,
+          identifier: getMetadata(signed).identifier,
+        });
+        await router.push(`/a/${naddr}`);
+      }
     } finally {
       setIsPublishing(false);
     }
@@ -102,23 +95,15 @@ export default function MyEditor({ event, showPreview }) {
   async function onSave() {
     try {
       setIsPublishing(true);
-      // todo: mention tags
       const s = {
         ...ev,
         kind: LONG_FORM_DRAFT,
       };
-      const ndkEvent = new NDKEvent(ndk, s);
-      await ndkEvent.sign();
-      await ndk.publish(ndkEvent);
-      toast({
-        title: "Draft saved",
-        status: "success",
-      });
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Couldn't save draft",
-        status: "error",
+      await publish(s, {
+        successTitle: "Draft saved",
+        sucessMessage: "",
+        errorTitle: "Couldn't save draft",
+        errorMessage: "",
       });
     } finally {
       setIsPublishing(false);

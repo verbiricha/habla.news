@@ -21,7 +21,7 @@ export default function WritePage() {
         <meta name="og:description" content="Speak your mind" />
       </Head>
       <Layout>
-        {!pubkey && <Text>Log in to see bookmarks</Text>}
+        {!pubkey && <Text>Log in to write</Text>}
         {pubkey && <Write pubkey={pubkey} />}
       </Layout>
     </>
