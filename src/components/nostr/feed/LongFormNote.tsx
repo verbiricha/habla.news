@@ -108,7 +108,7 @@ export default function LongFormNote({
               </Heading>
             </Link>
             {summary?.length > 0 && (
-              <Text color="secondary" py={1} wordBreak="keep-all">
+              <Text color="secondary" py={1} wordBreak="break-word">
                 {summary}
               </Text>
             )}
