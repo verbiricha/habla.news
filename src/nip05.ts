@@ -21,6 +21,7 @@ export const names = {
   nout: "deba271e547767bd6d8eec75eece5615db317a03b07f459134b03e7236005655",
   sperry: "11d0b66747887ba9a6d34b23eb31287374b45b1a1b161eac54cb183c53e00ef7",
   sikto: "50c59a1cb233d08d5a1fb493f520c6b5d7f77a2ba42e4666801a3e366b0a027e",
+  gigabtc: "4d0068338af5ee79c06513deaaf02492247bbf7abd29f116e6e50c158ab6a677",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
