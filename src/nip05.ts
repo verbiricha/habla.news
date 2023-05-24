@@ -23,6 +23,10 @@ export const names = {
   sikto: "50c59a1cb233d08d5a1fb493f520c6b5d7f77a2ba42e4666801a3e366b0a027e",
   gigabtc: "4d0068338af5ee79c06513deaaf02492247bbf7abd29f116e6e50c158ab6a677",
   xanny: "f0ff87e7796ba86fc84b4807b25a5dee206d724c6f61aa8853975a39deeeff58",
+  gzuuus: "40b9c85fffeafc1cadf8c30a4e5c88660ff6e4971a0dc723d5ab674b5e61b451",
+  quentin: "89e14be49ed0073da83b678279cd29ba5ad86cf000b6a3d1a4c3dc4aa4fdd02c",
+  jonb: "35a8f9c0272c119a620f47c055c8db39e9f805fef1b22d0b7a42b189351dae66",
+  karnage: "1bc70a0148b3f316da33fe3c89f23e3e71ac4ff998027ec712b905cd24f6a411",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
