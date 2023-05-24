@@ -40,22 +40,10 @@ export default function HomeFeeds() {
         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
           {feed}
         </MenuButton>
-        <MenuList fontFamily="'Inter'" bg="layer">
-          <MenuItem
-            bg="layer"
-            _hover={{
-              bg: "surface",
-            }}
-            onClick={() => setFeed(Feeds.All)}
-          >
-            All
-          </MenuItem>
+        <MenuList fontFamily="'Inter'">
+          <MenuItem onClick={() => setFeed(Feeds.All)}>All</MenuItem>
           <MenuItem
             isDisabled={!isLoggedIn}
-            bg="layer"
-            _hover={{
-              bg: "surface",
-            }}
             onClick={() => setFeed(Feeds.Follows)}
           >
             Follows
