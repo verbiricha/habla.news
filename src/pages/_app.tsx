@@ -5,6 +5,7 @@ import "@fontsource/inter/600.css";
 import "@fontsource/source-serif-pro/400.css";
 
 import { useMemo, useEffect } from "react";
+import { appWithTranslation } from "next-i18next";
 import { AppProps } from "next/app";
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
@@ -40,4 +41,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);
