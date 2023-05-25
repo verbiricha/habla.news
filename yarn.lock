@@ -1421,10 +1421,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nostr-dev-kit/ndk@0.3.141":
-  version "0.3.141"
-  resolved "https://registry.yarnpkg.com/@nostr-dev-kit/ndk/-/ndk-0.3.141.tgz#cee9784c4cb7d3506dc193d7d763cb3525d4413e"
-  integrity sha512-LEtiC61CWteItp+A6tx1xiPqEtIk53/iPH1CWCDUsx1scz6ajPjpN8fe0/ZKTiOVfBpT/0EGfvuxab4yT0bY/Q==
+"@nostr-dev-kit/ndk@0.3.1415":
+  version "0.3.1415"
+  resolved "https://registry.yarnpkg.com/@nostr-dev-kit/ndk/-/ndk-0.3.1415.tgz#2a762366875fbc3f711c8d45760d71ba8f49e542"
+  integrity sha512-48Tds/SHMRJKXEbruKFge5DusYMEz4cRc3p2K1mzPFG64wtUSLyclIpqSsF5BJMbkFbq+MNqW87OapH3IEbVbA==
   dependencies:
     "@scure/base" "^1.1.1"
     "@typescript-eslint/eslint-plugin" "^5.57.0"

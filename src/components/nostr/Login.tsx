@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { NDKUser, NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
@@ -22,6 +23,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  UnorderedList,
+  ListItem,
 } from "@chakra-ui/react";
 
 import { CONTACTS } from "@habla/const";
@@ -36,6 +39,7 @@ function LoginModal({ isOpen, onClose }) {
   const [pubkeyLike, setPubkeyLike] = useState();
   const toast = useToast();
   const [, setPubkey] = useAtom(pubkeyAtom);
+  const { t } = useTranslation("common");
 
   async function loginWithPubkey() {
     try {
@@ -89,32 +93,43 @@ function LoginModal({ isOpen, onClose }) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Log In</ModalHeader>
+          <ModalHeader>{t("log-in")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Stack mb={5} gap={3}>
-              <Heading fontSize="lg">Nostr extension</Heading>
-              <Text>
-                Use a Nostr extension such as{" "}
-                <ExternalLink href="https://chrome.google.com/webstore/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp">
-                  nos2x
-                </ExternalLink>{" "}
-                or <ExternalLink href="https://getalby.com/">Alby</ExternalLink>{" "}
-                for logging in. This is the recommended method.
-              </Text>
+            <Stack mb={5}>
+              <Heading fontSize="lg" mb={2}>
+                {t("extension")}
+              </Heading>
+              <Text>{t("extension-descr")}</Text>
+              <UnorderedList pl={6}>
+                <ListItem>
+                  <ExternalLink href="https://chrome.google.com/webstore/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp">
+                    nos2x
+                  </ExternalLink>
+                </ListItem>
+                <ListItem>
+                  <ExternalLink href="https://getalby.com/">Alby</ExternalLink>
+                </ListItem>
+              </UnorderedList>
               <Button
                 maxW="12rem"
                 colorScheme="orange"
                 isDisabled={typeof window === "undefined" || !window.nostr}
                 onClick={loginWithExtension}
               >
-                Log In
+                {t("log-in")}
               </Button>
-              <Divider />
-              <Heading fontSize="lg">Public key</Heading>
-              <Text>Log in with a public key or nostr address. Read only.</Text>
+            </Stack>
+            <Divider />
+            <Stack my={4} gap={2}>
+              <Heading fontSize="lg" mb={2}>
+                {t("public-key")}
+              </Heading>
+              <Text>{t("public-key-descr")}</Text>
               <Input
-                placeholder="npub or nostr address (nip-05)"
+                fontFamily="'Inter'"
+                size="sm"
+                placeholder={t("public-key-placeholder")}
                 type="text"
                 value={pubkeyLike}
                 onChange={(e) => setPubkeyLike(e.target.value)}
@@ -125,15 +140,16 @@ function LoginModal({ isOpen, onClose }) {
                 isDisabled={!pubkeyLike}
                 onClick={loginWithPubkey}
               >
-                Log In
+                {t("log-in")}
               </Button>
             </Stack>
             <Divider />
-            <Stack my={5} gap={3}>
-              <Heading fontSize="lg">Create account</Heading>
+            <Stack my={4} gap={2}>
+              <Heading fontSize="lg" mb={2}>
+                {t("create-account")}
+              </Heading>
               <Text>
-                We are working on this feature. In the meantime you can create a
-                nostr account in{" "}
+                {t("create-account-descr")}
                 <ExternalLink href="https://nosta.me/">Nosta</ExternalLink>.
               </Text>
             </Stack>
@@ -169,6 +185,7 @@ export default function Login() {
   const bg = useColorModeValue("black", "white");
   const fg = useColorModeValue("white", "black");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     if (pubkey) {
@@ -203,7 +220,7 @@ export default function Login() {
           color={fg}
           leftIcon={<Icon as={WriteIcon} boxSize={5} />}
         >
-          Write
+          {t("write")}
         </Button>
       </Link>
       <ProfileLink pubkey={pubkey} relays={relays} />
@@ -211,7 +228,7 @@ export default function Login() {
   ) : (
     <>
       <Button colorScheme="orange" onClick={onOpen}>
-        Log in
+        {t("log-in")}
       </Button>
       <LoginModal isOpen={isOpen} onClose={onClose} />
     </>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import {
   Flex,
@@ -21,6 +22,7 @@ import Events from "@habla/components/nostr/feed/Events";
 import Editor from "@habla/markdown/Editor";
 
 export default function Write({ pubkey }) {
+  const { t } = useTranslation("common");
   const [showPreview, setShowPreview] = useState(false);
   const [event, setEvent] = useState();
   const { events } = useEvents(
@@ -50,7 +52,7 @@ export default function Write({ pubkey }) {
           <IconButton
             icon={<EditIcon />}
             size="lg"
-            aria-label="Edit"
+            aria-label={t("edit")}
             onClick={() => setShowPreview(false)}
             variant="outline"
           />
@@ -58,7 +60,7 @@ export default function Write({ pubkey }) {
           <IconButton
             icon={<ViewIcon />}
             size="lg"
-            aria-label="Preview"
+            aria-label={t("preview")}
             onClick={() => setShowPreview(true)}
             variant="outline"
           />
@@ -72,12 +74,12 @@ export default function Write({ pubkey }) {
           />
           <MenuList maxW="90vw">
             <MenuItem icon={<AddIcon />} onClick={() => setEvent()}>
-              New
+              {t("new")}
             </MenuItem>
             <MenuDivider />
             {drafts.length > 0 && (
               <>
-                <MenuGroup title="Drafts">
+                <MenuGroup title={t("drafts")}>
                   {drafts.map((d) => (
                     <MenuItem key={d.id} onClick={() => setEvent(d)}>
                       {getMetadata(d).title}
@@ -87,7 +89,7 @@ export default function Write({ pubkey }) {
                 <MenuDivider />
               </>
             )}
-            <MenuGroup title="Posts">
+            <MenuGroup title={t("articles")}>
               {posts.map((p) => (
                 <MenuItem
                   sx={{ wordBreak: "break-word" }}

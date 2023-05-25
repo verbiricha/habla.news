@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 import { Flex, Heading, Text, Button } from "@chakra-ui/react";
 
 export default function Hero() {
+  const { t } = useTranslation("common");
   return (
     <Flex
       flexDirection="column"
@@ -10,14 +12,13 @@ export default function Hero() {
       p="17px 24px"
       gap={4}
     >
-      <Heading fontSize="xl">What is Habla?</Heading>
+      <Heading fontSize="xl">{t("what-is-habla")}</Heading>
       <Text fontSize="md" fontWeight={400}>
-        Habla is a nostr-based web app that enables anyone to earn from their
-        writing.
+        {t("habla-description")}
       </Text>
       <Link href={`/faq`}>
         <Button variant="solid" color="white" bg="surface" maxWidth="8rem">
-          2 min intro
+          {t("intro")}
         </Button>
       </Link>
     </Flex>

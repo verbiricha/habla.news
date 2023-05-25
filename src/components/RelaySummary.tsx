@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -68,7 +69,17 @@ function PayToRelay({ info }) {
   );
 }
 
+function NipLink({ nip, icon, label }) {
+  return (
+    <Tag size="md" maxW="10em">
+      <TagLeftIcon as={icon} />
+      <TagLabel>{label}</TagLabel>
+    </Tag>
+  );
+}
+
 export function Nips({ info }) {
+  const { t } = useTranslation("common");
   const { supported_nips } = info;
   const hasDeletes = supported_nips?.includes(9);
   const hasMarkets = supported_nips?.includes(15);
@@ -77,6 +88,7 @@ export function Nips({ info }) {
   const hasAuth = supported_nips?.includes(42);
   const hasSearch = supported_nips?.includes(50);
   const hasFilestorage = supported_nips?.includes(95);
+
   return (
     <>
       {supported_nips && (
@@ -85,43 +97,43 @@ export function Nips({ info }) {
             {hasReplaceable && (
               <Tag size="md" maxW="10em">
                 <TagLeftIcon as={EditIcon} />
-                <TagLabel>Blog</TagLabel>
+                <TagLabel>{t("blog")}</TagLabel>
               </Tag>
             )}
             {hasMarkets && (
               <Tag size="md" maxW="10em">
                 <TagLeftIcon as={RepeatIcon} />
-                <TagLabel>Markets</TagLabel>
+                <TagLabel>{t("markets")}</TagLabel>
               </Tag>
             )}
             {hasPublicChat && (
               <Tag size="md" maxW="10em">
                 <TagLeftIcon as={CommentIcon} />
-                <TagLabel>Chat</TagLabel>
+                <TagLabel>{t("chat")}</TagLabel>
               </Tag>
             )}
             {hasDeletes && (
               <Tag size="md" maxW="10em">
                 <TagLeftIcon as={DeleteIcon} />
-                <TagLabel>Delete</TagLabel>
+                <TagLabel>{t("delete")}</TagLabel>
               </Tag>
             )}
             {hasSearch && (
               <Tag size="md" maxW="10em">
                 <TagLeftIcon as={SearchIcon} />
-                <TagLabel>Search</TagLabel>
+                <TagLabel>{t("search")}</TagLabel>
               </Tag>
             )}
             {hasAuth && (
               <Tag size="md" maxW="10em">
                 <TagLeftIcon as={LockIcon} />
-                <TagLabel>Auth</TagLabel>
+                <TagLabel>{t("auth")}</TagLabel>
               </Tag>
             )}
             {hasFilestorage && (
               <Tag size="md" maxW="10em">
                 <TagLeftIcon as={AttachmentIcon} />
-                <TagLabel>Files</TagLabel>
+                <TagLabel>{t("files")}</TagLabel>
               </Tag>
             )}
           </Flex>
@@ -184,16 +196,7 @@ function isHexString(str) {
 
 export function Operator({ info }) {
   const { pubkey } = info;
-  return (
-    isHexString(pubkey) && (
-      <Stack align="center" direction="row" gap={1}>
-        <Text fontSize="xs" color="gray.500">
-          by
-        </Text>
-        <User size="xs" pubkey={pubkey} />
-      </Stack>
-    )
-  );
+  return isHexString(pubkey) && <User size="xs" pubkey={pubkey} />;
 }
 
 function getLanguageName(languageTag) {

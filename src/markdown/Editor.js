@@ -1,5 +1,6 @@
 import { useRef, useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 import {
   useToast,
@@ -28,6 +29,7 @@ import LongFormNote from "@habla/components/LongFormNote";
 
 // todo: link to markdown reference
 export default function MyEditor({ event, showPreview }) {
+  const { t } = useTranslation("common");
   const toast = useToast();
   const publish = usePublishEvent();
   const ref = useRef();
@@ -121,20 +123,20 @@ export default function MyEditor({ event, showPreview }) {
   ) : (
     <>
       <Flex flexDirection="column" alignItems="flex-start">
-        <FormLabel htmlFor="title">Title</FormLabel>
+        <FormLabel htmlFor="title">{t("title")}</FormLabel>
         <Input
           dir="auto"
           id="title"
           value={title}
-          placeholder="Title for your article"
+          placeholder={t("title-placeholder")}
           onChange={(ev) => setTitle(ev.target.value)}
           size="md"
           mb={2}
         />
-        <FormLabel>Content</FormLabel>
+        <FormLabel>{t("content")}</FormLabel>
         <MdEditor
           ref={ref}
-          placeholder="Speak your mind"
+          placeholder={t("content-placeholder")}
           value={content}
           renderHTML={(text) => (
             <Prose>
@@ -154,32 +156,32 @@ export default function MyEditor({ event, showPreview }) {
           }}
           onChange={onChange}
         />
-        <FormLabel htmlFor="image">Image</FormLabel>
+        <FormLabel htmlFor="image">{t("image")}</FormLabel>
         <Input
           id="image"
-          placeholder="Link to the main article image"
+          placeholder={t("image-placeholder")}
           value={image}
           onChange={(ev) => setImage(ev.target.value)}
           size="md"
           mb={2}
         />
-        <FormLabel htmlFor="summary">Summary</FormLabel>
+        <FormLabel htmlFor="summary">{t("summary")}</FormLabel>
         <Textarea
           id="summary"
           dir="auto"
-          placeholder="A brief summary of what your article is about"
+          placeholder={t("summary-placeholder")}
           value={summary}
           onChange={(ev) => setSummary(ev.target.value)}
           size="md"
         />
         <FormLabel htmlFor="tags" mt={2}>
-          Tags
+          {t("tags")}
         </FormLabel>
         <Input
           id="tags"
           dir="auto"
           value={hashtags}
-          placeholder="List of tags separated by comma: nostr, markdown"
+          placeholder={t("tags-placeholder")}
           onChange={(ev) => setHashtags(ev.target.value)}
           size="md"
           mb={2}
@@ -187,15 +189,15 @@ export default function MyEditor({ event, showPreview }) {
 
         <Flex my={4} justifyContent="space-between" width="100%">
           <Button variant="solid" onClick={() => onSave()}>
-            Save draft
+            {t("save-draft")}
           </Button>
           <Button variant="solid" colorScheme="orange" onClick={() => onPost()}>
-            {event?.kind === 30023 && event?.sig ? "Update" : "Post"}
+            {event?.kind === 30023 && event?.sig ? t("update") : t("post")}
           </Button>
         </Flex>
 
         <FormLabel htmlFor="identifer" mt={2}>
-          Identifier
+          {t("identifier")}
         </FormLabel>
         <Input
           id="identifier"
@@ -204,9 +206,6 @@ export default function MyEditor({ event, showPreview }) {
           size="md"
           mb={2}
         />
-        <FormLabel>
-          <Code>d</Code> field
-        </FormLabel>
       </Flex>
     </>
   );

@@ -42,7 +42,7 @@ export default function Layout({ aside, children }) {
         </GridItem>
         <GridItem area={"main"}>
           <Flex align="center" justifyContent="center">
-            <Stack spacing="1.5rem" maxWidth="52rem" px="1rem">
+            <Stack spacing="1.5rem" maxWidth="52rem" px="1rem" width="100%">
               {children}
             </Stack>
           </Flex>

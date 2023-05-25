@@ -13,9 +13,11 @@ export function formatReadingTime(text: string) {
 }
 
 export function formatDay(timestamp: number) {
+  const locale =
+    typeof navigator === "undefined" ? "en-US" : navigator.language;
   const date = new Date(timestamp * 1000);
   const options = { month: "short", day: "numeric" };
-  const formatter = new Intl.DateTimeFormat("en-US", options);
+  const formatter = new Intl.DateTimeFormat(locale, options);
   return formatter.format(date);
 }
 

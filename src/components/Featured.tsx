@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import { Flex, Stack, Text, Button } from "@chakra-ui/react";
 
 import SectionHeading from "@habla/components/SectionHeading";
@@ -65,9 +66,10 @@ const featuredAuthors = [
 ];
 
 export function FeaturedAuthors() {
+  const { t } = useTranslation("common");
   return (
     <>
-      <SectionHeading>Popular authors</SectionHeading>
+      <SectionHeading>{t("popular-authors")}</SectionHeading>
       <Stack gap={2}>
         {featuredAuthors.map((pubkey) => {
           return (
@@ -87,9 +89,10 @@ export function FeaturedAuthors() {
 }
 
 export default function FeaturedArticles() {
+  const { t } = useTranslation("common");
   return (
     <>
-      <SectionHeading>Popular posts</SectionHeading>
+      <SectionHeading>{t("popular-posts")}</SectionHeading>
       <Stack spacing={4}>
         <WelcomeToNostr />
         <PurpleText />

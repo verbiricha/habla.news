@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { Text } from "@chakra-ui/react";
 
@@ -11,19 +12,35 @@ const Relay = dynamic(() => import("@habla/components/nostr/Relay"), {
   ssr: false,
 });
 
-export default function RelayPage() {
+export default function RelayPage({ relay }) {
   const router = useRouter();
-  const { nrelay } = router.query;
-  const relay = decodeNrelay(nrelay);
   return (
     <>
       <Head>
         <title>Relay: {relay}</title>
       </Head>
       <Layout>
-        {!relay && <Text>Sorry, couldn't decode nrelay.</Text>}
-        {relay && <Relay key={relay} relay={relay} />}
+        <Relay key={relay} relay={relay} />
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps({ query, locale }) {
+  const relay = decodeNrelay(query.nrelay);
+  if (relay) {
+    return {
+      props: {
+        relay,
+        ...(await serverSideTranslations(locale, ["common"])),
+      },
+    };
+  } else {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
 }

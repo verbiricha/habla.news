@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { Helmet } from "react-helmet";
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { Text } from "@chakra-ui/react";
 
@@ -36,4 +37,12 @@ export default function Profile({ metadata }) {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }

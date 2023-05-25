@@ -1,3 +1,4 @@
+import { useTranslation } from "next-i18next";
 import { useAtom } from "jotai";
 import { useToast, Icon, Button } from "@chakra-ui/react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
@@ -9,6 +10,7 @@ import { pubkeyAtom, followsAtom } from "@habla/state";
 import { useNdk } from "@habla/nostr/hooks";
 
 export default function FollowButton({ pubkey }) {
+  const { t } = useTranslation("common");
   const ndk = useNdk();
   const toast = useToast();
   const [user] = useAtom(pubkeyAtom);
@@ -48,7 +50,7 @@ export default function FollowButton({ pubkey }) {
       leftIcon={following ? <Icon as={CheckIcon} color="green.400" /> : null}
       onClick={following ? null : followPubkey}
     >
-      Follow
+      {t("follow")}
     </Button>
   );
 }

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Stack } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import Tabs from "@habla/components/Tabs";
@@ -7,6 +8,7 @@ import Highlights from "@habla/components/nostr/Highlights";
 import LongFormNote from "./feed/LongFormNote";
 
 export default function UserContent({ pubkey, events }) {
+  const { t } = useTranslation("common");
   const posts = useMemo(() => {
     return events.filter((e) => e.kind === LONG_FORM);
   }, [events]);
@@ -15,7 +17,7 @@ export default function UserContent({ pubkey, events }) {
   }, [events]);
   const tabs = [
     {
-      name: "Posts",
+      name: t("articles"),
       panel: (
         <Stack spacing="4">
           {posts.map((e) => (
@@ -25,7 +27,7 @@ export default function UserContent({ pubkey, events }) {
       ),
     },
     {
-      name: "Highlights",
+      name: t("highlights"),
       panel: (
         <Stack spacing="4">
           <Highlights highlights={highlights} showHeader={false} />

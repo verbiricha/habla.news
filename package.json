@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "i18n": "i18next"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.2",
@@ -15,7 +16,7 @@
     "@fontsource/source-serif-pro": "^4.5.9",
     "@fontsource/unbounded": "^4.5.1",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@nostr-dev-kit/ndk": "0.3.141",
+    "@nostr-dev-kit/ndk": "0.3.1415",
     "bech32": "^2.0.0",
     "dexie": "^3.2.3",
     "dexie-react-hooks": "^1.1.3",

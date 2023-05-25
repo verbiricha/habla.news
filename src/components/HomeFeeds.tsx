@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "next-i18next";
 
 import { useAtom } from "jotai";
 import {
   Flex,
-  Stack,
   Button,
   Menu,
   MenuButton,
@@ -30,6 +30,7 @@ enum Feeds {
 
 export default function HomeFeeds() {
   // todo: list feed
+  const { t } = useTranslation("common");
   const [feed, setFeed] = useState(Feeds.All);
   const [follows] = useAtom(followsAtom);
   const [pubkey] = useAtom(pubkeyAtom);
@@ -38,15 +39,15 @@ export default function HomeFeeds() {
     <Flex justifyContent="flex-end" width="100%">
       <Menu isLazy>
         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-          {feed}
+          {feed === Feeds.All ? t("all") : t("follows")}
         </MenuButton>
         <MenuList fontFamily="'Inter'">
-          <MenuItem onClick={() => setFeed(Feeds.All)}>All</MenuItem>
+          <MenuItem onClick={() => setFeed(Feeds.All)}>{t("all")}</MenuItem>
           <MenuItem
             isDisabled={!isLoggedIn}
             onClick={() => setFeed(Feeds.Follows)}
           >
-            Follows
+            {t("follows")}
           </MenuItem>
         </MenuList>
       </Menu>
@@ -54,7 +55,7 @@ export default function HomeFeeds() {
   );
   const tabs = [
     {
-      name: `Articles`,
+      name: t("articles"),
       panel: (
         <>
           {feedSelector}
@@ -71,7 +72,7 @@ export default function HomeFeeds() {
       ),
     },
     {
-      name: `Highlights`,
+      name: t("highlights"),
       panel: (
         <>
           {feedSelector}

@@ -7,7 +7,7 @@ import Feed from "@habla/components/nostr/Feed";
 export default function TagFeeds({ tag }) {
   return (
     <>
-      <Heading>Tag: #{tag}</Heading>
+      <Heading>#{tag}</Heading>
       <Feed
         filter={{ kinds: [LONG_FORM], "#t": [tag] }}
         options={{ cacheUsage: "PARALLEL", closeOnEose: true }}

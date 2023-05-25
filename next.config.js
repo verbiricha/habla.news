@@ -2,11 +2,12 @@ module.exports = {
   i18n: {
     defaultLocale: "en",
     locales: ["en", "es"],
-    localeDetection: false,
   },
+
   typescript: {
     ignoreBuildErrors: true,
   },
+
   async headers() {
     return [
       {

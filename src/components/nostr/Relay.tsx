@@ -1,11 +1,12 @@
 import { useState, useMemo } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { nip19 } from "nostr-tools";
 
 import { Stack, Heading, Text } from "@chakra-ui/react";
 
-import { LONG_FORM, HIGHLIGHT, DAY } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, DAY, WEEK } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
 import Events from "@habla/components/nostr/feed/Events";
 import RelayFavicon from "@habla/components/RelayFavicon";
@@ -17,16 +18,17 @@ import Search from "@habla/components/Search";
 
 export default function Relay({ relay }) {
   const { data, isError } = useRelayMetadata(relay);
+  const { t } = useTranslation("common");
   const relays = [relay];
   const tabs = useMemo(() => {
     const result = [
       {
-        name: "Posts",
+        name: t("articles"),
         panel: (
           <FeedPage
             key={`${relay}-posts`}
             filter={{ kinds: [LONG_FORM] }}
-            offset={DAY}
+            offset={2 * DAY}
             options={{
               relays,
               cacheUsage: "ONLY_RELAY",
@@ -35,12 +37,12 @@ export default function Relay({ relay }) {
         ),
       },
       {
-        name: "Highlights",
+        name: t("highlights"),
         panel: (
           <FeedPage
             key={`${relay}-highlights`}
             filter={{ kinds: [HIGHLIGHT] }}
-            offset={DAY}
+            offset={WEEK}
             options={{
               relays,
               cacheUsage: "ONLY_RELAY",
@@ -51,7 +53,7 @@ export default function Relay({ relay }) {
     ];
     if (data?.supported_nips?.includes(50)) {
       result.push({
-        name: "Search",
+        name: t("search"),
         panel: <Search relays={relays} />,
       });
     }
@@ -59,11 +61,9 @@ export default function Relay({ relay }) {
   }, [data, relays]);
   return (
     <>
-      <Stack>
-        <Stack align="center" direction="row" gap={1} wordBreak="break-word">
-          <RelayFavicon url={relay} size="sm" />
-          <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
-        </Stack>
+      <Stack align="center" direction="row" gap={1} wordBreak="break-word">
+        <RelayFavicon url={relay} size="md" />
+        <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
       </Stack>
       <Text>{data?.description}</Text>
       {data && <Nips info={data} />}

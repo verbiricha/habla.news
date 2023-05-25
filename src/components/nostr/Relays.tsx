@@ -8,7 +8,7 @@ import { RelayItem } from "@habla/components/Relays";
 export default function Relays() {
   const [relays] = useAtom(relaysAtom);
   return (
-    <Stack gap={4}>
+    <Stack gap={8}>
       {relays.map((url) => (
         <RelayItem key={url} url={url} />
       ))}

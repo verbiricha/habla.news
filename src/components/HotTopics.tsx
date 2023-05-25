@@ -1,5 +1,4 @@
 import { useTranslation } from "next-i18next";
-
 import { Stack } from "@chakra-ui/react";
 
 import Hashtags from "@habla/components/Hashtags";

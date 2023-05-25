@@ -1,5 +1,6 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
@@ -35,12 +36,15 @@ export default function Post({ event }) {
   );
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ locale, params }) {
   const { handle, slug } = params;
   const pubkey = await getPubkey(handle);
   const event = await getPost(pubkey, slug);
   return {
-    props: { event },
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      event,
+    },
   };
 }
 

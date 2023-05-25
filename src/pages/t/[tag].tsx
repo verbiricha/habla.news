@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import Layout from "@habla/layouts/Wide";
 
@@ -19,4 +20,12 @@ export default function TagPage() {
       <Layout>{tag && <TagFeeds tag={tag} />}</Layout>
     </>
   );
+}
+
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }

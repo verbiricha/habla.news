@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { Stack } from "@chakra-ui/react";
@@ -50,13 +51,14 @@ export default function Profile({
   );
 }
 
-export async function getStaticProps(context) {
-  const { handle } = context.params;
+export async function getStaticProps({ locale, params }) {
+  const { handle } = params;
   const pubkey = await getPubkey(handle);
   const events = await getEvents(pubkey);
   const profile = await getProfile(pubkey);
   return {
     props: {
+      ...(await serverSideTranslations(locale, ["common"])),
       handle,
       pubkey,
       events,

@@ -88,7 +88,7 @@ export default function Highlight({ event, showHeader = true, ...props }) {
         <Stack gap="1">
           {!e && (
             <Blockquote style={{ margin: 0 }}>
-              {context ? (
+              {context && context.length > event.content.length + 1 ? (
                 <HighlightSubstring text={context} substring={event.content} />
               ) : (
                 event.content

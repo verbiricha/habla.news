@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Helmet } from "react-helmet";
 import dynamic from "next/dynamic";
 import { Text, Box } from "@chakra-ui/react";
@@ -48,4 +49,12 @@ export default function Article({ metadata }) {
       </Layout>
     </>
   );
+}
+
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 }
