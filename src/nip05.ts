@@ -47,7 +47,12 @@ export async function getHandle(pubkey) {
 }
 
 export async function getRelays(pubkey) {
-  return ["wss://nostr.wine/", "wss://nos.lol/", "wss://relay.damus.io/"];
+  return [
+    "wss://relay.snort.social",
+    "wss://relay.damus.io/",
+    "wss://nostr.wine/",
+    "wss://nos.lol/",
+  ];
 }
 
 export async function getPost(pubkey, slug) {
