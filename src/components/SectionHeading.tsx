@@ -4,6 +4,7 @@ export default function SectionHeading({ children }) {
   return (
     <Heading
       mt={6}
+      dir="auto"
       mb={4}
       sx={{
         fontFamily: "'Inter'",

@@ -92,7 +92,7 @@ function LoginModal({ isOpen, onClose }) {
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent dir="auto">
           <ModalHeader>{t("log-in")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>

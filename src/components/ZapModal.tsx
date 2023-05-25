@@ -231,7 +231,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
   return (
     <Modal isOpen={isOpen} onClose={closeModal} isCentered>
       <ModalOverlay />
-      <ModalContent bg={bg}>
+      <ModalContent dir="auto" bg={bg}>
         <ModalHeader>
           <Stack direction="row" gap={1}>
             <Text fontFamily="'Inter'">Zap</Text>
