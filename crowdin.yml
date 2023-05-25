@@ -1,0 +1,5 @@
+project_id: 590927
+preserve_hierarchy: true
+files:
+  - source: public/locales/en/common.json
+    translation: public/locales/%locale_with_underscore%/common.json
