@@ -28,10 +28,12 @@ function atomWithLocalStorage<T>(key: string, initialValue: T) {
   return derivedAtom;
 }
 
-export const userAtom = atom<NDKUser | null>(null);
-export const pubkeyAtom = atom<Pubkey | null>(null);
+export const pubkeyAtom = atomWithLocalStorage<Pubkey | null>(
+  "userPubkey",
+  null
+);
 export const followsAtom = atom<string[]>([]);
-export const relaysAtom = atomWithLocalStorage<string[]>("relays", [
+export const relaysAtom = atomWithLocalStorage<string[]>("userRelays", [
   "wss://purplepag.es",
   "wss://nos.lol",
   "wss://nostr-relay.nokotaro.com",

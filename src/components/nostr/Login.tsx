@@ -27,12 +27,12 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 
-import { CONTACTS } from "@habla/const";
+import { CONTACTS, RELAYS } from "@habla/const";
 import WriteIcon from "@habla/icons/Write";
 import ExternalLink from "@habla/components/ExternalLink";
 import { useNdk } from "@habla/nostr/hooks";
 import Avatar from "@habla/components/nostr/Avatar";
-import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
+import { relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
 
 function LoginModal({ isOpen, onClose }) {
   const ndk = useNdk();
@@ -188,8 +188,29 @@ export default function Login() {
   const { t } = useTranslation("common");
 
   useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      pubkey &&
+      !ndk.signer &&
+      window.nostr
+    ) {
+      try {
+        const signer = new NDKNip07Signer();
+        ndk.signer = signer;
+      } catch (error) {
+        toast({
+          title: "Could not sign in",
+          status: "error",
+          description: error.message,
+        });
+        console.error(error);
+      }
+    }
+  }, [pubkey]);
+
+  useEffect(() => {
     if (pubkey) {
-      // Follows & Relays
+      // Follows
       ndk
         .fetchEvent({
           kinds: [CONTACTS],
@@ -200,12 +221,16 @@ export default function Login() {
             .filter((t) => t.at(0) === "p")
             .map((t) => t.at(1));
           setFollows(follows);
-          try {
-            const relays = JSON.parse(contactList.content);
-            setRelays(Object.keys(relays));
-          } catch (error) {
-            console.log("Relays not included in contact list");
-          }
+        });
+      // Relays
+      ndk
+        .fetchEvent({
+          kinds: [RELAYS],
+          authors: [pubkey],
+        })
+        .then((relayMetadata) => {
+          const relays = relayMetadata.tags.map((r) => r.at(1));
+          setRelays(relays);
         });
     }
   }, [pubkey]);

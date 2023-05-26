@@ -17,7 +17,7 @@ import NostrContext from "@habla/nostr/provider";
 import cacheAdapter from "@habla/cache/indexeddb";
 
 import theme from "@habla/theme";
-import { userAtom, relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
+import { relaysAtom } from "@habla/state";
 import { useNdk } from "@habla/nostr";
 
 // this changes the default local storage key name to ensure that no user has light mode cached in

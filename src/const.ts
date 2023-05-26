@@ -1,6 +1,7 @@
 export const LONG_FORM = 30023;
 export const LONG_FORM_DRAFT = 30024;
 export const HIGHLIGHT = 9802;
+export const RELAYS = 10002;
 export const NOTE = 1;
 export const CONTACTS = 3;
 export const REPOST = 6;
