@@ -107,12 +107,23 @@ export default function LongFormNote({
                 {title}
               </Heading>
             </Link>
-            {summary?.length > 0 && (
+            {summary?.length > 0 && summary?.length < 360 && (
               <Text color="secondary" py={1} wordBreak="break-word">
                 {summary}
               </Text>
             )}
-            {hashtags.length > 0 && <Hashtags mt={4} hashtags={hashtags} />}
+            {hashtags.length > 0 && (
+              <Flex alignItems="center" gap={3} mt={4}>
+                <Hashtags hashtags={hashtags.slice(0, 3)} />
+                {hashtags.length > 3 && (
+                  <Flex h={7}>
+                    <Text fontSize="xs" color="secondary">
+                      …
+                    </Text>
+                  </Flex>
+                )}
+              </Flex>
+            )}
           </Flex>
           {image?.length > 0 && summary?.length > 0 && (
             <Image
