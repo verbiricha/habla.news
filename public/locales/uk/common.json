@@ -43,5 +43,8 @@
   "chat": "Чат",
   "delete": "Видалити",
   "files": "Файли",
-  "auth": "Авторизація"
+  "auth": "Авторизація",
+  "search-description": "Paste a nostr ID (npub, nprofile, note, nevent or naddr), nostr address (tony@habla.news) or a URL with a nostr ID to see it in Habla.",
+  "search-more": "Hashtags are supported, use a #in front of a term to filter by hashtags.",
+  "search-placeholder": "URL, nostr ID, nostr address or hashtag"
 }
