@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 
 import { useAtom } from "jotai";
 import { useColorModeValue, Flex, IconButton } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
 
 import { pubkeyAtom } from "@habla/state";
 import ReadIcon from "@habla/icons/Read";
 import BookmarkIcon from "@habla/icons/Bookmark";
+import SearchIcon from "@habla/icons/Search";
 
 export default function Nav() {
   const [pubkey] = useAtom(pubkeyAtom);
