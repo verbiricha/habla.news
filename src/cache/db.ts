@@ -107,6 +107,20 @@ export function filterEvents(db: HablaDatabase, filter: NDKFilter) {
     query = query.and((ev) => filter["#p"].includes(ev.p));
   }
 
+  if (query && filter["search"]) {
+    const search = filter["search"];
+    query = query.and((ev) => {
+      const title = ev.tags.find((t) => t.at(0) === "title");
+      const summary = ev.tags.find((t) => t.at(0) === "summary");
+      const content = ev.content;
+      return (
+        content.includes(search) ||
+        summary?.includes(search) ||
+        title?.includes(search)
+      );
+    });
+  }
+
   return query;
 }
 

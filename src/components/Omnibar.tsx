@@ -4,6 +4,8 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/navigation";
 import throttle from "lodash/throttle";
 import {
+  useDisclosure,
+  Spinner,
   Stack,
   Heading,
   Text,
@@ -15,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { nip05, nip19 } from "nostr-tools";
 
-import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, HASHTAG_REGEX } from "@habla/const";
 import { urlsToNip27 } from "@habla/nip27";
 import Feed from "@habla/components/nostr/Feed";
 import SearchIcon from "@habla/icons/Search";
@@ -25,6 +27,9 @@ export default function Omnibar() {
   const { t } = useTranslation("common");
   const [event, setEvent] = useState();
   const [search, setSearch] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [tags, setTags] = useState([]);
+  const isTagSearch = tags?.length > 0;
 
   const onSearchChange = useCallback(
     throttle(async () => {
@@ -48,6 +53,7 @@ export default function Omnibar() {
       } catch (error) {}
 
       try {
+        onOpen();
         const profile = await nip05.queryProfile(newContent);
         if (profile) {
           if (profile.relays.length) {
@@ -58,7 +64,15 @@ export default function Omnibar() {
             return await router.push(`/p/${npub}`);
           }
         }
-      } catch (error) {}
+      } catch (error) {
+      } finally {
+        onClose();
+      }
+
+      const hashtags = newContent.match(HASHTAG_REGEX);
+      if (hashtags) {
+        setTags(hashtags.map((t) => t.slice(1)));
+      }
     }, 500),
     [search]
   );
@@ -71,9 +85,14 @@ export default function Omnibar() {
     <Stack gap={2}>
       <Heading>{t("search")}</Heading>
       <Text>{t("search-description")}</Text>
+      <Text>{t("search-more")}</Text>
       <InputGroup>
         <InputLeftElement pointerEvents="none">
-          <Icon as={SearchIcon} color="secondary" />
+          {isOpen ? (
+            <Spinner size="xs" color="secondary" />
+          ) : (
+            <Icon as={SearchIcon} color="secondary" />
+          )}
         </InputLeftElement>
         <Input
           autoFocus
@@ -82,15 +101,23 @@ export default function Omnibar() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </InputGroup>
+      {isTagSearch && (
+        <Feed
+          key={tags.join("")}
+          filter={{ kinds: [LONG_FORM], "#t": tags }}
+          options={{
+            cacheUsage: "PARALLEL",
+            closeOnEose: true,
+          }}
+        />
+      )}
       // todo: add when it works
-      {false && search?.length > 2 && (
+      {!isTagSearch && search?.length > 2 && (
         <Feed
           key={search}
-          filter={{ kinds: [LONG_FORM, HIGHLIGHT], search, limit: 50 }}
+          filter={{ kinds: [LONG_FORM], search }}
           options={{
-            cacheUsage: "RELAY_ONLY",
-            closeOnEose: true,
-            relays: ["wss://relay.nostr.band"],
+            cacheUsage: "CACHE_ONLY",
           }}
         />
       )}
