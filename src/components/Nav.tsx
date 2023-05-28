@@ -7,6 +7,7 @@ import { useColorModeValue, Flex, IconButton } from "@chakra-ui/react";
 import { pubkeyAtom } from "@habla/state";
 import ReadIcon from "@habla/icons/Read";
 import BookmarkIcon from "@habla/icons/Bookmark";
+import SearchIcon from "@habla/icons/Search";
 
 export default function Nav() {
   const [pubkey] = useAtom(pubkeyAtom);
@@ -36,7 +37,7 @@ export default function Nav() {
         <IconButton
           icon={<ReadIcon />}
           aria-label="Read"
-          sx={path !== "/bookmarks" ? activeNav : nav}
+          sx={["/search", "/bookmarks"].includes(path) ? nav : activeNav}
         />
       </Link>
       <Link href="/bookmarks">
@@ -44,6 +45,13 @@ export default function Nav() {
           icon={<BookmarkIcon />}
           aria-label="Bookmarks"
           sx={path === "/bookmarks" ? activeNav : nav}
+        />
+      </Link>
+      <Link href="/search">
+        <IconButton
+          icon={<SearchIcon />}
+          aria-label="Search"
+          sx={path === "/search" ? activeNav : nav}
         />
       </Link>
     </Flex>

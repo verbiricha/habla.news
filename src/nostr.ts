@@ -76,3 +76,17 @@ export function decodeNevent(nevent) {
     console.error(error);
   }
 }
+
+export function decodeNote(nevent) {
+  try {
+    if (!nevent) {
+      return;
+    }
+    const decoded = nip19.decode(nevent);
+    if (decoded.type === "note") {
+      return decoded.data;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}

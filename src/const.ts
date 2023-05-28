@@ -23,3 +23,6 @@ export const LISTS = [MUTED, PINNED, PEOPLE, BOOKMARKS, ZAPSTR_LIST, EMOJIS];
 export const HOUR = 60 * 60;
 export const DAY = 24 * HOUR;
 export const WEEK = 7 * DAY;
+
+// eslint-disable-next-line no-useless-escape
+export const HASHTAG_REGEX = /(#[^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]+)/g;
