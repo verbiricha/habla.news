@@ -2,7 +2,7 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 import Omnibar from "@habla/components/Omnibar";
 
 export default function Search() {
@@ -10,7 +10,10 @@ export default function Search() {
     <>
       <Head>
         <title>Search</title>
-        <meta name="og:title" content="Search by URL, nostr id or term" />
+        <meta
+          name="og:title"
+          content="Search by URL, nostr id or nostr address"
+        />
       </Head>
       <Layout>
         <Omnibar />
