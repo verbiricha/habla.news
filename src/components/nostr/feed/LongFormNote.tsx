@@ -27,6 +27,7 @@ import SeenIn from "@habla/components/SeenIn";
 import User from "../User";
 import Hashtags from "../../Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
+import { detectLanguage } from "@habla/util";
 
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
@@ -71,6 +72,8 @@ export default function LongFormNote({
       relays: relays.length > 0 ? relays : defaultRelays,
     });
   }, [event]);
+  const language = detectLanguage(title, summary, event.content);
+
   return (
     <Card ref={ref} variant="article" my={4}>
       {!excludeAuthor && (
@@ -104,7 +107,7 @@ export default function LongFormNote({
                   lineHeight: "30px",
                 }}
               >
-                {title}
+                {language} - {title}
               </Heading>
             </Link>
             {summary?.length > 0 && (

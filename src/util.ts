@@ -1,3 +1,6 @@
+import { franc } from "franc";
+import {micromark} from 'micromark';
+
 export function combineLists(lists) {
   const result = [];
 
@@ -31,4 +34,38 @@ export function normalizeURL(url: string): string {
   p.searchParams.sort();
   p.hash = "";
   return p.toString();
+}
+
+export function detectLanguage(title: string, summary: string, content: string,): string {
+  const div = document.createElement('div');
+  div.innerHTML = micromark(content);
+  const text = `${title} ${summary || ""} ${div.textContent}`;
+  div.remove();
+  const language = franc(text, {only: Object.keys(languageMapping)});
+  return languageMapping[language];
+}
+
+// https://github.com/wooorm/iso-639-3/blob/main/iso6393-to-1.js
+const languageMapping = {
+  afr: 'af',
+  ara: 'ar',
+  bul: 'bg',
+  deu: 'de',
+  eng: 'en',
+  spa: 'es',
+  fas: 'fa',
+  fra: 'fr',
+  hrv: 'hr',
+  ita: 'it',
+  jpn: 'ja',
+  kor: 'ko',
+  nld: 'nl',
+  por: 'pt',
+  rus: 'ru',
+  slk: 'sk',
+  slv: 'sl',
+  swe: 'sv',
+  tur: 'tr',
+  ukr: 'uk',
+  cmn: 'zh',
 }

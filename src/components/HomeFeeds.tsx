@@ -26,20 +26,22 @@ import FeedPage from "@habla/components/nostr/feed/FeedPage";
 enum Feeds {
   All = "All",
   Follows = "Follows",
+  Language = "Language"
 }
 
 export default function HomeFeeds() {
   // todo: list feed
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const [feed, setFeed] = useState(Feeds.All);
   const [follows] = useAtom(followsAtom);
   const [pubkey] = useAtom(pubkeyAtom);
   const isLoggedIn = pubkey && follows.length > 0;
+  const languageLabel = `${t("language")} (${i18n.language})`;
   const feedSelector = (
     <Flex justifyContent="flex-end" width="100%">
       <Menu isLazy>
         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-          {feed === Feeds.All ? t("all") : t("follows")}
+          {feed === Feeds.All ? t("all") : (feed === Feeds.Language ? languageLabel : t("follows"))}
         </MenuButton>
         <MenuList fontFamily="'Inter'">
           <MenuItem onClick={() => setFeed(Feeds.All)}>{t("all")}</MenuItem>
@@ -49,6 +51,7 @@ export default function HomeFeeds() {
           >
             {t("follows")}
           </MenuItem>
+          <MenuItem onClick={() => setFeed(Feeds.Language)}>{languageLabel}</MenuItem>
         </MenuList>
       </Menu>
     </Flex>
@@ -59,15 +62,19 @@ export default function HomeFeeds() {
       panel: (
         <>
           {feedSelector}
-          {feed === Feeds.Follows ? (
+          {feed === Feeds.Follows &&
             <FeedPage
               key={`posts-${pubkey}`}
               filter={{ kinds: [LONG_FORM], authors: follows }}
               offset={2 * DAY}
             />
-          ) : (
+          }
+          {feed === Feeds.Language &&
+            <FeedPage filter={{ kinds: [LONG_FORM] }} offset={2 * DAY} options={{language: i18n.language}} />
+          }
+          {feed === Feeds.All &&
             <FeedPage filter={{ kinds: [LONG_FORM] }} offset={DAY} />
-          )}
+          }
         </>
       ),
     },

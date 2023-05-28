@@ -18,6 +18,8 @@ import db from "@habla/cache/db";
 import { relaysAtom } from "@habla/state";
 
 import NostrContext from "./provider";
+import { getMetadata } from "@habla/nip23";
+import { detectLanguage } from "@habla/util";
 
 const defaultOpts = {
   closeOnEose: true,
@@ -63,7 +65,7 @@ export function useEvents(filter, options = {}) {
   const [defaultRelays] = useAtom(relaysAtom);
   const [eose, setEose] = useState(false);
   const [events, setEvents] = useState([]);
-  const { relays, ...rest } = options;
+  const { relays, language, ...rest } = options;
 
   let opts = { ...defaultOpts, ...rest };
   let relaySet;
@@ -78,6 +80,15 @@ export function useEvents(filter, options = {}) {
       const sub = ndk.subscribe(filter, opts, relaySet);
 
       sub.on("event", (ev, relay) => {
+        if (language) {
+          const event = getMetadata(ev);
+          const detected = detectLanguage(event.title, event.summary, ev.content);
+          // console.log(`[${language === detected}] ${detected} -- ${event.title}`);
+          if (language !== detected) {
+            return;
+          }
+        }
+
         setEvents((evs) =>
           uniqByFn(utils.insertEventIntoDescendingList(evs, ev), (e) =>
             e.tagId()
