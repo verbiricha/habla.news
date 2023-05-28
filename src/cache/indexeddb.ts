@@ -45,7 +45,11 @@ class IndexedDBCache implements NDKCacheAdapter {
   }
 
   async setEvent(event: NDKEvent, filter: NDKFilter) {
-    return storeEvent(this.db, event);
+    try {
+      return storeEvent(this.db, event);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

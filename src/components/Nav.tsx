@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import { useAtom } from "jotai";
 import { useColorModeValue, Flex, IconButton } from "@chakra-ui/react";
+import { SearchIcon } from "@chakra-ui/icons";
 
 import { pubkeyAtom } from "@habla/state";
 import ReadIcon from "@habla/icons/Read";
@@ -36,7 +37,7 @@ export default function Nav() {
         <IconButton
           icon={<ReadIcon />}
           aria-label="Read"
-          sx={path !== "/bookmarks" ? activeNav : nav}
+          sx={["/search", "/bookmarks"].includes(path) ? nav : activeNav}
         />
       </Link>
       <Link href="/bookmarks">
@@ -44,6 +45,13 @@ export default function Nav() {
           icon={<BookmarkIcon />}
           aria-label="Bookmarks"
           sx={path === "/bookmarks" ? activeNav : nav}
+        />
+      </Link>
+      <Link href="/search">
+        <IconButton
+          icon={<SearchIcon />}
+          aria-label="Search"
+          sx={path === "/search" ? activeNav : nav}
         />
       </Link>
     </Flex>
