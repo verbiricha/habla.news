@@ -7,17 +7,18 @@ import {
   Stack,
   Heading,
   Text,
+  Icon,
   IconButton,
   InputGroup,
   InputLeftElement,
   Input,
 } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
 import { nip05, nip19 } from "nostr-tools";
 
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { urlsToNip27 } from "@habla/nip27";
 import Feed from "@habla/components/nostr/Feed";
+import SearchIcon from "@habla/icons/Search";
 
 export default function Omnibar() {
   const router = useRouter();
@@ -72,7 +73,7 @@ export default function Omnibar() {
       <Text>{t("search-description")}</Text>
       <InputGroup>
         <InputLeftElement pointerEvents="none">
-          <SearchIcon color="secondary" />
+          <Icon as={SearchIcon} color="secondary" />
         </InputLeftElement>
         <Input
           autoFocus
