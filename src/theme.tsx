@@ -56,6 +56,17 @@ const theme = extendTheme(
       ".twitter-tweet iframe": {
         width: "auto",
       },
+      code: {
+        "overflow-y": "hidden",
+        "overflow-x": "scroll",
+        width: "100vw",
+      },
+      pre: {
+        "overflow-y": "hidden",
+        "overflow-x": "scroll",
+        width: "100vw",
+        maxWidth: "45rem",
+      },
     },
   })
 );
