@@ -324,9 +324,12 @@ export default function Markdown({
           />
         );
       },
-      li: ({ children }) => transformText(children, tags, (t) => <li>{t}</li>),
-      td: ({ children }) => transformText(children, tags, (t) => <td>{t}</td>),
-      p: ({ children }) => transformText(children, tags, (t) => <p>{t}</p>),
+      li: ({ children }) =>
+        children && transformText(children, tags, (t) => <li>{t}</li>),
+      td: ({ children }) =>
+        children && transformText(children, tags, (t) => <td>{t}</td>),
+      p: ({ children }) =>
+        children && transformText(children, tags, (t) => <p>{t}</p>),
       a: (props) => {
         return <HyperText link={props.href}>{props.children}</HyperText>;
       },
