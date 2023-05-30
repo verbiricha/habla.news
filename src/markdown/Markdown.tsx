@@ -70,7 +70,7 @@ function extractMentions(fragments, tags) {
                   return <Mention key={ref[1]} pubkey={ref[1]} />;
                 }
                 case "e": {
-                  return <EventId id={ref[1]} />;
+                  return <EventId id={ref[1]} mx="auto" />;
                 }
                 case "t": {
                   return <Hashtag tag={ref[1]} />;
@@ -242,7 +242,7 @@ function extractNoteIds(fragments) {
           if (i.startsWith("nostr:note1")) {
             try {
               const id = nip19.decode(i.replace(NostrPrefixRegex, "")).data;
-              return <EventId id={id} />;
+              return <EventId id={id} mx="auto" />;
             } catch (error) {
               return i;
             }
