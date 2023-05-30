@@ -80,10 +80,10 @@ export default function HomeFeeds() {
             <FeedPage
               key={`highlights-${pubkey}`}
               filter={{ kinds: [HIGHLIGHT], authors: follows }}
-              offset={2 * DAY}
+              offset={3 * DAY}
             />
           ) : (
-            <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={DAY} />
+            <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={3 * DAY} />
           )}
         </>
       ),
