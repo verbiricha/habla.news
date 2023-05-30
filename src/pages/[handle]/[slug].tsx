@@ -13,7 +13,7 @@ import {
 } from "@habla/nip05";
 import { useNdk } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
-import Layout from "@habla/layouts/Layout";
+import Layout from "@habla/layouts/Wide";
 import LongFormNote from "@habla/components/nostr/LongFormNote";
 
 export default function Post({ event }) {
