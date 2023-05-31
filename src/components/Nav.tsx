@@ -40,6 +40,7 @@ export default function Nav() {
           sx={["/search", "/bookmarks"].includes(path) ? nav : activeNav}
         />
       </Link>
+      {/*
       <Link href="/bookmarks">
         <IconButton
           icon={<BookmarkIcon />}
@@ -47,6 +48,7 @@ export default function Nav() {
           sx={path === "/bookmarks" ? activeNav : nav}
         />
       </Link>
+      */}
       <Link href="/search">
         <IconButton
           icon={<SearchIcon />}
