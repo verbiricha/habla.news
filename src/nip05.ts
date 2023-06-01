@@ -28,6 +28,7 @@ export const names = {
   jonb: "35a8f9c0272c119a620f47c055c8db39e9f805fef1b22d0b7a42b189351dae66",
   karnage: "1bc70a0148b3f316da33fe3c89f23e3e71ac4ff998027ec712b905cd24f6a411",
   herald: "7e7224cfe0af5aaf9131af8f3e9d34ff615ff91ce2694640f1f1fee5d8febb7d",
+  jb55: "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
