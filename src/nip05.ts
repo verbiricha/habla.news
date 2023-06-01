@@ -98,3 +98,22 @@ export async function getProfile(pubkey) {
   const ev = await pool.get(relays, filter);
   return JSON.parse(ev.content);
 }
+
+
+const requestHeaders: HeadersInit = new Headers();
+requestHeaders.set('Content-Type', 'application/json');
+requestHeaders.set('Authorization', 'Nostr: ewogICJpZCI6ICIzYWUyMDMyZTZhZjU0M2FiOTQwYzNmNmQ2N2JiZWQ0YzYyYWVhZDc2OGRkZWI4MDJjN2RlMWM3NmZmY2I2YTQwIiwKICAicHVia2V5IjogImM5ZTEyNzMyNTViYmMzNjAxNWRmOTcwY2ZiNTc4M2YwMDQ5NzYwY2EzZmFkYjM5YzUyMzQ1NGFkMzJmNGY1YTAiLAogICJjcmVhdGVkX2F0IjogMTY4MjMyNzg1MiwKICAia2luZCI6IDI3MjM1LAogICJ0YWdzIjogWwogICAgWwogICAgICAidSIsCiAgICAgICJodHRwOi8vbG9jYWxob3N0OjMwMDAvYXBpL3YxL21lZGlhIgogICAgXSwKICAgIFsKICAgICAgIm1ldGhvZCIsCiAgICAgICJHRVQiCiAgICBdLAogICAgWwogICAgICAicGF5bG9hZCIsCiAgICAgICJ0ZXN0IgogICAgXQogIF0sCiAgImNvbnRlbnQiOiAiIiwKICAic2lnIjogIjY0MDMwZjVmYjg2ZmZjZDI1MTdmZDA3OWQ1ZDcwZjRiMzY4NDY2YzI3OTQzMTVjNGI1MWUzODhkNTdlMzNiMDJiM2JjN2U2NDJiZWY3MTU0ODRmMWQwZTViNWI1MTQ5N2MzNGJmOWY3MmQ3MDYxYWEyMzYzNzNkYzFkMDcyZWQ0Igp9');
+
+export async function getNIP95names():Promise<JSON>{
+    const res = await fetch('https://nostrcheck.me/api/v1/domains/nostrcheck.me/users', 
+    {
+        method: 'GET',
+        headers: requestHeaders,
+    });
+    //let data = await res.json();
+  
+    console.log(await res.json());
+    let data : JSON = {_: "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c"}
+
+    return data;
+}
