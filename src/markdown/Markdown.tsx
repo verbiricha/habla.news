@@ -339,8 +339,8 @@ export default function Markdown({
   return (
     <ReactMarkdown
       components={components}
-      remarkPlugins={[remarkGfm, remarkMath]}
-      rehypePlugins={[rehypeRaw, rehypeKatex]}
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]}
       transformLinkUri={nostrUriTransformer}
     >
       {highlighted}
