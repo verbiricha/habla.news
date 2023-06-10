@@ -143,16 +143,6 @@ function LoginModal({ isOpen, onClose }) {
                 {t("log-in")}
               </Button>
             </Stack>
-            <Divider />
-            <Stack my={4} gap={2}>
-              <Heading fontSize="lg" mb={2}>
-                {t("create-account")}
-              </Heading>
-              <Text>
-                {t("create-account-descr")}
-                <ExternalLink href="https://nosta.me/">Nosta</ExternalLink>.
-              </Text>
-            </Stack>
           </ModalBody>
         </ModalContent>
       </Modal>
