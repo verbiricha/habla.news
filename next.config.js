@@ -1,7 +1,7 @@
 module.exports = {
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "es", "ja", "de", "ru", "uk", "fa", "it"],
+    locales: ["en", "es", "ja", "de", "ru", "uk", "fa", "it", "zh"],
   },
 
   typescript: {
