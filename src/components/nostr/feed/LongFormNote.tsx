@@ -71,7 +71,7 @@ export default function LongFormNote({
       relays: relays.length > 0 ? relays : defaultRelays,
     });
   }, [event]);
-  return event.content.length > 0 ? (
+  return title.length > 0 && event.content.length > 0 ? (
     <Card ref={ref} variant="article" my={4}>
       {!excludeAuthor && (
         <CardHeader>
