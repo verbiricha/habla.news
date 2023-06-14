@@ -50,7 +50,12 @@ const HighlightSubstring = ({ text, substring }) => {
   );
 };
 
-export default function Highlight({ event, showHeader = true, ...props }) {
+export default function Highlight({
+  event,
+  showHeader = true,
+  showReactions = true,
+  ...props
+}) {
   const { ref, inView } = useInView({
     threshold: 0,
   });
@@ -61,11 +66,13 @@ export default function Highlight({ event, showHeader = true, ...props }) {
   const seenOn = useSeenOn(event);
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
   const nevent = useMemo(() => {
-    return nip19.neventEncode({
-      id: event.id,
-      author: event.pubkey,
-      relays: seenOn,
-    });
+    if (event.id) {
+      return nip19.neventEncode({
+        id: event.id,
+        author: event.pubkey,
+        relays: seenOn,
+      });
+    }
   }, [event, seenOn]);
   const naddr = useMemo(() => {
     if (kind && pubkey && identifier) {
@@ -122,19 +129,25 @@ export default function Highlight({ event, showHeader = true, ...props }) {
           )}
         </Stack>
       </CardBody>
-      <CardFooter dir="auto">
-        <Flex alignItems="center" justifyContent="space-between" width="100%">
-          <Reactions event={event} kinds={[ZAP, REPOST, NOTE]} live={inView} />
-          <Link href={`/e/${nevent}`}>
-            <Icon
-              as={LinkIcon}
-              boxSize={3}
-              color="secondary"
-              cursor="pointer"
+      {showReactions && (
+        <CardFooter dir="auto">
+          <Flex alignItems="center" justifyContent="space-between" width="100%">
+            <Reactions
+              event={event}
+              kinds={[ZAP, REPOST, NOTE]}
+              live={inView}
             />
-          </Link>
-        </Flex>
-      </CardFooter>
+            <Link href={`/e/${nevent}`}>
+              <Icon
+                as={LinkIcon}
+                boxSize={3}
+                color="secondary"
+                cursor="pointer"
+              />
+            </Link>
+          </Flex>
+        </CardFooter>
+      )}
     </Card>
   ) : null;
 }

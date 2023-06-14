@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   useToast,
   Text,
@@ -15,23 +16,38 @@ import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import { HIGHLIGHT } from "@habla/const";
 import { getMetadata } from "@habla/nip23";
-import Blockquote from "@habla/components/Blockquote";
+import Highlight from "@habla/components/nostr/feed/Highlight";
 import User from "@habla/components/nostr/User";
 import { useNdk } from "@habla/nostr/hooks";
 
-export default function HighlightModal({ event, content, isOpen, onClose }) {
+export default function HighlightModal({
+  event,
+  content,
+  context,
+  isOpen,
+  onClose,
+}) {
   const ndk = useNdk();
   const toast = useToast();
   const { title } = getMetadata(event);
+
+  const highlight = useMemo(() => {
+    const ev = {
+      kind: HIGHLIGHT,
+      created_at: Math.round(Date.now() / 1000),
+      content,
+      tags: [["p", event.pubkey], event.tagReference()],
+    };
+    if (context) {
+      ev.tags.push(["context", context.text]);
+      //ev.tags.push(["range", context.start, context.end, "context"]);
+    }
+    return ev;
+  }, [event, content, context]);
+
   async function onHighlight() {
     try {
-      const ev = {
-        kind: HIGHLIGHT,
-        created_at: Math.round(Date.now() / 1000),
-        content,
-        tags: [["p", event.pubkey], event.tagReference()],
-      };
-      const signed = new NDKEvent(ndk, ev);
+      const signed = new NDKEvent(ndk, highlight);
       await signed.sign();
       await ndk.publish(signed);
       toast({
@@ -57,7 +73,11 @@ export default function HighlightModal({ event, content, isOpen, onClose }) {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody fontFamily="'Inter'">
-          <Blockquote>{content}</Blockquote>
+          <Highlight
+            event={highlight}
+            showHeader={false}
+            showReactions={false}
+          />
         </ModalBody>
 
         <ModalFooter>

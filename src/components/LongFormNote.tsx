@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useTextSelection } from "use-text-selection";
 import {
   useColorModeValue,
   useDisclosure,
@@ -31,6 +30,7 @@ import Highlighter from "@habla/icons/Highlighter";
 import Highlight from "@habla/components/nostr/feed/Highlight";
 import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
+import { useTextSelection } from "@habla/hooks/useTextSelection";
 import Zaps from "./Zaps";
 import Reposts from "./Reposts";
 import Comments from "./Comments";
@@ -104,13 +104,15 @@ export default function LongFormNote({
     [event]
   );
   const [textSelection, setTextSelection] = useState();
-  const { textContent, isCollapsed, clientRect } = useTextSelection(
+  const [ctx, setCtx] = useState();
+  const { context, textContent, isCollapsed, clientRect } = useTextSelection(
     ref.current
   );
 
   useEffect(() => {
     if (!highlightModal.isOpen) {
       setTextSelection(textContent);
+      setCtx(context);
     }
   }, [textContent]);
 
@@ -178,9 +180,11 @@ export default function LongFormNote({
       <HighlightModal
         event={event}
         content={textSelection}
+        context={ctx}
         {...highlightModal}
         onClose={() => {
           setTextSelection("");
+          setCtx();
           highlightModal.onClose();
         }}
       />

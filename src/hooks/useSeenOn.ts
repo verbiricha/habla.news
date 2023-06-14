@@ -5,8 +5,8 @@ import db from "@habla/cache/db";
 export default function useSeenOn(event: NDKEvent) {
   const seenOn = useLiveQuery(
     () => {
-      const id = event?.tagId();
-      if (id) {
+      if (event?.tagId) {
+        const id = event?.tagId();
         return db.relaySet.get(id).then((s) => s?.urls || []);
       }
       return [];
