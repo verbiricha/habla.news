@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-import { LONG_FORM, HIGHLIGHT, WEEK } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, DAY } from "@habla/const";
 import { pubkeyAtom, followsAtom } from "@habla/state";
 import SectionHeading from "@habla/components/SectionHeading";
 import Tabs from "@habla/components/Tabs";
@@ -63,10 +63,10 @@ export default function HomeFeeds() {
             <FeedPage
               key={`posts-${pubkey}`}
               filter={{ kinds: [LONG_FORM], authors: follows }}
-              offset={WEEK}
+              offset={2 * DAY}
             />
           ) : (
-            <FeedPage filter={{ kinds: [LONG_FORM] }} offset={WEEK} />
+            <FeedPage filter={{ kinds: [LONG_FORM] }} offset={DAY} />
           )}
         </>
       ),
@@ -80,10 +80,10 @@ export default function HomeFeeds() {
             <FeedPage
               key={`highlights-${pubkey}`}
               filter={{ kinds: [HIGHLIGHT], authors: follows }}
-              offset={WEEK}
+              offset={3 * DAY}
             />
           ) : (
-            <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={WEEK} />
+            <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={3 * DAY} />
           )}
         </>
       ),
