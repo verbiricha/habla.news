@@ -60,6 +60,7 @@ export function ListTag({ tag }) {
 export default function List({ event }) {
   const identifier = findTag(event, "d");
   const subject = findTag(event, "subject");
+  const description = findTag(event, "description");
   const hashtags = findTags(event, "t");
   return (
     <>
@@ -69,7 +70,10 @@ export default function List({ event }) {
         justifyContent="space-between"
         my={4}
       >
-        <Heading as="h5">{subject || identifier}</Heading>
+        <Stack>
+          <Heading as="h5">{subject || identifier}</Heading>
+          {description && <Text color="secondary">{description}</Text>}
+        </Stack>
         <Flex alignItems="center" gap={2}>
           <Text as="span" fontSize="lg" color="secondary">
             by
