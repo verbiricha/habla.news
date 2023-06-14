@@ -11,6 +11,7 @@ import Emoji from "@habla/components/Emoji";
 import EventId from "@habla/markdown/EventId";
 import Hashtags from "@habla/components/Hashtags";
 import Address from "@habla/components/nostr/Address";
+import { RelayItem } from "@habla/components/Relays";
 
 export function ListTag({ tag }) {
   const [t, value, relay] = tag;
@@ -49,6 +50,9 @@ export function ListTag({ tag }) {
       </Flex>
     );
   } else if (t === "r") {
+    if (value.startsWith("ws://") || value.startsWith("wss://")) {
+      return <RelayItem key={value} url={value} />;
+    }
     return <Link href={value}>{value}</Link>;
   }
 }
@@ -74,7 +78,7 @@ export default function List({ event }) {
         </Flex>
       </Flex>
       <Hashtags hashtags={hashtags} />
-      <Stack spacing={-4}>
+      <Stack>
         {event.tags.map((t) => (
           <ListTag tag={t} />
         ))}

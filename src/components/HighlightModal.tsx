@@ -32,12 +32,23 @@ export default function HighlightModal({
   const { title } = getMetadata(event);
 
   const highlight = useMemo(() => {
+    if (!event) {
+      return {
+        kind: HIGHLIGHT,
+        created_at: Math.round(Date.now() / 1000),
+        content,
+        tags: [],
+      };
+    }
     const ev = {
       kind: HIGHLIGHT,
       created_at: Math.round(Date.now() / 1000),
       content,
-      tags: [["p", event.pubkey], event.tagReference()],
+      tags: [["p", event.pubkey]],
     };
+    if (event.tagReference) {
+      ev.tags.push(event.tagReference());
+    }
     if (context) {
       ev.tags.push(["context", context.text]);
       //ev.tags.push(["range", context.start, context.end, "context"]);

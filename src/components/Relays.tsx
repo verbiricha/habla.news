@@ -20,10 +20,10 @@ import RelayFavicon from "./RelayFavicon";
 import InputCopy from "@habla/components/InputCopy";
 import RelayLink from "@habla/components/RelayLink";
 
-export function RelayItem({ url }) {
+export function RelayItem({ url, ...rest }) {
   const { data, isError } = useRelayMetadata(url);
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} {...rest}>
       <Flex
         flexDirection={["column", "row"]}
         alignItems={["flex-start", "center"]}

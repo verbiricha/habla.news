@@ -15,10 +15,19 @@ export const BOOKMARKS = 30001;
 export const LONG_FORM = 30023;
 export const LONG_FORM_DRAFT = 30024;
 export const BADGE = 30009;
+export const RELAY_LIST = 30022;
 export const EMOJIS = 30030;
 export const ZAPSTR_TRACK = 31337;
 export const ZAPSTR_LIST = 31338;
-export const LISTS = [MUTED, PINNED, PEOPLE, BOOKMARKS, ZAPSTR_LIST, EMOJIS];
+export const LISTS = [
+  MUTED,
+  PINNED,
+  PEOPLE,
+  BOOKMARKS,
+  ZAPSTR_LIST,
+  EMOJIS,
+  RELAY_LIST,
+];
 // Time
 export const HOUR = 60 * 60;
 export const DAY = 24 * HOUR;
