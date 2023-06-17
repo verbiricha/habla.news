@@ -25,13 +25,14 @@ export default function Reposts({ event, reposts }) {
     const relay = seenOn.at(0);
     const tag = relay ? [...ref, relay] : ref;
     const p = ["p", event.pubkey];
+    const k = ["k", String(event.kind)];
 
     try {
       const ev = {
         kind: REPOST,
         created_at: dateToUnix(),
-        tags: [tag, p, ...evTags],
-        content: JSON.stringify(rawEvent),
+        tags: [tag, p, k],
+        content: "",
       };
       const signed = new NDKEvent(ndk, ev);
       await signed.sign();
