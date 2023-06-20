@@ -15,8 +15,10 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  useColorMode,
 } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import "zapthreads";
 
 import User from "./nostr/User";
 
@@ -135,6 +137,8 @@ export default function LongFormNote({
     </Flex>
   );
 
+  const { colorMode } = useColorMode();
+
   return (
     <>
       <Box sx={{ wordBreak: "break-word" }} ref={ref} dir="auto">
@@ -196,7 +200,31 @@ export default function LongFormNote({
         onClose={onClose}
       />
 
-      <Box mt={4}>{reactions}</Box>
+      <Box>
+        <style>{
+          colorMode == 'light' ? `
+            :root {
+              --ctr-font: Inter;
+              --ctr-text-color: #2B2B2B;
+              --ctr-textarea-color: #2B2B2B;
+              --ctr-icon-color: #656565;
+              --ctr-link-color:  #92379c;
+              --ctr-login-button-color: var(--chakra-colors-orange-500);
+              --ctr-background-color: rgba(0, 0, 0, 0.03);
+            }
+          ` : `
+            :root {
+              --ctr-font: Inter;
+              --ctr-text-color: #dedede;
+              --ctr-icon-color: #656565;
+              --ctr-link-color: #e4b144;
+              --ctr-login-button-color: #5e584b;
+              --ctr-background-color: rgba(255, 255, 255, 0.05);
+            }
+          `}
+        </style>
+        <zap-threads relays="wss://relay.damus.io,wss://eden.nostr.land" anchor={event.encode()} />
+      </Box>
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
           𐡷
