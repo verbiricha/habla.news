@@ -32,6 +32,7 @@ export const LISTS = [
 export const HOUR = 60 * 60;
 export const DAY = 24 * HOUR;
 export const WEEK = 7 * DAY;
+export const MONTH = 4 * WEEK;
 
 // eslint-disable-next-line no-useless-escape
 export const HASHTAG_REGEX = /(#[^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]+)/g;
