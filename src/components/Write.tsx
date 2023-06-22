@@ -49,29 +49,36 @@ export default function Write({ pubkey }) {
     <>
       <Flex alignItems="center" justifyContent="space-between">
         {showPreview ? (
-          <IconButton
-            icon={<EditIcon />}
-            size="lg"
+          <Button
+            leftIcon={<EditIcon />}
+            size="md"
             aria-label={t("edit")}
             onClick={() => setShowPreview(false)}
             variant="outline"
-          />
+          >
+            {t("edit")}
+          </Button>
         ) : (
-          <IconButton
-            icon={<ViewIcon />}
-            size="lg"
+          <Button
+            leftIcon={<ViewIcon />}
+            size="md"
             aria-label={t("preview")}
             onClick={() => setShowPreview(true)}
             variant="outline"
-          />
+          >
+            {t("preview")}
+          </Button>
         )}
         <Menu>
           <MenuButton
-            as={IconButton}
+            as={Button}
             aria-label="Options"
-            icon={<HamburgerIcon />}
+            size="md"
+            leftIcon={<HamburgerIcon />}
             variant="outline"
-          />
+          >
+            {t("my-articles")}
+          </MenuButton>
           <MenuList maxW="90vw">
             <MenuItem icon={<AddIcon />} onClick={() => setEvent()}>
               {t("new")}
