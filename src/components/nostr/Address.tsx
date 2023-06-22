@@ -35,5 +35,10 @@ export default function Address({
     return <List event={event} />;
   }
 
-  return event ? <code>{event.content}</code> : null;
+  return event ? (
+    <>
+      <code>{JSON.stringify(event.tags, null, 2)}</code>
+      <code>{JSON.stringify(JSON.parse(event.content), null, 2)}</code>
+    </>
+  ) : null;
 }
