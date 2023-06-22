@@ -16,7 +16,7 @@
     "@fontsource/source-serif-pro": "^4.5.9",
     "@fontsource/unbounded": "^4.5.1",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@nostr-dev-kit/ndk": "0.3.27",
+    "@nostr-dev-kit/ndk": "0.5.11",
     "bech32": "^2.0.0",
     "dexie": "^3.2.3",
     "dexie-react-hooks": "^1.1.3",
