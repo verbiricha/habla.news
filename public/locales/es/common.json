@@ -44,7 +44,9 @@
   "delete": "Borrado",
   "files": "Ficheros",
   "auth": "Autenticación",
-  "search-description": "Paste a nostr ID (npub, nprofile, note, nevent or naddr), nostr address (tony@habla.news) or a URL with a nostr ID to see it in Habla",
-  "search-more": "Hashtags are supported, use a #in front of a term to filter by hashtags.",
-  "search-placeholder": "URL, nostr ID or nostr address"
+  "search-description": "Introduce un ID de nostr (npub, nprofile, note, nevent o naddr), nostr address (tony@habla.news) o una URL con un ID de nostr para verlo en Habla.",
+  "search-more": "Los hashtags están soportados, escribe una # delante de una palabra para filtrar por hashtag.",
+  "search-placeholder": "URL, ID de nostr o nostr address",
+  "my-articles": "Mis artículos",
+  "cancel": "Cancel"
 }

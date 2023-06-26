@@ -21,7 +21,7 @@
   "write": "Новый пост",
   "all": "Все",
   "follows": "Подписки",
-  "title": "Заголовок",
+  "title": "Title",
   "title-placeholder": "Заголовок вашей статьи",
   "content": "Содержание",
   "content-placeholder": "Поделитесь своими мыслями",
@@ -46,5 +46,7 @@
   "auth": "Авторизация",
   "search-description": "Paste a nostr ID (npub, nprofile, note, nevent or naddr), nostr address (tony@habla.news) or a URL with a nostr ID to see it in Habla",
   "search-more": "Hashtags are supported, use a #in front of a term to filter by hashtags.",
-  "search-placeholder": "URL, nostr ID or nostr address"
+  "search-placeholder": "URL, nostr ID or nostr address",
+  "my-articles": "My articles",
+  "cancel": "Cancel"
 }
