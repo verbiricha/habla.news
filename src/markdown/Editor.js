@@ -119,7 +119,7 @@ export default function MyEditor({ event, showPreview }) {
   }, [ref, showPreview]);
 
   return showPreview ? (
-    <LongFormNote event={ev} isDraft excludeAuthor />
+    <LongFormNote event={ev} isDraft excludeAuthor isEditingInline={true} />
   ) : (
     <>
       <Flex flexDirection="column" alignItems="flex-start">

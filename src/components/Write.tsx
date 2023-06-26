@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useTranslation } from "next-i18next";
 
 import {
@@ -13,6 +13,7 @@ import {
   MenuGroup,
   MenuItem,
 } from "@chakra-ui/react";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { AddIcon, HamburgerIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 
 import { getMetadata } from "@habla/nip23";
@@ -21,10 +22,22 @@ import { useEvents } from "@habla/nostr/hooks";
 import Events from "@habla/components/nostr/feed/Events";
 import Editor from "@habla/markdown/Editor";
 
-export default function Write({ pubkey }) {
+interface WriteProps {
+  pubkey: string;
+  ev?: NDKEvent;
+  isEditingInline: boolean;
+  children: ReactNode;
+}
+
+export default function Write({
+  pubkey,
+  ev,
+  isEditingInline,
+  children,
+}: WriteProps) {
   const { t } = useTranslation("common");
   const [showPreview, setShowPreview] = useState(false);
-  const [event, setEvent] = useState();
+  const [event, setEvent] = useState(ev);
   const { events } = useEvents(
     {
       kinds: [LONG_FORM, LONG_FORM_DRAFT],
@@ -69,46 +82,50 @@ export default function Write({ pubkey }) {
             {t("preview")}
           </Button>
         )}
-        <Menu>
-          <MenuButton
-            as={Button}
-            aria-label="Options"
-            size="md"
-            leftIcon={<HamburgerIcon />}
-            variant="outline"
-          >
-            {t("my-articles")}
-          </MenuButton>
-          <MenuList maxW="90vw">
-            <MenuItem icon={<AddIcon />} onClick={() => setEvent()}>
-              {t("new")}
-            </MenuItem>
-            <MenuDivider />
-            {drafts.length > 0 && (
-              <>
-                <MenuGroup title={t("drafts")}>
-                  {drafts.map((d) => (
-                    <MenuItem key={d.id} onClick={() => setEvent(d)}>
-                      {getMetadata(d).title}
-                    </MenuItem>
-                  ))}
-                </MenuGroup>
-                <MenuDivider />
-              </>
-            )}
-            <MenuGroup title={t("articles")}>
-              {posts.map((p) => (
-                <MenuItem
-                  sx={{ wordBreak: "break-word" }}
-                  key={p.id}
-                  onClick={() => setEvent(p)}
-                >
-                  {getMetadata(p).title}
-                </MenuItem>
-              ))}
-            </MenuGroup>
-          </MenuList>
-        </Menu>
+        {isEditingInline ? (
+          children
+        ) : (
+          <Menu>
+            <MenuButton
+              as={Button}
+              aria-label="Options"
+              size="md"
+              leftIcon={<HamburgerIcon />}
+              variant="outline"
+            >
+              {t("my-articles")}
+            </MenuButton>
+            <MenuList maxW="90vw">
+              <MenuItem icon={<AddIcon />} onClick={() => setEvent()}>
+                {t("new")}
+              </MenuItem>
+              <MenuDivider />
+              {drafts.length > 0 && (
+                <>
+                  <MenuGroup title={t("drafts")}>
+                    {drafts.map((d) => (
+                      <MenuItem key={d.id} onClick={() => setEvent(d)}>
+                        {getMetadata(d).title}
+                      </MenuItem>
+                    ))}
+                  </MenuGroup>
+                  <MenuDivider />
+                </>
+              )}
+              <MenuGroup title={t("articles")}>
+                {posts.map((p) => (
+                  <MenuItem
+                    sx={{ wordBreak: "break-word" }}
+                    key={p.id}
+                    onClick={() => setEvent(p)}
+                  >
+                    {getMetadata(p).title}
+                  </MenuItem>
+                ))}
+              </MenuGroup>
+            </MenuList>
+          </Menu>
+        )}
       </Flex>
       <Editor key={event?.id} showPreview={showPreview} event={event} />
     </>
