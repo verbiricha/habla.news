@@ -21,7 +21,7 @@
   "write": "撰写",
   "all": "全部",
   "follows": "关注",
-  "title": "標題",
+  "title": "标题",
   "title-placeholder": "你的文章标题",
   "content": "内容",
   "content-placeholder": "说说心里话",
@@ -47,5 +47,6 @@
   "search-description": "粘贴 nostr ID （npub、nprofile、note、nevent 或 naddr）、nostr 地址（tony@habla.news）或含有 nostr ID 的链接以在 Habla 中呈现。",
   "search-more": "支持主题标签，在主题标签前使用#以按主题标签筛选。",
   "search-placeholder": "URL、 nostr ID、 nostr 地址或主题标签",
-  "my-articles": "我的文章"
+  "my-articles": "我的文章",
+  "cancel": "Cancel"
 }
