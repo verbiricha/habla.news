@@ -21,7 +21,7 @@
   "write": "Escribe",
   "all": "Todo",
   "follows": "Seguidos",
-  "title": "Title",
+  "title": "Título",
   "title-placeholder": "Título de su artículo",
   "content": "Contenido",
   "content-placeholder": "Di lo que piensas",
@@ -47,5 +47,6 @@
   "search-description": "Paste a nostr ID (npub, nprofile, note, nevent or naddr), nostr address (tony@habla.news) or a URL with a nostr ID to see it in Habla",
   "search-more": "Hashtags are supported, use a #in front of a term to filter by hashtags.",
   "search-placeholder": "URL, nostr ID or nostr address",
-  "my-articles": "My articles"
+  "my-articles": "Mis artículos",
+  "cancel": "Cancel"
 }
