@@ -48,5 +48,6 @@
   "search-description": "Paste a nostr ID (npub, nprofile, note, nevent or naddr), nostr address (tony@habla.news) or a URL with a nostr ID to see it in Habla.",
   "search-more": "Hashtags are supported, write a # in front of a term to filter by hashtags.",
   "search-placeholder": "URL, nostr ID, nostr address or hashtag",
-  "my-articles": "My articles"
+  "my-articles": "My articles",
+  "cancel": "Cancel"
 }
