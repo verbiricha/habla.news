@@ -1,12 +1,13 @@
 import Link from "next/link";
 
-import { Text } from "@chakra-ui/react";
+import { Text, Code } from "@chakra-ui/react";
 
 import { useEvent } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import {
   LONG_FORM,
   LONG_FORM_DRAFT,
+  LIVE_EVENT,
   ZAP,
   HIGHLIGHT,
   REACTION,
@@ -17,6 +18,7 @@ import {
 import Badge from "@habla/components/nostr/Badge";
 import List from "@habla/components/nostr/List";
 import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
+import LiveEvent from "@habla/components/nostr/LiveEvent";
 
 export default function Naddr({
   naddr,
@@ -44,6 +46,10 @@ export default function Naddr({
         </Text>
       </Link>
     );
+  }
+
+  if (event && kind === LIVE_EVENT) {
+    return <LiveEvent event={event} naddr={naddr} />;
   }
 
   if (event && kind === BADGE) {
