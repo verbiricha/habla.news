@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-import { LONG_FORM, HIGHLIGHT, WEEK, MONTH } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, DAY, MONTH } from "@habla/const";
 import { pubkeyAtom, followsAtom } from "@habla/state";
 import SectionHeading from "@habla/components/SectionHeading";
 import Tabs from "@habla/components/Tabs";
@@ -66,7 +66,7 @@ export default function HomeFeeds() {
               offset={MONTH}
             />
           ) : (
-            <FeedPage filter={{ kinds: [LONG_FORM] }} offset={WEEK} />
+            <FeedPage filter={{ kinds: [LONG_FORM] }} offset={DAY} />
           )}
         </>
       ),
@@ -83,7 +83,7 @@ export default function HomeFeeds() {
               offset={MONTH}
             />
           ) : (
-            <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={WEEK} />
+            <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={DAY} />
           )}
         </>
       ),
