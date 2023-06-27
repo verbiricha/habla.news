@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 
 import {
   Flex,
@@ -28,6 +27,7 @@ import CommentIcon from "@habla/icons/Comment";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import User from "@habla/components/nostr/User";
+import ExternalLink from "@habla/components/ExternalLink";
 
 function Description({ info }) {
   const { description } = info;
@@ -61,7 +61,7 @@ function PayToRelay({ info }) {
             <Heading fontSize="xl" mb={2}>
               Pay to Relay
             </Heading>
-            <Link href={payments_url}>{payments_url}</Link>
+            <ExternalLink href={payments_url}>{payments_url}</ExternalLink>
           </Flex>
         </>
       )}
@@ -239,7 +239,7 @@ function CommunityPreferences({ info }) {
           <Heading fontSize="xl" mb={2}>
             Posting Policy
           </Heading>
-          <Link href={posting_policy}>{posting_policy}</Link>
+          <ExternalLink href={posting_policy}>{posting_policy}</ExternalLink>
         </Flex>
       )}
     </>

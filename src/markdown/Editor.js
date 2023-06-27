@@ -87,7 +87,7 @@ export default function MyEditor({ event, showPreview }) {
           pubkey: signed.pubkey,
           identifier: getMetadata(signed).identifier,
         });
-        await router.push(`/a/${naddr}`);
+        await router.push(`/a/${naddr}`, undefined, { shallow: true });
       }
     } finally {
       setIsPublishing(false);

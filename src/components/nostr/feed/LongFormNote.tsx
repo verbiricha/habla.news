@@ -94,7 +94,7 @@ export default function LongFormNote({
           dir="auto"
         >
           <Flex flexDirection="column">
-            <Link href={`/a/${naddr}`}>
+            <Link href={`/a/${naddr}`} shallow>
               <Heading
                 wordBreak="break-word"
                 mb={3}

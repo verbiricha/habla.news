@@ -19,6 +19,7 @@ import RelaySummary, { Operator, Nips } from "./RelaySummary";
 import RelayFavicon from "./RelayFavicon";
 import InputCopy from "@habla/components/InputCopy";
 import RelayLink from "@habla/components/RelayLink";
+import NipLink from "@habla/components/NipLink";
 
 export function RelayItem({ url, ...rest }) {
   const { data, isError } = useRelayMetadata(url);
@@ -66,8 +67,7 @@ export function RelayCard({ url, ...props }) {
         <CardBody>
           {isError ? (
             <Text color="gray.400">
-              Could not fetch <Link href={`https://nips.be/11`}>NIP-11</Link>{" "}
-              metadata
+              Could not fetch <NipLink nip={11} /> metadata
             </Text>
           ) : data ? (
             <>

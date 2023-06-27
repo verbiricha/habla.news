@@ -19,7 +19,7 @@ export default function ArticleTitle({
 
   const { title } = event ? getMetadata(event) : {};
   return (
-    <Link href={`/a/${naddr}`}>
+    <Link href={`/a/${naddr}`} shallow>
       <Heading fontSize="xl" {...rest}>
         {title}
       </Heading>
