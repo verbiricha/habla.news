@@ -21,7 +21,7 @@
   "write": "Write",
   "all": "All",
   "follows": "Follows",
-  "title": "title",
+  "title": "Title",
   "title-placeholder": "Title for your article",
   "content": "Content",
   "content-placeholder": "Speak your mind",
@@ -47,5 +47,8 @@
   "search": "Search",
   "search-description": "Paste a nostr ID (npub, nprofile, note, nevent or naddr), nostr address (tony@habla.news) or a URL with a nostr ID to see it in Habla.",
   "search-more": "Hashtags are supported, write a # in front of a term to filter by hashtags.",
-  "search-placeholder": "URL, nostr ID, nostr address or hashtag"
+  "search-placeholder": "URL, nostr ID, nostr address or hashtag",
+  "my-articles": "My articles",
+  "cancel": "Cancel",
+  "watch-stream": "Watch live stream"
 }

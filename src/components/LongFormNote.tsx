@@ -1,13 +1,16 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useTranslation } from "next-i18next";
 import {
   useColorModeValue,
   useDisclosure,
+  Button,
   Flex,
   Stack,
   Box,
   Heading,
   Text,
   Image,
+  Icon,
   IconButton,
   Drawer,
   DrawerBody,
@@ -19,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import "zapthreads";
+import { useAtom } from "jotai";
 
 import User from "./nostr/User";
 
@@ -29,10 +33,13 @@ import Markdown from "@habla/markdown/Markdown";
 import Hashtags from "@habla/components/Hashtags";
 import { formatDay } from "@habla/format";
 import Highlighter from "@habla/icons/Highlighter";
+import WriteIcon from "@habla/icons/Write";
 import Highlight from "@habla/components/nostr/feed/Highlight";
 import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
+import Write from "@habla/components/Write";
+import { pubkeyAtom } from "@habla/state";
 import Zaps from "./Zaps";
 import Reposts from "./Reposts";
 import Comments from "./Comments";
@@ -96,20 +103,25 @@ export default function LongFormNote({
   notes = [],
   highlights = [],
   reposts = [],
+  isEditingInline,
 }) {
   const ref = useRef();
+  const [pubkey] = useAtom(pubkeyAtom);
   const [selected, setSelected] = useState();
+  const [isEditing, setIsEditing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const highlightModal = useDisclosure();
   const { title, summary, image, hashtags, publishedAt } = useMemo(
     () => getMetadata(event),
     [event]
   );
+  const isMine = pubkey === event.pubkey;
   const [textSelection, setTextSelection] = useState();
   const [ctx, setCtx] = useState();
   const { context, textContent, isCollapsed, clientRect } = useTextSelection(
     ref.current
   );
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     if (!highlightModal.isOpen) {
@@ -139,16 +151,42 @@ export default function LongFormNote({
 
   const { colorMode } = useColorMode();
 
-  return (
+  return isMine && isEditing ? (
+    <Write pubkey={pubkey} ev={event} isEditingInline>
+      <Button
+        variant="write"
+        aria-label="Edit"
+        bg="secondary"
+        color="white"
+        onClick={() => setIsEditing(false)}
+      >
+        {t("cancel")}
+      </Button>
+    </Write>
+  ) : (
     <>
       <Box sx={{ wordBreak: "break-word" }} ref={ref} dir="auto">
         <Stack gap={2} mb={6}>
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
           )}
-          <Heading as="h1" fontSize="4xl">
-            {title}
-          </Heading>
+          <Flex justifyContent="space-between">
+            <Heading as="h1" fontSize="4xl">
+              {title}
+            </Heading>
+            {!isEditingInline && isMine && (
+              <Button
+                variant="write"
+                aria-label="Edit"
+                bg="secondary"
+                color="white"
+                onClick={() => setIsEditing(true)}
+                leftIcon={<Icon as={WriteIcon} boxSize={5} />}
+              >
+                {t("edit")}
+              </Button>
+            )}
+          </Flex>
           {summary?.length > 0 && (
             <Blockquote fontSize="lg">{summary}</Blockquote>
           )}

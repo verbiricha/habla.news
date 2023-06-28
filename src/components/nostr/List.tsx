@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Flex, Stack, Text, Heading, Divider } from "@chakra-ui/react";
 
 import { nip19 } from "nostr-tools";
@@ -12,6 +11,7 @@ import EventId from "@habla/markdown/EventId";
 import Hashtags from "@habla/components/Hashtags";
 import Address from "@habla/components/nostr/Address";
 import { RelayItem } from "@habla/components/Relays";
+import ExternalLink from "@habla/components/ExternalLink";
 
 export function ListTag({ tag }) {
   const [t, value, relay] = tag;
@@ -53,7 +53,7 @@ export function ListTag({ tag }) {
     if (value.startsWith("ws://") || value.startsWith("wss://")) {
       return <RelayItem key={value} url={value} />;
     }
-    return <Link href={value}>{value}</Link>;
+    return <ExternalLink href={value}>{value}</ExternalLink>;
   }
 }
 

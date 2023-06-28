@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 
 import {
@@ -20,6 +19,7 @@ import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import User from "@habla/components/nostr/User";
 import Blockquote from "@habla/components/Blockquote";
+import ExternalLink from "@habla/components/ExternalLink";
 
 export default function Highlight({ event }) {
   const { ref, inView } = useInView({
@@ -63,9 +63,9 @@ export default function Highlight({ event }) {
         )}
         {r && !naddr && !r.startsWith("https://habla.news") && (
           <Stack direction="column" spacing="1">
-            <Link href={r}>
+            <ExternalLink href={r}>
               <Heading fontSize="2xl">{r}</Heading>
-            </Link>
+            </ExternalLink>
             {p && <User pubkey={p} />}
           </Stack>
         )}

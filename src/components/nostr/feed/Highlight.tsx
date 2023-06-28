@@ -27,6 +27,7 @@ import Blockquote from "@habla/components/Blockquote";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import EventId from "@habla/markdown/EventId";
+import ExternalLink from "@habla/components/ExternalLink";
 
 const HighlightSubstring = ({ text, substring }) => {
   const startIndex = text.indexOf(substring);
@@ -116,7 +117,7 @@ export default function Highlight({
             />
           )}
           {r && !naddr && !r.startsWith("https://habla.news") && (
-            <Link href={r}>
+            <ExternalLink href={r}>
               <Text
                 fontFamily="'Inter'"
                 fontWeight={600}
@@ -125,7 +126,7 @@ export default function Highlight({
               >
                 {r}
               </Text>
-            </Link>
+            </ExternalLink>
           )}
         </Stack>
       </CardBody>
@@ -137,7 +138,7 @@ export default function Highlight({
               kinds={[ZAP, REPOST, NOTE]}
               live={inView}
             />
-            <Link href={`/e/${nevent}`}>
+            <Link href={`/e/${nevent}`} shallow>
               <Icon
                 as={LinkIcon}
                 boxSize={3}

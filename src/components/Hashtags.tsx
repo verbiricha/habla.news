@@ -5,7 +5,9 @@ import { Box, Flex, Tag } from "@chakra-ui/react";
 export function Hashtag({ tag }) {
   return (
     <Tag size="sm" fontWeight={300}>
-      <Link href={`/t/${tag}`}>{tag}</Link>
+      <Link href={`/t/${tag}`} shallow>
+        {tag}
+      </Link>
     </Tag>
   );
 }

@@ -17,7 +17,7 @@ export default function Header(props: FlexProps) {
       {...props}
     >
       <Flex alignItems="center" gap="4">
-        <Link href="/">
+        <Link href="/" shallow>
           <Heading
             sx={{
               fontWeight: 600,

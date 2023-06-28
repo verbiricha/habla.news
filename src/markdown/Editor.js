@@ -87,7 +87,7 @@ export default function MyEditor({ event, showPreview }) {
           pubkey: signed.pubkey,
           identifier: getMetadata(signed).identifier,
         });
-        await router.push(`/a/${naddr}`);
+        await router.push(`/a/${naddr}`, undefined, { shallow: true });
       }
     } finally {
       setIsPublishing(false);
@@ -119,7 +119,7 @@ export default function MyEditor({ event, showPreview }) {
   }, [ref, showPreview]);
 
   return showPreview ? (
-    <LongFormNote event={ev} isDraft excludeAuthor />
+    <LongFormNote event={ev} isDraft excludeAuthor isEditingInline={true} />
   ) : (
     <>
       <Flex flexDirection="column" alignItems="flex-start">

@@ -38,17 +38,29 @@ export default function Omnibar() {
       try {
         const decoded = nip19.decode(newContent);
         if (decoded?.type === "npub") {
-          return await router.push(`/p/${newContent}`);
+          return await router.push(`/p/${newContent}`, undefined, {
+            shallow: true,
+          });
         } else if (decoded?.type === "nprofile") {
-          return await router.push(`/p/${newContent}`);
+          return await router.push(`/p/${newContent}`, undefined, {
+            shallow: true,
+          });
         } else if (decoded?.type === "note") {
-          return await router.push(`/n/${newContent}`);
+          return await router.push(`/n/${newContent}`, undefined, {
+            shallow: true,
+          });
         } else if (decoded?.type === "nevent") {
-          return await router.push(`/e/${newContent}`);
+          return await router.push(`/e/${newContent}`, undefined, {
+            shallow: true,
+          });
         } else if (decoded?.type === "naddr") {
-          return await router.push(`/a/${newContent}`);
+          return await router.push(`/a/${newContent}`, undefined, {
+            shallow: true,
+          });
         } else if (decoded?.type === "nrelay") {
-          return await router.push(`/r/${newContent}`);
+          return await router.push(`/r/${newContent}`, undefined, {
+            shallow: true,
+          });
         }
       } catch (error) {}
 
@@ -58,10 +70,14 @@ export default function Omnibar() {
         if (profile) {
           if (profile.relays.length) {
             const nprofile = nip19.nprofileEncode(profile);
-            return await router.push(`/p/${nprofile}`);
+            return await router.push(`/p/${nprofile}`, undefined, {
+              shallow: true,
+            });
           } else {
             const npub = nip19.npubEncode(profile.pubkey);
-            return await router.push(`/p/${npub}`);
+            return await router.push(`/p/${npub}`, undefined, {
+              shallow: true,
+            });
           }
         }
       } catch (error) {

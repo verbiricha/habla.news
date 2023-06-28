@@ -33,7 +33,7 @@ export default function Nav() {
       mx={[4, 4, 0]}
       my={[0, 0, 4]}
     >
-      <Link href="/">
+      <Link href="/" shallow>
         <IconButton
           icon={<ReadIcon />}
           aria-label="Read"
@@ -49,7 +49,7 @@ export default function Nav() {
         />
       </Link>
       */}
-      <Link href="/search">
+      <Link href="/search" shallow>
         <IconButton
           icon={<SearchIcon />}
           aria-label="Search"
