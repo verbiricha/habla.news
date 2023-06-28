@@ -39,7 +39,7 @@ import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
 import Write from "@habla/components/Write";
-import { pubkeyAtom } from "@habla/state";
+import { pubkeyAtom, relaysAtom } from "@habla/state";
 import Zaps from "./Zaps";
 import Reposts from "./Reposts";
 import Comments from "./Comments";
@@ -107,6 +107,7 @@ export default function LongFormNote({
 }) {
   const ref = useRef();
   const [pubkey] = useAtom(pubkeyAtom);
+  const [defaultRelays] = useAtom(relaysAtom);
   const [selected, setSelected] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -261,7 +262,12 @@ export default function LongFormNote({
             }
           `}
         </style>
-        <zap-threads disable-likes={true} disable-zaps={true} pubkey={pubkey} anchor={event.encode()} />
+        <zap-threads
+          anchor={event.encode()}
+          pubkey={pubkey}
+          relays={defaultRelays}
+          disable-likes={true}
+          disable-zaps={true} />
       </Box>
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
