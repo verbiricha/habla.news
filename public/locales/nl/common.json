@@ -21,7 +21,7 @@
   "write": "Schrijf",
   "all": "Alles",
   "follows": "Volgend",
-  "title": "Title",
+  "title": "title",
   "title-placeholder": "Title for your article",
   "content": "Content",
   "content-placeholder": "Speak your mind",
@@ -48,5 +48,6 @@
   "search-more": "Hashtags are supported, use a #in front of a term to filter by hashtags.",
   "search-placeholder": "URL, nostr ID or nostr address",
   "my-articles": "My articles",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "watch-stream": "Watch live stream"
 }

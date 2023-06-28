@@ -48,5 +48,6 @@
   "search-more": "Los hashtags están soportados, escribe una # delante de una palabra para filtrar por hashtag.",
   "search-placeholder": "URL, ID de nostr o nostr address",
   "my-articles": "Mis artículos",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "watch-stream": "Watch live stream"
 }
