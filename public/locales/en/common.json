@@ -49,5 +49,6 @@
   "search-more": "Hashtags are supported, write a # in front of a term to filter by hashtags.",
   "search-placeholder": "URL, nostr ID, nostr address or hashtag",
   "my-articles": "My articles",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "watch-stream": "Watch live stream"
 }
