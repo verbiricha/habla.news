@@ -242,26 +242,26 @@ export default function LongFormNote({
         <style>{
           colorMode == 'light' ? `
             :root {
-              --ctr-font: Inter;
-              --ctr-text-color: #2B2B2B;
-              --ctr-textarea-color: #2B2B2B;
-              --ctr-icon-color: #656565;
-              --ctr-link-color:  #92379c;
-              --ctr-login-button-color: var(--chakra-colors-orange-500);
-              --ctr-background-color: rgba(0, 0, 0, 0.03);
+              --ztr-font: Inter;
+              --ztr-text-color: #2B2B2B;
+              --ztr-textarea-color: #2B2B2B;
+              --ztr-icon-color: #656565;
+              --ztr-link-color:  #92379c;
+              --ztr-login-button-color: var(--chakra-colors-orange-500);
+              --ztr-background-color: rgba(0, 0, 0, 0.03);
             }
           ` : `
             :root {
-              --ctr-font: Inter;
-              --ctr-text-color: #dedede;
-              --ctr-icon-color: #656565;
-              --ctr-link-color: #e4b144;
-              --ctr-login-button-color: #5e584b;
-              --ctr-background-color: rgba(255, 255, 255, 0.05);
+              --ztr-font: Inter;
+              --ztr-text-color: #dedede;
+              --ztr-icon-color: #656565;
+              --ztr-link-color: #e4b144;
+              --ztr-login-button-color: #5e584b;
+              --ztr-background-color: rgba(255, 255, 255, 0.05);
             }
           `}
         </style>
-        <zap-threads relays="wss://relay.damus.io,wss://eden.nostr.land" anchor={event.encode()} />
+        <zap-threads disable-likes={true} disable-zaps={true} pubkey={pubkey} anchor={event.encode()} />
       </Box>
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
