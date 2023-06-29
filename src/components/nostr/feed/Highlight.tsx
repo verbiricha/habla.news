@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
+import "zapthreads";
 
 import {
   Flex,
@@ -12,6 +13,7 @@ import {
   CardBody,
   CardFooter,
   Stack,
+  useColorMode,
 } from "@chakra-ui/react";
 import { LinkIcon } from "@chakra-ui/icons";
 
@@ -28,6 +30,8 @@ import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import EventId from "@habla/markdown/EventId";
 import ExternalLink from "@habla/components/ExternalLink";
+import { useAtom } from "jotai";
+import { pubkeyAtom, relaysAtom } from "@habla/state";
 
 const HighlightSubstring = ({ text, substring }) => {
   const startIndex = text.indexOf(substring);
@@ -66,6 +70,8 @@ export default function Highlight({
   const context = findTag(event, "context");
   const seenOn = useSeenOn(event);
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
+  const [loggedInPubkey] = useAtom(pubkeyAtom);
+  const [defaultRelays] = useAtom(relaysAtom);
   const nevent = useMemo(() => {
     if (event.id) {
       return nip19.neventEncode({
@@ -85,6 +91,9 @@ export default function Highlight({
       });
     }
   }, [kind, pubkey, identifier]);
+
+  const { colorMode } = useColorMode();
+
   return event.content.length < 4200 ? (
     <Card variant="highlight" key={event.id} ref={ref} my={4} {...props}>
       {showHeader && (
@@ -131,23 +140,55 @@ export default function Highlight({
         </Stack>
       </CardBody>
       {showReactions && (
-        <CardFooter dir="auto">
-          <Flex alignItems="center" justifyContent="space-between" width="100%">
-            <Reactions
-              event={event}
-              kinds={[ZAP, REPOST, NOTE]}
-              live={inView}
-            />
-            <Link href={`/e/${nevent}`} shallow>
-              <Icon
-                as={LinkIcon}
-                boxSize={3}
-                color="secondary"
-                cursor="pointer"
+        <>
+          <CardFooter dir="auto">
+            <Flex alignItems="center" justifyContent="space-between" width="100%">
+              <Reactions
+                event={event}
+                kinds={[ZAP, REPOST, NOTE]}
+                live={inView}
               />
-            </Link>
-          </Flex>
-        </CardFooter>
+              <Link href={`/e/${nevent}`} shallow>
+                <Icon
+                  as={LinkIcon}
+                  boxSize={3}
+                  color="secondary"
+                  cursor="pointer"
+                />
+              </Link>
+            </Flex>
+          </CardFooter>
+          <style>{
+            colorMode == 'light' ? `
+            :root {
+              --ztr-font: Inter;
+              --ztr-text-color: #2B2B2B;
+              --ztr-textarea-color: #2B2B2B;
+              --ztr-icon-color: #656565;
+              --ztr-link-color:  #92379c;
+              --ztr-login-button-color: var(--chakra-colors-orange-500);
+              --ztr-background-color: rgba(0, 0, 0, 0.03);
+            }
+          ` : `
+            :root {
+              --ztr-font: Inter;
+              --ztr-text-color: #dedede;
+              --ztr-icon-color: #656565;
+              --ztr-link-color: #e4b144;
+              --ztr-login-button-color: #5e584b;
+              --ztr-background-color: rgba(255, 255, 255, 0.05);
+            }
+          `}
+          </style>
+          <zap-threads
+            anchor={nevent}
+            pubkey={loggedInPubkey}
+            relays={defaultRelays}
+            disable-likes={true}
+            disable-zaps={true}
+            disable-publish={true}
+          />
+        </>
       )}
     </Card>
   ) : null;
