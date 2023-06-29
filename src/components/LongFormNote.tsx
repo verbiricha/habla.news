@@ -267,7 +267,9 @@ export default function LongFormNote({
           pubkey={pubkey}
           relays={defaultRelays}
           disable-likes={true}
-          disable-zaps={true} />
+          disable-zaps={true}
+          disable-publish={true}
+        />
       </Box>
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
