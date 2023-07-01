@@ -242,10 +242,11 @@ export default function LongFormNote({
         onClose={onClose}
       />
 
-      <Box>
-        <style>
-          {colorMode == "light"
-            ? `
+      {event && event.encode && (
+        <Box>
+          <style>
+            {colorMode == "light"
+              ? `
             :root {
               --ztr-font: Inter;
               --ztr-text-color: #2B2B2B;
@@ -256,7 +257,7 @@ export default function LongFormNote({
               --ztr-background-color: rgba(0, 0, 0, 0.03);
             }
           `
-            : `
+              : `
             :root {
               --ztr-font: Inter;
               --ztr-text-color: #dedede;
@@ -266,9 +267,10 @@ export default function LongFormNote({
               --ztr-background-color: rgba(255, 255, 255, 0.05);
             }
           `}
-        </style>
-        <Thread anchor={event.encode()} />
-      </Box>
+          </style>
+          <Thread anchor={event.encode()} />
+        </Box>
+      )}
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
           𐡷
