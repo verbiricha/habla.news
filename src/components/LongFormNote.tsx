@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { useAtom } from "jotai";
-import Thread from "@habla/components/nostr/Thread";
+import dynamic from "next/dynamic";
 
 import User from "./nostr/User";
 
@@ -43,6 +43,10 @@ import { pubkeyAtom, relaysAtom } from "@habla/state";
 import Zaps from "./Zaps";
 import Reposts from "./Reposts";
 import Comments from "./Comments";
+
+const Thread = dynamic(() => import("@habla/components/nostr/Thread"), {
+  ssr: false,
+});
 
 function deselect() {
   if (window.getSelection) {
