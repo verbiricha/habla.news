@@ -6,7 +6,7 @@ function formatNumber(number) {
   return number.toString().padStart(2, "0");
 }
 
-export function NipLink({ nip }) {
+export default function NipLink({ nip }) {
   return (
     <Link
       href={`https://github.com/nostr-protocol/nips/${formatNumber(nip)}.md`}
