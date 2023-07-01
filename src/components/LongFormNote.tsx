@@ -18,8 +18,10 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  useColorMode,
 } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import "zapthreads";
 import { useAtom } from "jotai";
 
 import User from "./nostr/User";
@@ -37,7 +39,7 @@ import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
 import Write from "@habla/components/Write";
-import { pubkeyAtom } from "@habla/state";
+import { pubkeyAtom, relaysAtom } from "@habla/state";
 import Zaps from "./Zaps";
 import Reposts from "./Reposts";
 import Comments from "./Comments";
@@ -105,6 +107,7 @@ export default function LongFormNote({
 }) {
   const ref = useRef();
   const [pubkey] = useAtom(pubkeyAtom);
+  const [defaultRelays] = useAtom(relaysAtom);
   const [selected, setSelected] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -146,6 +149,8 @@ export default function LongFormNote({
       <Comments event={event} comments={notes} />
     </Flex>
   );
+
+  const { colorMode } = useColorMode();
 
   return isMine && isEditing ? (
     <Write pubkey={pubkey} ev={event} isEditingInline>
@@ -234,7 +239,38 @@ export default function LongFormNote({
         onClose={onClose}
       />
 
-      <Box mt={4}>{reactions}</Box>
+      <Box>
+        <style>{
+          colorMode == 'light' ? `
+            :root {
+              --ztr-font: Inter;
+              --ztr-text-color: #2B2B2B;
+              --ztr-textarea-color: #2B2B2B;
+              --ztr-icon-color: #656565;
+              --ztr-link-color:  #92379c;
+              --ztr-login-button-color: var(--chakra-colors-orange-500);
+              --ztr-background-color: rgba(0, 0, 0, 0.03);
+            }
+          ` : `
+            :root {
+              --ztr-font: Inter;
+              --ztr-text-color: #dedede;
+              --ztr-icon-color: #656565;
+              --ztr-link-color: #e4b144;
+              --ztr-login-button-color: #5e584b;
+              --ztr-background-color: rgba(255, 255, 255, 0.05);
+            }
+          `}
+        </style>
+        <zap-threads
+          anchor={event.encode()}
+          pubkey={pubkey}
+          relays={defaultRelays}
+          disable-likes={true}
+          disable-zaps={true}
+          disable-publish={true}
+        />
+      </Box>
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
           𐡷

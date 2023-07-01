@@ -46,7 +46,8 @@
     "remark-toc": "^8.0.1",
     "slugify": "^1.6.6",
     "use-text-selection": "^1.1.5",
-    "ws": "^8.13.0"
+    "ws": "^8.13.0",
+    "zapthreads": "0.0.2"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
