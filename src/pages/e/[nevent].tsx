@@ -7,6 +7,10 @@ import { decodeNevent } from "@habla/nostr";
 import { useEvent } from "@habla/nostr/hooks";
 import Layout from "@habla/layouts/Wide";
 
+const Thread = dynamic(() => import("@habla/components/nostr/Thread"), {
+  ssr: false,
+});
+
 const NEvent = dynamic(() => import("@habla/components/nostr/NEvent"), {
   ssr: false,
 });
@@ -32,6 +36,7 @@ export default function Nevent({ metadata }) {
         {id && (
           <NEvent nevent={nevent} id={id} author={author} relays={relays} />
         )}
+        <Thread anchor={nevent} />
       </Layout>
     </>
   );

@@ -21,8 +21,8 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
-import "zapthreads";
 import { useAtom } from "jotai";
+import Thread from "@habla/components/nostr/Thread";
 
 import User from "./nostr/User";
 
@@ -107,7 +107,6 @@ export default function LongFormNote({
 }) {
   const ref = useRef();
   const [pubkey] = useAtom(pubkeyAtom);
-  const [defaultRelays] = useAtom(relaysAtom);
   const [selected, setSelected] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -240,8 +239,9 @@ export default function LongFormNote({
       />
 
       <Box>
-        <style>{
-          colorMode == 'light' ? `
+        <style>
+          {colorMode == "light"
+            ? `
             :root {
               --ztr-font: Inter;
               --ztr-text-color: #2B2B2B;
@@ -251,7 +251,8 @@ export default function LongFormNote({
               --ztr-login-button-color: var(--chakra-colors-orange-500);
               --ztr-background-color: rgba(0, 0, 0, 0.03);
             }
-          ` : `
+          `
+            : `
             :root {
               --ztr-font: Inter;
               --ztr-text-color: #dedede;
@@ -262,14 +263,7 @@ export default function LongFormNote({
             }
           `}
         </style>
-        <zap-threads
-          anchor={event.encode()}
-          pubkey={pubkey}
-          relays={defaultRelays}
-          disable-likes={true}
-          disable-zaps={true}
-          disable-publish={true}
-        />
+        <Thread anchor={event.encode()} />
       </Box>
       <Box mt="120px">
         <Text color="secondary" textAlign="center">
