@@ -57,9 +57,11 @@ export async function getStaticPaths() {
       const slugs = articles.map((e) => {
         return getMetadata(e).identifier;
       });
-      return slugs.map((slug) => {
-        return { params: { handle, slug } };
-      });
+      return slugs
+        .filter((slug) => slug)
+        .map((slug) => {
+          return { params: { handle, slug } };
+        });
     })
   );
   const paths = pathLists.flat();
