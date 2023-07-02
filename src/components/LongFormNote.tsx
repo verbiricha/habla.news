@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import dynamic from "next/dynamic";
+import levenshtein from "js-levenshtein";
 import { useTranslation } from "next-i18next";
 import {
   useColorModeValue,
@@ -22,7 +24,6 @@ import {
 } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { useAtom } from "jotai";
-import dynamic from "next/dynamic";
 
 import User from "./nostr/User";
 
@@ -65,10 +66,24 @@ function deselect() {
   }
 }
 
+const MAX_DISTANCE = 7;
+
 function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
   const stackRef = useRef();
   const initialFocusRef = useRef();
   const bg = useColorModeValue("white", "layer");
+
+  const highlightsToShow = highlights.filter((event) => {
+    return (
+      event.content === selected ||
+      selected?.includes(event.content) ||
+      event.content.includes(selected) ||
+      (event.content &&
+        selected &&
+        selected.length > 2 * MAX_DISTANCE &&
+        levenshtein(event.content, selected) < MAX_DISTANCE)
+    );
+  });
 
   //useEffect(() => {
   //  if (isOpen) {
@@ -88,9 +103,10 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
         </DrawerHeader>
         <DrawerBody>
           <Stack ref={stackRef}>
-            {highlights.reverse().map((event) => (
-              <Box ref={event.id === selected?.id ? initialFocusRef : null}>
+            {highlightsToShow.reverse().map((event) => (
+              <Box key={event.id}>
                 <Highlight key={event.id} event={event} />
+                <Thread anchor={event.encode()} />
               </Box>
             ))}
           </Stack>
@@ -135,8 +151,10 @@ export default function LongFormNote({
   }, [textContent]);
 
   function onHighlightClick(highlight) {
-    setSelected(highlight);
-    onOpen();
+    if (highlight) {
+      setSelected(highlight);
+      onOpen();
+    }
   }
 
   function onHighlightOpen() {

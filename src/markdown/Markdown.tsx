@@ -298,16 +298,20 @@ export default function Markdown({
     () => processHighlights(content, highlights),
     [content, highlights]
   );
-  const mark = ({ children }) => {
-    const highlight = highlights.find((h) => h.content === children.at(0));
-    return (
-      <mark
-        style={{ cursor: "pointer" }}
-        onClick={() => onHighlightClick(highlight)}
-      >
-        {children}
-      </mark>
-    );
+  const mark = ({ children, ...rest }) => {
+    const content = children.filter((c) => typeof c === "string").join("");
+    function onClick(ev) {
+      ev.stopPropagation();
+      onHighlightClick(content);
+    }
+    if (content) {
+      return (
+        <mark style={{ cursor: "pointer" }} onClick={onClick}>
+          {children}
+        </mark>
+      );
+    }
+    return <mark>{children}</mark>;
   };
   const components = useMemo(() => {
     return {
