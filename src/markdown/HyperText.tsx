@@ -62,7 +62,9 @@ export default function HyperText({ link, children }) {
       } else {
         return <Link href={link}>{children || link}</Link>;
       }
-    } catch (error) {}
+    } catch (error) {
+      return <Link href={link}>{children || link}</Link>;
+    }
   }, [link, children]);
 
   return render();

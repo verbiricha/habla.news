@@ -328,14 +328,28 @@ export default function Markdown({
           />
         );
       },
-      li: ({ children }) =>
-        children && transformText(children, tags, (t) => <li>{t}</li>),
+      li: ({ children, ...props }) => {
+        return (
+          children &&
+          transformText(children, tags, (t) => <li {...props}>{t}</li>)
+        );
+      },
       td: ({ children }) =>
         children && transformText(children, tags, (t) => <td>{t}</td>),
       p: ({ children }) =>
         children && transformText(children, tags, (t) => <p>{t}</p>),
       a: (props) => {
-        return <HyperText link={props.href}>{props.children}</HyperText>;
+        const isInternal = props.href.startsWith("#");
+        function goToHref(ev) {
+          ev.stopPropagation();
+        }
+        return isInternal ? (
+          <a {...props} onClick={goToHref}>
+            {props.children}
+          </a>
+        ) : (
+          <HyperText link={props.href}>{props.children}</HyperText>
+        );
       },
     };
   }, [tags]);
