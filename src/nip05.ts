@@ -57,6 +57,7 @@ export async function getRelays(pubkey) {
     "wss://relay.damus.io/",
     "wss://nostr.wine/",
     "wss://nos.lol/",
+    "wss://relay.nostr.band/",
   ];
 }
 
