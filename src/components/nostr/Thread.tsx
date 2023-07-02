@@ -15,6 +15,7 @@ export default function Thread({ anchor }) {
           ? `
             :root {
               --ztr-font: Inter;
+              --ztr-font-size: 15px;
               --ztr-text-color: #2B2B2B;
               --ztr-textarea-color: #2B2B2B;
               --ztr-icon-color: #656565;
@@ -26,6 +27,7 @@ export default function Thread({ anchor }) {
           : `
             :root {
               --ztr-font: Inter;
+              --ztr-font-size: 15px;
               --ztr-text-color: #dedede;
               --ztr-icon-color: #656565;
               --ztr-link-color: #e4b144;

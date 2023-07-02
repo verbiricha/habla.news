@@ -69,8 +69,6 @@ function deselect() {
 const MAX_DISTANCE = 7;
 
 function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
-  const stackRef = useRef();
-  const initialFocusRef = useRef();
   const bg = useColorModeValue("white", "layer");
 
   const highlightsToShow = highlights.filter((event) => {
@@ -85,13 +83,7 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
     );
   });
 
-  //useEffect(() => {
-  //  if (isOpen) {
-  //    if (initialFocusRef.current) {
-  //      stackRef.scrollTo(initialFocusRef.current);
-  //    }
-  //  }
-  //}, [isOpen, initialFocusRef]);
+  // todo: zapsort
 
   return (
     <Drawer size="md" isOpen={isOpen} placement="right" onClose={onClose}>
@@ -102,7 +94,7 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
           <Heading>Highlights</Heading>
         </DrawerHeader>
         <DrawerBody>
-          <Stack ref={stackRef}>
+          <Stack>
             {highlightsToShow.reverse().map((event) => (
               <Box key={event.id}>
                 <Highlight key={event.id} event={event} />
