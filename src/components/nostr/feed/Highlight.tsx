@@ -107,7 +107,7 @@ export default function Highlight({
               )}
             </Blockquote>
           )}
-          {e && <EventId id={e} highlights={[event]} my={0} />}
+          {e && <EventId id={e} my={0} />}
           {naddr && (
             <ArticleTitle
               naddr={naddr}
