@@ -10,6 +10,7 @@ export default class Document extends NextDocument {
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/katex@0.15.0/dist/katex.min.css"
           />
+          <link rel="icon" type="image/png" href="/favicon.png" />
         </Head>
         <body>
           {/* Make Color mode to persists when you refresh the page. */}

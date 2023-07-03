@@ -1,13 +1,24 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
-
-import { Heading, Flex, FlexProps } from "@chakra-ui/react";
+import { useRef } from "react";
+import {
+  useColorModeValue,
+  Heading,
+  Flex,
+  FlexProps,
+  Icon,
+} from "@chakra-ui/react";
+import { useHover } from "usehooks-ts";
+import Logo from "@habla/icons/Logo";
+import LogoAnimated from "@habla/icons/LogoAnimated";
 
 const Login = dynamic(() => import("@habla/components/nostr/Login"), {
   ssr: false,
 });
 
 export default function Header(props: FlexProps) {
+  const ref = useRef(null);
+  const isHovering = useHover(ref);
   return (
     <Flex
       as="header"
@@ -17,16 +28,8 @@ export default function Header(props: FlexProps) {
       {...props}
     >
       <Flex alignItems="center" gap="4">
-        <Link href="/" shallow>
-          <Heading
-            sx={{
-              fontWeight: 600,
-              fontSize: "24px",
-              lineHeight: "30px",
-            }}
-          >
-            Habla
-          </Heading>
+        <Link href="/" shallow ref={ref}>
+          <Icon boxSize={14} as={isHovering ? LogoAnimated : Logo} />
         </Link>
       </Flex>
       <Flex alignItems="center" gap="1">
