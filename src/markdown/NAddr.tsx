@@ -14,11 +14,13 @@ import {
   BADGE,
   LISTS,
   ZAPSTR_TRACK,
+  COMMUNITY,
 } from "@habla/const";
 import Badge from "@habla/components/nostr/Badge";
 import List from "@habla/components/nostr/List";
 import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
 import LiveEvent from "@habla/components/nostr/LiveEvent";
+import Community from "@habla/components/nostr/feed/Community";
 
 export default function Naddr({
   naddr,
@@ -62,6 +64,10 @@ export default function Naddr({
 
   if (event && kind === ZAPSTR_TRACK) {
     return <ZapstrTrack event={event} />;
+  }
+
+  if (event && kind === COMMUNITY) {
+    return <Community event={event} />;
   }
 
   return (
