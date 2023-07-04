@@ -34,11 +34,18 @@ function isCommunityTag(t) {
   return t.startsWith(`${COMMUNITY}:`);
 }
 
-function CommunitySelector({ onCommunitySelect }) {
+function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   const { t } = useTranslation("common");
+  const [selected, setSelected] = useState(initialCommunity);
   const { events } = useEvents({
     kinds: [COMMUNITY],
   });
+
+  function onChange(e) {
+    setSelected(e.target.value);
+    onCommunitySelect(e.target.value);
+  }
+
   return (
     <>
       <FormLabel htmlFor="identifer" mt={2}>
@@ -46,7 +53,8 @@ function CommunitySelector({ onCommunitySelect }) {
       </FormLabel>
       <Select
         placeholder={t("select-community")}
-        onChange={(e) => onCommunitySelect(e.target.value)}
+        value={selected}
+        onChange={onChange}
       >
         {events.map((e) => (
           <option value={e.tagId()}>{findTag(e, "d")}</option>
@@ -212,7 +220,10 @@ export default function MyEditor({ event, showPreview }) {
           onChange={(ev) => setSummary(ev.target.value)}
           size="md"
         />
-        <CommunitySelector onCommunitySelect={setCommunity} />
+        <CommunitySelector
+          initialCommunity={initialCommunity}
+          onCommunitySelect={setCommunity}
+        />
         <FormLabel htmlFor="tags" mt={2}>
           {t("tags")}
         </FormLabel>
