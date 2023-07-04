@@ -29,6 +29,7 @@ export const LISTS = [
   EMOJIS,
   RELAY_LIST,
 ];
+export const COMMUNITY = 34550;
 // Time
 export const HOUR = 60 * 60;
 export const DAY = 24 * HOUR;

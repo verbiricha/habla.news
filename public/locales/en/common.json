@@ -50,5 +50,7 @@
   "search-placeholder": "URL, nostr ID, nostr address or hashtag",
   "my-articles": "My articles",
   "cancel": "Cancel",
-  "watch-stream": "Watch live stream"
+  "watch-stream": "Watch live stream",
+  "communities": "Communities",
+  "author": "Author"
 }

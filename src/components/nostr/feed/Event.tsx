@@ -4,10 +4,12 @@ import {
   HIGHLIGHT,
   LISTS,
   ZAPSTR_TRACK,
+  COMMUNITY,
 } from "@habla/const";
 
 import LongFormNote from "./LongFormNote";
 import Highlight from "./Highlight";
+import Community from "./Community";
 import List from "@habla/components/nostr/List";
 import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
 
@@ -26,6 +28,10 @@ export default function Event({ event }) {
 
   if (event.kind === ZAPSTR_TRACK) {
     return <ZapstrTrack event={event} />;
+  }
+
+  if (event.kind === COMMUNITY) {
+    return <Community event={event} />;
   }
 
   return null;

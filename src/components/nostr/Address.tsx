@@ -5,10 +5,13 @@ import {
   ZAP,
   HIGHLIGHT,
   LISTS,
+  COMMUNITY,
 } from "@habla/const";
 import LongFormNote from "./LongFormNote";
 import Feed from "./Feed";
 import List from "./List";
+// todo: community detail view
+import Community from "./feed/Community";
 
 export default function Address({
   naddr,
@@ -34,11 +37,13 @@ export default function Address({
   if (event && LISTS.includes(kind)) {
     return <List event={event} />;
   }
+  if (event && kind === COMMUNITY) {
+    return <Community event={event} />;
+  }
 
   return event ? (
     <>
       <code>{JSON.stringify(event.tags, null, 2)}</code>
-      <code>{JSON.stringify(JSON.parse(event.content), null, 2)}</code>
     </>
   ) : null;
 }

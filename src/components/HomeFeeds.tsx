@@ -16,12 +16,13 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-import { LONG_FORM, HIGHLIGHT, DAY, MONTH } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, COMMUNITY, DAY, MONTH } from "@habla/const";
 import { pubkeyAtom, followsAtom } from "@habla/state";
 import SectionHeading from "@habla/components/SectionHeading";
 import Tabs from "@habla/components/Tabs";
 import Relays from "@habla/components/Relays";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
+import Feed from "@habla/components/nostr/Feed";
 
 enum Feeds {
   All = "All",
@@ -84,6 +85,22 @@ export default function HomeFeeds() {
             />
           ) : (
             <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={DAY} />
+          )}
+        </>
+      ),
+    },
+    {
+      name: t("communities"),
+      panel: (
+        <>
+          {feedSelector}
+          {feed === Feeds.Follows ? (
+            <Feed key={`communities`} filter={{ kinds: [COMMUNITY] }} />
+          ) : (
+            <Feed
+              key={`communities-follows`}
+              filter={{ kinds: [COMMUNITY], authors: follows }}
+            />
           )}
         </>
       ),
