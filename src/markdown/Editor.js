@@ -13,6 +13,7 @@ import {
   Input,
   Text,
   Textarea,
+  Select,
 } from "@chakra-ui/react";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -21,11 +22,39 @@ import { nip19 } from "nostr-tools";
 
 import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
-import { LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
+import { COMMUNITY, LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
 import { usePublishEvent } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
+import { useEvents } from "@habla/nostr/hooks";
+import { findTag } from "@habla/tags";
+
+function isCommunityTag(t) {
+  return t.startsWith(`${COMMUNITY}:`);
+}
+
+function CommunitySelector({ onCommunitySelect }) {
+  const { t } = useTranslation("common");
+  const { events } = useEvents({
+    kinds: [COMMUNITY],
+  });
+  return (
+    <>
+      <FormLabel htmlFor="identifer" mt={2}>
+        {t("community")}
+      </FormLabel>
+      <Select
+        placeholder={t("select-community")}
+        onChange={(e) => onCommunitySelect(e.target.value)}
+      >
+        {events.map((e) => (
+          <option value={e.tagId()}>{findTag(e, "d")}</option>
+        ))}
+      </Select>
+    </>
+  );
+}
 
 // todo: link to markdown reference
 export default function MyEditor({ event, showPreview }) {
@@ -45,6 +74,12 @@ export default function MyEditor({ event, showPreview }) {
     metadata?.hashtags?.join(", ") ?? ""
   );
   const [content, setContent] = useState(event?.content ?? "");
+  const initialCommunity = (event?.tags ?? [])
+    .find((t) => {
+      return t.at(0) === "a" && isCommunityTag(t.at(1));
+    })
+    ?.at(1);
+  const [community, setCommunity] = useState(initialCommunity);
   const htags = hashtags
     .split(",")
     .map((s) => s.trim())
@@ -60,6 +95,9 @@ export default function MyEditor({ event, showPreview }) {
   ];
   if (image?.length > 0) {
     tags.push(["image", image]);
+  }
+  if (community && isCommunityTag(community)) {
+    tags.push(["a", community]);
   }
   const ev = {
     content,
@@ -174,6 +212,7 @@ export default function MyEditor({ event, showPreview }) {
           onChange={(ev) => setSummary(ev.target.value)}
           size="md"
         />
+        <CommunitySelector onCommunitySelect={setCommunity} />
         <FormLabel htmlFor="tags" mt={2}>
           {t("tags")}
         </FormLabel>

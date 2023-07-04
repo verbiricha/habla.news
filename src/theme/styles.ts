@@ -5,6 +5,9 @@ const styles = {
     input: {
       fontFamily: "'Inter'",
     },
+    select: {
+      fontFamily: "'Inter'",
+    },
     textarea: {
       fontFamily: "'Inter'",
     },
