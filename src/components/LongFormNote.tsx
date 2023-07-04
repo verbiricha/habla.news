@@ -195,7 +195,6 @@ export default function LongFormNote({
                 bg="secondary"
                 color="white"
                 onClick={() => setIsEditing(true)}
-                leftIcon={<Icon as={WriteIcon} boxSize={5} />}
               >
                 {t("edit")}
               </Button>
