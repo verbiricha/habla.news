@@ -33,7 +33,7 @@ export default function Community({ event }) {
 
   const filteredEvents = useMemo(() => {
     return events.filter((e) => {
-      if (e.pubkey === event.pubkey) {
+      if (e.pubkey === event.pubkey || moderators.includes(e.pubkey)) {
         return true;
       }
 
