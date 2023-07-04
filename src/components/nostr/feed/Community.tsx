@@ -36,9 +36,7 @@ export default function Community({ event }) {
           dir="auto"
         >
           <Flex flexDirection="column">
-            <Link
-              href={`https://nostr.kiwi/communities/${event.kind}:${event.pubkey}:${title}`}
-            >
+            <Link href={`/c/${event.encode()}`} shallow>
               <Heading
                 wordBreak="break-word"
                 mb={3}

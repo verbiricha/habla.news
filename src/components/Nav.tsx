@@ -8,6 +8,7 @@ import { pubkeyAtom } from "@habla/state";
 import ReadIcon from "@habla/icons/Read";
 import BookmarkIcon from "@habla/icons/Bookmark";
 import SearchIcon from "@habla/icons/Search";
+import CommunitiesIcon from "@habla/icons/Community";
 
 export default function Nav() {
   const [pubkey] = useAtom(pubkeyAtom);
@@ -37,7 +38,7 @@ export default function Nav() {
         <IconButton
           icon={<ReadIcon />}
           aria-label="Read"
-          sx={["/search", "/bookmarks"].includes(path) ? nav : activeNav}
+          sx={path === "/" ? activeNav : nav}
         />
       </Link>
       {/*
@@ -54,6 +55,13 @@ export default function Nav() {
           icon={<SearchIcon />}
           aria-label="Search"
           sx={path === "/search" ? activeNav : nav}
+        />
+      </Link>
+      <Link href="/c/" shallow>
+        <IconButton
+          icon={<CommunitiesIcon />}
+          aria-label="Communities"
+          sx={path === "/c" ? activeNav : nav}
         />
       </Link>
     </Flex>

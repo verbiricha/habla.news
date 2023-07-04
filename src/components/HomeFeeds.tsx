@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-import { LONG_FORM, HIGHLIGHT, COMMUNITY, DAY, MONTH } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, DAY, MONTH } from "@habla/const";
 import { pubkeyAtom, followsAtom } from "@habla/state";
 import SectionHeading from "@habla/components/SectionHeading";
 import Tabs from "@habla/components/Tabs";
@@ -86,14 +86,6 @@ export default function HomeFeeds() {
           ) : (
             <FeedPage filter={{ kinds: [HIGHLIGHT] }} offset={DAY} />
           )}
-        </>
-      ),
-    },
-    {
-      name: t("communities"),
-      panel: (
-        <>
-          <Feed key={`communities`} filter={{ kinds: [COMMUNITY] }} />
         </>
       ),
     },

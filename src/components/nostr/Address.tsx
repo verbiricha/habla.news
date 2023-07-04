@@ -10,8 +10,7 @@ import {
 import LongFormNote from "./LongFormNote";
 import Feed from "./Feed";
 import List from "./List";
-// todo: community detail view
-import Community from "./feed/Community";
+import Community from "./Community";
 
 export default function Address({
   naddr,
