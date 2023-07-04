@@ -49,5 +49,7 @@
   "search-placeholder": "URL, ID de nostr o nostr address",
   "my-articles": "Mis artículos",
   "cancel": "Cancel",
-  "watch-stream": "Watch live stream"
+  "watch-stream": "Watch live stream",
+  "communities": "Communities",
+  "author": "Author"
 }
