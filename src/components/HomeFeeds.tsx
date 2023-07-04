@@ -93,15 +93,7 @@ export default function HomeFeeds() {
       name: t("communities"),
       panel: (
         <>
-          {feedSelector}
-          {feed === Feeds.Follows ? (
-            <Feed key={`communities`} filter={{ kinds: [COMMUNITY] }} />
-          ) : (
-            <Feed
-              key={`communities-follows`}
-              filter={{ kinds: [COMMUNITY], authors: follows }}
-            />
-          )}
+          <Feed key={`communities`} filter={{ kinds: [COMMUNITY] }} />
         </>
       ),
     },
