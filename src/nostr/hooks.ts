@@ -113,16 +113,10 @@ export function useEvent(filter, opts = defaultOpts) {
   const { relays, ...rest } = opts;
   const [event, setEvent] = useState();
   let options = { ...rest };
-
-  let relaySet;
-  if (relays?.length > 0) {
-    relaySet = NDKRelaySet.fromRelayUrls(relays, ndk);
-  } else if (defaultRelays) {
-    relaySet = NDKRelaySet.fromRelayUrls(defaultRelays, ndk);
-  }
+  // todo: use relays
 
   useEffect(() => {
-    ndk.fetchEvent(filter, options, relaySet).then(setEvent);
+    ndk.fetchEvent(filter, options).then(setEvent);
   }, []);
 
   return event;
