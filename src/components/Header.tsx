@@ -17,6 +17,7 @@ const Login = dynamic(() => import("@habla/components/nostr/Login"), {
 });
 
 export default function Header(props: FlexProps) {
+  const logoColor = useColorModeValue("black", "white");
   const ref = useRef(null);
   const isHovering = useHover(ref);
   return (
@@ -29,7 +30,11 @@ export default function Header(props: FlexProps) {
     >
       <Flex alignItems="center" gap="4">
         <Link href="/" shallow ref={ref}>
-          <Icon boxSize={14} as={isHovering ? LogoAnimated : Logo} />
+          <Icon
+            boxSize={14}
+            as={isHovering ? LogoAnimated : Logo}
+            fill={logoColor}
+          />
         </Link>
       </Flex>
       <Flex alignItems="center" gap="1">
