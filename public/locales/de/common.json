@@ -51,5 +51,7 @@
   "cancel": "Cancel",
   "watch-stream": "Watch live stream",
   "communities": "Communities",
-  "author": "Author"
+  "author": "Author",
+  "community": "Community",
+  "select-community": "Select community"
 }
