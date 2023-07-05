@@ -50,6 +50,8 @@
   "my-articles": "我的文章",
   "cancel": "取消",
   "watch-stream": "观看直播",
-  "communities": "Communities",
-  "author": "Author"
+  "communities": "社區",
+  "author": "作者",
+  "community": "社區",
+  "select-community": "選擇社區"
 }
