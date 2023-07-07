@@ -52,7 +52,7 @@ function LoginModal({ isOpen, onClose }) {
         const profile = await nip05.queryProfile(pubkeyLike);
         if (profile) {
           setPubkey(profile.pubkey);
-          if (profile.relays.length) {
+          if (profile.relays?.length) {
             setRelays(profile.relays);
           }
         }
