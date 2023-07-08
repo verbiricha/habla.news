@@ -190,6 +190,7 @@ export default function HomeFeeds() {
           key={filter.id}
           filter={filter.filter}
           offset={filter.offset}
+          options={filter.options}
         />
       ) : (
         <Text>Unknown filter</Text>
