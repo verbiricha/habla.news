@@ -55,7 +55,7 @@ const HighlightSubstring = ({ text, substring }) => {
 export default function Highlight({
   event,
   showHeader = true,
-  showReactions = true,
+  showReactions = false,
   ...props
 }) {
   const { ref, inView } = useInView({
@@ -93,7 +93,17 @@ export default function Highlight({
     <Card variant="highlight" key={event.id} ref={ref} my={4} {...props}>
       {showHeader && (
         <CardHeader>
-          <User pubkey={event.pubkey} />
+          <Flex alignItems="center" justifyContent="space-between" width="100%">
+            <User pubkey={event.pubkey} />
+            <Link href={`/e/${nevent}`} shallow>
+              <Icon
+                as={LinkIcon}
+                boxSize={3}
+                color="secondary"
+                cursor="pointer"
+              />
+            </Link>
+          </Flex>
         </CardHeader>
       )}
       <CardBody dir="auto">
@@ -135,29 +145,9 @@ export default function Highlight({
         </Stack>
       </CardBody>
       {showReactions && (
-        <>
-          <CardFooter dir="auto">
-            <Flex
-              alignItems="center"
-              justifyContent="space-between"
-              width="100%"
-            >
-              <Reactions
-                event={event}
-                kinds={[ZAP, REPOST, NOTE]}
-                live={inView}
-              />
-              <Link href={`/e/${nevent}`} shallow>
-                <Icon
-                  as={LinkIcon}
-                  boxSize={3}
-                  color="secondary"
-                  cursor="pointer"
-                />
-              </Link>
-            </Flex>
-          </CardFooter>
-        </>
+        <CardFooter dir="auto">
+          <Reactions event={event} kinds={[ZAP, REPOST, NOTE]} live={inView} />
+        </CardFooter>
       )}
     </Card>
   ) : null;

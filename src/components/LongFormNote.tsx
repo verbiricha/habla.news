@@ -97,7 +97,7 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
           <Stack>
             {highlightsToShow.reverse().map((event) => (
               <Box key={event.id}>
-                <Highlight key={event.id} event={event} />
+                <Highlight showReactions key={event.id} event={event} />
                 <Thread anchor={event.encode()} />
               </Box>
             ))}

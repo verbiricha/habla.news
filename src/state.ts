@@ -41,3 +41,9 @@ export const relaysAtom = atomWithLocalStorage<string[]>("userRelays", [
   "wss://relay.damus.io",
   "wss://nostr.wine",
 ]);
+export const bookmarksAtom = atomWithLocalStorage<string[][]>(
+  "userBookmarks",
+  []
+);
+
+export const peopleListsAtom = atom<NDKEvent[]>([]);

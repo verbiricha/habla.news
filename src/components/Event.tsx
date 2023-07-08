@@ -11,7 +11,7 @@ export default function Event({ event }) {
   }
 
   if (event.kind === HIGHLIGHT) {
-    return <Highlight event={event} />;
+    return <Highlight event={event} showReactions />;
   }
 
   if (event.kind === NOTE) {

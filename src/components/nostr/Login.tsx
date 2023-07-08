@@ -27,12 +27,19 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 
-import { CONTACTS, RELAYS } from "@habla/const";
+import { BOOKMARKS, PEOPLE, CONTACTS, RELAYS } from "@habla/const";
 import WriteIcon from "@habla/icons/Write";
 import ExternalLink from "@habla/components/ExternalLink";
 import { useNdk } from "@habla/nostr/hooks";
 import Avatar from "@habla/components/nostr/Avatar";
-import { relaysAtom, pubkeyAtom, followsAtom } from "@habla/state";
+import {
+  relaysAtom,
+  pubkeyAtom,
+  followsAtom,
+  bookmarksAtom,
+  peopleListsAtom,
+} from "@habla/state";
+import { findTag } from "@habla/tags";
 
 function LoginModal({ isOpen, onClose }) {
   const ndk = useNdk();
@@ -172,6 +179,8 @@ export default function Login() {
   const [relays, setRelays] = useAtom(relaysAtom);
   const [pubkey, setPubkey] = useAtom(pubkeyAtom);
   const [, setFollows] = useAtom(followsAtom);
+  const [, setBookmarks] = useAtom(bookmarksAtom);
+  const [, setPeopleLists] = useAtom(peopleListsAtom);
   const bg = useColorModeValue("black", "white");
   const fg = useColorModeValue("white", "black");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -211,6 +220,36 @@ export default function Login() {
             .filter((t) => t.at(0) === "p")
             .map((t) => t.at(1));
           setFollows(follows);
+        });
+      // Communities
+      ndk
+        .fetchEvent({
+          kinds: [BOOKMARKS],
+          authors: [pubkey],
+          "#d": ["communities"],
+        })
+        .then((communities) => {
+          if (communities) {
+            setBookmarks((_bs) =>
+              communities.tags.filter((t) => t.at(0) === "a")
+            );
+          }
+        });
+      // People lists
+      ndk
+        .fetchEvents({
+          kinds: [PEOPLE],
+          authors: [pubkey],
+        })
+        .then((people) => {
+          const peopleLists = Array.from(people).filter((p) => {
+            const d = findTag(p, "d");
+            const t = findTag(p, "t");
+            const outdatedD = ["mute", "p:mute", "pin", "pinned"];
+            // discard outdated pre nip-51 lists
+            return !outdatedD.includes(d) && !outdatedD.includes(t);
+          });
+          setPeopleLists(peopleLists);
         });
       // Relays
       ndk

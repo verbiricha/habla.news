@@ -19,7 +19,7 @@ export default function Username({ pubkey, renderLink, ...rest }) {
       return { ...acc, [t.at(1)]: t.at(2) };
     }, {}) ?? {};
   const emojified = useMemo(() => {
-    if (!user && !user.name) {
+    if (!user?.name) {
       return;
     }
     let result = user.name || user.display_name;

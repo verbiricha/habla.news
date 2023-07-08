@@ -124,23 +124,35 @@ export function useEvent(filter, opts = defaultOpts) {
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
-  const user = useLiveQuery(() => db.profile.get(pubkey), [pubkey], {});
+
+  const user = useLiveQuery(
+    async () => {
+      try {
+        return await db.profile.get(pubkey);
+      } catch (error) {
+        console.error(error);
+        return {};
+      }
+    },
+    [pubkey],
+    {}
+  );
 
   useEffect(() => {
-    if (pubkey) {
+    if (pubkey && !user) {
       ndk.fetchEvent(
         {
           kinds: [0],
           authors: [pubkey],
         },
         {
-          cacheUsage: "CACHE_FIRST",
+          cacheUsage: "RELAY_ONLY",
         }
       );
     }
   }, [pubkey]);
 
-  return user ?? {};
+  return user;
 }
 
 function eventToFilter(ev: NDKEvent) {

@@ -42,6 +42,7 @@ export default function Thread({ anchor }) {
         relays={defaultRelays}
         disable-likes={true}
         disable-zaps={true}
+        close-on-eose={true}
       />
     </>
   );
