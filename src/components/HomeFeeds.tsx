@@ -127,7 +127,10 @@ export default function HomeFeeds() {
           kinds,
           authors: listPeople,
         },
-        offset: WEEK,
+        options: {
+          cacheUsage: "PARALLEL",
+        },
+        offset: MONTH,
       };
     }
 
