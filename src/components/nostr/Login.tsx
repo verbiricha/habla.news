@@ -242,13 +242,15 @@ export default function Login() {
           authors: [pubkey],
         })
         .then((people) => {
-          const peopleLists = Array.from(people).filter((p) => {
-            const d = findTag(p, "d");
-            const t = findTag(p, "t");
-            const outdatedD = ["mute", "p:mute", "pin", "pinned"];
-            // discard outdated pre nip-51 lists
-            return !outdatedD.includes(d) && !outdatedD.includes(t);
-          });
+          const peopleLists = Array.from(people)
+            .filter((p) => {
+              const d = findTag(p, "d");
+              const t = findTag(p, "t");
+              const outdatedD = ["mute", "p:mute", "pin", "pinned"];
+              // discard outdated pre nip-51 lists
+              return !outdatedD.includes(d) && !outdatedD.includes(t);
+            })
+            .filter((p) => p.tags.find((t) => t.at(0) === "p"));
           setPeopleLists(peopleLists);
         });
       // Relays

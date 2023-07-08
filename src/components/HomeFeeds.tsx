@@ -73,32 +73,30 @@ export default function HomeFeeds() {
   }, [list]);
 
   const feedSelector = (
-    <Flex justifyContent="flex-end" width="100%">
-      <Menu>
-        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-          {feed === Feeds.All && t("all")}
-          {feed === Feeds.Follows && t("follows")}
-          {feed === Feeds.PeopleList && listName}
-        </MenuButton>
-        <MenuList fontFamily="'Inter'">
-          <MenuItem
-            isDisabled={!isLoggedIn}
-            onClick={() => setFeed(Feeds.Follows)}
-          >
-            {t("follows")}
-          </MenuItem>
-          <MenuItem onClick={() => setFeed(Feeds.All)}>{t("all")}</MenuItem>
-          {peopleLists.map((e) => {
-            const d = findTag(e, "d");
-            const onClick = () => {
-              setList(e);
-              setFeed(Feeds.PeopleList);
-            };
-            return <MenuItem onClick={onClick}>{d}</MenuItem>;
-          })}
-        </MenuList>
-      </Menu>
-    </Flex>
+    <Menu>
+      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+        {feed === Feeds.All && t("all")}
+        {feed === Feeds.Follows && t("follows")}
+        {feed === Feeds.PeopleList && listName}
+      </MenuButton>
+      <MenuList fontFamily="'Inter'">
+        <MenuItem
+          isDisabled={!isLoggedIn}
+          onClick={() => setFeed(Feeds.Follows)}
+        >
+          {t("follows")}
+        </MenuItem>
+        <MenuItem onClick={() => setFeed(Feeds.All)}>{t("all")}</MenuItem>
+        {peopleLists.map((e) => {
+          const d = findTag(e, "d");
+          const onClick = () => {
+            setList(e);
+            setFeed(Feeds.PeopleList);
+          };
+          return <MenuItem onClick={onClick}>{d}</MenuItem>;
+        })}
+      </MenuList>
+    </Menu>
   );
 
   const filter = useMemo(() => {
@@ -152,7 +150,7 @@ export default function HomeFeeds() {
 
   return (
     <>
-      <Flex>
+      <Flex flexDir={["column", "row"]} justifyContent="space-between" gap={4}>
         <ButtonGroup>
           <Button
             colorScheme={kinds.includes(LONG_FORM) ? "purple" : null}
