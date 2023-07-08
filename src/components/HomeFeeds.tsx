@@ -29,13 +29,15 @@ enum Feeds {
   Follows = "Follows",
 }
 
+// todo: people lists, pinned communnities
+
 export default function HomeFeeds() {
   // todo: list feed
   const { t } = useTranslation("common");
-  const [feed, setFeed] = useState(Feeds.All);
-  const [follows] = useAtom(followsAtom);
   const [pubkey] = useAtom(pubkeyAtom);
+  const [follows] = useAtom(followsAtom);
   const isLoggedIn = pubkey && follows.length > 0;
+  const [feed, setFeed] = useState(pubkey ? Feeds.Follows : Feeds.All);
   const feedSelector = (
     <Flex justifyContent="flex-end" width="100%">
       <Menu isLazy>
@@ -43,13 +45,13 @@ export default function HomeFeeds() {
           {feed === Feeds.All ? t("all") : t("follows")}
         </MenuButton>
         <MenuList fontFamily="'Inter'">
-          <MenuItem onClick={() => setFeed(Feeds.All)}>{t("all")}</MenuItem>
           <MenuItem
             isDisabled={!isLoggedIn}
             onClick={() => setFeed(Feeds.Follows)}
           >
             {t("follows")}
           </MenuItem>
+          <MenuItem onClick={() => setFeed(Feeds.All)}>{t("all")}</MenuItem>
         </MenuList>
       </Menu>
     </Flex>
@@ -60,7 +62,7 @@ export default function HomeFeeds() {
       panel: (
         <>
           {feedSelector}
-          {feed === Feeds.Follows ? (
+          {feed === Feeds.Follows && follows.length > 0 ? (
             <FeedPage
               key={`posts-${pubkey}`}
               filter={{ kinds: [LONG_FORM], authors: follows }}
