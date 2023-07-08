@@ -17,8 +17,8 @@ export default function Communities() {
     <>
       <Head>
         <title>Habla</title>
-        <meta name="og:title" content="Habla" />
-        <meta name="og:description" content="Speak your mind" />
+        <meta name="og:title" content="Communities" />
+        <meta name="og:description" content="Browse moderated communities" />
       </Head>
       <Layout>
         <Heading>{t("communities")}</Heading>
