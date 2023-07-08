@@ -127,7 +127,7 @@ export default function HomeFeeds() {
           kinds,
           authors: listPeople,
         },
-        offset: MONTH,
+        offset: WEEK,
       };
     }
 
