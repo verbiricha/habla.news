@@ -1,9 +1,3 @@
-import { SimplePool } from "nostr-tools";
-
-import { LONG_FORM, HIGHLIGHT } from "@habla/const";
-
-const pool = new SimplePool([]);
-
 export const names = {
   _: "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c",
   verbiricha:
@@ -27,6 +21,7 @@ export const names = {
   jonb: "35a8f9c0272c119a620f47c055c8db39e9f805fef1b22d0b7a42b189351dae66",
   karnage: "1bc70a0148b3f316da33fe3c89f23e3e71ac4ff998027ec712b905cd24f6a411",
   herald: "7e7224cfe0af5aaf9131af8f3e9d34ff615ff91ce2694640f1f1fee5d8febb7d",
+  devstr: "700d3de34b2929478652de1a41738ea4b3589831a76d1adfc612bd6f2529fd22",
   jb55: "32e1827635450ebb3c5a7d12c1f8e7b2b514439ac10a67eef3d9fd9c5c68e245",
   gek: "693c2832de939b4af8ccd842b17f05df2edd551e59989d3c4ef9a44957b2f1fb",
   ttdr: "5ada3677187ff024a3cea797e89e1cc8b69f6099a40a6b8f644d3b027c21c9db",
@@ -48,57 +43,4 @@ export async function getPubkey(handle) {
 
 export async function getHandle(pubkey) {
   return pubkeyToHandle[pubkey];
-}
-
-export async function getRelays(pubkey) {
-  return [
-    "wss://relay.snort.social",
-    "wss://relay.damus.io/",
-    "wss://nostr.wine/",
-    "wss://nos.lol/",
-    "wss://relay.nostr.band/",
-  ];
-}
-
-export async function getPost(pubkey, slug) {
-  const relays = await getRelays(pubkey);
-  const filter = {
-    kinds: [30023],
-    authors: [pubkey],
-    "#d": [slug],
-  };
-  const event = await pool.get(relays, filter);
-  return event;
-}
-
-export async function getPosts(pubkey) {
-  const relays = await getRelays(pubkey);
-  const filters = [
-    {
-      kinds: [LONG_FORM],
-      authors: [pubkey],
-    },
-  ];
-  return pool.list(relays, filters);
-}
-
-export async function getEvents(pubkey) {
-  const relays = await getRelays(pubkey);
-  const filters = [
-    {
-      kinds: [LONG_FORM, HIGHLIGHT],
-      authors: [pubkey],
-    },
-  ];
-  return pool.list(relays, filters);
-}
-
-export async function getProfile(pubkey) {
-  const relays = await getRelays(pubkey);
-  const filter = {
-    kinds: [0],
-    authors: [pubkey],
-  };
-  const ev = await pool.get(relays, filter);
-  return JSON.parse(ev.content);
 }

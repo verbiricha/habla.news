@@ -4,13 +4,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
-import {
-  getHandles,
-  getPubkey,
-  getHandle,
-  getPost,
-  getPosts,
-} from "@habla/nip05";
+import { getHandles, getPubkey, getHandle } from "@habla/nip05";
+import { getPost, getPosts } from "@habla/db";
 import { useNdk } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Layout from "@habla/layouts/Wide";

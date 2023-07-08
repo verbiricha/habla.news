@@ -8,7 +8,8 @@ import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import Markdown from "@habla/markdown/Markdown";
 import Layout from "@habla/layouts/Wide";
-import { getHandles, getPubkey, getProfile, getEvents } from "@habla/nip05";
+import { getHandles, getPubkey } from "@habla/nip05";
+import { getProfile, getEvents } from "@habla/db";
 import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";
 
