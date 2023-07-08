@@ -128,9 +128,9 @@ export default function HomeFeeds() {
           authors: listPeople,
         },
         options: {
-          cacheUsage: "PARALLEL",
+          cacheUsage: "RELAY_FIRST",
         },
-        offset: MONTH,
+        offset: 3 * MONTH,
       };
     }
 
