@@ -64,7 +64,6 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   );
 }
 
-// todo: link to markdown reference
 export default function MyEditor({ event, showPreview }) {
   const { t } = useTranslation("common");
   const toast = useToast();
