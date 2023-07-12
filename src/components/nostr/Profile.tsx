@@ -31,7 +31,7 @@ export default function Profile({ pubkey, relays }) {
   return (
     <>
       <Helmet>
-        <title>{profile.name || pubkey}</title>
+        <title>{profile?.name || pubkey}</title>
       </Helmet>
       <Stack align="center">
         <Flex
