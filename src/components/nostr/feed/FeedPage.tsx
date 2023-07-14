@@ -48,7 +48,7 @@ export default function FeedPage({ filter, until, offset, options = {} }) {
       {showNext && (
         <FeedPage
           filter={filter}
-          until={oldest.created_at}
+          until={oldest.created_at - 1}
           offset={offset}
           options={options}
         />
