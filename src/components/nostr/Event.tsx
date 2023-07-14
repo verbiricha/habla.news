@@ -1,3 +1,4 @@
+import { Text } from "@chakra-ui/react";
 import { HIGHLIGHT, NOTE, BADGE, ZAPSTR_TRACK } from "@habla/const";
 
 import Highlight from "./feed/Highlight";
@@ -23,5 +24,15 @@ export default function Event(props) {
     return <ZapstrTrack {...props} />;
   }
 
-  return event.kind;
+  if (event.kind === 68002) {
+    // todo
+    return null;
+  }
+
+  const alt = event?.tags.find((t) => t.at(0) === "alt");
+  return alt ? (
+    <Text>{alt}</Text>
+  ) : (
+    <Text>Unknown event kind: {event.kind}</Text>
+  );
 }

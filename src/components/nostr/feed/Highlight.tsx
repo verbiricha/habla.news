@@ -108,16 +108,14 @@ export default function Highlight({
       )}
       <CardBody dir="auto">
         <Stack gap="1">
-          {!e && (
-            <Blockquote style={{ margin: 0 }}>
-              {context && context.length > event.content.length + 1 ? (
-                <HighlightSubstring text={context} substring={event.content} />
-              ) : (
-                event.content
-              )}
-            </Blockquote>
-          )}
-          {e && <EventId id={e} my={0} />}
+          <Blockquote style={{ margin: 0 }}>
+            {context && context.length > event.content.length + 1 && !e ? (
+              <HighlightSubstring text={context} substring={event.content} />
+            ) : (
+              event.content
+            )}
+          </Blockquote>
+          {e && <EventId id={e} my={0} highlights={[event]} />}
           {naddr && (
             <ArticleTitle
               naddr={naddr}
