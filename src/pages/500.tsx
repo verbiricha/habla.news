@@ -3,8 +3,6 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Heading, Flex, Box, Img, Text } from "@chakra-ui/react";
 
-import Layout from "@habla/layouts/Wide";
-
 export default function ServerError() {
   const { t } = useTranslation("common");
   return (
@@ -14,8 +12,14 @@ export default function ServerError() {
         <meta name="og:title" content={t("habla")} />
         <meta name="og:description" content={t("tagline")} />
       </Head>
-      <Layout>
-        <Flex flexDir="column" gap={5}>
+      <Flex flexDir="column" px={4} alignItems="center">
+        <Flex
+          flexDir="column"
+          gap={5}
+          maxWidth={["100%", "100%", "48rem"]}
+          width="100%"
+          mt={5}
+        >
           <Heading>{t("server-error")}</Heading>
           <Text>{t("server-error-long")}</Text>
           <Box
@@ -31,7 +35,7 @@ export default function ServerError() {
             <Img src="/family.png" alt={t("oops")} />
           </Box>
         </Flex>
-      </Layout>
+      </Flex>
     </>
   );
 }
