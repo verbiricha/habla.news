@@ -3,6 +3,8 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Heading, Flex, Box, Img, Text } from "@chakra-ui/react";
 
+import Layout from "@habla/layouts/Wide";
+
 export default function Error() {
   const { t } = useTranslation("common");
   return (
@@ -12,30 +14,22 @@ export default function Error() {
         <meta name="og:title" content={t("habla")} />
         <meta name="og:description" content={t("tagline")} />
       </Head>
-      <Flex flexDir="column" px={4} alignItems="center">
-        <Flex
-          flexDir="column"
-          gap={5}
-          maxWidth={["100%", "100%", "48rem"]}
-          width="100%"
-          mt={5}
+      <Layout>
+        <Heading>{t("not-found")}</Heading>
+        <Text>{t("not-found-long")}</Text>
+        <Box
+          boxSize={{
+            base: "xs",
+            sm: "sm",
+            md: "md",
+            lg: "xl",
+          }}
+          margin="0 auto"
+          mt={10}
         >
-          <Heading>{t("not-found")}</Heading>
-          <Text>{t("not-found-long")}</Text>
-          <Box
-            boxSize={{
-              base: "xs",
-              sm: "sm",
-              md: "md",
-              lg: "xl",
-            }}
-            margin="0 auto"
-            mt={10}
-          >
-            <Img src="/family.png" alt={t("oops")} />
-          </Box>
-        </Flex>
-      </Flex>
+          <Img src="/family.png" alt={t("oops")} />
+        </Box>
+      </Layout>
     </>
   );
 }
