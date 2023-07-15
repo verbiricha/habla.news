@@ -53,5 +53,12 @@
   "communities": "社區",
   "author": "作者",
   "community": "社區",
-  "select-community": "選擇社區"
+  "select-community": "選擇社區",
+  "oops": "Oops, something went wrong",
+  "habla": "Habla",
+  "tagline": "Speak your mind",
+  "not-found": "Not found",
+  "not-found-long": "Sorry, we couldn't find the page you are looking for",
+  "server-error": "Something went wrong",
+  "server-error-long": "This is likely a bug in Habla, sorry for the inconvenience"
 }
