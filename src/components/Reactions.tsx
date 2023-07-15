@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useAtom } from "jotai";
 
-import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKEvent } from "habla-ndk";
 import { Flex, Text, IconButton } from "@chakra-ui/react";
 
 import { useNdk } from "@habla/nostr/hooks";
