@@ -29,6 +29,8 @@ export const names = {
   freakoverse:
     "3cea4806b1e1a9829d30d5cb8a78011d4271c6474eb31531ec91f28110fe3f40",
   opensats: "787338757fc25d65cd929394d5e7713cf43638e8d259e8dcf5c73b834eb851f2",
+  nvk: "e88a691e98d9987c964521dff60025f60700378a4879180dcbbb4a5027850411",
+  fiatjaf: "3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
