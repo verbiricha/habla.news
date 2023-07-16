@@ -63,12 +63,9 @@
   "server-error": "Something went wrong",
   "server-error-long": "This is likely a bug in Habla, sorry for the inconvenience",
   "share": "Share",
-  "share-cta": "Share this article with the world!",
+  "share-cta": "Share your article with the world!",
   "share-url": "URL",
   "share-url-cta": "Human-readable URL, use this when sharing oustide of nostr.",
   "share-nostr": "Nostr ID",
-  "share-nostr-cta": "Nostr ID, use this when sharing on nostr.",
-  "profile": "Profile",
-  "relays": "Relays",
-  "logout": "Log Out"
+  "share-nostr-cta": "Nostr ID, use this when sharing on nostr."
 }
