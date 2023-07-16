@@ -8,12 +8,12 @@ import {
 
 import { useCopy } from "@habla/hooks/useCopy";
 
-export default function InputCopy({ text, ...rest }) {
+export default function InputCopy({ text, copyText, ...rest }) {
   const toast = useToast();
   const { copy } = useCopy();
 
   const handleClick = () => {
-    copy(text);
+    copy(copyText ?? text);
     toast({ description: "Copied to clipboard" });
   };
 

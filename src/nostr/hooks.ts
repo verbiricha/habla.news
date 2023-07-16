@@ -146,7 +146,7 @@ export function useUser(pubkey) {
           authors: [pubkey],
         },
         {
-          cacheUsage: "RELAY_ONLY",
+          cacheUsage: "CACHE_FIRST",
         }
       );
     }

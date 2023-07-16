@@ -28,6 +28,7 @@ export const names = {
   blowater: "6b9da920c4b6ecbf2c12018a7a2d143b4dfdf9878c3beac69e39bb597841cc6e",
   freakoverse:
     "3cea4806b1e1a9829d30d5cb8a78011d4271c6474eb31531ec91f28110fe3f40",
+  opensats: "787338757fc25d65cd929394d5e7713cf43638e8d259e8dcf5c73b834eb851f2",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
@@ -35,14 +36,14 @@ const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
   return { ...acc, [v]: k };
 }, {});
 
-export async function getHandles() {
+export function getHandles() {
   return Object.keys(names).filter((h) => h !== "_");
 }
 
-export async function getPubkey(handle) {
+export function getPubkey(handle) {
   return names[handle];
 }
 
-export async function getHandle(pubkey) {
+export function getHandle(pubkey) {
   return pubkeyToHandle[pubkey];
 }

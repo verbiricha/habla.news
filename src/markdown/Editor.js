@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { useRef, useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { useAtom } from "jotai";
 
 import {
   useToast,
@@ -19,6 +21,7 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { nip19 } from "nostr-tools";
+import slugify from "slugify";
 
 import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
@@ -29,6 +32,9 @@ import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
 import { useEvents } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
+import { articleLink } from "@habla/components/nostr/ArticleLink";
+import { pubkeyAtom } from "@habla/state";
+import { getHandle } from "@habla/nip05";
 
 function isCommunityTag(t) {
   return t.startsWith(`${COMMUNITY}:`);
@@ -71,6 +77,8 @@ export default function MyEditor({ event, showPreview }) {
   const ref = useRef();
   const router = useRouter();
   const metadata = event && getMetadata(event);
+  const [pubkey] = useAtom(pubkeyAtom);
+  const handle = getHandle(pubkey);
   const [isPublishing, setIsPublishing] = useState(false);
   const [title, setTitle] = useState(metadata?.title ?? "");
   const [slug, setSlug] = useState(metadata?.identifier ?? String(Date.now()));
@@ -127,12 +135,8 @@ export default function MyEditor({ event, showPreview }) {
         errorMessage: "",
       });
       if (signed) {
-        const naddr = nip19.naddrEncode({
-          kind: signed.kind,
-          pubkey: signed.pubkey,
-          identifier: getMetadata(signed).identifier,
-        });
-        await router.push(`/a/${naddr}`, undefined, { shallow: true });
+        const link = articleLink(signed);
+        await router.push(link, undefined, { shallow: true });
       }
     } finally {
       setIsPublishing(false);
@@ -163,18 +167,26 @@ export default function MyEditor({ event, showPreview }) {
     }
   }, [ref, showPreview]);
 
+  function onTitleChange(ev) {
+    setTitle(ev.target.value);
+    //const slug = slugify(ev.target.value.toLowerCase());
+    //if (slug.trim().length) {
+    //  setSlug(slug);
+    //}
+  }
+
   return showPreview ? (
     <LongFormNote event={ev} isDraft excludeAuthor isEditingInline={true} />
   ) : (
     <>
-      <Flex flexDirection="column" alignItems="flex-start">
+      <Flex flexDirection="column" alignItems="flex-start" mb={10}>
         <FormLabel htmlFor="title">{t("title")}</FormLabel>
         <Input
           dir="auto"
           id="title"
           value={title}
           placeholder={t("title-placeholder")}
-          onChange={(ev) => setTitle(ev.target.value)}
+          onChange={onTitleChange}
           size="md"
           mb={2}
         />
@@ -255,6 +267,17 @@ export default function MyEditor({ event, showPreview }) {
           size="md"
           mb={2}
         />
+        {handle && (
+          <Text
+            fontFamily="Inter"
+            textDecoration="underline"
+            textDecorationStyle="dotted"
+          >
+            <Link href={`habla.news/${handle}/${slug}`}>
+              {`habla.news/${handle}/${slug}`}
+            </Link>
+          </Text>
+        )}
       </Flex>
     </>
   );

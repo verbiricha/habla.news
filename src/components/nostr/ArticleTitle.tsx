@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { Heading } from "@chakra-ui/react";
 
 import { useEvent } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
+import ArticleLink from "@habla/components/nostr/ArticleLink";
 
 export default function ArticleTitle({
   naddr,
@@ -18,11 +18,10 @@ export default function ArticleTitle({
   });
 
   const { title } = event ? getMetadata(event) : {};
-  return (
-    <Link href={`/a/${naddr}`} shallow>
-      <Heading fontSize="xl" {...rest}>
-        {title}
-      </Heading>
-    </Link>
+  const content = (
+    <Heading fontSize="xl" {...rest}>
+      {title}
+    </Heading>
   );
+  return event ? <ArticleLink event={event}>{content}</ArticleLink> : content;
 }

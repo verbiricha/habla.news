@@ -19,7 +19,11 @@ export default function Profile({ pubkey, relays }) {
 }
 
 export const getServerSideProps = async ({ locale, query }) => {
-  const props = await nip05.queryProfile(query.nip05);
+  const profile = await nip05.queryProfile(query.nip05);
+  const props = {
+    pubkey: profile.pubkey,
+    relays: Array.isArray(profile.relays) ? profile.relays : [],
+  };
   if (props) {
     return {
       props: {

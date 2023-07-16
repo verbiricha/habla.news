@@ -1,9 +1,7 @@
 import { useMemo } from "react";
-import Link from "next/link";
 import { useAtom } from "jotai";
 import { useInView } from "react-intersection-observer";
 
-import { nip19 } from "nostr-tools";
 import {
   Flex,
   Box,
@@ -27,6 +25,7 @@ import SeenIn from "@habla/components/SeenIn";
 import User from "../User";
 import Hashtags from "../../Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
+import ArticleLink from "@habla/components/nostr/ArticleLink";
 
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
@@ -63,14 +62,6 @@ export default function LongFormNote({
     publishedAt,
   } = useMemo(() => getMetadata(event), [event]);
   const relays = useSeenOn(event);
-  const naddr = useMemo(() => {
-    return nip19.naddrEncode({
-      identifier,
-      pubkey: event.pubkey,
-      kind: event.kind,
-      relays: relays.length > 0 ? relays : defaultRelays,
-    });
-  }, [event]);
   return title.length > 0 && event.content.length > 0 ? (
     <Card ref={ref} variant="article" my={4}>
       {!excludeAuthor && (
@@ -94,7 +85,7 @@ export default function LongFormNote({
           dir="auto"
         >
           <Flex flexDirection="column">
-            <Link href={`/a/${naddr}`} shallow>
+            <ArticleLink event={event}>
               <Heading
                 wordBreak="break-word"
                 mb={3}
@@ -106,7 +97,7 @@ export default function LongFormNote({
               >
                 {title}
               </Heading>
-            </Link>
+            </ArticleLink>
             {summary?.length > 0 && summary?.length < 360 && (
               <Text color="secondary" py={1} wordBreak="break-word">
                 {summary}

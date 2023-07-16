@@ -38,6 +38,7 @@ import WriteIcon from "@habla/icons/Write";
 import Highlight from "@habla/components/nostr/feed/Highlight";
 import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
+import ShareModal from "@habla/components/ShareModal";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
 import Write from "@habla/components/Write";
 import { pubkeyAtom, relaysAtom } from "@habla/state";
@@ -121,7 +122,8 @@ export default function LongFormNote({
   const [pubkey] = useAtom(pubkeyAtom);
   const [selected, setSelected] = useState();
   const [isEditing, setIsEditing] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure("highlight");
+  const shareModal = useDisclosure("share-modal");
   const highlightModal = useDisclosure();
   const { title, summary, image, hashtags, publishedAt } = useMemo(
     () => getMetadata(event),
@@ -184,21 +186,40 @@ export default function LongFormNote({
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
           )}
-          <Flex justifyContent="space-between">
+          <Flex
+            gap={2}
+            justifyContent="space-between"
+            flexDir={["column", "row"]}
+          >
             <Heading as="h1" fontSize="4xl">
               {title}
             </Heading>
-            {!isEditingInline && isMine && (
-              <Button
-                variant="write"
-                aria-label="Edit"
-                bg="secondary"
-                color="white"
-                onClick={() => setIsEditing(true)}
-              >
-                {t("edit")}
-              </Button>
-            )}
+            <Flex gap={1}>
+              {isMine && (
+                <Button
+                  maxW="12em"
+                  variant="write"
+                  aria-label="Share"
+                  bg="secondary"
+                  color="white"
+                  onClick={shareModal.onOpen}
+                >
+                  {t("share")}
+                </Button>
+              )}
+              {!isEditingInline && isMine && (
+                <Button
+                  maxW="12em"
+                  variant="write"
+                  aria-label="Edit"
+                  bg="secondary"
+                  color="white"
+                  onClick={() => setIsEditing(true)}
+                >
+                  {t("edit")}
+                </Button>
+              )}
+            </Flex>
           </Flex>
           {summary?.length > 0 && (
             <Blockquote fontSize="lg">{summary}</Blockquote>
@@ -243,6 +264,8 @@ export default function LongFormNote({
           highlightModal.onClose();
         }}
       />
+
+      <ShareModal event={event} {...shareModal} />
 
       <HighlightsDrawer
         selected={selected}

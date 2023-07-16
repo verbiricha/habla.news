@@ -21,6 +21,7 @@ import List from "@habla/components/nostr/List";
 import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
 import LiveEvent from "@habla/components/nostr/LiveEvent";
 import Community from "@habla/components/nostr/feed/Community";
+import ArticleLink from "@habla/components/nostr/ArticleLink";
 
 export default function Naddr({
   naddr,
@@ -41,13 +42,12 @@ export default function Naddr({
 
   if (kind === LONG_FORM || kind === LONG_FORM_DRAFT) {
     const { title } = event ? getMetadata(event) : {};
-    return (
-      <Link href={`/a/${naddr}`} shallow>
-        <Text as="span" fontWeight={500} {...rest}>
-          {title}
-        </Text>
-      </Link>
+    const content = (
+      <Text as="span" fontWeight={500} {...rest}>
+        {title}
+      </Text>
     );
+    return event ? <ArticleLink event={event}>{content}</ArticleLink> : content;
   }
 
   if (event && kind === LIVE_EVENT) {

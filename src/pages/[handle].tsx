@@ -54,7 +54,7 @@ export default function Profile({
 
 export async function getStaticProps({ locale, params }) {
   const { handle } = params;
-  const pubkey = await getPubkey(handle);
+  const pubkey = getPubkey(handle);
   const events = await getEvents(pubkey);
   const profile = await getProfile(pubkey);
   return {
@@ -69,7 +69,7 @@ export async function getStaticProps({ locale, params }) {
 }
 
 export async function getStaticPaths() {
-  const handles = await getHandles();
+  const handles = getHandles();
   const paths = handles.map((handle) => {
     return {
       params: { handle },

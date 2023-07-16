@@ -5,7 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { NDKEvent } from "habla-ndk";
 
-import { getHandles, getPubkey, getHandle } from "@habla/nip05";
+import { getHandles, getPubkey } from "@habla/nip05";
 import { getPost, getPosts } from "@habla/db";
 import { useNdk } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
@@ -39,11 +39,12 @@ export default function Post({ event }) {
 
 export async function getStaticProps({ locale, params }) {
   const { handle, slug } = params;
-  const pubkey = await getPubkey(handle);
+  const pubkey = getPubkey(handle);
   if (!pubkey) {
     return {
       redirect: {
         destination: "/",
+        permanent: false,
       },
     };
   }
@@ -64,10 +65,10 @@ export async function getStaticProps({ locale, params }) {
 }
 
 export async function getStaticPaths() {
-  const handles = await getHandles();
+  const handles = getHandles();
   const pathLists = await Promise.all(
     handles.map(async (handle) => {
-      const pubkey = await getPubkey(handle);
+      const pubkey = getPubkey(handle);
       const articles = await getPosts(pubkey);
       const slugs = articles.map((e) => {
         return getMetadata(e).identifier;
