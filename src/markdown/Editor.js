@@ -30,7 +30,7 @@ import { usePublishEvent } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
-import { useEvents } from "@habla/nostr/hooks";
+import { useEvents, useUser } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import { articleLink } from "@habla/components/nostr/ArticleLink";
 import { pubkeyAtom } from "@habla/state";
@@ -79,6 +79,7 @@ export default function MyEditor({ event, showPreview }) {
   const metadata = event && getMetadata(event);
   const [pubkey] = useAtom(pubkeyAtom);
   const handle = getHandle(pubkey);
+  const profile = useUser(pubkey);
   const [isPublishing, setIsPublishing] = useState(false);
   const [title, setTitle] = useState(metadata?.title ?? "");
   const [slug, setSlug] = useState(metadata?.identifier ?? String(Date.now()));
@@ -275,6 +276,17 @@ export default function MyEditor({ event, showPreview }) {
           >
             <Link href={`habla.news/${handle}/${slug}`}>
               {`habla.news/${handle}/${slug}`}
+            </Link>
+          </Text>
+        )}
+        {!handle && profile && profile.nip05 && (
+          <Text
+            fontFamily="Inter"
+            textDecoration="underline"
+            textDecorationStyle="dotted"
+          >
+            <Link href={`habla.news/u/${profile.nip05}/${slug}`}>
+              {`habla.news/u/${profile.nip05}/${slug}`}
             </Link>
           </Text>
         )}
