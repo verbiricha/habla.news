@@ -63,7 +63,7 @@
   "server-error": "Something went wrong",
   "server-error-long": "This is likely a bug in Habla, sorry for the inconvenience",
   "share": "Share",
-  "share-cta": "Share your article with the world!",
+  "share-cta": "Share this article with the world!",
   "share-url": "URL",
   "share-url-cta": "Human-readable URL, use this when sharing oustide of nostr.",
   "share-nostr": "Nostr ID",

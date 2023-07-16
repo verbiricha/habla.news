@@ -186,51 +186,47 @@ export default function LongFormNote({
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
           )}
-          <Flex
-            gap={2}
-            justifyContent="space-between"
-            flexDir={["column", "row"]}
-          >
-            <Heading as="h1" fontSize="4xl">
-              {title}
-            </Heading>
+          <Heading as="h1" fontSize="4xl">
+            {title}
+          </Heading>
+          {summary?.length > 0 && (
+            <Blockquote fontSize="lg">{summary}</Blockquote>
+          )}
+          <Hashtags hashtags={hashtags} />
+          {reactions}
+          <Flex alignItems="center" justifyContent="space-between">
+            <Flex align="center" gap={3} fontFamily="Inter">
+              {event.pubkey && <User pubkey={event.pubkey} />}
+              <Text color="secondary" fontSize="sm">
+                {formatDay(publishedAt)}
+              </Text>
+            </Flex>
             <Flex gap={1}>
-              {isMine && (
-                <Button
-                  maxW="12em"
-                  variant="write"
-                  aria-label="Share"
-                  bg="secondary"
-                  color="white"
-                  onClick={shareModal.onOpen}
-                >
-                  {t("share")}
-                </Button>
-              )}
               {!isEditingInline && isMine && (
                 <Button
                   maxW="12em"
                   variant="write"
                   aria-label="Edit"
                   bg="secondary"
+                  size="sm"
                   color="white"
                   onClick={() => setIsEditing(true)}
                 >
                   {t("edit")}
                 </Button>
               )}
+              <Button
+                maxW="12em"
+                size="sm"
+                variant="write"
+                aria-label="Share"
+                bg="secondary"
+                color="white"
+                onClick={shareModal.onOpen}
+              >
+                {t("share")}
+              </Button>
             </Flex>
-          </Flex>
-          {summary?.length > 0 && (
-            <Blockquote fontSize="lg">{summary}</Blockquote>
-          )}
-          <Hashtags hashtags={hashtags} />
-          {reactions}
-          <Flex align="center" gap={3} fontFamily="Inter">
-            {event.pubkey && <User pubkey={event.pubkey} />}
-            <Text color="secondary" fontSize="sm">
-              {formatDay(publishedAt)}
-            </Text>
           </Flex>
         </Stack>
         <Prose>
