@@ -43,7 +43,11 @@ export default function Profile({ pubkey, relays }) {
         >
           <Avatar pubkey={pubkey} size="xl" />
           <Stack flex={1}>
-            <Flex alignItems="center" justifyContent="space-between">
+            <Flex
+              flexDir={["column", "row"]}
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <Username pubkey={pubkey} fontSize="2xl" fontWeight="500" />
               <FollowButton pubkey={pubkey} />
             </Flex>

@@ -33,14 +33,18 @@ export const pubkeyAtom = atomWithLocalStorage<Pubkey | null>(
   null
 );
 export const followsAtom = atom<string[]>([]);
-export const relaysAtom = atomWithLocalStorage<string[]>("userRelays", [
-  "wss://purplepag.es",
+export const defaultRelays = [
+  "wss://relay.snort.social",
+  "wss://relay.damus.io",
   "wss://nos.lol",
   "wss://nostr-relay.nokotaro.com",
   "wss://offchain.pub",
-  "wss://relay.damus.io",
   "wss://nostr.wine",
-]);
+];
+export const relaysAtom = atomWithLocalStorage<string[]>(
+  "userRelays",
+  defaultRelays
+);
 export const bookmarksAtom = atomWithLocalStorage<string[][]>(
   "userBookmarks",
   []

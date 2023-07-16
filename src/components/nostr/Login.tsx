@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { NDKUser, NDKNip07Signer } from "habla-ndk";
@@ -23,11 +24,18 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
   UnorderedList,
   ListItem,
 } from "@chakra-ui/react";
+import { AtSignIcon, ChevronDownIcon, WarningIcon } from "@chakra-ui/icons";
 
 import { BOOKMARKS, PEOPLE, CONTACTS, RELAYS } from "@habla/const";
+import RelayIcon from "@habla/icons/RSS";
 import WriteIcon from "@habla/icons/Write";
 import ExternalLink from "@habla/components/ExternalLink";
 import { useNdk } from "@habla/nostr/hooks";
@@ -38,6 +46,7 @@ import {
   followsAtom,
   bookmarksAtom,
   peopleListsAtom,
+  defaultRelays,
 } from "@habla/state";
 import { findTag } from "@habla/tags";
 
@@ -157,7 +166,14 @@ function LoginModal({ isOpen, onClose }) {
   );
 }
 
-function ProfileLink({ pubkey, relays }) {
+function ProfileMenu({ pubkey, relays }) {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+  const [, setPubkey] = useAtom(pubkeyAtom);
+  const [, setFollows] = useAtom(followsAtom);
+  const [, setBookmarks] = useAtom(bookmarksAtom);
+  const [, setPeopleLists] = useAtom(peopleListsAtom);
+  const [, setRelays] = useAtom(relaysAtom);
   const nprofile = useMemo(() => {
     if (pubkey) {
       return nip19.nprofileEncode({
@@ -167,10 +183,41 @@ function ProfileLink({ pubkey, relays }) {
     }
   }, [pubkey, relays]);
 
+  async function logOut() {
+    setRelays(defaultRelays);
+    setFollows([]);
+    setBookmarks([]);
+    setPeopleLists([]);
+    setPubkey(null);
+    await router.push("/");
+  }
+
   return (
-    <Link href={`/p/${nprofile}`}>
-      <Avatar size="md" pubkey={pubkey} />
-    </Link>
+    <Menu>
+      <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+        <Avatar size="sm" pubkey={pubkey} />
+      </MenuButton>
+      <MenuList>
+        <MenuItem
+          icon={<AtSignIcon />}
+          onClick={() =>
+            router.push(`/p/${nprofile}`, undefined, { shallow: true })
+          }
+        >
+          {t("profile")}
+        </MenuItem>
+        <MenuItem
+          icon={<Icon as={RelayIcon} boxSize={3} />}
+          onClick={() => router.push(`/relays`, undefined, { shallow: true })}
+        >
+          {t("relays")}
+        </MenuItem>
+        <MenuDivider />
+        <MenuItem icon={<WarningIcon />} onClick={logOut}>
+          {t("logout")}
+        </MenuItem>
+      </MenuList>
+    </Menu>
   );
 }
 
@@ -279,7 +326,7 @@ export default function Login() {
           {t("write")}
         </Button>
       </Link>
-      <ProfileLink pubkey={pubkey} relays={relays} />
+      <ProfileMenu pubkey={pubkey} relays={relays} />
     </Stack>
   ) : (
     <>

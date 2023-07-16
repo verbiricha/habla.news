@@ -67,5 +67,8 @@
   "share-url": "URL",
   "share-url-cta": "Human-readable URL, use this when sharing oustide of nostr.",
   "share-nostr": "Nostr ID",
-  "share-nostr-cta": "Nostr ID, use this when sharing on nostr."
+  "share-nostr-cta": "Nostr ID, use this when sharing on nostr.",
+  "profile": "Profile",
+  "relays": "Relays",
+  "logout": "Log Out"
 }

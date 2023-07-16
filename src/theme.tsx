@@ -4,6 +4,7 @@ import { withProse } from "@nikolovlazar/chakra-ui-prose";
 import Tag from "@habla/theme/components/tag";
 import Card from "@habla/theme/components/card";
 import Button from "@habla/theme/components/button";
+import Menu from "@habla/theme/components/menu";
 import colors from "@habla/theme/colors";
 import styles from "@habla/theme/styles";
 import semanticTokens from "@habla/theme/tokens";
@@ -16,7 +17,7 @@ const breakpoints = {
   xl: "80em",
 };
 
-const components = { Tag, Card, Button };
+const components = { Tag, Card, Button, Menu };
 
 const config = {
   initialColorMode: "system",

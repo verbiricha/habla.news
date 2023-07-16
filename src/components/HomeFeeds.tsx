@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 
 import { useAtom } from "jotai";
@@ -136,6 +136,12 @@ export default function HomeFeeds() {
 
     return null;
   }, [pubkey, follows, kinds, feed, list]);
+
+  useEffect(() => {
+    if (!filter) {
+      setFeed(Feeds.All);
+    }
+  }, [filter]);
 
   function setKind(k) {
     setKinds([k]);
