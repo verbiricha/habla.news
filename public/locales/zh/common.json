@@ -54,11 +54,17 @@
   "author": "作者",
   "community": "社區",
   "select-community": "選擇社區",
-  "oops": "Oops, something went wrong",
+  "oops": "哎呀，似乎出了點問題",
   "habla": "Habla",
-  "tagline": "Speak your mind",
-  "not-found": "Not found",
-  "not-found-long": "Sorry, we couldn't find the page you are looking for",
-  "server-error": "Something went wrong",
-  "server-error-long": "This is likely a bug in Habla, sorry for the inconvenience"
+  "tagline": "說說心裡話",
+  "not-found": "未找到",
+  "not-found-long": "抱歉，我們無法找到你正在查找的頁面",
+  "server-error": "出錯了",
+  "server-error-long": "這可能是 Habla 的一個錯誤，很抱歉給你帶來不便",
+  "share": "Share",
+  "share-cta": "Share your article with the world!",
+  "share-url": "URL",
+  "share-url-cta": "Human-readable URL, use this when sharing oustide of nostr.",
+  "share-nostr": "Nostr ID",
+  "share-nostr-cta": "Nostr ID, use this when sharing on nostr."
 }
