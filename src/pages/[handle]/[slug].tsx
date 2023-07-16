@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -12,6 +13,11 @@ import Layout from "@habla/layouts/Wide";
 import LongFormNote from "@habla/components/nostr/LongFormNote";
 
 export default function Post({ event }) {
+  const router = useRouter();
+  if (router.isFallback) {
+    return <span>Loading...</span>;
+  }
+
   const { title, summary, image } = getMetadata(event);
   const ndk = useNdk();
   const ev = new NDKEvent(ndk, event);
@@ -34,7 +40,21 @@ export default function Post({ event }) {
 export async function getStaticProps({ locale, params }) {
   const { handle, slug } = params;
   const pubkey = await getPubkey(handle);
+  if (!pubkey) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
   const event = await getPost(pubkey, slug);
+  if (!event) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),
@@ -63,6 +83,6 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 }
