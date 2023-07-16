@@ -20,11 +20,11 @@ export function articleLink(event, profile) {
   const { identifier } = getMetadata(event);
   const handle = getHandle(pubkey);
 
-  if (handle) {
+  if (handle && identifier) {
     return `/${handle}/${identifier}`;
   }
 
-  if (profile && profile.nip05) {
+  if (profile && profile.nip05 && identifier) {
     const nip05handle = profile.nip05.replace(/^_@/, "");
     return `/u/${nip05handle}/${identifier}`;
   }
@@ -32,7 +32,7 @@ export function articleLink(event, profile) {
   const naddr = nip19.naddrEncode({
     kind: event.kind,
     pubkey: event.pubkey,
-    identifier,
+    identifier: identifier ?? "",
   });
 
   return `/a/${naddr}`;
