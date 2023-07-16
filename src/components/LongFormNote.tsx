@@ -215,17 +215,19 @@ export default function LongFormNote({
                   {t("edit")}
                 </Button>
               )}
-              <Button
-                maxW="12em"
-                size="sm"
-                variant="write"
-                aria-label="Share"
-                bg="secondary"
-                color="white"
-                onClick={shareModal.onOpen}
-              >
-                {t("share")}
-              </Button>
+              {!isEditingInline && (
+                <Button
+                  maxW="12em"
+                  size="sm"
+                  variant="write"
+                  aria-label="Share"
+                  bg="secondary"
+                  color="white"
+                  onClick={shareModal.onOpen}
+                >
+                  {t("share")}
+                </Button>
+              )}
             </Flex>
           </Flex>
         </Stack>
@@ -261,7 +263,7 @@ export default function LongFormNote({
         }}
       />
 
-      <ShareModal event={event} {...shareModal} />
+      {event.pubkey && <ShareModal event={event} {...shareModal} />}
 
       <HighlightsDrawer
         selected={selected}

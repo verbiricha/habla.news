@@ -29,13 +29,15 @@ export function articleLink(event, profile) {
     return `/u/${nip05handle}/${identifier}`;
   }
 
-  const naddr = nip19.naddrEncode({
-    kind: event.kind,
-    pubkey: event.pubkey,
-    identifier: identifier ?? "",
-  });
+  if (event.pubkey) {
+    const naddr = nip19.naddrEncode({
+      kind: event.kind,
+      pubkey: event.pubkey,
+      identifier: identifier ?? "",
+    });
 
-  return `/a/${naddr}`;
+    return `/a/${naddr}`;
+  }
 }
 
 export default function ArticleLink({ event, children }) {
