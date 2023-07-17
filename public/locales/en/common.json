@@ -6,6 +6,7 @@
   "popular-authors": "Popular authors",
   "topics": "Topics",
   "follow": "Follow",
+  "following": "Following",
   "log-in": "Log In",
   "extension": "Nostr Extension",
   "extension-descr": "Use a nostr extension for logging in. This is the recommended method.",
@@ -70,5 +71,19 @@
   "share-nostr-cta": "Nostr ID, use this when sharing on nostr.",
   "profile": "Profile",
   "relays": "Relays",
-  "logout": "Log Out"
+  "logout": "Log Out",
+  "what-we-will-call-you": "What we will call you?",
+  "you-can-change-later": "You can change this later if you like",
+  "skip": "Skip for now",
+  "next": "Next",
+  "add-avatar": "Add a profile image",
+  "image-url": "Enter a image URL, upload coming soon™️",
+  "pick-topics": "Pick a few topis of interest",
+  "follow-people": "Habla is more fun together",
+  "backup-keys": "Don't lose access to your account, we'd miss you!",
+  "backup-keys-cta": "Backup your account login information, it only takes a few seconds!",
+  "backup": "Back up my login",
+  "already-backed-up": "Already backed up!",
+  "finished": "You are ready to explore!",
+  "discover": "Discover"
 }

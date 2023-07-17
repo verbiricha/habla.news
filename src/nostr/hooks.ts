@@ -184,7 +184,8 @@ export function useNdk() {
   return ndk;
 }
 
-export function usePublishEvent() {
+export function usePublishEvent(options) {
+  const { showToast, debug } = options ?? { showToast: true };
   const ndk = useNdk();
   const toast = useToast();
 
@@ -200,20 +201,28 @@ export function usePublishEvent() {
     try {
       const ndkEvent = new NDKEvent(ndk, ev);
       await ndkEvent.sign();
-      await ndk.publish(ndkEvent);
-      toast({
-        title: successTitle,
-        description: sucessMessage,
-        status: "success",
-      });
+      if (debug) {
+        console.log("publish", ndkEvent);
+      } else {
+        await ndk.publish(ndkEvent);
+      }
+      if (showToast) {
+        toast({
+          title: successTitle,
+          description: sucessMessage,
+          status: "success",
+        });
+      }
       return ndkEvent;
     } catch (error) {
       console.error(error);
-      toast({
-        title: errorTitle,
-        description: errorMessage,
-        status: "error",
-      });
+      if (showToast) {
+        toast({
+          title: errorTitle,
+          description: errorMessage,
+          status: "error",
+        });
+      }
     }
   };
 }

@@ -33,7 +33,10 @@ export const names = {
   fiatjaf: "3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d",
   lou: "18e3af1edeecb70542eb7e000cf5c43ea0d6d3b79ebb64c8e2c98b341d42e5df",
   newton: "c31e22c3715c1bde5608b7e0d04904f22f5fc453ba1806d21c9f2382e1e58c6c",
+  guyswann: "b9e76546ba06456ed301d9e52bc49fa48e70a6bf2282be7a1ae72947612023dc",
 };
+
+export const featured = ["dergigi", "herald", "nostreport"];
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
   const [k, v] = item;

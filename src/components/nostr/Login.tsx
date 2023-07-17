@@ -39,6 +39,7 @@ import RelayIcon from "@habla/icons/RSS";
 import WriteIcon from "@habla/icons/Write";
 import ExternalLink from "@habla/components/ExternalLink";
 import { useNdk } from "@habla/nostr/hooks";
+import NewUser from "@habla/onboarding/NewUser";
 import Avatar from "@habla/components/nostr/Avatar";
 import {
   relaysAtom,
@@ -158,6 +159,8 @@ function LoginModal({ isOpen, onClose }) {
               >
                 {t("log-in")}
               </Button>
+              <Divider />
+              <NewUser />
             </Stack>
           </ModalBody>
         </ModalContent>

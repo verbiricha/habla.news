@@ -32,6 +32,10 @@ export const pubkeyAtom = atomWithLocalStorage<Pubkey | null>(
   "userPubkey",
   null
 );
+export const privkeyAtom = atomWithLocalStorage<Pubkey | null>(
+  "userPrivkey",
+  null
+);
 export const followsAtom = atom<string[]>([]);
 export const defaultRelays = [
   "wss://relay.snort.social",
