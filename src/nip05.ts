@@ -31,6 +31,7 @@ export const names = {
   opensats: "787338757fc25d65cd929394d5e7713cf43638e8d259e8dcf5c73b834eb851f2",
   nvk: "e88a691e98d9987c964521dff60025f60700378a4879180dcbbb4a5027850411",
   fiatjaf: "3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d",
+  lou: "18e3af1edeecb70542eb7e000cf5c43ea0d6d3b79ebb64c8e2c98b341d42e5df",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
