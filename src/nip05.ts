@@ -32,6 +32,7 @@ export const names = {
   nvk: "e88a691e98d9987c964521dff60025f60700378a4879180dcbbb4a5027850411",
   fiatjaf: "3bf0c63fcb93463407af97a5e5ee64fa883d107ef9e558472c4eb9aaaefa459d",
   lou: "18e3af1edeecb70542eb7e000cf5c43ea0d6d3b79ebb64c8e2c98b341d42e5df",
+  newton: "c31e22c3715c1bde5608b7e0d04904f22f5fc453ba1806d21c9f2382e1e58c6c",
 };
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
