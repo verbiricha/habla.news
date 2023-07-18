@@ -13,7 +13,7 @@ import {
   MenuGroup,
   MenuItem,
 } from "@chakra-ui/react";
-import { NDKEvent } from "habla-ndk";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { AddIcon, HamburgerIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 
 import { getMetadata } from "@habla/nip23";

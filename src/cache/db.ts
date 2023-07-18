@@ -1,4 +1,4 @@
-import { NDKEvent, NDKFilter, NDKSubscription } from "habla-ndk";
+import { NDKEvent, NDKFilter, NDKSubscription } from "@nostr-dev-kit/ndk";
 import Dexie, { type Table } from "dexie";
 import { combineLists } from "@habla/util";
 import { findTag, findTags } from "@habla/tags";

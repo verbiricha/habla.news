@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { NDKEvent, NDKUser } from "habla-ndk";
+import { NDKEvent, NDKUser } from "@nostr-dev-kit/ndk";
 
 type Pubkey = string;
 

@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import { useAtom } from "jotai";
 import { useToast, Icon, Button } from "@chakra-ui/react";
-import { NDKEvent } from "habla-ndk";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { CheckIcon } from "@chakra-ui/icons";
 
 import { dateToUnix } from "@habla/time";

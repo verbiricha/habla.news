@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 
-import NDK, { NDKEvent, NDKNip07Signer } from "habla-ndk";
+import NDK, { NDKEvent, NDKNip07Signer } from "@nostr-dev-kit/ndk";
 import { nip05, nip19 } from "nostr-tools";
 
 export function useNdk(options) {

@@ -1,4 +1,4 @@
-import type { NDKEvent } from "habla-ndk";
+import type { NDKEvent } from "@nostr-dev-kit/ndk";
 import { useLiveQuery } from "dexie-react-hooks";
 import db from "@habla/cache/db";
 
