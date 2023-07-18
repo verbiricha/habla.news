@@ -42,7 +42,13 @@ export default function Username({ pubkey, renderLink, ...rest }) {
     </Text>
   );
   return renderLink ? (
-    <Link href={`/p/${nip19.nprofileEncode({ pubkey, relays })}`}>
+    <Link
+      href={
+        user.nip05
+          ? `/u/${user.nip05}`
+          : `/p/${nip19.nprofileEncode({ pubkey, relays })}`
+      }
+    >
       {username}
     </Link>
   ) : (

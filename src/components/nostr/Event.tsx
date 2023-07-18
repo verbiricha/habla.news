@@ -1,6 +1,7 @@
 import { Text } from "@chakra-ui/react";
 import { HIGHLIGHT, NOTE, BADGE, ZAPSTR_TRACK } from "@habla/const";
 
+import Blockquote from "@habla/components/Blockquote";
 import Highlight from "./feed/Highlight";
 import Note from "./Note";
 import Badge from "./Badge";
@@ -12,7 +13,7 @@ export default function Event(props) {
     return <Highlight {...props} maxW="586px" />;
   }
 
-  if (event.kind === NOTE) {
+  if (event.kind === NOTE || event.kind === 68002) {
     return <Note {...props} />;
   }
 
@@ -22,11 +23,6 @@ export default function Event(props) {
 
   if (event.kind === ZAPSTR_TRACK) {
     return <ZapstrTrack {...props} />;
-  }
-
-  if (event.kind === 68002) {
-    // todo
-    return null;
   }
 
   const alt = event?.tags.find((t) => t.at(0) === "alt");

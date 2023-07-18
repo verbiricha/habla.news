@@ -12,16 +12,19 @@ function hexToDecimal(hexString) {
   return Number(decimalValue) / Number(maxValue);
 }
 
-export default function Avatar({ pubkey, size = "sm", ...rest }) {
-  const user = useUser(pubkey);
+export function UserAvatar({ pubkey, user, ...rest }) {
   const seed = useMemo(() => hexToDecimal(pubkey), [pubkey]);
   const placeholder = useRandomAvatar(seed);
   return (
     <BaseAvatar
       name={user?.name || pubkey}
-      size={size}
       src={user?.picture || user?.image || placeholder}
       {...rest}
     />
   );
+}
+
+export default function Avatar({ pubkey, size = "sm", ...rest }) {
+  const user = useUser(pubkey);
+  return <UserAvatar pubkey={pubkey} user={user} size={size} {...rest} />;
 }

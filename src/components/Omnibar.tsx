@@ -68,17 +68,9 @@ export default function Omnibar() {
         onOpen();
         const profile = await nip05.queryProfile(newContent);
         if (profile) {
-          if (profile.relays.length) {
-            const nprofile = nip19.nprofileEncode(profile);
-            return await router.push(`/p/${nprofile}`, undefined, {
-              shallow: true,
-            });
-          } else {
-            const npub = nip19.npubEncode(profile.pubkey);
-            return await router.push(`/p/${npub}`, undefined, {
-              shallow: true,
-            });
-          }
+          return await router.push(`/u/${newContent}`, undefined, {
+            shallow: true,
+          });
         }
       } catch (error) {
       } finally {

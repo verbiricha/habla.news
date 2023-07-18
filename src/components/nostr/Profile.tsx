@@ -8,7 +8,7 @@ import Markdown from "@habla/markdown/Markdown";
 import FollowButton from "@habla/components/nostr/FollowButton";
 
 import Username from "./Username";
-import Avatar from "./Avatar";
+import { UserAvatar } from "./Avatar";
 import UserContent from "./UserContent";
 
 function Bio({ profile }) {
@@ -41,7 +41,7 @@ export default function Profile({ pubkey, relays }) {
           mb={5}
           width="100%"
         >
-          <Avatar pubkey={pubkey} size="xl" />
+          <UserAvatar pubkey={pubkey} user={profile} size="xl" />
           <Stack flex={1}>
             <Flex
               flexDir={["column", "row"]}
