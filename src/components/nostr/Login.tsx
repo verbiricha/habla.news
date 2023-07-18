@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import { NDKUser, NDKNip07Signer } from "@nostr-dev-kit/ndk";
+import { NDKUser, NDKNip07Signer } from "habla-ndk";
 import { useAtom } from "jotai";
 import { nip05, nip19 } from "nostr-tools";
 

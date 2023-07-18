@@ -2,7 +2,7 @@ import { useMemo, useEffect, useState, useContext } from "react";
 import { useAtom } from "jotai";
 import { useToast } from "@chakra-ui/react";
 
-import { NDKEvent, NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
+import { NDKEvent, NDKRelay, NDKRelaySet } from "habla-ndk";
 import { useLiveQuery } from "dexie-react-hooks";
 import { utils } from "nostr-tools";
 

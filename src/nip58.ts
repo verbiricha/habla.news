@@ -1,4 +1,4 @@
-import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKEvent } from "habla-ndk";
 
 import { findTag } from "@habla/tags";
 

@@ -3,7 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { Stack } from "@chakra-ui/react";
-import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKEvent } from "habla-ndk";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import Markdown from "@habla/markdown/Markdown";

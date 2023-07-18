@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import NDK, { NDKEvent, NDKSigner } from "@nostr-dev-kit/ndk";
+import NDK, { NDKEvent, NDKSigner } from "habla-ndk";
 
 const NostrContext = createContext<{ ndk: NDK; signer: NDKSigner }>({
   ndk: () => null,

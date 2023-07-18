@@ -27,7 +27,7 @@ import {
   NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKEvent } from "habla-ndk";
 
 import { ZAP_REQUEST } from "@habla/const";
 import useWebln from "@habla/hooks/useWebln";

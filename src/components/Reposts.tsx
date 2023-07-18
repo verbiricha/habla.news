@@ -1,4 +1,4 @@
-import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKEvent } from "habla-ndk";
 import { useToast } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 

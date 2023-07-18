@@ -11,7 +11,7 @@ Available in https://habla.news.
 To run Habla locally for development, run:
 
 ```
-yarn dev
+pnpm dev
 ```
 
 This should start a local server and open a browser with the project. You can now start modifying the code and see the changes in real time.
@@ -19,6 +19,6 @@ This should start a local server and open a browser with the project. You can no
 ## Run your own instance
 
 ```
-yarn install
-yarn build
+pnpm install
+pnpm build
 ```
