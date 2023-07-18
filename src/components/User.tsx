@@ -32,7 +32,7 @@ export default function User({ pubkey, user, size = "sm", ...rest }) {
         src={user.picture || user.image}
       />
 
-      <Text>{user.name || shortenString(pubkey, 8)}</Text>
+      <Text fontFamily="Inter">{user.name || shortenString(pubkey, 8)}</Text>
     </Flex>
   );
 }
