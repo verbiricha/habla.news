@@ -31,6 +31,7 @@ export const LISTS = [
 ];
 export const COMMUNITY = 34550;
 export const POST_APPROVAL = 4550;
+export const JOB_RESULT = 68002;
 // Time
 export const HOUR = 60 * 60;
 export const DAY = 24 * HOUR;
