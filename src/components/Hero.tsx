@@ -19,7 +19,7 @@ export default function Hero() {
         {t("habla-description")}
       </Text>
       <Link href={`/faq`} shallow>
-        <Button variant="solid" color="white" bg="surface" maxWidth="12rem">
+        <Button variant="solid" bg="rgba(94, 48, 224, 0.20)" maxWidth="12rem">
           {t("intro")}
         </Button>
       </Link>

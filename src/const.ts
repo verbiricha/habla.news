@@ -40,3 +40,4 @@ export const MONTH = 4 * WEEK;
 
 // eslint-disable-next-line no-useless-escape
 export const HASHTAG_REGEX = /(#[^\s!@#$%^&*()=+.\/,\[{\]};:'"?><]+)/g;
+export const FILE_EXT_REGEX = /\.([\w]{1,7})$/i;

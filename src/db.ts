@@ -1,5 +1,15 @@
 import { SimplePool } from "nostr-tools";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+import { uniqByFn } from "@habla/util";
+import { findTag } from "@habla/tags";
+
+const getAddress = (ev) => {
+  if (ev.kind && ev.kind >= 30000 && ev.kind <= 40000) {
+    const dTagId = findTag(ev, "d");
+    return `${ev.kind}:${ev.pubkey}:${dTagId}`;
+  }
+  return ev.id;
+};
 
 const memoize = (fn) => {
   const cache = new Map();
@@ -35,7 +45,7 @@ const pool = new SimplePool(relays);
 
 async function getNostrPost(pubkey, slug) {
   const filter = {
-    kinds: [30023],
+    kinds: [LONG_FORM],
     authors: [pubkey],
     "#d": [slug],
   };
@@ -52,7 +62,8 @@ async function getNostrPosts(pubkey) {
       authors: [pubkey],
     },
   ];
-  return pool.list(relays, filters);
+  const results = await pool.list(relays, filters);
+  return uniqByFn(results, getAddress);
 }
 
 export const getPosts = memoize(getNostrPosts);
@@ -64,7 +75,8 @@ async function getNostrEvents(pubkey) {
       authors: [pubkey],
     },
   ];
-  return pool.list(relays, filters);
+  const results = await pool.list(relays, filters);
+  return uniqByFn(results, getAddress);
 }
 
 export const getEvents = memoize(getNostrEvents);

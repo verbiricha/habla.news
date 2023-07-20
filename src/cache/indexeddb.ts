@@ -3,7 +3,7 @@ import {
   NDKFilter,
   NDKSubscription,
   NDKCacheAdapter,
-} from "habla-ndk";
+} from "@nostr-dev-kit/ndk";
 import db, {
   type HablaDatabase,
   storeEvent,

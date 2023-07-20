@@ -14,13 +14,11 @@ import {
 import { nip19 } from "nostr-tools";
 
 import { getBadge } from "@habla/nip58";
-import useSeenOn from "@habla/hooks/useSeenOn";
 import User from "@habla/components/nostr/User";
 
 export default function Badge({ naddr, event }) {
   const router = useRouter();
   const { name, description, image } = getBadge(event);
-  const seenOn = useSeenOn(event);
   return (
     <Card variant="outline" my={4}>
       <CardBody

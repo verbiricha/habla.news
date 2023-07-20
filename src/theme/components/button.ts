@@ -18,6 +18,22 @@ const solid = defineStyle({
   borderRadius: "20px",
 });
 
+const dark = defineStyle({
+  borderRadius: "20px",
+  fontFamily: "'Inter'",
+  fontWeight: 500,
+  bg: "black",
+  color: "white",
+  _hover: {
+    color: "white",
+    bg: "rgba(0, 0, 0, 0.6)",
+  },
+  _dark: {
+    bg: "white",
+    color: "black",
+  },
+});
+
 export default defineStyleConfig({
-  variants: { outline, write, solid },
+  variants: { outline, write, solid, dark },
 });

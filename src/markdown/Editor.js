@@ -274,7 +274,7 @@ export default function MyEditor({ event, showPreview }) {
             textDecoration="underline"
             textDecorationStyle="dotted"
           >
-            <Link href={`habla.news/${handle}/${slug}`}>
+            <Link href={`/${handle}/${slug}`}>
               {`habla.news/${handle}/${slug}`}
             </Link>
           </Text>
@@ -285,7 +285,7 @@ export default function MyEditor({ event, showPreview }) {
             textDecoration="underline"
             textDecorationStyle="dotted"
           >
-            <Link href={`habla.news/u/${profile.nip05}/${slug}`}>
+            <Link href={`/u/${profile.nip05}/${slug}`}>
               {`habla.news/u/${profile.nip05}/${slug}`}
             </Link>
           </Text>

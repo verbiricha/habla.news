@@ -43,9 +43,9 @@ export default function FeedPage({ filter, until, offset, options = {} }) {
           <Spinner size="xl" />
         </Flex>
       )}
-      {events.length > 0 && <Events events={events} />}
+      {events.length > 0 && eose && <Events events={events} />}
       {events.length > 0 && !showNext && <div ref={ref}></div>}
-      {showNext && (
+      {showNext && eose && (
         <FeedPage
           filter={filter}
           until={oldest.created_at - 1}

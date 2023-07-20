@@ -2,6 +2,7 @@ import { Tooltip, Avatar } from "@chakra-ui/react";
 import { PhoneIcon } from "@chakra-ui/icons";
 
 export default function RelayFavicon({ url, children, ...rest }) {
+  // todo: isConnected indicator
   const domain = url
     .replace("wss://relay.", "https://")
     .replace("wss://", "https://")

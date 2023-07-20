@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
 import { useAtom } from "jotai";
@@ -9,6 +10,7 @@ import {
   Text,
   Button,
   ButtonGroup,
+  Icon,
   Menu,
   MenuButton,
   MenuList,
@@ -20,24 +22,32 @@ import {
   AvatarGroup,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import KeyIcon from "@habla/icons/Key";
+import HashtagIcon from "@habla/icons/Hashtag";
+import ListIcon from "@habla/icons/List";
+import UsersIcon from "@habla/icons/Users";
+import GlobeIcon from "@habla/icons/Globe";
 
 import { LONG_FORM, HIGHLIGHT, DAY, WEEK, MONTH } from "@habla/const";
 import {
   pubkeyAtom,
   followsAtom,
+  tagsAtom,
   //bookmarksAtom,
   peopleListsAtom,
 } from "@habla/state";
 import SectionHeading from "@habla/components/SectionHeading";
-import Tabs from "@habla/components/Tabs";
 import Relays from "@habla/components/Relays";
+import Hashtags from "@habla/components/Hashtags";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
 import Feed from "@habla/components/nostr/Feed";
 import Avatar from "@habla/components/nostr/Avatar";
 import { findTag } from "@habla/tags";
+import { useNeedsBackup } from "@habla/onboarding/hooks";
 
 enum Feeds {
   All = "All",
+  Tag = "Tag",
   Follows = "Follows",
   PeopleList = "PeopleList",
   Community = "Community",
@@ -50,9 +60,14 @@ export default function HomeFeeds() {
   //const [bookmarks] = useAtom(bookmarksAtom);
   const [peopleLists] = useAtom(peopleListsAtom);
   const [list, setList] = useState();
+  const [tag, setTag] = useState();
+  const [tags] = useAtom(tagsAtom);
   const isLoggedIn = pubkey && follows.length > 0;
   const [kinds, setKinds] = useState([LONG_FORM]);
-  const [feed, setFeed] = useState(pubkey ? Feeds.Follows : Feeds.All);
+  const hasFollows = pubkey && follows.length > 0;
+  const [feed, setFeed] = useState(hasFollows > 0 ? Feeds.Follows : Feeds.All);
+  const needsBackup = useNeedsBackup();
+  const router = useRouter();
   const listName = useMemo(() => {
     if (list) {
       return findTag(list, "name") || findTag(list, "d");
@@ -78,23 +93,51 @@ export default function HomeFeeds() {
         {feed === Feeds.All && t("all")}
         {feed === Feeds.Follows && t("follows")}
         {feed === Feeds.PeopleList && listName}
+        {feed === Feeds.Tag && `# ${tag}`}
       </MenuButton>
-      <MenuList fontFamily="'Inter'">
-        <MenuItem
-          isDisabled={!isLoggedIn}
-          onClick={() => setFeed(Feeds.Follows)}
-        >
-          {t("follows")}
-        </MenuItem>
-        <MenuItem onClick={() => setFeed(Feeds.All)}>{t("all")}</MenuItem>
+      <MenuList>
+        {hasFollows && (
+          <MenuItem
+            isDisabled={!isLoggedIn}
+            onClick={() => setFeed(Feeds.Follows)}
+            icon={<Icon as={UsersIcon} />}
+          >
+            {t("follows")}
+          </MenuItem>
+        )}
         {peopleLists.map((e) => {
           const d = findTag(e, "d");
           const onClick = () => {
             setList(e);
             setFeed(Feeds.PeopleList);
           };
-          return <MenuItem onClick={onClick}>{d}</MenuItem>;
+          return (
+            <MenuItem icon={<Icon as={ListIcon} />} onClick={onClick}>
+              {d}
+            </MenuItem>
+          );
         })}
+        {tags.map((t) => {
+          const onClick = () => {
+            setTag(t);
+            setFeed(Feeds.Tag);
+          };
+          return (
+            <MenuItem
+              key={t}
+              icon={<Icon as={HashtagIcon} />}
+              onClick={onClick}
+            >
+              {t}
+            </MenuItem>
+          );
+        })}
+        <MenuItem
+          icon={<Icon as={GlobeIcon} />}
+          onClick={() => setFeed(Feeds.All)}
+        >
+          {t("all")}
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -107,7 +150,18 @@ export default function HomeFeeds() {
           kinds,
           authors: follows,
         },
-        offset: WEEK,
+        offset: MONTH,
+      };
+    }
+
+    if (feed === Feeds.Tag && tag) {
+      return {
+        id: `tag-${tag}`,
+        filter: {
+          kinds,
+          "#t": [tag],
+        },
+        offset: MONTH,
       };
     }
     if (feed === Feeds.All) {
@@ -127,15 +181,24 @@ export default function HomeFeeds() {
           kinds,
           authors: listPeople,
         },
+        offset: 12 * MONTH,
         options: {
           cacheUsage: "RELAY_FIRST",
         },
-        offset: 3 * MONTH,
       };
     }
 
     return null;
-  }, [pubkey, follows, kinds, feed, list]);
+  }, [pubkey, follows, kinds, feed, list, tag]);
+
+  useEffect(() => {
+    if (pubkey && hasFollows && feed === Feeds.All) {
+      setFeed(Feeds.Follows);
+    }
+    if (!pubkey && feed === Feeds.Follows) {
+      setFeed(Feeds.All);
+    }
+  }, [pubkey, hasFollows]);
 
   function setKind(k) {
     setKinds([k]);
@@ -153,7 +216,33 @@ export default function HomeFeeds() {
 
   return (
     <>
-      <Flex flexDir={["column", "row"]} justifyContent="space-between" gap={4}>
+      {needsBackup && (
+        <Flex borderRadius="20px" bg="rgba(217, 161, 51, 0.10)" p={4} gap={4}>
+          <Icon as={KeyIcon} boxSize={5} />
+          <Flex flexDir="column" gap={4}>
+            <Stack spacing={3}>
+              <Heading fontSize="lg">{t("backup-keys")}</Heading>
+              <Text>{t("backup-keys-descr")}</Text>
+              <Button
+                maxW="160px"
+                variant="dark"
+                size="xs"
+                onClick={() =>
+                  router.push("/onboarding/backup", null, { shallow: true })
+                }
+              >
+                {t("backup")}
+              </Button>
+            </Stack>
+          </Flex>
+        </Flex>
+      )}
+      <Flex
+        key={pubkey}
+        flexDir={["column", "row"]}
+        justifyContent="space-between"
+        gap={4}
+      >
         <ButtonGroup>
           <Button
             colorScheme={kinds.includes(LONG_FORM) ? "purple" : null}
@@ -193,7 +282,7 @@ export default function HomeFeeds() {
           options={filter.options}
         />
       ) : (
-        <Text>Unknown filter</Text>
+        <Text>{t("unknown-filter")}</Text>
       )}
     </>
   );

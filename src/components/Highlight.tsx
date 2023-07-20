@@ -12,7 +12,6 @@ import {
 
 import { nip19 } from "nostr-tools";
 
-import useSeenOn from "@habla/hooks/useSeenOn";
 import NAddr from "@habla/markdown/Naddr";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
@@ -28,22 +27,19 @@ export default function Highlight({ event }) {
   const a = findTag(event, "a");
   const r = findTag(event, "r");
   const p = findTag(event, "p");
-  const seenOn = useSeenOn(event);
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
   const nevent = useMemo(() => {
     return nip19.neventEncode({
       id: event.id,
       author: event.pubkey,
-      relays: seenOn,
     });
-  }, [event, seenOn]);
+  }, [event]);
   const naddr = useMemo(() => {
     if (kind && pubkey && identifier) {
       return nip19.naddrEncode({
         identifier,
         pubkey,
         kind: Number(kind),
-        relays: seenOn,
       });
     }
   }, [kind, pubkey, identifier]);

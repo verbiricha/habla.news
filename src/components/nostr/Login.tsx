@@ -2,13 +2,16 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import { NDKUser, NDKNip07Signer } from "habla-ndk";
+import {
+  NDKUser,
+  NDKNip07Signer,
+  NDKPrivateKeySigner,
+} from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip05, nip19 } from "nostr-tools";
 
 import {
   useDisclosure,
-  useColorModeValue,
   useToast,
   Flex,
   Button,
@@ -34,26 +37,31 @@ import {
 } from "@chakra-ui/react";
 import { AtSignIcon, ChevronDownIcon, WarningIcon } from "@chakra-ui/icons";
 
-import { BOOKMARKS, PEOPLE, CONTACTS, RELAYS } from "@habla/const";
-import RelayIcon from "@habla/icons/RSS";
+import { PEOPLE, CONTACTS, RELAYS } from "@habla/const";
+import SettingsIcon from "@habla/icons/Settings";
+import RelayIcon from "@habla/icons/Relay";
 import WriteIcon from "@habla/icons/Write";
 import ExternalLink from "@habla/components/ExternalLink";
-import { useNdk } from "@habla/nostr/hooks";
 import NewUser from "@habla/onboarding/NewUser";
 import Avatar from "@habla/components/nostr/Avatar";
 import {
+  ndkAtom,
   relaysAtom,
   pubkeyAtom,
-  followsAtom,
-  bookmarksAtom,
+  privkeyAtom,
+  contactListAtom,
+  relayListAtom,
   peopleListsAtom,
   defaultRelays,
 } from "@habla/state";
 import { findTag } from "@habla/tags";
+import { useIsOnboarding } from "@habla/onboarding/hooks";
+import { createNdk } from "@habla/nostr";
+import { useNdk } from "@habla/nostr/hooks";
 
-function LoginModal({ isOpen, onClose }) {
-  const ndk = useNdk();
+function LoginDialog({ isOpen, onClose }) {
   const [pubkeyLike, setPubkeyLike] = useState();
+  const [relays] = useAtom(relaysAtom);
   const toast = useToast();
   const [, setPubkey] = useAtom(pubkeyAtom);
   const { t } = useTranslation("common");
@@ -69,9 +77,6 @@ function LoginModal({ isOpen, onClose }) {
         const profile = await nip05.queryProfile(pubkeyLike);
         if (profile) {
           setPubkey(profile.pubkey);
-          if (profile.relays?.length) {
-            setRelays(profile.relays);
-          }
         }
       }
       onClose();
@@ -85,15 +90,31 @@ function LoginModal({ isOpen, onClose }) {
     }
   }
 
-  function loginWithExtension() {
+  function loginWithPrivkey(privkey: string) {
+    try {
+      const signer = new NDKPrivateKeySigner(privkey);
+      const newNdk = createNdk({ signer, explicitRelayUrls: relays });
+      setNdk(newNdk);
+      signer.user().then((user) => {
+        setPubkey(user.hexpubkey());
+      });
+    } catch (error) {
+      toast({
+        title: "Could not sign in",
+        status: "error",
+        description: error.message,
+      });
+      console.error(error);
+    }
+  }
+
+  function loginWithExtension(shouldFetchProfile: boolean) {
     try {
       const signer = new NDKNip07Signer();
-      ndk.signer = signer;
+      const newNdk = createNdk({ signer, explicitRelayUrls: relays });
+      setNdk(newNdk);
       signer.user().then((user) => {
-        user.ndk = ndk;
         setPubkey(user.hexpubkey());
-        // User profile
-        user.fetchProfile();
       });
     } catch (error) {
       toast({
@@ -107,63 +128,108 @@ function LoginModal({ isOpen, onClose }) {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Stack mb={5}>
+        <Heading fontSize="lg" mb={2}>
+          {t("extension")}
+        </Heading>
+        <Text>{t("extension-descr")}</Text>
+        <UnorderedList pl={6}>
+          <ListItem>
+            <ExternalLink href="https://chrome.google.com/webstore/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp">
+              nos2x
+            </ExternalLink>
+          </ListItem>
+          <ListItem>
+            <ExternalLink href="https://getalby.com/">Alby</ExternalLink>
+          </ListItem>
+        </UnorderedList>
+        <Button
+          maxW="12rem"
+          colorScheme="orange"
+          isDisabled={typeof window === "undefined" || !window.nostr}
+          onClick={() => loginWithExtension(true)}
+        >
+          {t("log-in")}
+        </Button>
+      </Stack>
+
+      <Divider />
+
+      <Stack my={4} gap={2}>
+        <Heading fontSize="lg" mb={2}>
+          {t("public-key")}
+        </Heading>
+        <Text>{t("public-key-descr")}</Text>
+        <Input
+          fontFamily="'Inter'"
+          size="sm"
+          placeholder={t("public-key-placeholder")}
+          type="text"
+          value={pubkeyLike}
+          onChange={(e) => setPubkeyLike(e.target.value)}
+        />
+        <Button
+          maxW="12rem"
+          colorScheme="orange"
+          isDisabled={!pubkeyLike}
+          onClick={loginWithPubkey}
+        >
+          {t("log-in")}
+        </Button>
+      </Stack>
+    </>
+  );
+}
+
+type LoginModalFlow = "login" | "onboarding";
+
+function LoginModal({ isOpen, onClose }) {
+  const [ndk] = useAtom(ndkAtom);
+  const [flow, setFlow] = useState<LoginModalFlow | null>(null);
+  const { t } = useTranslation("common");
+  const onboardingModal = useDisclosure("onboarding");
+
+  function closeModal() {
+    setFlow(null);
+    onClose();
+  }
+
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent dir="auto">
-          <ModalHeader>{t("log-in")}</ModalHeader>
+          <ModalHeader>{!flow && t("get-started")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Stack mb={5}>
-              <Heading fontSize="lg" mb={2}>
-                {t("extension")}
-              </Heading>
-              <Text>{t("extension-descr")}</Text>
-              <UnorderedList pl={6}>
-                <ListItem>
-                  <ExternalLink href="https://chrome.google.com/webstore/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp">
-                    nos2x
-                  </ExternalLink>
-                </ListItem>
-                <ListItem>
-                  <ExternalLink href="https://getalby.com/">Alby</ExternalLink>
-                </ListItem>
-              </UnorderedList>
-              <Button
-                maxW="12rem"
-                colorScheme="orange"
-                isDisabled={typeof window === "undefined" || !window.nostr}
-                onClick={loginWithExtension}
-              >
-                {t("log-in")}
-              </Button>
-            </Stack>
-            <Divider />
-            <Stack my={4} gap={2}>
-              <Heading fontSize="lg" mb={2}>
-                {t("public-key")}
-              </Heading>
-              <Text>{t("public-key-descr")}</Text>
-              <Input
-                fontFamily="'Inter'"
-                size="sm"
-                placeholder={t("public-key-placeholder")}
-                type="text"
-                value={pubkeyLike}
-                onChange={(e) => setPubkeyLike(e.target.value)}
-              />
-              <Button
-                maxW="12rem"
-                colorScheme="orange"
-                isDisabled={!pubkeyLike}
-                onClick={loginWithPubkey}
-              >
-                {t("log-in")}
-              </Button>
-              {/*
-              <Divider />
-              <NewUser />
-              */}
-            </Stack>
+            {flow === null && (
+              <Stack gap={4} mb={4}>
+                <Stack gap={2}>
+                  <Heading fontSize="lg" mb={2}>
+                    {t("account")}
+                  </Heading>
+                  <Text>{t("account-descr")}</Text>
+                  <Button onClick={() => setFlow("login")}>
+                    {t("log-in")}
+                  </Button>
+                </Stack>
+
+                <Stack gap={2}>
+                  <Heading fontSize="lg" mb={2}>
+                    {t("im-new")}
+                  </Heading>
+                  <Text>{t("im-new-descr")}</Text>
+                  <Button onClick={() => setFlow("onboarding")}>
+                    {t("create-account")}
+                  </Button>
+                </Stack>
+              </Stack>
+            )}
+
+            {flow === "login" && (
+              <LoginDialog isOpen={isOpen} onClose={closeModal} />
+            )}
+            {flow === "onboarding" && <NewUser onDone={closeModal} />}
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -171,14 +237,14 @@ function LoginModal({ isOpen, onClose }) {
   );
 }
 
-function ProfileMenu({ pubkey, relays }) {
+function ProfileMenu({ pubkey, relays, onClose }) {
   const { t } = useTranslation("common");
   const router = useRouter();
   const [, setPubkey] = useAtom(pubkeyAtom);
-  const [, setFollows] = useAtom(followsAtom);
-  const [, setBookmarks] = useAtom(bookmarksAtom);
+  const [, setPrivkey] = useAtom(privkeyAtom);
+  const [, setContactList] = useAtom(contactListAtom);
   const [, setPeopleLists] = useAtom(peopleListsAtom);
-  const [, setRelays] = useAtom(relaysAtom);
+  const isOnboarding = useIsOnboarding();
   const nprofile = useMemo(() => {
     if (pubkey) {
       return nip19.nprofileEncode({
@@ -188,13 +254,12 @@ function ProfileMenu({ pubkey, relays }) {
     }
   }, [pubkey, relays]);
 
-  async function logOut() {
-    setRelays(defaultRelays);
-    setFollows([]);
-    setBookmarks([]);
+  function logOut(ev) {
     setPeopleLists([]);
     setPubkey(null);
-    await router.push("/");
+    setPrivkey(null);
+    setContactList(null);
+    onClose();
   }
 
   return (
@@ -206,10 +271,18 @@ function ProfileMenu({ pubkey, relays }) {
         <MenuItem
           icon={<AtSignIcon />}
           onClick={() =>
-            router.push(`/p/${nprofile}`, undefined, { shallow: true })
+            isOnboarding
+              ? router.push(`onboarding`, undefined, { shallow: true })
+              : router.push(`/p/${nprofile}`, undefined, { shallow: true })
           }
         >
           {t("profile")}
+        </MenuItem>
+        <MenuItem
+          icon={<Icon as={SettingsIcon} boxSize={3} />}
+          onClick={() => router.push(`/settings`, undefined, { shallow: true })}
+        >
+          {t("settings")}
         </MenuItem>
         <MenuItem
           icon={<Icon as={RelayIcon} boxSize={3} />}
@@ -228,63 +301,30 @@ function ProfileMenu({ pubkey, relays }) {
 
 export default function Login() {
   const ndk = useNdk();
-  const [relays, setRelays] = useAtom(relaysAtom);
+  const toast = useToast();
+  const [relayList, setRelayList] = useAtom(relayListAtom);
+  const [relays] = useAtom(relaysAtom);
   const [pubkey, setPubkey] = useAtom(pubkeyAtom);
-  const [, setFollows] = useAtom(followsAtom);
-  const [, setBookmarks] = useAtom(bookmarksAtom);
+  const [privkey, setPrivkey] = useAtom(privkeyAtom);
+  const [contacts, setContactList] = useAtom(contactListAtom);
   const [, setPeopleLists] = useAtom(peopleListsAtom);
-  const bg = useColorModeValue("black", "white");
-  const fg = useColorModeValue("white", "black");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation("common");
 
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      pubkey &&
-      !ndk.signer &&
-      window.nostr
-    ) {
-      try {
-        const signer = new NDKNip07Signer();
-        ndk.signer = signer;
-      } catch (error) {
-        toast({
-          title: "Could not sign in",
-          status: "error",
-          description: error.message,
-        });
-        console.error(error);
-      }
-    }
-  }, [pubkey]);
-
-  useEffect(() => {
     if (pubkey) {
-      // Follows
+      // Contact list
       ndk
         .fetchEvent({
           kinds: [CONTACTS],
           authors: [pubkey],
         })
         .then((contactList) => {
-          const follows = contactList.tags
-            .filter((t) => t.at(0) === "p")
-            .map((t) => t.at(1));
-          setFollows(follows);
-        });
-      // Communities
-      ndk
-        .fetchEvent({
-          kinds: [BOOKMARKS],
-          authors: [pubkey],
-          "#d": ["communities"],
-        })
-        .then((communities) => {
-          if (communities) {
-            setBookmarks((_bs) =>
-              communities.tags.filter((t) => t.at(0) === "a")
-            );
+          if (
+            contactList &&
+            (!contacts || contactList.created_at > contacts.created_at)
+          ) {
+            contactList.toNostrEvent().then(setContactList);
           }
         });
       // People lists
@@ -294,16 +334,18 @@ export default function Login() {
           authors: [pubkey],
         })
         .then((people) => {
-          const peopleLists = Array.from(people)
-            .filter((p) => {
-              const d = findTag(p, "d");
-              const t = findTag(p, "t");
-              const outdatedD = ["mute", "p:mute", "pin", "pinned"];
-              // discard outdated pre nip-51 lists
-              return !outdatedD.includes(d) && !outdatedD.includes(t);
-            })
-            .filter((p) => p.tags.find((t) => t.at(0) === "p"));
-          setPeopleLists(peopleLists);
+          if (people) {
+            const peopleLists = Array.from(people)
+              .filter((p) => {
+                const d = findTag(p, "d");
+                const t = findTag(p, "t");
+                const outdatedD = ["mute", "p:mute", "pin", "pinned"];
+                // discard outdated pre nip-51 lists
+                return !outdatedD.includes(d) && !outdatedD.includes(t);
+              })
+              .filter((p) => p.tags.find((t) => t.at(0) === "p"));
+            setPeopleLists(peopleLists);
+          }
         });
       // Relays
       ndk
@@ -312,8 +354,12 @@ export default function Login() {
           authors: [pubkey],
         })
         .then((relayMetadata) => {
-          const relays = relayMetadata.tags.map((r) => r.at(1));
-          setRelays(relays);
+          if (relayMetadata) {
+            const relays = relayMetadata.tags.map((r) => r.at(1));
+            if (!relayList || relayMetadata.created_at > relayList.created_at) {
+              relayMetadata.toNostrEvent().then(setRelayList);
+            }
+          }
         });
     }
   }, [pubkey]);
@@ -322,21 +368,19 @@ export default function Login() {
     <Stack align="center" direction="row" spacing={2}>
       <Link href="/write">
         <Button
-          variant="write"
+          variant="dark"
           aria-label="Write"
-          bg={bg}
-          color={fg}
           leftIcon={<Icon as={WriteIcon} boxSize={5} />}
         >
           {t("write")}
         </Button>
       </Link>
-      <ProfileMenu pubkey={pubkey} relays={relays} />
+      <ProfileMenu pubkey={pubkey} relays={relays} onClose={onClose} />
     </Stack>
   ) : (
     <>
       <Button colorScheme="orange" onClick={onOpen}>
-        {t("log-in")}
+        {t("get-started")}
       </Button>
       <LoginModal isOpen={isOpen} onClose={onClose} />
     </>

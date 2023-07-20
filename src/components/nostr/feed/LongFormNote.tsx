@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useAtom } from "jotai";
-import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
@@ -20,10 +19,8 @@ import { EditIcon } from "@chakra-ui/icons";
 import { relaysAtom } from "@habla/state";
 import { getMetadata } from "@habla/nip23";
 import { formatDay } from "@habla/format";
-import useSeenOn from "@habla/hooks/useSeenOn";
-import SeenIn from "@habla/components/SeenIn";
-import User from "../User";
-import Hashtags from "../../Hashtags";
+import User from "@habla/components/nostr/User";
+import Hashtags from "@habla/components/Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import ArticleLink from "@habla/components/nostr/ArticleLink";
 
@@ -48,9 +45,6 @@ export default function LongFormNote({
   excludeAuthor,
   excludeReactions = true,
 }) {
-  const { ref, inView } = useInView({
-    threshold: 0,
-  });
   const [defaultRelays] = useAtom(relaysAtom);
   const {
     identifier,
@@ -61,9 +55,8 @@ export default function LongFormNote({
     hashtags,
     publishedAt,
   } = useMemo(() => getMetadata(event), [event]);
-  const relays = useSeenOn(event);
   return title.length > 0 && event.content.length > 0 ? (
-    <Card ref={ref} variant="article" my={4}>
+    <Card variant="article" my={4}>
       {!excludeAuthor && (
         <CardHeader>
           <Flex align="center" direction="row" gap={2} fontFamily="Inter">
@@ -129,11 +122,6 @@ export default function LongFormNote({
           )}
         </Flex>
       </CardBody>
-      {!excludeReactions && (
-        <CardFooter>
-          <Reactions event={event} live={inView} />
-        </CardFooter>
-      )}
     </Card>
   ) : null;
 }

@@ -5,6 +5,13 @@ const styles = {
     input: {
       fontFamily: "'Inter'",
     },
+    'input[type="file"]': {
+      my: "2",
+      border: "1px solid ",
+      borderColor: "whiteAlpha.300",
+      padding: "1",
+      cursor: "pointer",
+    },
     select: {
       fontFamily: "'Inter'",
     },

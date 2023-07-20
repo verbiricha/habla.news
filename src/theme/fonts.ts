@@ -1,6 +1,6 @@
 const fonts = {
   heading: `'Unbounded', sans-serif`,
-  body: `'Source Serif Pro', serif`,
+  body: `'Inter', serif`,
   mono: `'Menlo', monospace`,
 };
 

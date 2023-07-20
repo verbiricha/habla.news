@@ -37,9 +37,22 @@ export const names = {
   arfonzo: "0ab50b198824f4ed986f4f497f6169f0d903122bcaa14bcb11cecd3b922522bc",
   isolabellart:
     "f4db5270bd991b17bea1e6d035f45dee392919c29474bbac10342d223c74e0d0",
+  jack: "82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2",
+  rabble: "76c71aae3a491f1d9eec47cba17e229cda4113a0bbb6e6ae1776d7643e29cafa",
 };
 
-export const featured = ["dergigi", "herald", "nostreport"];
+export const featured = [
+  "jack",
+  "rabble",
+  "fiatjaf",
+  "dergigi",
+  "karnage",
+  "tony",
+  "isolabellart",
+  "moon",
+  "herald",
+  "nostreport",
+];
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
   const [k, v] = item;

@@ -1,10 +1,15 @@
+import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 import { Flex, Stack, Text, Button } from "@chakra-ui/react";
 
 import SectionHeading from "@habla/components/SectionHeading";
 import User from "@habla/components/nostr/User";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
-import FollowButton from "@habla/components/nostr/FollowButton";
+
+const FollowButton = dynamic(
+  () => import("@habla/components/nostr/FollowButton"),
+  { ssr: false }
+);
 
 function Featured({ naddr, kind, pubkey, identifier }) {
   return (
@@ -120,7 +125,7 @@ export default function FeaturedArticles() {
       <Stack spacing={4}>
         <PurpleText />
         <NostrTree />
-        <HablaFeatures />
+        <NativeInternetProtocolForSocialMedia />
       </Stack>
     </>
   );

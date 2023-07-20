@@ -10,6 +10,8 @@ import {
   Heading,
   Alert,
   AlertIcon,
+  AlertTitle,
+  AlertDescription,
   Text,
   Spinner,
   Flex,
@@ -30,7 +32,7 @@ import {
   NumberDecrementStepper,
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
-import { NDKEvent } from "habla-ndk";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import { ZAP_REQUEST } from "@habla/const";
 import useWebln from "@habla/hooks/useWebln";
@@ -259,7 +261,11 @@ export default function ZapModal({ event, isOpen, onClose }) {
                 textAlign="center"
                 height="120px"
               >
-                <AlertIcon /> {t("cant-zap")}
+                <AlertIcon />
+                <AlertTitle>{t("cant-zap-title")}</AlertTitle>
+                <AlertDescription maxWidth="sm">
+                  {t("cant-zap")}
+                </AlertDescription>
               </Alert>
             )}
             {lnurl && !invoice && (

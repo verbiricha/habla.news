@@ -16,20 +16,17 @@ import {
 import { LinkIcon } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 
-import useSeenOn from "@habla/hooks/useSeenOn";
 import Markdown from "@habla/markdown/Markdown";
 import User from "../User";
 
 export default function Note({ event, highlights = [], ...props }) {
   const router = useRouter();
-  const seenOn = useSeenOn(event);
   const nevent = useMemo(() => {
     return nip19.neventEncode({
       id: event.id,
       author: event.pubkey,
-      relays: seenOn,
     });
-  }, [event, seenOn]);
+  }, [event]);
   return (
     <Card variant="outline" my={4} {...props}>
       <CardHeader>

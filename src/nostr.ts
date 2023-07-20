@@ -1,21 +1,19 @@
 import { useEffect, useState, useMemo } from "react";
 
-import NDK, { NDKEvent } from "habla-ndk";
+import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
 import { nip05, nip19 } from "nostr-tools";
+import cacheAdapter from "@habla/cache/indexeddb";
 
-export function useNdk(options) {
-  const ndk = useMemo(() => new NDK(options), []);
-
-  useEffect(() => {
-    try {
-      ndk.connect();
-    } catch (error) {
-      console.error(`Failed to connect to relays`);
-      console.error(error);
-    }
-  }, []);
-
-  return ndk;
+export function createNdk(options) {
+  const ndk = new NDK({ cacheAdapter, ...options });
+  try {
+    ndk.connect();
+  } catch (error) {
+    console.error(`Failed to connect to relays`);
+    console.error(error);
+  } finally {
+    return ndk;
+  }
 }
 
 export function decodeNaddr(naddr) {

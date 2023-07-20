@@ -2,9 +2,8 @@ import { useMemo } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import { Stack } from "@chakra-ui/react";
-import { NDKEvent } from "habla-ndk";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import { Flex, Stack } from "@chakra-ui/react";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import Markdown from "@habla/markdown/Markdown";
 import Layout from "@habla/layouts/Wide";
@@ -13,6 +12,7 @@ import { getProfile, getEvents } from "@habla/db";
 import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";
 
+import FollowButton from "@habla/components/nostr/FollowButton";
 import UserContent from "@habla/components/nostr/UserContent";
 
 export default function Profile({
@@ -37,13 +37,16 @@ export default function Profile({
         {profile?.picture && <meta name="og:image" content={profile.picture} />}
       </Head>
       <Layout>
-        <Stack alignItems="center" spacing="2">
-          <User
-            pubkey={pubkey}
-            user={profile}
-            size="xl"
-            flexDirection="column"
-          />
+        <Stack spacing="2">
+          <Flex justifyContent="space-between">
+            <User
+              pubkey={pubkey}
+              user={profile}
+              size="xl"
+              flexDirection="column"
+            />
+            <FollowButton pubkey={pubkey} />
+          </Flex>
           {profile?.about && <Markdown content={profile?.about} />}
         </Stack>
         <UserContent events={ndkEvents} pubkey={pubkey} />

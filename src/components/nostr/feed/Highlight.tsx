@@ -19,7 +19,6 @@ import { LinkIcon } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 
 import { ZAP, REPOST, NOTE } from "@habla/const";
-import useSeenOn from "@habla/hooks/useSeenOn";
 import NAddr from "@habla/markdown/Naddr";
 import { useEvent } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
@@ -65,24 +64,21 @@ export default function Highlight({
   const e = findTag(event, "e");
   const r = findTag(event, "r");
   const context = findTag(event, "context");
-  const seenOn = useSeenOn(event);
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
   const nevent = useMemo(() => {
     if (event.id) {
       return nip19.neventEncode({
         id: event.id,
         author: event.pubkey,
-        relays: seenOn,
       });
     }
-  }, [event, seenOn]);
+  }, [event]);
   const naddr = useMemo(() => {
     if (kind && pubkey && identifier) {
       return nip19.naddrEncode({
         identifier,
         pubkey,
         kind: Number(kind),
-        relays: seenOn,
       });
     }
   }, [kind, pubkey, identifier]);

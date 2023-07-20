@@ -2,11 +2,12 @@ import { useMemo, useEffect, useState, useContext } from "react";
 import { useAtom } from "jotai";
 import { useToast } from "@chakra-ui/react";
 
-import { NDKEvent, NDKRelay, NDKRelaySet } from "habla-ndk";
+import { NDKEvent, NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
 import { useLiveQuery } from "dexie-react-hooks";
 import { utils } from "nostr-tools";
 
 import {
+  PROFILE,
   ZAP,
   HIGHLIGHT,
   REACTION,
@@ -14,32 +15,15 @@ import {
   LONG_FORM,
   NOTE,
 } from "@habla/const";
-import db from "@habla/cache/db";
+import db, { storeEvent } from "@habla/cache/db";
 import { relaysAtom } from "@habla/state";
+import { uniqByFn } from "@habla/util";
 
 import NostrContext from "./provider";
 
 const defaultOpts = {
   closeOnEose: true,
   cacheUsage: "CACHE_FIRST",
-};
-
-const uniqByFn = <T>(arr: T[], keyFn: any): T[] => {
-  return Object.values(
-    arr.reduce((map, item) => {
-      const key = keyFn(item);
-      if (map[key]) {
-        return {
-          ...map,
-          [key]: map[key].created_at > item.created_at ? map[key] : item,
-        };
-      }
-      return {
-        ...map,
-        [key]: item,
-      };
-    }, {})
-  );
 };
 
 async function updateIdUrls(id, url) {
@@ -139,14 +123,14 @@ export function useUser(pubkey) {
   );
 
   useEffect(() => {
-    if (pubkey && !user) {
+    if (pubkey) {
       ndk.fetchEvent(
         {
-          kinds: [0],
+          kinds: [PROFILE],
           authors: [pubkey],
         },
         {
-          cacheUsage: "RELAY_FIRST",
+          cacheUsage: "PARALLEL",
         }
       );
     }
@@ -186,6 +170,7 @@ export function useNdk() {
 
 export function usePublishEvent(options) {
   const { showToast, debug } = options ?? { showToast: true };
+  const [relays] = useAtom(relaysAtom);
   const ndk = useNdk();
   const toast = useToast();
 
@@ -201,10 +186,17 @@ export function usePublishEvent(options) {
     try {
       const ndkEvent = new NDKEvent(ndk, ev);
       await ndkEvent.sign();
+      if (ndkEvent.kind === PROFILE) {
+        await storeEvent(db, ndkEvent);
+      }
       if (debug) {
-        console.log("publish", ndkEvent);
+        console.debug(ndkEvent);
       } else {
-        await ndk.publish(ndkEvent);
+        await ndk.publish(
+          ndkEvent,
+          NDKRelaySet.fromRelayUrls(relays, ndk),
+          30000
+        );
       }
       if (showToast) {
         toast({

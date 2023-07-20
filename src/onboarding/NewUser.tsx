@@ -1,10 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useAtom } from "jotai";
 import { useTranslation } from "next-i18next";
 import { generatePrivateKey, getPublicKey } from "nostr-tools";
 import { useNdk, usePublishEvent } from "@habla/nostr/hooks";
-import { NDKPrivateKeySigner } from "habla-ndk";
+import { NDKPrivateKeySigner } from "@nostr-dev-kit/ndk";
 
-import { defaultRelays } from "@habla/state";
 import {
   useDisclosure,
   Flex,
@@ -16,19 +16,22 @@ import {
   Heading,
   Text,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
 } from "@chakra-ui/react";
+
+import {
+  defaultRelays,
+  pubkeyAtom,
+  privkeyAtom,
+  contactListAtom,
+  relaysAtom,
+} from "@habla/state";
+import { initialSteps, stepsAtom } from "@habla/onboarding/state";
 import { dateToUnix } from "@habla/time";
 import User from "@habla/components/nostr/User";
 import useTopTags from "@habla/hooks/useTopTags";
-import Hashtags from "@habla/components/Hashtags";
 import { getPubkey, featured } from "@habla/nip05";
+import ImageUploader from "@habla/components/ImageUploader";
+import { PROFILE, CONTACTS, RELAY_LIST } from "@habla/const";
 
 enum Steps {
   NAME = "NAME",
@@ -38,9 +41,42 @@ enum Steps {
   FINISHED = "FINISHED",
 }
 
-export default function NewUser() {
+function TagSelector({ tags, onChange }) {
+  const topTags = useTopTags(30);
+  return (
+    <Flex flexWrap="wrap" gap={1}>
+      {topTags.map((t) => {
+        const isSelected = tags.includes(t);
+        return (
+          <Tag
+            cursor="pointer"
+            variant={isSelected ? "outline" : "subtle"}
+            colorScheme={isSelected ? "purple" : null}
+            key={t}
+            size="sm"
+            fontWeight={300}
+            onClick={() =>
+              isSelected
+                ? onChange(tags.filter((tag) => tag !== t))
+                : onChange([...tags, t])
+            }
+          >
+            {t}
+          </Tag>
+        );
+      })}
+    </Flex>
+  );
+}
+
+export default function NewUser({ onDone }) {
   const ndk = useNdk();
-  const publish = usePublishEvent({ showToast: false, debug: true });
+  const [, setPubkey] = useAtom(pubkeyAtom);
+  const [, setPrivkey] = useAtom(privkeyAtom);
+  const [, setContactList] = useAtom(contactListAtom);
+  const [relays] = useAtom(relaysAtom);
+  const [, setSteps] = useAtom(stepsAtom);
+  const publish = usePublishEvent({ showToast: false });
   const privkey = useMemo(() => {
     return generatePrivateKey();
   }, []);
@@ -49,12 +85,14 @@ export default function NewUser() {
   }, [privkey]);
   const [step, setStep] = useState(Steps.NAME);
   const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState();
+  const [picture, setPicture] = useState();
   const [tags, setTags] = useState([]);
   const [follows, setFollows] = useState([]);
   const { t } = useTranslation("common");
-  const topTags = useTopTags(12);
-  const { isOpen, onOpen, onClose } = useDisclosure("onboarding");
+
+  useEffect(() => {
+    setSteps(initialSteps);
+  }, []);
 
   function onNext() {
     if (step === Steps.NAME) {
@@ -77,28 +115,94 @@ export default function NewUser() {
     }
   }
 
-  async function onDone() {
-    loginWithPrivkey();
-    // todo: kind 0, kind 3, kind 10002
+  async function publishProfile() {
+    const created_at = dateToUnix();
+
+    const user = { name };
+    if (picture) {
+      user.picture = picture;
+    }
+
     const profile = {
-      kind: 0,
-      content: JSON.stringify({ name }),
-      created_at: dateToUnix(),
+      kind: PROFILE,
+      content: JSON.stringify(user),
+      created_at,
       tags: [],
     };
+
     try {
+      setPubkey(pubkey);
+      setPrivkey(privkey);
       await publish(profile, {});
     } catch (error) {
       console.error(error);
+    } finally {
+      return profile;
     }
-    //onClose();
   }
+
+  async function publishContactList() {
+    const created_at = dateToUnix();
+
+    const contactHashtags = tags.map((t) => ["t", t]);
+    const contactPubkeys = follows.map((p) => ["p", p, "wss://purplepag.es"]);
+    const contactList = {
+      kind: CONTACTS,
+      content: "",
+      created_at,
+      tags: contactPubkeys.concat(contactHashtags),
+    };
+
+    try {
+      setContactList(contactList);
+      await publish(contactList, {});
+    } catch (error) {
+      console.error(error);
+    } finally {
+      return contactList;
+    }
+  }
+
+  async function publishRelayList() {
+    const created_at = dateToUnix();
+    const relayTags = relays.map((r) => ["r", r]);
+    const relayList = {
+      kind: RELAY_LIST,
+      content: "",
+      created_at,
+      tags: relayTags,
+    };
+    try {
+      await publish(relayList, {});
+    } catch (error) {
+      console.error(error);
+    } finally {
+      return relayList;
+    }
+  }
+
+  useEffect(() => {
+    const fn = async () => {
+      if (step === Steps.FINISHED) {
+        loginWithPrivkey();
+        try {
+          await publishProfile();
+          await publishContactList();
+          await publishRelayList();
+          onDone();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fn();
+  }, [step]);
 
   const canGoNext =
     step === Steps.NAME
       ? name.trim().length > 0
       : step === Steps.AVATAR
-      ? avatar
+      ? picture
       : step === Steps.FOLLOWS
       ? follows.length > 0
       : step === Steps.TOPICS
@@ -106,128 +210,88 @@ export default function NewUser() {
       : true;
 
   return (
-    <>
-      <Button onClick={onOpen}>{t("create-account")}</Button>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {step === Steps.NAME && (
-              <Heading fontSize="xl">{t("what-we-will-call-you")}</Heading>
-            )}
-            {step === Steps.AVATAR && (
-              <Heading fontSize="xl">{t("add-avatar")}</Heading>
-            )}
-            {step === Steps.TOPICS && (
-              <Heading fontSize="xl">{t("pick-topics")}</Heading>
-            )}
-            {step === Steps.FOLLOWS && (
-              <Heading fontSize="xl">{t("follow-people")}</Heading>
-            )}
-            {step === Steps.FINISHED && (
-              <Heading fontSize="xl">{t("finished")}</Heading>
-            )}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Stack align="center" spacing={2} my={5}>
-              {step === Steps.NAME && (
-                <>
-                  <Input
-                    autoFocus
-                    value={name}
-                    onChange={(ev) => setName(ev.target.value)}
-                  />
-                  <Text
-                    fontSize="sm"
-                    color="secondary"
-                    fontFamily="'Inter'"
-                    ml={2}
-                  >
-                    {t("you-can-change-later")}
-                  </Text>
-                </>
-              )}
-              {step === Steps.AVATAR && (
-                <ImageUploader onImageUpload={(img) => setAvatar(img)} />
-              )}
-              {step === Steps.TOPICS && (
-                <Flex flexWrap="wrap" gap={1}>
-                  {topTags.map((t) => {
-                    const isSelected = tags.includes(t);
-                    return (
-                      <Tag
-                        cursor="pointer"
-                        variant="outline"
-                        key={t}
-                        size="sm"
-                        colorScheme={isSelected ? "purple" : "white"}
-                        fontWeight={300}
-                        onClick={() =>
-                          isSelected
-                            ? setTags(tags.filter((tag) => tag !== t))
-                            : setTags([...tags, t])
-                        }
-                      >
-                        {t}
-                      </Tag>
-                    );
-                  })}
-                </Flex>
-              )}
-              {step === Steps.FOLLOWS && (
-                <Stack w="100%" gap={2}>
-                  {featured.map((handle) => {
-                    const pubkey = getPubkey(handle);
-                    const following = follows.includes(pubkey);
-                    return (
-                      <Flex
-                        key={pubkey}
-                        alignItems="center"
-                        justifyContent="space-between"
-                      >
-                        <User pubkey={pubkey} />
-                        <Button
-                          isDisabled={following}
-                          variant="outline"
-                          onClick={() =>
-                            following ? null : setFollows([...follows, pubkey])
-                          }
-                        >
-                          {following ? t("following") : t("follow")}
-                        </Button>
-                      </Flex>
-                    );
-                  })}
-                </Stack>
-              )}
-              {step === Steps.FINISHED && (
-                <Image src="/family.png" alt={t("finished")} />
-              )}
-            </Stack>
-          </ModalBody>
-          <ModalFooter>
-            <Stack w="100%">
-              {step === Steps.FINISHED ? (
-                <Button colorScheme="purple" onClick={onDone}>
-                  {t("discover")}
-                </Button>
-              ) : (
-                <>
-                  {canGoNext ? (
-                    <Button colorScheme="orange" onClick={onNext}>
-                      {t("next")}
+    <Stack my={4}>
+      <Heading fontSize="xl">
+        {step === Steps.NAME && t("what-we-will-call-you")}
+        {step === Steps.AVATAR && t("add-avatar")}
+        {step === Steps.TOPICS && t("pick-topics")}
+        {step === Steps.FOLLOWS && t("follow-people")}
+        {step === Steps.FINISHED && t("finished")}
+      </Heading>
+      <Stack align="center" spacing={2} my={5}>
+        {step === Steps.NAME && (
+          <>
+            <Input
+              autoFocus
+              value={name}
+              onChange={(ev) => setName(ev.target.value)}
+            />
+            <Text fontSize="sm" color="secondary" fontFamily="'Inter'" ml={2}>
+              {t("you-can-change-later")}
+            </Text>
+          </>
+        )}
+        {step === Steps.AVATAR && (
+          <ImageUploader
+            pubkey={pubkey}
+            onImageUpload={(img) => setPicture(img)}
+          />
+        )}
+        {step === Steps.TOPICS && (
+          <TagSelector tags={tags} onChange={setTags} />
+        )}
+        {step === Steps.FOLLOWS && (
+          <Stack w="100%" gap={4} maxHeight="320px" overflow="scroll" mb={4}>
+            {featured.map((handle) => {
+              const pubkey = getPubkey(handle);
+              const following = follows.includes(pubkey);
+              return (
+                <Flex
+                  key={pubkey}
+                  alignItems="flex-start"
+                  justifyContent="space-between"
+                >
+                  <User flex={1} flexWrap="none" showBio pubkey={pubkey} />
+                  <Flex ml="auto" w="120px">
+                    <Button
+                      w="100%"
+                      isDisabled={following}
+                      variant="outline"
+                      onClick={() =>
+                        following ? null : setFollows([...follows, pubkey])
+                      }
+                    >
+                      {following ? t("following") : t("follow")}
                     </Button>
-                  ) : (
-                    <Button onClick={onNext}>{t("skip")}</Button>
-                  )}
-                </>
-              )}
-            </Stack>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+                  </Flex>
+                </Flex>
+              );
+            })}
+          </Stack>
+        )}
+        {step === Steps.FINISHED && (
+          <>
+            <Image src="/family.png" alt={t("finished")} />
+          </>
+        )}
+      </Stack>
+      <Stack w="100%">
+        {step === Steps.FINISHED ? (
+          <Button colorScheme="purple" onClick={onDone}>
+            {t("discover")}
+          </Button>
+        ) : (
+          <>
+            {canGoNext ? (
+              <Button colorScheme="orange" onClick={onNext}>
+                {t("next")}
+              </Button>
+            ) : (
+              <Button onClick={onNext}>{t("skip")}</Button>
+            )}
+          </>
+        )}
+      </Stack>
+    </Stack>
   );
 }
