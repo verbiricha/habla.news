@@ -85,5 +85,6 @@
   "backup": "Back up my login",
   "already-backed-up": "Already backed up!",
   "finished": "You are ready to explore!",
-  "discover": "Discover"
+  "discover": "Discover",
+  "cant-zap": "Looks like this user doesn't have a Lightning Address configured so they can't be zapped"
 }

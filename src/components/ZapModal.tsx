@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import { useTranslation } from "next-i18next";
 
 import {
   useColorModeValue,
@@ -7,6 +8,8 @@ import {
   Box,
   Button,
   Heading,
+  Alert,
+  AlertIcon,
   Text,
   Spinner,
   Flex,
@@ -148,15 +151,19 @@ export default function ZapModal({ event, isOpen, onClose }) {
   const [isFetchingInvoice, setIsFetchingInvoice] = useState(false);
   const webln = useWebln(isOpen);
   const [lnurl, setLnurl] = useState();
+  const [cantZap, setCantZap] = useState(false);
   const profile = useUser(event.pubkey);
   const [invoice, setInvoice] = useState();
   const [comment, setComment] = useState("");
   const [sats, setSats] = useState(defaultZapAmount);
+  const { t } = useTranslation("common");
   const bg = useColorModeValue("white", "layer");
 
   useEffect(() => {
     if (isOpen && profile?.lud16) {
       loadService(profile.lud16).then(setLnurl);
+    } else {
+      setCantZap(true);
     }
   }, [event, profile, isOpen]);
 
@@ -241,7 +248,20 @@ export default function ZapModal({ event, isOpen, onClose }) {
         <ModalCloseButton />
         <ModalBody fontFamily="'Inter'">
           <Stack alignItems="center" minH="4rem">
-            {!lnurl && <Spinner />}
+            {!lnurl && !cantZap && <Spinner />}
+            {!lnurl && cantZap && (
+              <Alert
+                status="warning"
+                variant="subtle"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                textAlign="center"
+                height="120px"
+              >
+                <AlertIcon /> {t("cant-zap")}
+              </Alert>
+            )}
             {lnurl && !invoice && (
               <>
                 <SatSlider

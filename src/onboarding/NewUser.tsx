@@ -7,7 +7,6 @@ import { NDKPrivateKeySigner } from "habla-ndk";
 import { defaultRelays } from "@habla/state";
 import {
   useDisclosure,
-  Avatar,
   Flex,
   Box,
   Image,
@@ -26,7 +25,6 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { dateToUnix } from "@habla/time";
-import NostrAvatar from "@habla/components/nostr/Avatar";
 import User from "@habla/components/nostr/User";
 import useTopTags from "@habla/hooks/useTopTags";
 import Hashtags from "@habla/components/Hashtags";
@@ -152,18 +150,7 @@ export default function NewUser() {
                 </>
               )}
               {step === Steps.AVATAR && (
-                <>
-                  {avatar ? (
-                    <Avatar size="lg" src={avatar} />
-                  ) : (
-                    <NostrAvatar size="lg" pubkey={pubkey} />
-                  )}
-                  <Input
-                    placeholder={t("image-url")}
-                    value={avatar}
-                    onChange={(ev) => setAvatar(ev.target.value)}
-                  />
-                </>
+                <ImageUploader onImageUpload={(img) => setAvatar(img)} />
               )}
               {step === Steps.TOPICS && (
                 <Flex flexWrap="wrap" gap={1}>
