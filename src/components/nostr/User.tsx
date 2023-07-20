@@ -31,7 +31,7 @@ export default function User({ pubkey, size = "sm", ...rest }) {
       {...rest}
     >
       <UserAvatar size={size} user={user} pubkey={pubkey} />
-      <Text>{user?.name || shortenString(pubkey, 6)}</Text>
+      <Text fontFamily="Inter">{user?.name || shortenString(pubkey, 6)}</Text>
     </Flex>
   );
 }

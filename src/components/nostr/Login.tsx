@@ -159,8 +159,10 @@ function LoginModal({ isOpen, onClose }) {
               >
                 {t("log-in")}
               </Button>
+              {/*
               <Divider />
               <NewUser />
+              */}
             </Stack>
           </ModalBody>
         </ModalContent>
