@@ -25,6 +25,7 @@ const memoize = (fn) => {
 };
 
 const relays = [
+  "wss://purplepag.es",
   "wss://relay.snort.social",
   "wss://relay.damus.io/",
   "wss://nostr.wine/",
