@@ -116,7 +116,7 @@ export default function LongFormNote({
               </Flex>
             )}
           </Flex>
-          {image?.length > 0 && summary?.length > 0 && (
+          {image?.length > 0 && (
             <Image
               src={image}
               alt={title}
