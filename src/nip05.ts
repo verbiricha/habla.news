@@ -35,6 +35,7 @@ export const names = {
   newton: "c31e22c3715c1bde5608b7e0d04904f22f5fc453ba1806d21c9f2382e1e58c6c",
   guyswann: "b9e76546ba06456ed301d9e52bc49fa48e70a6bf2282be7a1ae72947612023dc",
   arfonzo: "0ab50b198824f4ed986f4f497f6169f0d903122bcaa14bcb11cecd3b922522bc",
+  isolabell: "f4db5270bd991b17bea1e6d035f45dee392919c29474bbac10342d223c74e0d0",
 };
 
 export const featured = ["dergigi", "herald", "nostreport"];
