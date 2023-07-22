@@ -32,7 +32,7 @@ export default function FollowButton({ pubkey }) {
       };
       const signed = new NDKEvent(ndk, newContacts);
       await signed.sign();
-      await ndk.publish();
+      await ndk.publish(signed);
       setFollows(newFollows.map((t) => t.at(1)));
     } catch (error) {
       console.error(error);
