@@ -150,7 +150,7 @@ export default function HomeFeeds() {
           kinds,
           authors: follows,
         },
-        offset: MONTH,
+        offset: 2 * MONTH,
       };
     }
 
