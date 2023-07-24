@@ -125,10 +125,6 @@ export function filterEvents(db: HablaDatabase, filter: NDKFilter) {
         title?.includes(search)
       );
     });
-
-    if (query && limit) {
-      query = query.and((ev) => ev.created_at < until);
-    }
   }
 
   return query;
