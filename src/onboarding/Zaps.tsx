@@ -18,6 +18,7 @@ export default function DiscoverZaps() {
   }
 
   async function onCancel() {
+    setSteps({ ...steps, "discover-zaps": true });
     await router.back();
   }
 

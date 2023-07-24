@@ -15,6 +15,7 @@ export default function Relays() {
   }
 
   async function onCancel() {
+    setSteps({ ...steps, "add-relays": true });
     await router.back();
   }
 
