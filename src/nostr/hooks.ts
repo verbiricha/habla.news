@@ -64,7 +64,7 @@ export function useEvents(filter, options = {}) {
       sub.on("event", (ev, relay) => {
         setEvents((evs) =>
           uniqByFn(utils.insertEventIntoDescendingList(evs, ev), (e) =>
-            e.tagId()
+            e.kind === PROFILE ? `0:${e.pubkey}` : e.tagId()
           )
         );
         if (relay && ev.kind === LONG_FORM) {

@@ -44,6 +44,7 @@ import WriteIcon from "@habla/icons/Write";
 import ExternalLink from "@habla/components/ExternalLink";
 import NewUser from "@habla/onboarding/NewUser";
 import Avatar from "@habla/components/nostr/Avatar";
+import { useEvents } from "@habla/nostr/hooks";
 import {
   ndkAtom,
   relaysAtom,
@@ -282,72 +283,67 @@ function ProfileMenu({ pubkey, relays, onClose }) {
   );
 }
 
-export default function Login() {
+function LoggedInUser({ pubkey, onClose }) {
   const ndk = useNdk();
-  const toast = useToast();
-  const [relayList, setRelayList] = useAtom(relayListAtom);
   const [relays] = useAtom(relaysAtom);
-  const [pubkey, setPubkey] = useAtom(pubkeyAtom);
-  const [privkey, setPrivkey] = useAtom(privkeyAtom);
   const [contacts, setContactList] = useAtom(contactListAtom);
-  const [, setPeopleLists] = useAtom(peopleListsAtom);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { events } = useEvents(
+    {
+      kinds: [CONTACTS, RELAYS],
+      authors: [pubkey],
+    },
+    {
+      cacheUsage: "RELAY_ONLY",
+      closeOnEose: false,
+    }
+  );
   const { t } = useTranslation("common");
+  const [relayList, setRelayList] = useAtom(relayListAtom);
+  const [, setPeopleLists] = useAtom(peopleListsAtom);
 
   useEffect(() => {
-    if (pubkey) {
-      // Contact list
-      ndk
-        .fetchEvent({
-          kinds: [CONTACTS],
-          authors: [pubkey],
-        })
-        .then((contactList) => {
-          if (
-            contactList &&
-            (!contacts || contactList.created_at > contacts.created_at)
-          ) {
-            contactList.toNostrEvent().then(setContactList);
+    const fn = async () => {
+      for (const event of events) {
+        const nostrEvent = await event.toNostrEvent();
+        if (event.kind === CONTACTS) {
+          if (!contacts || nostrEvent.created_at > contacts.created_at) {
+            setContactList(nostrEvent);
           }
-        });
-      // People lists
-      ndk
-        .fetchEvents({
-          kinds: [PEOPLE],
-          authors: [pubkey],
-        })
-        .then((people) => {
-          if (people) {
-            const peopleLists = Array.from(people)
-              .filter((p) => {
-                const d = findTag(p, "d");
-                const t = findTag(p, "t");
-                const outdatedD = ["mute", "p:mute", "pin", "pinned"];
-                // discard outdated pre nip-51 lists
-                return !outdatedD.includes(d) && !outdatedD.includes(t);
-              })
-              .filter((p) => p.tags.find((t) => t.at(0) === "p"));
-            setPeopleLists(peopleLists);
+        }
+        if (event.kind === RELAYS) {
+          const relays = nostrEvent.tags.map((r) => r.at(1));
+          if (!relayList || nostrEvent.created_at > relayList.created_at) {
+            setRelayList(nostrEvent);
           }
-        });
-      // Relays
-      ndk
-        .fetchEvent({
-          kinds: [RELAYS],
-          authors: [pubkey],
-        })
-        .then((relayMetadata) => {
-          if (relayMetadata) {
-            const relays = relayMetadata.tags.map((r) => r.at(1));
-            if (!relayList || relayMetadata.created_at > relayList.created_at) {
-              relayMetadata.toNostrEvent().then(setRelayList);
-            }
-          }
-        });
-    }
-  }, [pubkey]);
+        }
+      }
+    };
+    fn();
+  }, [events]);
 
-  return pubkey ? (
+  useEffect(() => {
+    // People lists
+    ndk
+      .fetchEvents({
+        kinds: [PEOPLE],
+        authors: [pubkey],
+      })
+      .then((people) => {
+        if (people) {
+          const peopleLists = Array.from(people)
+            .filter((p) => {
+              const d = findTag(p, "d");
+              const t = findTag(p, "t");
+              const outdatedD = ["mute", "p:mute", "pin", "pinned"];
+              // discard outdated pre nip-51 lists
+              return !outdatedD.includes(d) && !outdatedD.includes(t);
+            })
+            .filter((p) => p.tags.find((t) => t.at(0) === "p"));
+          setPeopleLists(peopleLists);
+        }
+      });
+  }, [pubkey]);
+  return (
     <Stack align="center" direction="row" spacing={2}>
       <Link href="/write">
         <Button
@@ -360,6 +356,18 @@ export default function Login() {
       </Link>
       <ProfileMenu pubkey={pubkey} relays={relays} onClose={onClose} />
     </Stack>
+  );
+}
+
+export default function Login() {
+  const toast = useToast();
+  const [pubkey, setPubkey] = useAtom(pubkeyAtom);
+  const [privkey, setPrivkey] = useAtom(privkeyAtom);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation("common");
+
+  return pubkey ? (
+    <LoggedInUser pubkey={pubkey} onClose={onClose} />
   ) : (
     <>
       <Button colorScheme="orange" onClick={onOpen}>
