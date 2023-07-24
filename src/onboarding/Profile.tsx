@@ -18,6 +18,7 @@ export default function Profile() {
   }
 
   async function onCancel() {
+    setSteps({ ...steps, "fill-profile": true });
     await router.back();
   }
 
