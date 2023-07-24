@@ -169,9 +169,15 @@ type LoginModalFlow = "login" | "onboarding";
 
 function LoginModal({ isOpen, onClose }) {
   const [ndk] = useAtom(ndkAtom);
+  const router = useRouter();
   const [flow, setFlow] = useState<LoginModalFlow | null>(null);
   const { t } = useTranslation("common");
   const onboardingModal = useDisclosure("onboarding");
+
+  function continueOnboarding() {
+    closeModal();
+    router.push("/onboarding");
+  }
 
   function closeModal() {
     setFlow(null);
@@ -213,7 +219,7 @@ function LoginModal({ isOpen, onClose }) {
             {flow === "login" && (
               <LoginDialog isOpen={isOpen} onClose={closeModal} />
             )}
-            {flow === "onboarding" && <NewUser onDone={closeModal} />}
+            {flow === "onboarding" && <NewUser onDone={continueOnboarding} />}
           </ModalBody>
         </ModalContent>
       </Modal>

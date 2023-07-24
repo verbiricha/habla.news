@@ -22,7 +22,6 @@ import {
   defaultRelays,
   pubkeyAtom,
   privkeyAtom,
-  contactListAtom,
   relaysAtom,
 } from "@habla/state";
 import { initialSteps, stepsAtom } from "@habla/onboarding/state";
@@ -73,7 +72,6 @@ export default function NewUser({ onDone }) {
   const ndk = useNdk();
   const [, setPubkey] = useAtom(pubkeyAtom);
   const [, setPrivkey] = useAtom(privkeyAtom);
-  const [, setContactList] = useAtom(contactListAtom);
   const [relays] = useAtom(relaysAtom);
   const [, setSteps] = useAtom(stepsAtom);
   const publish = usePublishEvent({ showToast: false });
@@ -187,8 +185,7 @@ export default function NewUser({ onDone }) {
         loginWithPrivkey();
         try {
           await publishProfile();
-          const contactList = await publishContactList();
-          setContactList(contactList);
+          await publishContactList();
           await publishRelayList();
           onDone();
         } catch (error) {

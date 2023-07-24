@@ -6,7 +6,7 @@ import RelayEditor from "@habla/components/nostr/RelayEditor";
 
 export default function Relays() {
   const router = useRouter();
-  const [relayList, setRelayList] = useAtom(relayListAtom);
+  const [relayList] = useAtom(relayListAtom);
   const [steps, setSteps] = useAtom(stepsAtom);
 
   async function onSave() {
