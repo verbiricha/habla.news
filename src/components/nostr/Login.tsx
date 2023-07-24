@@ -255,7 +255,7 @@ function ProfileMenu({ pubkey, relays, onClose }) {
           icon={<AtSignIcon />}
           onClick={() =>
             isOnboarding
-              ? router.push(`onboarding`, undefined, { shallow: true })
+              ? router.push(`/onboarding`, undefined, { shallow: true })
               : router.push(`/p/${nprofile}`, undefined, { shallow: true })
           }
         >
