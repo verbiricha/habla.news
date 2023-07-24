@@ -95,15 +95,13 @@ export default function FollowButton({ pubkey }) {
   }
 
   return (
-    ndk?.signer && (
-      <Button
-        isDisabled={following}
-        variant="outline"
-        leftIcon={following ? <Icon as={CheckIcon} color="green.400" /> : null}
-        onClick={following ? null : followPubkey}
-      >
-        {t("follow")}
-      </Button>
-    )
+    <Button
+      isDisabled={following}
+      variant="outline"
+      leftIcon={following ? <Icon as={CheckIcon} color="green.400" /> : null}
+      onClick={following ? null : followPubkey}
+    >
+      {t("follow")}
+    </Button>
   );
 }
