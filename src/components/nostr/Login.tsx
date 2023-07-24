@@ -91,24 +91,6 @@ function LoginDialog({ isOpen, onClose }) {
     }
   }
 
-  function loginWithPrivkey(privkey: string) {
-    try {
-      const signer = new NDKPrivateKeySigner(privkey);
-      const newNdk = createNdk({ signer, explicitRelayUrls: relays });
-      setNdk(newNdk);
-      signer.user().then((user) => {
-        setPubkey(user.hexpubkey());
-      });
-    } catch (error) {
-      toast({
-        title: "Could not sign in",
-        status: "error",
-        description: error.message,
-      });
-      console.error(error);
-    }
-  }
-
   function loginWithExtension(shouldFetchProfile: boolean) {
     try {
       const signer = new NDKNip07Signer();
