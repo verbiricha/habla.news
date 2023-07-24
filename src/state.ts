@@ -18,7 +18,10 @@ export const relayListAtom = atomWithLocalStorage<NDKEvent | null>(
 export const relaysAtom = atom<string[]>((get) => {
   const relayList = get(relayListAtom);
   if (relayList) {
-    return relayList?.tags.filter((t) => t.at(0) === "r").map((t) => t.at(1));
+    return (
+      relayList?.tags?.filter((t) => t.at(0) === "r").map((t) => t.at(1)) ??
+      defaultRelays
+    );
   }
   return defaultRelays;
 });

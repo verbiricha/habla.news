@@ -38,12 +38,12 @@ export default function FeedPage({ filter, until, offset, options = {} }) {
 
   return (
     <Stack gap={4} width="100%">
-      {events.length === 0 && !eose && (
+      {events.length > 0 && <Events events={events} />}
+      {!eose && (
         <Flex alignItems="center" justifyContent="center" w="100%" minH="20rem">
           <Spinner size="xl" />
         </Flex>
       )}
-      {events.length > 0 && eose && <Events events={events} />}
       {events.length > 0 && !showNext && <div ref={ref}></div>}
       {showNext && eose && (
         <FeedPage
