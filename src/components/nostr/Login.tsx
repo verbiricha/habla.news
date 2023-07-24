@@ -61,6 +61,7 @@ import { useNdk } from "@habla/nostr/hooks";
 
 function LoginDialog({ isOpen, onClose }) {
   const [pubkeyLike, setPubkeyLike] = useState();
+  const [, setNdk] = useAtom(ndkAtom);
   const [relays] = useAtom(relaysAtom);
   const toast = useToast();
   const [, setPubkey] = useAtom(pubkeyAtom);
