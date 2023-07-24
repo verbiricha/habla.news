@@ -195,7 +195,7 @@ export function usePublishEvent(options) {
         await ndk.publish(
           ndkEvent,
           NDKRelaySet.fromRelayUrls(relays, ndk),
-          30000
+          2000
         );
       }
       if (showToast) {

@@ -73,7 +73,7 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
 export default function MyEditor({ event, showPreview }) {
   const { t } = useTranslation("common");
   const toast = useToast();
-  const publish = usePublishEvent();
+  const publish = usePublishEvent({ showToast: true });
   const ref = useRef();
   const router = useRouter();
   const metadata = event && getMetadata(event);
