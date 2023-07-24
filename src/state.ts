@@ -8,13 +8,20 @@ type Privkey = string;
 export const pubkeyAtom = atomWithLocalStorage<Pubkey | null>("npub", null);
 export const privkeyAtom = atomWithLocalStorage<Privkey | null>("nsec", null);
 export const contactListAtom = atomWithLocalStorage<NDKEvent | null>(
-  "contacts",
+  "contactList",
   null
 );
 export const relayListAtom = atomWithLocalStorage<NDKEvent | null>(
-  "relays",
+  "relayList",
   null
 );
+export const defaultRelays = [
+  "wss://relay.damus.io",
+  "wss://purplepag.es",
+  "wss://nostr.mom",
+  "wss://nos.lol",
+  "wss://offchain.pub",
+];
 export const relaysAtom = atom<string[]>((get) => {
   const relayList = get(relayListAtom);
   if (relayList) {
@@ -37,13 +44,6 @@ export const tagsAtom = atom<string[]>(
       ?.tags.filter((t) => t.at(0) === "t")
       .map((t) => t.at(1)) ?? []
 );
-export const defaultRelays = [
-  "wss://relay.damus.io",
-  "wss://purplepag.es",
-  "wss://nostr.mom",
-  "wss://nos.lol",
-  "wss://offchain.pub",
-];
 export const ndkAtom = atom<NDK | null>(null);
 export const bookmarksAtom = atomWithLocalStorage<string[][]>(
   "userBookmarks",
