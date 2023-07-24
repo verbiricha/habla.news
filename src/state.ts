@@ -42,7 +42,6 @@ export const defaultRelays = [
   "wss://purplepag.es",
   "wss://nostr.mom",
   "wss://nos.lol",
-  "wss://nostr-relay.nokotaro.com",
   "wss://offchain.pub",
 ];
 export const ndkAtom = atom<NDK | null>(null);

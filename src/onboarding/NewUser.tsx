@@ -146,6 +146,7 @@ export default function NewUser({ onDone }) {
 
     const contactHashtags = tags.map((t) => ["t", t]);
     const contactPubkeys = follows.map((p) => ["p", p, "wss://purplepag.es"]);
+
     const contactList = {
       kind: CONTACTS,
       content: "",
@@ -154,7 +155,6 @@ export default function NewUser({ onDone }) {
     };
 
     try {
-      setContactList(contactList);
       await publish(contactList, {});
     } catch (error) {
       console.error(error);
@@ -187,7 +187,8 @@ export default function NewUser({ onDone }) {
         loginWithPrivkey();
         try {
           await publishProfile();
-          await publishContactList();
+          const contactList = await publishContactList();
+          setContactList(contactList);
           await publishRelayList();
           onDone();
         } catch (error) {
