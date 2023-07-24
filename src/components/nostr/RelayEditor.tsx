@@ -103,7 +103,7 @@ export default function RelayEditor({ relayList, skipText, onCancel, onSave }) {
           {relays.map((r) => (
             <Flex alignItems="center" gap={3} key={r}>
               <RelayFavicon url={r} />
-              <Text fontFamily="monospace" fontSize="lg">
+              <Text fontFamily="monospace" fontSize="sm">
                 {r}
               </Text>
               <IconButton
