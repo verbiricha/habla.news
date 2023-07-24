@@ -156,7 +156,7 @@ export default function HomeFeeds() {
 
     if (feed === Feeds.Tag && tag) {
       return {
-        id: `tag-${tag}`,
+        id: `tag-${tag}-${kinds.join("-")}`,
         filter: {
           kinds,
           "#t": [tag],
