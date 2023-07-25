@@ -24,7 +24,7 @@ export function articleLink(event, profile) {
     return `/${handle}/${identifier}`;
   }
 
-  if (profile && profile.nip05 && identifier) {
+  if (profile && profile.nip05 && identifier && !identifier.includes("/")) {
     const nip05handle = profile.nip05.replace(/^_@/, "");
     return `/u/${nip05handle}/${identifier}`;
   }
