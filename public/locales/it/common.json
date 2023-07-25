@@ -119,5 +119,7 @@
   "lnaddress-placeholder": "you@example.com",
   "lnaddress-help": "Go to https://lightningaddress.com to get one",
   "settings": "Settings",
-  "wallet": "Wallet"
+  "wallet": "Wallet",
+  "profile-saved": "Profile saved",
+  "relays-saved": "Relay list saved"
 }
