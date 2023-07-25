@@ -309,13 +309,15 @@ function LoggedInUser({ pubkey, onClose }) {
       for (const event of events) {
         const nostrEvent = await event.toNostrEvent();
         if (event.kind === CONTACTS) {
-          if (!contacts || nostrEvent.created_at > contacts.created_at) {
+          const lastSeen = contacts?.created_at ?? 0;
+          if (nostrEvent.created_at > lastSeen) {
             setContactList(nostrEvent);
           }
         }
         if (event.kind === RELAYS) {
           const relays = nostrEvent.tags.map((r) => r.at(1));
-          if (!relayList || nostrEvent.created_at > relayList.created_at) {
+          const lastSeen = relayList?.created_at ?? 0;
+          if (nostrEvent.created_at > lastSeen) {
             setRelayList(nostrEvent);
           }
         }
