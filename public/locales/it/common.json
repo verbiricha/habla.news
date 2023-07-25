@@ -80,7 +80,7 @@
   "next": "Next",
   "add-avatar": "Add a profile image",
   "image-url": "Enter a image URL, upload coming soon™️",
-  "pick-topics": "Pick a few topis of interest",
+  "pick-topics": "Pick a few topics of interest",
   "follow-people": "Habla is more fun together",
   "backup-keys": "Don't lose access to your account, we'd miss you!",
   "backup-keys-descr": "Backup your account login information, it only takes a few seconds!",
@@ -119,5 +119,7 @@
   "lnaddress-placeholder": "you@example.com",
   "lnaddress-help": "Go to https://lightningaddress.com to get one",
   "settings": "Settings",
-  "wallet": "Wallet"
+  "wallet": "Wallet",
+  "profile-saved": "Profile saved",
+  "relays-saved": "Relay list saved"
 }
