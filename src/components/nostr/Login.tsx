@@ -59,6 +59,7 @@ import { useIsOnboarding } from "@habla/onboarding/hooks";
 import { useNdk } from "@habla/nostr/hooks";
 
 function LoginDialog({ isOpen, onClose }) {
+  const ndk = useNdk()
   const [pubkeyLike, setPubkeyLike] = useState();
   const [relays] = useAtom(relaysAtom);
   const toast = useToast();
