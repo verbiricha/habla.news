@@ -119,5 +119,7 @@
   "lnaddress-placeholder": "you@example.com",
   "lnaddress-help": "برای دریافت به https://lightningaddress.com بروید",
   "settings": "تنظیمات",
-  "wallet": "کیف پول"
+  "wallet": "کیف پول",
+  "profile-saved": "Profile saved",
+  "relays-saved": "Relay list saved"
 }
