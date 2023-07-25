@@ -169,7 +169,7 @@ export function useNdk() {
 }
 
 export function usePublishEvent(options) {
-  const { showToast, debug } = options ?? { showToast: true };
+  const { showToast, debug } = options ?? { showToast: true, debug: false };
   const [relays] = useAtom(relaysAtom);
   const ndk = useNdk();
   const toast = useToast();
@@ -192,11 +192,7 @@ export function usePublishEvent(options) {
       if (debug) {
         console.debug(ndkEvent);
       } else {
-        await ndk.publish(
-          ndkEvent,
-          NDKRelaySet.fromRelayUrls(relays, ndk),
-          2000
-        );
+        await ndk.publish(ndkEvent);
       }
       if (showToast) {
         toast({

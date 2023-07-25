@@ -46,7 +46,6 @@ import NewUser from "@habla/onboarding/NewUser";
 import Avatar from "@habla/components/nostr/Avatar";
 import { useEvents } from "@habla/nostr/hooks";
 import {
-  ndkAtom,
   relaysAtom,
   pubkeyAtom,
   privkeyAtom,
@@ -57,12 +56,10 @@ import {
 } from "@habla/state";
 import { findTag } from "@habla/tags";
 import { useIsOnboarding } from "@habla/onboarding/hooks";
-import { createNdk } from "@habla/nostr";
 import { useNdk } from "@habla/nostr/hooks";
 
 function LoginDialog({ isOpen, onClose }) {
   const [pubkeyLike, setPubkeyLike] = useState();
-  const [, setNdk] = useAtom(ndkAtom);
   const [relays] = useAtom(relaysAtom);
   const toast = useToast();
   const [, setPubkey] = useAtom(pubkeyAtom);
@@ -95,8 +92,7 @@ function LoginDialog({ isOpen, onClose }) {
   function loginWithExtension(shouldFetchProfile: boolean) {
     try {
       const signer = new NDKNip07Signer();
-      const newNdk = createNdk({ signer, explicitRelayUrls: relays });
-      setNdk(newNdk);
+      ndk.signer = signer;
       signer.user().then((user) => {
         setPubkey(user.hexpubkey());
       });
@@ -168,7 +164,7 @@ function LoginDialog({ isOpen, onClose }) {
 type LoginModalFlow = "login" | "onboarding";
 
 function LoginModal({ isOpen, onClose }) {
-  const [ndk] = useAtom(ndkAtom);
+  const ndk = useNdk()
   const router = useRouter();
   const [flow, setFlow] = useState<LoginModalFlow | null>(null);
   const { t } = useTranslation("common");

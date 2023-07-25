@@ -21,19 +21,17 @@ import {
   CardBody,
 } from "@chakra-ui/react";
 
-import { ndkAtom, pubkeyAtom, relayListAtom, relaysAtom } from "@habla/state";
+import { pubkeyAtom, relayListAtom, relaysAtom } from "@habla/state";
 import DeleteIcon from "@habla/icons/Delete";
 import { dateToUnix } from "@habla/time";
 import { stepsAtom } from "@habla/onboarding/state";
 import { usePublishEvent } from "@habla/nostr/hooks";
 import RelayFavicon from "@habla/components/RelayFavicon";
 import { RELAYS } from "@habla/const";
-import { createNdk } from "@habla/nostr";
 
 export default function RelayEditor({ relayList, skipText, onCancel, onSave }) {
   const { t } = useTranslation("common");
   const [relay, setRelay] = useState();
-  const [ndk, setNdk] = useAtom(ndkAtom);
   const [, setRelayList] = useAtom(relayListAtom);
   const [defaultRelays] = useAtom(relaysAtom);
   const [relays, setRelays] = useState(
@@ -67,11 +65,6 @@ export default function RelayEditor({ relayList, skipText, onCancel, onSave }) {
     try {
       const relayList = await publishRelayList();
       setRelayList(relayList);
-      const newNdk = createNdk({
-        explicitRelayUrls: relays,
-        signer: ndk.signer,
-      });
-      setNdk(newNdk);
       onSave(relayList);
     } catch (error) {
       console.error(error);
