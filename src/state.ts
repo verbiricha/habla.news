@@ -5,7 +5,7 @@ import { atomWithLocalStorage } from "@habla/storage";
 type Pubkey = string;
 type Privkey = string;
 
-export const pubkeyAtom = atomWithLocalStorage<Pubkey | null>("npub", null);
+export const pubkeyAtom = atom<Pubkey | null>(null);
 export const privkeyAtom = atomWithLocalStorage<Privkey | null>("nsec", null);
 export const contactListAtom = atomWithLocalStorage<NDKEvent | null>(
   "contactList",

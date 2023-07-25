@@ -59,11 +59,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
-    ndk.signer?.user().then((user) => {
-      setPubkey(user.hexpubkey());
-      user.ndk = ndk;
-      user.fetchProfile();
-    });
+    const fn = async () => {
+      if (ndk.signer) {
+        const user = await ndk.signer.blockUntilReady();
+        setPubkey(user.hexpubkey());
+      }
+    };
+    fn();
   }, []);
 
   return (
