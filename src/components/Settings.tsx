@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import { useTranslation } from "next-i18next";
 
-import { Heading, Stack } from "@chakra-ui/react";
+import { useToast, Heading, Stack } from "@chakra-ui/react";
 
-import { pubkeyAtom } from "@habla/state";
+import { pubkeyAtom, relayListAtom } from "@habla/state";
 import { useUser } from "@habla/nostr/hooks";
 import RelayEditor from "@habla/components/nostr/RelayEditor";
 import ProfileEditor from "@habla/components/nostr/ProfileEditor";
@@ -14,8 +14,22 @@ import Tabs from "@habla/components/Tabs";
 export default function Settings() {
   const { t } = useTranslation("common");
   const [pubkey] = useAtom(pubkeyAtom);
+  const [relayList] = useAtom(relayListAtom);
   const profile = useUser(pubkey);
+  const toast = useToast();
   const router = useRouter();
+
+  async function onSave() {
+    toast({
+      title: t("profile-saved"),
+    });
+  }
+
+  async function onRelaysSave() {
+    toast({
+      title: t("relays-saved"),
+    });
+  }
 
   const tabs = [
     {
@@ -24,17 +38,20 @@ export default function Settings() {
     },
     {
       name: t("relays"),
-      panel: <RelayEditor skipText profile={profile} onSave={onSave} />,
+      panel: (
+        <RelayEditor
+          skipText
+          relayList={relayList}
+          profile={profile}
+          onSave={onRelaysSave}
+        />
+      ),
     },
     {
       name: t("wallet"),
       panel: <ZapsSettings skipText profile={profile} onSave={onSave} />,
     },
   ];
-
-  async function onSave() {
-    await router.back();
-  }
 
   return (
     <>

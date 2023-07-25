@@ -21,7 +21,7 @@ import { createLocalStorageManager, ChakraProvider } from "@chakra-ui/react";
 import NostrContext from "@habla/nostr/provider";
 
 import theme from "@habla/theme";
-import { ndkAtom, pubkeyAtom, privkeyAtom, relaysAtom } from "@habla/state";
+import { pubkeyAtom, privkeyAtom, relaysAtom } from "@habla/state";
 import { createNdk } from "@habla/nostr";
 import cacheAdapter from "@habla/cache/indexeddb";
 
@@ -42,6 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (window.nostr) {
       return new NDKNip07Signer();
     }
+
     return null;
   }, [privkey]);
   const options =
@@ -56,10 +57,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const ndk = useMemo(() => {
     return createNdk(options);
   }, []);
-  const [, setNdk] = useAtom(ndkAtom);
 
   useEffect(() => {
-    setNdk(ndk);
     ndk.signer?.user().then((user) => {
       setPubkey(user.hexpubkey());
       user.ndk = ndk;

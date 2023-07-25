@@ -135,7 +135,8 @@ export async function storeEvent(db: HablaDatabase, event: NDKEvent) {
     .transaction("rw", db.profile, db.event, async () => {
       if (event.kind === PROFILE) {
         const existing = await db.profile.get(event.pubkey);
-        if (!existing || event.created_at > existing.created_at) {
+        const lastSeen = existing?.created_at ?? 0;
+        if (event.created_at > lastSeen) {
           await db.profile.put({
             id: event.pubkey,
             created_at: event.created_at,

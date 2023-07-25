@@ -44,7 +44,6 @@ export const tagsAtom = atom<string[]>(
       ?.tags.filter((t) => t.at(0) === "t")
       .map((t) => t.at(1)) ?? []
 );
-export const ndkAtom = atom<NDK | null>(null);
 export const bookmarksAtom = atomWithLocalStorage<string[][]>(
   "userBookmarks",
   []

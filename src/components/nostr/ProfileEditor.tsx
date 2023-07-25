@@ -34,6 +34,7 @@ export default function ProfileEditor({ profile, onCancel, onSave }) {
   const [pubkey] = useAtom(pubkeyAtom);
   const [steps, setSteps] = useAtom(stepsAtom);
   const [avatar, setAvatar] = useState(profile?.picture);
+  const [website, setWebsite] = useState(profile?.website);
   const [name, setName] = useState(profile?.name);
   const [about, setAbout] = useState(profile?.about);
   const [nip05, setNip05] = useState(profile?.nip05);
@@ -74,6 +75,9 @@ export default function ProfileEditor({ profile, onCancel, onSave }) {
     delete user.emoji;
     if (avatar) {
       user.picture = avatar;
+    }
+    if (website) {
+      user.website = website;
     }
     if (about) {
       user.about = about;
@@ -133,6 +137,15 @@ export default function ProfileEditor({ profile, onCancel, onSave }) {
           value={about}
           onChange={(e) => setAbout(e.target.value)}
           placeholder={t("about-placeholder")}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>{t("website-label")}</FormLabel>
+        <Input
+          type="text"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          placeholder={t("website-placeholder")}
         />
       </FormControl>
       <FormControl>

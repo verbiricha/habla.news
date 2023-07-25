@@ -37,7 +37,7 @@ import {
 } from "@chakra-ui/react";
 import { AtSignIcon, ChevronDownIcon, WarningIcon } from "@chakra-ui/icons";
 
-import { PEOPLE, CONTACTS, RELAYS } from "@habla/const";
+import { PROFILE, PEOPLE, CONTACTS, RELAYS } from "@habla/const";
 import SettingsIcon from "@habla/icons/Settings";
 import RelayIcon from "@habla/icons/Relay";
 import WriteIcon from "@habla/icons/Write";
@@ -59,7 +59,7 @@ import { useIsOnboarding } from "@habla/onboarding/hooks";
 import { useNdk } from "@habla/nostr/hooks";
 
 function LoginDialog({ isOpen, onClose }) {
-  const ndk = useNdk()
+  const ndk = useNdk();
   const [pubkeyLike, setPubkeyLike] = useState();
   const [relays] = useAtom(relaysAtom);
   const toast = useToast();
@@ -165,7 +165,7 @@ function LoginDialog({ isOpen, onClose }) {
 type LoginModalFlow = "login" | "onboarding";
 
 function LoginModal({ isOpen, onClose }) {
-  const ndk = useNdk()
+  const ndk = useNdk();
   const router = useRouter();
   const [flow, setFlow] = useState<LoginModalFlow | null>(null);
   const { t } = useTranslation("common");

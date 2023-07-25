@@ -2,8 +2,6 @@ import dynamic from "next/dynamic";
 import { useMemo, useCallback } from "react";
 import ReactMarkdown, { uriTransformer } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import slugify from "slugify";
 import { Text, Image } from "@chakra-ui/react";
