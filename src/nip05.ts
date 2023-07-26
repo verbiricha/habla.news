@@ -39,7 +39,9 @@ export const names = {
   isolabellart:
     "f4db5270bd991b17bea1e6d035f45dee392919c29474bbac10342d223c74e0d0",
   jack: "82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2",
+
   rabble: "76c71aae3a491f1d9eec47cba17e229cda4113a0bbb6e6ae1776d7643e29cafa",
+  wastoids: "36ceac901ac9983bd0224cfe9224d7e41b7527d0923847a9f5420d730d24128d",
 };
 
 export const featured = [
