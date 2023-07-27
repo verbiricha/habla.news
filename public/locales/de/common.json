@@ -101,7 +101,7 @@
   "about-placeholder": "Schreibe ein paar Sätze über dich.",
   "nip05-label": "Nostr-Adresse",
   "nip05-placeholder": "name@domain.com",
-  "nip05-help": "Du kannst eine Nostr-Adresse auf nostrcheck.com bekommen",
+  "nip05-help": "You can get a nostr address in nostrcheck.com",
   "website-label": "Webseite",
   "website-placeholder": "Hast du eine Webseite?",
   "save": "Speichern",
