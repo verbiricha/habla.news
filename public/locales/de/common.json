@@ -101,7 +101,7 @@
   "about-placeholder": "Schreibe ein paar Sätze über dich.",
   "nip05-label": "Nostr-Adresse",
   "nip05-placeholder": "name@domain.com",
-  "nip05-help": "You can get a nostr address in nostrcheck.com",
+  "nip05-help": "Du kannst eine Nostr-Adresse auf nostrcheck.com bekommen",
   "website-label": "Webseite",
   "website-placeholder": "Hast du eine Webseite?",
   "save": "Speichern",
@@ -120,6 +120,6 @@
   "lnaddress-help": "Gehe zu https://lightningaddress.com um eine zu erhalten",
   "settings": "Einstellungen",
   "wallet": "Wallet",
-  "profile-saved": "Profile saved",
-  "relays-saved": "Relay list saved"
+  "profile-saved": "Profil gespeichert",
+  "relays-saved": "Relay-Liste gespeichert"
 }
