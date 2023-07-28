@@ -40,6 +40,7 @@ const relays = [
   "wss://relay.damus.io/",
   "wss://nostr.wine/",
   "wss://nos.lol/",
+  "wss://soloco.nl/",
 ];
 const pool = new SimplePool(relays);
 
