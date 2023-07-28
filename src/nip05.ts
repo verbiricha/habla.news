@@ -67,7 +67,7 @@ export function getHandles() {
 }
 
 export function getPubkey(handle) {
-  return names[handle];
+  return names[handle.toLowerCase()];
 }
 
 export function getHandle(pubkey) {
