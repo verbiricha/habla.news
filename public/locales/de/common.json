@@ -120,6 +120,6 @@
   "lnaddress-help": "Gehe zu https://lightningaddress.com um eine zu erhalten",
   "settings": "Einstellungen",
   "wallet": "Wallet",
-  "profile-saved": "Profile saved",
-  "relays-saved": "Relay list saved"
+  "profile-saved": "Profil gespeichert",
+  "relays-saved": "Relay-Liste gespeichert"
 }
