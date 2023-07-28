@@ -101,7 +101,7 @@
   "about-placeholder": "关于自己的一两句话。",
   "nip05-label": "Nostr 地址",
   "nip05-placeholder": "you@domain.com",
-  "nip05-help": "You can get a nostr address in nostrcheck.com",
+  "nip05-help": "你可以在 nostrcheck.com 获取一个 nostr 地址",
   "website-label": "网址",
   "website-placeholder": "你有自己的网站吗？",
   "save": "保存",
