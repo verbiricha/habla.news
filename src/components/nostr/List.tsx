@@ -53,13 +53,22 @@ export function ListTag({ tag }) {
     if (value.startsWith("ws://") || value.startsWith("wss://")) {
       return <RelayItem key={value} url={value} />;
     }
-    return <ExternalLink href={value}>{value}</ExternalLink>;
+    if (relay) {
+      return (
+        <Flex flexDir="column">
+          <Text fontSize="xl">{relay}</Text>
+          <ExternalLink href={value}>{value}</ExternalLink>
+        </Flex>
+      );
+    } else {
+      return <ExternalLink href={value}>{value}</ExternalLink>;
+    }
   }
 }
 
 export default function List({ event }) {
   const identifier = findTag(event, "d");
-  const subject = findTag(event, "subject");
+  const subject = findTag(event, "title") || findTag(event, "subject");
   const description = findTag(event, "description");
   const hashtags = findTags(event, "t");
   return (

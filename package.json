@@ -29,7 +29,7 @@
     "lodash": "^4.17.21",
     "next": "latest",
     "next-i18next": "^13.2.2",
-    "nostr-tools": "1.12.1",
+    "nostr-tools": "1.14.2",
     "prettier": "^2.8.7",
     "qr-code-styling": "^1.6.0-rc.1",
     "react": "^18.2.0",
