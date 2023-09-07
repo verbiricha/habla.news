@@ -94,13 +94,10 @@ export function useEvents(filter, options = {}) {
 export function useEvent(filter, opts = defaultOpts) {
   const [defaultRelays] = useAtom(relaysAtom);
   const { ndk } = useContext(NostrContext);
-  const { relays, ...rest } = opts;
   const [event, setEvent] = useState();
-  let options = { ...rest };
-  // todo: use relays
 
   useEffect(() => {
-    ndk.fetchEvent(filter, options).then(setEvent);
+    ndk.fetchEvent(filter, opts).then(setEvent);
   }, []);
 
   return event;

@@ -95,7 +95,7 @@ function LoginDialog({ isOpen, onClose }) {
       const signer = new NDKNip07Signer();
       ndk.signer = signer;
       signer.blockUntilReady().then((user) => {
-        setPubkey(user.hexpubkey());
+        setPubkey(user.hexpubkey);
       });
     } catch (error) {
       toast({

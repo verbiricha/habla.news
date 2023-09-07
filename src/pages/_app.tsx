@@ -50,6 +50,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       ? { explicitRelayUrls }
       : {
           explicitRelayUrls,
+          outboxRelayUrls: ["wss://purplepag.es"],
+          enableOutboxModel: false,
           signer,
           cacheAdapter,
         };
@@ -62,7 +64,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const fn = async () => {
       if (ndk.signer) {
         const user = await ndk.signer.blockUntilReady();
-        setPubkey(user.hexpubkey());
+        setPubkey(user.hexpubkey);
         user.ndk = ndk;
         user.fetchProfile();
       }

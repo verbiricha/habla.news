@@ -16,7 +16,7 @@
     "@fontsource/source-serif-pro": "^4.5.9",
     "@fontsource/unbounded": "^4.5.1",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@nostr-dev-kit/ndk": "^0.7.7",
+    "@nostr-dev-kit/ndk": "^1.0.0",
     "@void-cat/api": "^1.0.7",
     "bech32": "^2.0.0",
     "dexie": "^3.2.3",
@@ -57,10 +57,5 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "typescript": "^4.7.2"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@nostr-dev-kit/ndk@0.7.7": "patches/@nostr-dev-kit__ndk@0.7.7.patch"
-    }
   }
 }
