@@ -57,18 +57,16 @@ export default function LongFormNote({
   } = useMemo(() => getMetadata(event), [event]);
   return title.length > 0 && event.content.length > 0 ? (
     <Card variant="article" my={4}>
-      {!excludeAuthor && (
-        <CardHeader>
-          <Flex align="center" direction="row" gap={2} fontFamily="Inter">
-            <User pubkey={event.pubkey} size="sm" />
-            <LongFormTime
-              publishedAt={publishedAt}
-              updatedAt={event.created_at}
-              content={event.content}
-            />
-          </Flex>
-        </CardHeader>
-      )}
+      <CardHeader>
+        <Flex align="center" direction="row" gap={2} fontFamily="Inter">
+          {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
+          <LongFormTime
+            publishedAt={publishedAt}
+            updatedAt={event.created_at}
+            content={event.content}
+          />
+        </Flex>
+      </CardHeader>
       <CardBody>
         <Flex
           alignItems="flex-start"
