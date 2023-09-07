@@ -5,12 +5,15 @@ import { useTranslation } from "next-i18next";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import Tabs from "@habla/components/Tabs";
 import Highlights from "@habla/components/nostr/Highlights";
+import { getMetadata } from "@habla/nip23";
 import LongFormNote from "./feed/LongFormNote";
 
 export default function UserContent({ pubkey, events }) {
   const { t } = useTranslation("common");
   const posts = useMemo(() => {
-    return events.filter((e) => e.kind === LONG_FORM);
+    return events
+      .filter((e) => e.kind === LONG_FORM)
+      .sort((a, b) => getMetadata(b).publishedAt - getMetadata(a).publishedAt);
   }, [events]);
   const highlights = useMemo(() => {
     return events.filter((e) => e.kind === HIGHLIGHT);
