@@ -110,7 +110,7 @@ export default function LiveEvent({ naddr, event }) {
           </Flex>
         </CardBody>
         <CardFooter>
-          <ExternalLink href={`https://live.snort.social/live/${naddr}`}>
+          <ExternalLink href={`https://zap.stream/${naddr}`}>
             {t("watch-stream")}
           </ExternalLink>
         </CardFooter>
