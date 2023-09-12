@@ -274,30 +274,6 @@ export default function LongFormNote({
 
       {event && event.encode && (
         <Box>
-          <style>
-            {colorMode == "light"
-              ? `
-            :root {
-              --ztr-font: Inter;
-              --ztr-text-color: #2B2B2B;
-              --ztr-textarea-color: #2B2B2B;
-              --ztr-icon-color: #656565;
-              --ztr-link-color:  #92379c;
-              --ztr-login-button-color: var(--chakra-colors-orange-500);
-              --ztr-background-color: rgba(0, 0, 0, 0.03);
-            }
-          `
-              : `
-            :root {
-              --ztr-font: Inter;
-              --ztr-text-color: #dedede;
-              --ztr-icon-color: #656565;
-              --ztr-link-color: #e4b144;
-              --ztr-login-button-color: #5e584b;
-              --ztr-background-color: rgba(255, 255, 255, 0.05);
-            }
-          `}
-          </style>
           <Thread anchor={event.encode()} />
         </Box>
       )}

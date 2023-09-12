@@ -36,6 +36,14 @@ const styles = {
       color: "#16161D",
       bg: "#FFD1DC",
     },
+    ":root": {
+      // Zapthreads custom styles
+      '--ztr-font': 'Inter',
+      '--ztr-text-color': mode('#2B2B2B', '#DEDEDE')(props),
+      '--ztr-font-size': '15px',
+      '--ztr-login-button-color': mode('var(--chakra-colors-orange-600)', 'var(--chakra-colors-orange-300)')(props),
+      '--ztr-link-color': mode('var(--chakra-colors-orange-600)', 'var(--chakra-colors-orange-300)')(props)
+    }
   }),
 };
 
