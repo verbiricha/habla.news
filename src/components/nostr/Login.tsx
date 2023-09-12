@@ -90,7 +90,7 @@ function LoginDialog({ isOpen, onClose }) {
     }
   }
 
-  function loginWithExtension(shouldFetchProfile: boolean) {
+  function loginWithExtension() {
     try {
       const signer = new NDKNip07Signer();
       ndk.signer = signer;
@@ -170,6 +170,28 @@ function LoginModal({ isOpen, onClose }) {
   const [flow, setFlow] = useState<LoginModalFlow | null>(null);
   const { t } = useTranslation("common");
   const onboardingModal = useDisclosure("onboarding");
+  const [pubkey, setPubkey] = useAtom(pubkeyAtom);
+
+  async function autoLogin(shouldRetry = true) {
+    try {
+      if ("nostr" in window) {
+        const signer = new NDKNip07Signer();
+        ndk.signer = signer;
+        const user = await signer.blockUntilReady();
+        setPubkey(user.hexpubkey);
+      } else if (shouldRetry) {
+        setTimeout(() => autoLogin(false), 1_000);
+      }
+    } catch (error) {
+      console.error(`Autologin failed: ${error}`);
+    }
+  }
+
+  useEffect(() => {
+    if (pubkey === undefined) {
+      autoLogin();
+    }
+  }, [pubkey]);
 
   function continueOnboarding() {
     closeModal();

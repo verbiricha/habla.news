@@ -60,18 +60,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     return createNdk(options);
   }, []);
 
-  useEffect(() => {
-    const fn = async () => {
-      if (ndk.signer) {
-        const user = await ndk.signer.blockUntilReady();
-        setPubkey(user.hexpubkey);
-        user.ndk = ndk;
-        user.fetchProfile();
-      }
-    };
-    fn();
-  }, [ndk.signer]);
-
   return (
     <NostrContext.Provider value={{ ndk }}>
       <ChakraProvider theme={theme} colorModeManager={colorModeManager}>
