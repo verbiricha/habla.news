@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Heading, Flex, Box, Img, Text } from "@chakra-ui/react";
 
 import Layout from "@habla/layouts/Wide";
+import NotFound from "@habla/components/NotFound";
 
 export default function Error() {
   const { t } = useTranslation("common");
@@ -15,20 +15,7 @@ export default function Error() {
         <meta name="og:description" content={t("tagline")} />
       </Head>
       <Layout>
-        <Heading>{t("not-found")}</Heading>
-        <Text>{t("not-found-long")}</Text>
-        <Box
-          boxSize={{
-            base: "xs",
-            sm: "sm",
-            md: "md",
-            lg: "xl",
-          }}
-          margin="0 auto"
-          mt={10}
-        >
-          <Img src="/family.png" alt={t("oops")} />
-        </Box>
+        <NotFound />
       </Layout>
     </>
   );

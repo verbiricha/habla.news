@@ -6,37 +6,23 @@ import { nip05 } from "nostr-tools";
 
 import Layout from "@habla/layouts/Wide";
 
-const NProfile = dynamic(() => import("@habla/components/nostr/Profile"), {
+const NProfile = dynamic(() => import("@habla/components/nostr/NostrAddress"), {
   ssr: false,
 });
 
-export default function Profile({ pubkey, relays }) {
+export default function Profile({ nip05 }) {
   return (
     <Layout>
-      <NProfile key={pubkey} pubkey={pubkey} relays={relays} />
+      <NProfile query={nip05} key={nip05} />
     </Layout>
   );
 }
 
 export const getServerSideProps = async ({ locale, query }) => {
-  const profile = await nip05.queryProfile(query.nip05);
-  const props = {
-    pubkey: profile.pubkey,
-    relays: Array.isArray(profile.relays) ? profile.relays : [],
+  return {
+    props: {
+      ...query,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
   };
-  if (props) {
-    return {
-      props: {
-        ...props,
-        ...(await serverSideTranslations(locale, ["common"])),
-      },
-    };
-  } else {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
-    };
-  }
 };

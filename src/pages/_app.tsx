@@ -17,6 +17,7 @@ import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
 
 import { createLocalStorageManager, ChakraProvider } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import NostrContext from "@habla/nostr/provider";
 
@@ -27,6 +28,9 @@ import cacheAdapter from "@habla/cache/indexeddb";
 
 // this changes the default local storage key name to ensure that no user has light mode cached in
 const colorModeManager = createLocalStorageManager("habla-ui-color");
+
+// react-query client
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [explicitRelayUrls] = useAtom(relaysAtom);
@@ -63,7 +67,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <NostrContext.Provider value={{ ndk }}>
       <ChakraProvider theme={theme} colorModeManager={colorModeManager}>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       </ChakraProvider>
     </NostrContext.Provider>
   );

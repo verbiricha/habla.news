@@ -5,48 +5,26 @@ import { nip05, nip19 } from "nostr-tools";
 
 import Layout from "@habla/layouts/Wide";
 
-const Address = dynamic(() => import("@habla/components/nostr/Address"), {
-  ssr: false,
-});
+const Nip05Address = dynamic(
+  () => import("@habla/components/nostr/Nip05Address"),
+  {
+    ssr: false,
+  }
+);
 
-export default function Profile({ pubkey, relays, identifier }) {
-  const naddr = nip19.naddrEncode({ pubkey, relays, identifier });
+export default function Profile({ nip05, slug }) {
   return (
     <Layout>
-      <Address
-        kind={30023}
-        identifier={identifier}
-        pubkey={pubkey}
-        relays={relays}
-        naddr={naddr}
-      />
+      <Nip05Address identifier={slug} query={nip05} />
     </Layout>
   );
 }
 
 export const getServerSideProps = async ({ locale, query }) => {
-  const profile = await nip05.queryProfile(query.nip05);
-  const identifier = query.slug;
-  const props = profile
-    ? {
-        pubkey: profile.pubkey,
-        relays: Array.isArray(profile.relays) ? profile.relays : [],
-        identifier,
-      }
-    : null;
-  if (props) {
-    return {
-      props: {
-        ...props,
-        ...(await serverSideTranslations(locale, ["common"])),
-      },
-    };
-  } else {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
-    };
-  }
+  return {
+    props: {
+      ...query,
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
 };
