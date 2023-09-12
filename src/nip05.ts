@@ -42,8 +42,10 @@ export const names = {
 
   rabble: "76c71aae3a491f1d9eec47cba17e229cda4113a0bbb6e6ae1776d7643e29cafa",
   wastoids: "36ceac901ac9983bd0224cfe9224d7e41b7527d0923847a9f5420d730d24128d",
+  franzap: "726a1e261cc6474674e8285e3951b3bb139be9a773d1acf49dc868db861a1c11",
 };
 
+// todo: group by category
 export const featured = [
   "jack",
   "rabble",
