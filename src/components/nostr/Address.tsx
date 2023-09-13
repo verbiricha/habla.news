@@ -3,14 +3,25 @@ import {
   LONG_FORM,
   LONG_FORM_DRAFT,
   ZAP,
+  ZAPSTR_TRACK,
+  APP,
+  APP_RECOMMENDATION,
   HIGHLIGHT,
+  BADGE,
   LISTS,
+  LIVE_EVENT,
   COMMUNITY,
 } from "@habla/const";
+
 import LongFormNote from "./LongFormNote";
 import Feed from "./Feed";
 import List from "./List";
+import Badge from "./Badge";
+import ZapstrTrack from "./ZapstrTrack";
 import Community from "./Community";
+import App from "./App";
+import AppReccomendation from "./AppReccomendation";
+import UnknownKind from "./UnknownKind";
 
 export default function Address({
   naddr,
@@ -39,10 +50,18 @@ export default function Address({
   if (event && kind === COMMUNITY) {
     return <Community event={event} />;
   }
+  if (event?.kind === BADGE) {
+    return <Badge event={event} />;
+  }
+  if (event?.kind === ZAPSTR_TRACK) {
+    return <ZapstrTrack event={event} />;
+  }
+  if (event?.kind === APP) {
+    return <App event={event} />;
+  }
+  if (event?.kind === APP_RECOMMENDATION) {
+    return <AppReccomendation event={event} />;
+  }
 
-  return event ? (
-    <>
-      <code>{JSON.stringify(event.tags, null, 2)}</code>
-    </>
-  ) : null;
+  return event ? <UnknownKind event={event} /> : null;
 }

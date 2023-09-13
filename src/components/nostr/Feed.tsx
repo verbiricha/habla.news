@@ -7,6 +7,5 @@ import Events from "./feed/Events";
 
 export default function Feed({ filter, options = { closeOnEose: false } }) {
   const { events } = useEvents(filter, options);
-
   return <Events events={events} />;
 }

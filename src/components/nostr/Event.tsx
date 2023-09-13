@@ -2,13 +2,13 @@ import { Text } from "@chakra-ui/react";
 import { HIGHLIGHT, NOTE, BADGE, ZAPSTR_TRACK, JOB_RESULT } from "@habla/const";
 
 import Blockquote from "@habla/components/Blockquote";
-import { findTag } from "@habla/tags";
 
 import Highlight from "./feed/Highlight";
 import Note from "./Note";
 import Badge from "./Badge";
 import ZapstrTrack from "./ZapstrTrack";
 import JobResult from "./JobResult";
+import UnknownKind from "@habla/components/nostr/UnknownKind";
 
 export default function Event(props) {
   const { event } = props;
@@ -33,10 +33,5 @@ export default function Event(props) {
     return <ZapstrTrack {...props} />;
   }
 
-  const alt = findTag(event, "alt");
-  return alt ? (
-    <Text>{alt}</Text>
-  ) : (
-    <Text>Unknown event kind: {event.kind}</Text>
-  );
+  return <UnknownKind event={event} {...props} />;
 }

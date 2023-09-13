@@ -17,6 +17,7 @@ const breakpoints = {
   xl: "80em",
 };
 
+// todo: heading variants
 const components = { Tag, Card, Button, Menu };
 
 const config = {

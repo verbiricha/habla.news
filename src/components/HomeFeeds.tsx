@@ -37,7 +37,6 @@ import {
   peopleListsAtom,
 } from "@habla/state";
 import SectionHeading from "@habla/components/SectionHeading";
-import Relays from "@habla/components/Relays";
 import Hashtags from "@habla/components/Hashtags";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
 import Feed from "@habla/components/nostr/Feed";
@@ -50,7 +49,8 @@ enum Feeds {
   Tag = "Tag",
   Follows = "Follows",
   PeopleList = "PeopleList",
-  Community = "Community",
+  //Community = "Community",
+  //Relay = "Relay",
 }
 
 export default function HomeFeeds() {
@@ -65,7 +65,7 @@ export default function HomeFeeds() {
   const isLoggedIn = pubkey && follows.length > 0;
   const [kinds, setKinds] = useState([LONG_FORM]);
   const hasFollows = pubkey && follows.length > 0;
-  const [feed, setFeed] = useState(hasFollows > 0 ? Feeds.Follows : Feeds.All);
+  const [feed, setFeed] = useState(hasFollows ? Feeds.Follows : Feeds.All);
   const needsBackup = useNeedsBackup();
   const router = useRouter();
   const listName = useMemo(() => {

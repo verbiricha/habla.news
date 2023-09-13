@@ -29,6 +29,8 @@ export const LISTS = [
   EMOJIS,
   RELAY_LIST,
 ];
+export const APP = 31990;
+export const APP_RECOMMENDATION = 31989;
 export const COMMUNITY = 34550;
 export const POST_APPROVAL = 4550;
 export const JOB_RESULT = 68002;

@@ -105,7 +105,6 @@ export default function Omnibar() {
         <Input
           autoFocus
           placeholder={t("search-placeholder")}
-          value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </InputGroup>

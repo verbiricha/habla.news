@@ -10,11 +10,12 @@ import {
   LIVE_EVENT,
   ZAP,
   HIGHLIGHT,
-  REACTION,
   BADGE,
   LISTS,
   ZAPSTR_TRACK,
   COMMUNITY,
+  APP,
+  APP_RECOMMENDATION,
 } from "@habla/const";
 import Badge from "@habla/components/nostr/Badge";
 import List from "@habla/components/nostr/List";
@@ -22,6 +23,9 @@ import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
 import LiveEvent from "@habla/components/nostr/LiveEvent";
 import Community from "@habla/components/nostr/feed/Community";
 import ArticleLink from "@habla/components/nostr/ArticleLink";
+import App from "@habla/components/nostr/App";
+import AppReccomendation from "@habla/components/nostr/AppReccomendation";
+import UnknownKind from "@habla/components/nostr/UnknownKind";
 
 export default function Naddr({
   naddr,
@@ -70,11 +74,12 @@ export default function Naddr({
     return <Community event={event} />;
   }
 
-  return (
-    <Link href={`/a/${naddr}`} shallow>
-      <Text as="span" fontWeight={500} {...rest}>
-        {`${kind}:${pubkey}:${identifier}`}
-      </Text>
-    </Link>
-  );
+  if (event?.kind === APP) {
+    return <App event={event} />;
+  }
+  if (event?.kind === APP_RECOMMENDATION) {
+    return <AppReccomendation event={event} />;
+  }
+
+  return event ? <UnknownKind event={event} /> : null;
 }

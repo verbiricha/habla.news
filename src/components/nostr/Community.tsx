@@ -6,16 +6,15 @@ import { POST_APPROVAL, HIGHLIGHT, LONG_FORM, NOTE } from "@habla/const";
 import { useEvents } from "@habla/nostr/hooks";
 import User from "@habla/components/nostr/User";
 import Events from "@habla/components/nostr/feed/Events";
+import { FollowReferenceButton } from "@habla/components/nostr/FollowButton";
+import { getMetadata } from "@habla/nip72";
 
 export default function Community({ event }) {
-  const title = findTag(event, "d");
-  const description = findTag(event, "description");
-  const image = findTag(event, "image");
-  const rules = findTag(event, "rules"); // optional
+  const { name, description, image, rules } = getMetadata(event);
   const moderators = event.tags
     .filter((t) => t.at(0) === "p" && t.includes("moderator"))
     .map((t) => t.at(1));
-  const address = `${event.kind}:${event.pubkey}:${title}`;
+  const address = `${event.kind}:${event.pubkey}:${name}`;
   const { events } = useEvents({
     kinds: [HIGHLIGHT, LONG_FORM, NOTE],
     "#a": [address],
@@ -51,21 +50,20 @@ export default function Community({ event }) {
   return (
     <>
       <Helmet>
-        <title>{title}</title>
-        <meta name="og:title" content={title} />
+        <title>{name}</title>
+        <meta name="og:title" content={name} />
         <meta property="og:type" content="article" />
         <meta name="og:description" content={description} />
         {image && <meta name="og:image" content={image} />}
       </Helmet>
       <Flex flexDir="column">
-        <Flex
-          flexDir={["column-reverse", "row"]}
-          justifyContent="space-between"
-          gap={[4, 12]}
-          w="100%"
-        >
-          <Stack>
-            <Heading>{title}</Heading>
+        <Flex flexDir="column" gap={[4, 12]} w="100%">
+          {image && <Image width="100%" maxH="320px" fit="cover" src={image} />}
+          <Stack flex="1">
+            <Flex justifyContent="space-between">
+              <Heading>{name}</Heading>
+              <FollowReferenceButton reference={event.tagReference()} />
+            </Flex>
             <Text fontSize="lg">{description}</Text>
             <Heading as="h4" fontSize="lg" mt={4}>
               Moderators
@@ -75,15 +73,15 @@ export default function Community({ event }) {
                 <User key={pk} pubkey={pk} />
               ))}
             </Flex>
+            {rules.length > 0 && (
+              <>
+                <Heading as="h4" fontSize="lg" mt={4}>
+                  Rules
+                </Heading>
+                <Text fontSize="md">{rules}</Text>
+              </>
+            )}
           </Stack>
-          {image && (
-            <Image
-              maxW={["none", "320px"]}
-              maxH="210px"
-              fit="contain"
-              src={image}
-            />
-          )}
         </Flex>
         <Flex mt={10}>
           <Events events={filteredEvents} />
