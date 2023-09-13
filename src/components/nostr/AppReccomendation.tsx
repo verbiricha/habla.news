@@ -1,4 +1,4 @@
 export default function AppReccomendation({ event }) {
-  console.log("APP.rec", event);
+  // todo
   return null;
 }

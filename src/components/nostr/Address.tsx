@@ -5,7 +5,7 @@ import {
   ZAP,
   ZAPSTR_TRACK,
   APP,
-  APP_RECOMMENDATION,
+  //APP_RECOMMENDATION,
   HIGHLIGHT,
   BADGE,
   LISTS,
@@ -59,9 +59,9 @@ export default function Address({
   if (event?.kind === APP) {
     return <App event={event} />;
   }
-  if (event?.kind === APP_RECOMMENDATION) {
-    return <AppReccomendation event={event} />;
-  }
+  //if (event?.kind === APP_RECOMMENDATION) {
+  //  return <AppReccomendation event={event} />;
+  //}
 
   return event ? <UnknownKind event={event} /> : null;
 }

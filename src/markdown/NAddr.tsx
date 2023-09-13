@@ -15,7 +15,7 @@ import {
   ZAPSTR_TRACK,
   COMMUNITY,
   APP,
-  APP_RECOMMENDATION,
+  //APP_RECOMMENDATION,
 } from "@habla/const";
 import Badge from "@habla/components/nostr/Badge";
 import List from "@habla/components/nostr/List";
@@ -77,9 +77,9 @@ export default function Naddr({
   if (event?.kind === APP) {
     return <App event={event} />;
   }
-  if (event?.kind === APP_RECOMMENDATION) {
-    return <AppReccomendation event={event} />;
-  }
+  //if (event?.kind === APP_RECOMMENDATION) {
+  //  return <AppReccomendation event={event} />;
+  //}
 
   return event ? <UnknownKind event={event} /> : null;
 }
