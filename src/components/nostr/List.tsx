@@ -1,4 +1,12 @@
-import { Flex, Stack, Text, Heading, Divider } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Stack,
+  Text,
+  Heading,
+  Divider,
+  Tooltip,
+} from "@chakra-ui/react";
 
 import { nip19 } from "nostr-tools";
 
@@ -12,6 +20,7 @@ import Hashtags from "@habla/components/Hashtags";
 import Address from "@habla/components/nostr/Address";
 import { RelayItem } from "@habla/components/Relays";
 import ExternalLink from "@habla/components/ExternalLink";
+import { EMOJIS } from "@habla/const";
 
 export function ListTag({ tag }) {
   const [t, value, relay] = tag;
@@ -44,10 +53,11 @@ export function ListTag({ tag }) {
     );
   } else if (t === "emoji") {
     return (
-      <Flex align="center" gap={3} height="42px">
-        <Emoji src={relay} />
-        <Text>{value}</Text>
-      </Flex>
+      <Tooltip label={value} placement="bottom">
+        <Box>
+          <Emoji src={relay} />
+        </Box>
+      </Tooltip>
     );
   } else if (t === "r") {
     if (value.startsWith("ws://") || value.startsWith("wss://")) {
@@ -71,6 +81,8 @@ export default function List({ event }) {
   const subject = findTag(event, "title") || findTag(event, "subject");
   const description = findTag(event, "description");
   const hashtags = findTags(event, "t");
+  const isEmojiPack = event.kind === EMOJIS;
+  const content = event.tags.map((t) => <ListTag tag={t} />);
   return (
     <>
       <Flex
@@ -91,11 +103,13 @@ export default function List({ event }) {
         </Flex>
       </Flex>
       <Hashtags hashtags={hashtags} />
-      <Stack>
-        {event.tags.map((t) => (
-          <ListTag tag={t} />
-        ))}
-      </Stack>
+      {isEmojiPack ? (
+        <Flex flexDirection="row" align="flex-start" wrap="wrap" gap={2}>
+          {content}
+        </Flex>
+      ) : (
+        <Stack>{content}</Stack>
+      )}
     </>
   );
 }
