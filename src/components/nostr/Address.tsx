@@ -26,7 +26,7 @@ export default function Address({
       "#d": [identifier],
       authors: [pubkey],
     },
-    { cacheUsage: "CACHE_FIRST" }
+    { cacheUsage: "PARALLEL" }
   );
 
   if (event && (kind === LONG_FORM || kind === LONG_FORM_DRAFT)) {
