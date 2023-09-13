@@ -14,6 +14,8 @@ import {
 import ExternalLinkIcon from "@habla/components/ExternalLinkIcon";
 import User from "@habla/components/nostr/User";
 import { useUser } from "@habla/nostr/hooks";
+import Hashtags from "@habla/components/Hashtags";
+import { findTags } from "@habla/tags";
 
 function parseJSON<T>(raw: string, defaultValue: T) {
   try {
@@ -26,13 +28,16 @@ function parseJSON<T>(raw: string, defaultValue: T) {
 export default function App({ event }) {
   const publisherPubkey = event.pubkey;
   const authorPubkey = useMemo(() => {
-    return (
-      event.tags.find((t) => t.at(0) === "p" && t.at(3) === "author") ||
-      event.pubkey
+    const authorTag = event.tags.find(
+      (t) => t.at(0) === "p" && t.at(3) === "author"
     );
+    return authorTag?.at(1) || event.pubkey;
   }, [event]);
   const naddr = useMemo(() => {
     return event.encode();
+  }, [event]);
+  const hashtags = useMemo(() => {
+    return findTags(event, "t");
   }, [event]);
   const author = useUser(authorPubkey);
   const appProfile = useMemo(() => {
@@ -42,14 +47,28 @@ export default function App({ event }) {
     <Card variant="outline" my={4} maxW="320px">
       <CardHeader>
         <Flex align="center" justifyContent="space-between">
-          <Heading style={{ margin: 0 }}>{appProfile?.name}</Heading>
+          <Stack>
+            <Heading style={{ margin: 0 }}>
+              {appProfile?.display_name || appProfile?.name}
+            </Heading>
+          </Stack>
           <ExternalLinkIcon href={`https://nostrapp.link/a/${naddr}`} />
+        </Flex>
+        <Flex ml={2}>
+          {authorPubkey?.length === 64 && (
+            <User size="xs" pubkey={authorPubkey} />
+          )}
         </Flex>
       </CardHeader>
       <CardBody>
         <Stack align="center">
-          <Avatar src={appProfile?.picture} alt={appProfile?.name} size="xl" />
+          <Avatar
+            src={appProfile?.picture}
+            alt={appProfile?.display_name || appProfile?.name}
+            size="xl"
+          />
           {appProfile?.about && <Text>{appProfile?.about}</Text>}
+          <Hashtags hashtags={hashtags} />
         </Stack>
       </CardBody>
     </Card>
