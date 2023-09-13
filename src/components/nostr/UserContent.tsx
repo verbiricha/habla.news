@@ -33,7 +33,7 @@ export default function UserContent({ pubkey, events }) {
       name: t("highlights"),
       panel: (
         <Stack spacing="4">
-          <Highlights highlights={highlights} showHeader={false} />
+          <Highlights highlights={highlights} />
         </Stack>
       ),
     },
