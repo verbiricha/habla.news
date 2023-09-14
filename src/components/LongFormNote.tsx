@@ -45,6 +45,7 @@ import { pubkeyAtom, relaysAtom } from "@habla/state";
 import Zaps from "./Zaps";
 import Reposts from "./Reposts";
 import Comments from "./Comments";
+import { PublishedIn } from "@habla/components/nostr/feed/LongFormNote";
 
 const Thread = dynamic(() => import("@habla/components/nostr/Thread"), {
   ssr: false,
@@ -124,7 +125,7 @@ export default function LongFormNote({
   const { isOpen, onOpen, onClose } = useDisclosure("highlight");
   const shareModal = useDisclosure("share-modal");
   const highlightModal = useDisclosure();
-  const { title, summary, image, hashtags, publishedAt } = useMemo(
+  const { title, summary, image, hashtags, publishedAt, community } = useMemo(
     () => getMetadata(event),
     [event]
   );
@@ -239,6 +240,7 @@ export default function LongFormNote({
           />
         </Prose>
       </Box>
+      {community && <PublishedIn community={community} event={event} />}
 
       {textSelection?.length ? (
         <Box sx={{ position: "fixed", bottom: 4, right: 4 }}>

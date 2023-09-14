@@ -1,5 +1,8 @@
 import { useMemo } from "react";
 import { useAtom } from "jotai";
+import { useTranslation } from "next-i18next";
+import { nip19 } from "nostr-tools";
+import Link from "next/link";
 
 import {
   Flex,
@@ -40,6 +43,33 @@ function LongFormTime({ content, publishedAt, updatedAt }) {
   );
 }
 
+export function PublishedIn({ event, community }) {
+  const { t } = useTranslation("common");
+  const { name, naddr } = useMemo(() => {
+    if (!community) return {};
+    const [kind, pubkey, identifier] = community.split(":");
+    return {
+      name: identifier,
+      naddr: nip19.naddrEncode({
+        kind: Number(kind),
+        pubkey,
+        identifier,
+        relays: [],
+      }),
+    };
+  }, [community]);
+  return (
+    <Text color="secondary" fontSize="sm">
+      {t("published-in")}{" "}
+      <Link href={`/c/${naddr}`} shallow>
+        <Text as="span" textDecoration="underline" textDecorationStyle="dotted">
+          {name}
+        </Text>
+      </Link>
+    </Text>
+  );
+}
+
 export default function LongFormNote({
   event,
   excludeAuthor,
@@ -54,12 +84,14 @@ export default function LongFormNote({
     description,
     hashtags,
     publishedAt,
+    community,
   } = useMemo(() => getMetadata(event), [event]);
   return title.length > 0 && event.content.length > 0 ? (
     <Card variant="article" my={4}>
       <CardHeader>
         <Flex align="center" direction="row" gap={2} fontFamily="Inter">
           {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
+          {community && <PublishedIn community={community} event={event} />}
           <LongFormTime
             publishedAt={publishedAt}
             updatedAt={event.created_at}
@@ -79,7 +111,7 @@ export default function LongFormNote({
             <ArticleLink event={event}>
               <Heading
                 wordBreak="break-word"
-                mb={3}
+                mb={2}
                 sx={{
                   fontWeight: 600,
                   fontSize: "24px",

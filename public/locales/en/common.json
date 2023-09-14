@@ -127,5 +127,6 @@
   "settings": "Settings",
   "wallet": "Wallet",
   "profile-saved": "Profile saved",
-  "relays-saved": "Relay list saved"
+  "relays-saved": "Relay list saved",
+  "published-in": "Published in"
 }
