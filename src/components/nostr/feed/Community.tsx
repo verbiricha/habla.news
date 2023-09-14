@@ -13,7 +13,7 @@ import {
 import { findTag } from "@habla/tags";
 import User from "@habla/components/nostr/User";
 import { useTranslation } from "next-i18next";
-import { FollowReferenceButton } from "@habla/components/nostr/FollowButton";
+import { FollowCommunityButton } from "@habla/components/nostr/FollowButton";
 import { getMetadata } from "@habla/nip72";
 
 export default function Community({ event }) {
@@ -59,7 +59,7 @@ export default function Community({ event }) {
                   {name}
                 </Heading>
               </Link>
-              <FollowReferenceButton reference={event.tagReference()} />
+              <FollowCommunityButton reference={event.tagReference()} />
             </Flex>
             {description?.length > 0 && (
               <Text color="secondary" py={1} wordBreak="break-word">

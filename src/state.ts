@@ -11,6 +11,10 @@ export const contactListAtom = atomWithLocalStorage<NDKEvent | null>(
   "contactList",
   null
 );
+export const communitiesAtom = atomWithLocalStorage<NDKEvent | null>(
+  "communities",
+  null
+);
 export const relayListAtom = atomWithLocalStorage<NDKEvent | null>(
   "relayList",
   null

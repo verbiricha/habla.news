@@ -33,7 +33,7 @@ import LongFormNote from "@habla/components/LongFormNote";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import { articleLink } from "@habla/components/nostr/ArticleLink";
-import { pubkeyAtom, contactListAtom } from "@habla/state";
+import { pubkeyAtom, communitiesAtom, contactListAtom } from "@habla/state";
 import { getHandle } from "@habla/nip05";
 
 function isCommunityTag(t) {
@@ -43,14 +43,14 @@ function isCommunityTag(t) {
 function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   const { t } = useTranslation("common");
   const [selected, setSelected] = useState(initialCommunity);
-  const [contactList] = useAtom(contactListAtom);
+  const [communities] = useAtom(communitiesAtom);
   const followedCommunities = useMemo(() => {
     return (
-      contactList?.tags.filter(
+      communities?.tags.filter(
         (t) => t.at(0) === "a" && t.at(1)?.startsWith(`${COMMUNITY}:`)
       ) || []
     );
-  }, [contactList]);
+  }, [communities]);
 
   function onChange(e) {
     setSelected(e.target.value);

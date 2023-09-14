@@ -6,7 +6,7 @@ import { POST_APPROVAL, HIGHLIGHT, LONG_FORM, NOTE } from "@habla/const";
 import { useEvents } from "@habla/nostr/hooks";
 import User from "@habla/components/nostr/User";
 import Events from "@habla/components/nostr/feed/Events";
-import { FollowReferenceButton } from "@habla/components/nostr/FollowButton";
+import { FollowCommunityButton } from "@habla/components/nostr/FollowButton";
 import { getMetadata } from "@habla/nip72";
 
 export default function Community({ event }) {
@@ -62,7 +62,7 @@ export default function Community({ event }) {
           <Stack flex="1">
             <Flex justifyContent="space-between">
               <Heading>{name}</Heading>
-              <FollowReferenceButton reference={event.tagReference()} />
+              <FollowCommunityButton reference={event.tagReference()} />
             </Flex>
             <Text fontSize="lg">{description}</Text>
             <Heading as="h4" fontSize="lg" mt={4}>

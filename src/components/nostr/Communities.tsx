@@ -6,24 +6,24 @@ import { Heading, Text, Input } from "@chakra-ui/react";
 import { useEvents } from "@habla/nostr/hooks";
 import Community from "@habla/components/nostr/feed/Community";
 import { COMMUNITY } from "@habla/const";
-import { contactListAtom } from "@habla/state";
+import { communitiesAtom } from "@habla/state";
 import { findTag } from "@habla/tags";
 import { getMetadata } from "@habla/nip72";
 
 export default function Communities() {
   const { t } = useTranslation();
-  const [contactList] = useAtom(contactListAtom);
+  const [communities] = useAtom(communitiesAtom);
   const [query, setQuery] = useState("");
   const { events } = useEvents({
     kinds: [COMMUNITY],
   });
   const followedCommunities = useMemo(() => {
     return (
-      contactList?.tags.filter(
+      communities?.tags.filter(
         (t) => t.at(0) === "a" && t.at(1)?.startsWith(`${COMMUNITY}:`)
       ) || []
     );
-  }, [contactList]);
+  }, [communities]);
   const myCommunities = useMemo(() => {
     return followedCommunities
       .map((t) => {

@@ -37,7 +37,7 @@ import {
 } from "@chakra-ui/react";
 import { AtSignIcon, ChevronDownIcon, WarningIcon } from "@chakra-ui/icons";
 
-import { PROFILE, PEOPLE, CONTACTS, RELAYS } from "@habla/const";
+import { PROFILE, PEOPLE, BOOKMARKS, CONTACTS, RELAYS } from "@habla/const";
 import SettingsIcon from "@habla/icons/Settings";
 import RelayIcon from "@habla/icons/Relay";
 import WriteIcon from "@habla/icons/Write";
@@ -51,6 +51,7 @@ import {
   privkeyAtom,
   contactListAtom,
   relayListAtom,
+  communitiesAtom,
   peopleListsAtom,
   defaultRelays,
 } from "@habla/state";
@@ -324,6 +325,7 @@ function LoggedInUser({ pubkey, onClose }) {
   );
   const { t } = useTranslation("common");
   const [relayList, setRelayList] = useAtom(relayListAtom);
+  const [communities, setCommunities] = useAtom(communitiesAtom);
   const [, setPeopleLists] = useAtom(peopleListsAtom);
 
   useEffect(() => {
@@ -367,6 +369,21 @@ function LoggedInUser({ pubkey, onClose }) {
             })
             .filter((p) => p.tags.find((t) => t.at(0) === "p"));
           setPeopleLists(peopleLists);
+        }
+      });
+    // Communities
+    ndk
+      .fetchEvent({
+        kinds: [BOOKMARKS],
+        authors: [pubkey],
+        "#d": ["communities"],
+      })
+      .then((c) => {
+        if (c) {
+          const lastSeen = communities?.created_at ?? 0;
+          if (c.created_at > lastSeen) {
+            setCommunities(c);
+          }
         }
       });
   }, [pubkey]);
