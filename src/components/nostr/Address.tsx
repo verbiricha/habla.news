@@ -18,7 +18,7 @@ import Feed from "./Feed";
 import List from "./List";
 import Badge from "./Badge";
 import ZapstrTrack from "./ZapstrTrack";
-import Community from "./Community";
+import Community from "@habla/components/nostr/feed/Community";
 import App from "./App";
 import AppReccomendation from "./AppReccomendation";
 import UnknownKind from "./UnknownKind";
