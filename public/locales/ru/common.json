@@ -78,6 +78,7 @@
   "share-nostr-cta": "Nostr ID, используйте его, когда делитесь статьей в приложениях на базе Ностра.",
   "profile": "Профиль",
   "relays": "Релеи",
+  "select-relays": "Select the relays you want to publish to.",
   "logout": "Выйти",
   "what-we-will-call-you": "Как к вам обращаться?",
   "you-can-change-later": "Вы можете внести изменения в настройках позже",
@@ -126,5 +127,8 @@
   "settings": "Settings",
   "wallet": "Wallet",
   "profile-saved": "Profile saved",
-  "relays-saved": "Relay list saved"
+  "relays-saved": "Relay list saved",
+  "published-in": "Published in",
+  "publish": "Publish",
+  "publish-draft": "Publish draft"
 }
