@@ -1,9 +1,11 @@
-import Link from "next/link";
 import { useRef, useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useAtom } from "jotai";
+import { NDKRelaySet, NDKEvent } from "@nostr-dev-kit/ndk";
 
+import { useDisclosure } from "@chakra-ui/react";
 import {
   useToast,
   Flex,
@@ -16,6 +18,13 @@ import {
   Text,
   Textarea,
   Select,
+  Modal,
+  ModalOverlay,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalBody,
 } from "@chakra-ui/react";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -26,15 +35,21 @@ import slugify from "slugify";
 import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
 import { COMMUNITY, LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
-import { usePublishEvent } from "@habla/nostr/hooks";
+import { useNdk, usePublishEvent } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
 import LongFormNote from "@habla/components/LongFormNote";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import { articleLink } from "@habla/components/nostr/ArticleLink";
-import { pubkeyAtom, communitiesAtom, contactListAtom } from "@habla/state";
+import {
+  pubkeyAtom,
+  relaysAtom,
+  communitiesAtom,
+  contactListAtom,
+} from "@habla/state";
 import { getHandle } from "@habla/nip05";
+import RelaySelector from "@habla/components/RelaySelector";
 
 function isCommunityTag(t) {
   return t.startsWith(`${COMMUNITY}:`);
@@ -77,12 +92,91 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   );
 }
 
+function PublishModal({ event, isDraft, isOpen, onClose }) {
+  const { t } = useTranslation("common");
+  const ndk = useNdk();
+  const [relays] = useAtom(relaysAtom);
+  const [link, setLink] = useState();
+  const [relaySelection, setRelaySelection] = useState(relays);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [hasPublished, setHasPublished] = useState(false);
+  const [publishedOn, setPublishedOn] = useState([]);
+
+  async function onPost() {
+    try {
+      setIsPublishing(true);
+      const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
+      const ev = isDraft ? { ...event, kind: LONG_FORM_DRAFT } : event;
+      const ndkEvent = new NDKEvent(ndk, ev);
+      await ndkEvent.sign();
+      const results = await ndkEvent.publish(relaySet);
+      setPublishedOn(Array.from(results).map((r) => r.url));
+      setHasPublished(true);
+      if (!isDraft) {
+        const link = articleLink(ndkEvent);
+        setLink(link);
+      }
+    } finally {
+      setIsPublishing(false);
+    }
+  }
+
+  function onCloseModal() {
+    onClose();
+    setIsPublishing(false);
+    setHasPublished(false);
+    setPublishedOn();
+    setRelaySelection(relays);
+    setLink();
+  }
+
+  return (
+    <Modal isOpen={isOpen} onClose={onCloseModal}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{isDraft ? t("publish-draft") : t("publish")}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Stack spacing={4}>
+            <RelaySelector
+              isPublishing={isPublishing}
+              hasPublished={hasPublished}
+              publishedOn={publishedOn}
+              onChange={setRelaySelection}
+            />
+            {link && (
+              <Text
+                as="span"
+                fontFamily="Inter"
+                textDecoration="underline"
+                textDecorationStyle="dotted"
+              >
+                <Link href={link}>{`habla.news${link}`}</Link>
+              </Text>
+            )}
+          </Stack>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            isDisabled={relaySelection.length === 0}
+            colorScheme="orange"
+            onClick={onPost}
+          >
+            {t("post")}
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}
+
 export default function MyEditor({ event, showPreview }) {
   const { t } = useTranslation("common");
   const toast = useToast();
   const publish = usePublishEvent({ showToast: true });
   const ref = useRef();
   const router = useRouter();
+  const publishModal = useDisclosure();
   const metadata = event && getMetadata(event);
   const [pubkey] = useAtom(pubkeyAtom);
   const handle = getHandle(pubkey);
@@ -96,6 +190,7 @@ export default function MyEditor({ event, showPreview }) {
   const [hashtags, setHashtags] = useState(
     metadata?.hashtags?.join(", ") ?? ""
   );
+  const [isDraft, setIsDraft] = useState(false);
   const [content, setContent] = useState(event?.content ?? "");
   const initialCommunity = (event?.tags ?? [])
     .find((t) => {
@@ -133,47 +228,21 @@ export default function MyEditor({ event, showPreview }) {
     setContent(urlsToNip27(text));
   }
 
-  async function onPost() {
-    try {
-      setIsPublishing(true);
-      const signed = await publish(ev, {
-        successTitle: "Posted",
-        sucessMessage: "",
-        errorTitle: "Couldn't sign post",
-        errorMessage: "",
-      });
-      if (signed) {
-        const link = articleLink(signed);
-        await router.push(link, undefined, { shallow: true });
-      }
-    } finally {
-      setIsPublishing(false);
-    }
-  }
-
-  async function onSave() {
-    try {
-      setIsPublishing(true);
-      const s = {
-        ...ev,
-        kind: LONG_FORM_DRAFT,
-      };
-      await publish(s, {
-        successTitle: "Draft saved",
-        sucessMessage: "",
-        errorTitle: "Couldn't save draft",
-        errorMessage: "",
-      });
-    } finally {
-      setIsPublishing(false);
-    }
-  }
-
   useEffect(() => {
     if (ref.current) {
       ref.current.nodeMdText.current.dir = "auto";
     }
   }, [ref, showPreview]);
+
+  function onSaveDraft() {
+    setIsDraft(true);
+    publishModal.onOpen();
+  }
+
+  function onSave() {
+    setIsDraft(false);
+    publishModal.onOpen();
+  }
 
   function onTitleChange(ev) {
     setTitle(ev.target.value);
@@ -187,6 +256,7 @@ export default function MyEditor({ event, showPreview }) {
     <LongFormNote event={ev} isDraft excludeAuthor isEditingInline={true} />
   ) : (
     <>
+      <PublishModal event={ev} isDraft={isDraft} {...publishModal} />
       <Flex flexDirection="column" alignItems="flex-start" mb={10}>
         <FormLabel htmlFor="title">{t("title")}</FormLabel>
         <Input
@@ -257,10 +327,10 @@ export default function MyEditor({ event, showPreview }) {
         />
 
         <Flex my={4} justifyContent="space-between" width="100%">
-          <Button variant="solid" onClick={() => onSave()}>
+          <Button variant="solid" onClick={onSaveDraft}>
             {t("save-draft")}
           </Button>
-          <Button variant="solid" colorScheme="orange" onClick={() => onPost()}>
+          <Button variant="solid" colorScheme="orange" onClick={onSave}>
             {event?.kind === 30023 && event?.sig ? t("update") : t("post")}
           </Button>
         </Flex>
