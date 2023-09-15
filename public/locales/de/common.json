@@ -78,6 +78,7 @@
   "share-nostr-cta": "Verwende die Nostr-ID, wenn du den Text auf Nostr teilen willst.",
   "profile": "Profil",
   "relays": "Relays",
+  "select-relays": "Select the relays you want to publish to.",
   "logout": "Logout",
   "what-we-will-call-you": "Wie willst du dich nennen?",
   "you-can-change-later": "Du kannst das später in den Einstellungen ändern",
@@ -126,5 +127,8 @@
   "settings": "Einstellungen",
   "wallet": "Wallet",
   "profile-saved": "Profil gespeichert",
-  "relays-saved": "Relay-Liste gespeichert"
+  "relays-saved": "Relay-Liste gespeichert",
+  "published-in": "Published in",
+  "publish": "Publish",
+  "publish-draft": "Publish draft"
 }
