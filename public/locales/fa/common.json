@@ -78,6 +78,7 @@
   "share-nostr-cta": "شناسه ناستر، هنگام اشتراک گذاری در ناستر از این استفاده کنید.",
   "profile": "نمایه",
   "relays": "رله",
+  "select-relays": "Select the relays you want to publish to.",
   "logout": "خروج",
   "what-we-will-call-you": "شما را چی صدا بزنیم؟",
   "you-can-change-later": "بعدا اگر بخواهید می توانید این را تغییر دهید",
@@ -126,5 +127,8 @@
   "settings": "تنظیمات",
   "wallet": "کیف پول",
   "profile-saved": "Profile saved",
-  "relays-saved": "Relay list saved"
+  "relays-saved": "Relay list saved",
+  "published-in": "Published in",
+  "publish": "Publish",
+  "publish-draft": "Publish draft"
 }
