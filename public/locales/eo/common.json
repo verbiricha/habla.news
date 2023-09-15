@@ -78,6 +78,7 @@
   "share-nostr-cta": "Nostr-identigilo, uzu ĉi tiun kiam vi kunigus en nostr.",
   "profile": "Profilo",
   "relays": "Ripetiloj",
+  "select-relays": "Select the relays you want to publish to.",
   "logout": "Elsaluti",
   "what-we-will-call-you": "What we will call you?",
   "you-can-change-later": "You can change this later if you like",
@@ -126,5 +127,8 @@
   "settings": "Settings",
   "wallet": "Wallet",
   "profile-saved": "Profile saved",
-  "relays-saved": "Relay list saved"
+  "relays-saved": "Relay list saved",
+  "published-in": "Published in",
+  "publish": "Publish",
+  "publish-draft": "Publish draft"
 }
