@@ -78,6 +78,7 @@
   "share-nostr-cta": "Nostr IDです。Nostr内で共有する場合はこれを活用してください。",
   "profile": "プロフィール",
   "relays": "リレー",
+  "select-relays": "Select the relays you want to publish to.",
   "logout": "ログアウト",
   "what-we-will-call-you": "What we will call you?",
   "you-can-change-later": "You can change this later if you like",
@@ -126,5 +127,8 @@
   "settings": "Settings",
   "wallet": "Wallet",
   "profile-saved": "Profile saved",
-  "relays-saved": "Relay list saved"
+  "relays-saved": "Relay list saved",
+  "published-in": "Published in",
+  "publish": "Publish",
+  "publish-draft": "Publish draft"
 }

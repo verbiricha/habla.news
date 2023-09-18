@@ -78,6 +78,7 @@
   "share-nostr-cta": "Nostr ID, tumia hii wakati wa kushiriki kwenye nostr.",
   "profile": "Wasifu",
   "relays": "Relay",
+  "select-relays": "Select the relays you want to publish to.",
   "logout": "Toka nje",
   "what-we-will-call-you": "Tutakuitaje?",
   "you-can-change-later": "Unaweza kubadilisha hii baadaye ukipenda",
@@ -126,5 +127,8 @@
   "settings": "Mipangilio",
   "wallet": "Pochi",
   "profile-saved": "Wasifu umehifadhiwa",
-  "relays-saved": "Orodha ya relay imehifadhiwa"
+  "relays-saved": "Orodha ya relay imehifadhiwa",
+  "published-in": "Published in",
+  "publish": "Publish",
+  "publish-draft": "Publish draft"
 }
