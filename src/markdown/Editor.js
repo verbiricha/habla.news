@@ -25,6 +25,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalBody,
+  Checkbox,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -42,6 +48,7 @@ import LongFormNote from "@habla/components/LongFormNote";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import { articleLink } from "@habla/components/nostr/ArticleLink";
+import { useRelaysMetadata } from "@habla/hooks/useRelayMetadata";
 import {
   pubkeyAtom,
   relaysAtom,
@@ -50,6 +57,8 @@ import {
 } from "@habla/state";
 import { getHandle } from "@habla/nip05";
 import RelaySelector from "@habla/components/RelaySelector";
+import User from "@habla/components/nostr/User";
+import { formatShortNumber } from "@habla/format";
 
 function isCommunityTag(t) {
   return t.startsWith(`${COMMUNITY}:`);
@@ -92,6 +101,93 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   );
 }
 
+function ZapSplitConfig({ relaySelection, onChange }) {
+  // todo: use user relay for profile metadata
+  const { t } = useTranslation("common");
+  const [pubkey] = useAtom(pubkeyAtom);
+  const { data: relayMetadata } = useRelaysMetadata(relaySelection);
+  const [enableSplits, setEnableSplits] = useState(false);
+  const [zapSplits, setZapSplits] = useState([]);
+
+  useEffect(() => {
+    if (enableSplits) {
+      const relayOperators = relayMetadata
+        .map((m) => m.pubkey)
+        .filter((p) => p && p != pubkey);
+      const split = [
+        [
+          "zap",
+          pubkey,
+          "wss://purplepag.es",
+          String(100 - relayOperators.length - 1),
+        ],
+        ...relayOperators.map((p) => ["zap", p, "wss://purplepag.es", "1"]),
+        [
+          "zap",
+          "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c",
+          "wss://purplepag.es",
+          "1",
+        ],
+      ];
+      setZapSplits(split);
+      onChange(split);
+    } else {
+      setZapSplits([]);
+      onChange();
+    }
+  }, [enableSplits]);
+  const totalWeight = useMemo(() => {
+    return zapSplits.reduce((acc, z) => acc + Number(z.at(3)), 0);
+  }, [zapSplits]);
+
+  return (
+    <>
+      <Checkbox
+        isChecked={enableSplits}
+        onChange={(e) => setEnableSplits(e.target.checked)}
+      >
+        <Text>{t("enable-splits")}</Text>
+      </Checkbox>
+      {enableSplits &&
+        zapSplits.map((z, idx) => {
+          const percentage = Number(z.at(3)) / totalWeight;
+
+          function changeWeight(v) {
+            const newSplits = zapSplits.map((oldZap, i) =>
+              i === idx ? ["zap", oldZap.at(1), oldZap.at(2), v] : oldZap
+            );
+            setZapSplits(newSplits);
+            onChange(newSplits);
+          }
+
+          return (
+            <Flex justifyContent="space-between">
+              <User pubkey={z.at(1)} size="xs" />
+              <Flex gap={2} align="center">
+                <Text as="span" fontSize="md" color="secondary">
+                  {formatShortNumber((percentage * 100).toFixed(0))}%
+                </Text>
+                <NumberInput
+                  w="80px"
+                  defaultValue={z.at(3)}
+                  min={0}
+                  step={1}
+                  onChange={changeWeight}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
+              </Flex>
+            </Flex>
+          );
+        })}
+    </>
+  );
+}
+
 function PublishModal({ event, isDraft, isOpen, onClose }) {
   const { t } = useTranslation("common");
   const ndk = useNdk();
@@ -101,12 +197,19 @@ function PublishModal({ event, isDraft, isOpen, onClose }) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [hasPublished, setHasPublished] = useState(false);
   const [publishedOn, setPublishedOn] = useState([]);
+  const [zapSplits, setZapSplits] = useState();
 
   async function onPost() {
     try {
       setIsPublishing(true);
+      const zapTags = zapSplits
+        ? zapSplits.filter((z) => z.at(3) !== "0")
+        : null;
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
       const ev = isDraft ? { ...event, kind: LONG_FORM_DRAFT } : event;
+      if (zapTags && zapTags.length > 1) {
+        ev.tags = ev.tags.concat(zapTags);
+      }
       const ndkEvent = new NDKEvent(ndk, ev);
       await ndkEvent.sign();
       const results = await ndkEvent.publish(relaySet);
@@ -127,6 +230,7 @@ function PublishModal({ event, isDraft, isOpen, onClose }) {
     setHasPublished(false);
     setPublishedOn();
     setRelaySelection(relays);
+    setZapSplits();
     setLink();
   }
 
@@ -144,6 +248,12 @@ function PublishModal({ event, isDraft, isOpen, onClose }) {
               publishedOn={publishedOn}
               onChange={setRelaySelection}
             />
+            {!isDraft && (
+              <ZapSplitConfig
+                relaySelection={relaySelection}
+                onChange={setZapSplits}
+              />
+            )}
             {link && (
               <Text
                 as="span"

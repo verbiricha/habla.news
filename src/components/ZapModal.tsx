@@ -189,7 +189,6 @@ export function ZapSplitModal({ event, isOpen, onClose }) {
   useEffect(() => {
     if (isOpen && hasAddresses) {
       Promise.all(profiles.map((p) => loadService(p.lud16))).then((lnurls) => {
-        console.log("LNURLS", lnurls);
         setLnurls(lnurls);
         setCanZap(true);
       });
@@ -273,7 +272,6 @@ export function ZapSplitModal({ event, isOpen, onClose }) {
       setIsFetchingInvoices(false);
     }
   }
-  console.log({ lnurls, invoices });
 
   return (
     <Modal isOpen={isOpen} onClose={closeModal} isCentered>
