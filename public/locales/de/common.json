@@ -130,5 +130,10 @@
   "relays-saved": "Relay-Liste gespeichert",
   "published-in": "Veröffentlicht auf",
   "publish": "Veröffentlichen",
-  "publish-draft": "Entwurf veröffentlichen"
+  "publish-draft": "Entwurf veröffentlichen",
+  "ends": "endet",
+  "ended": "beendet",
+  "contribute": "Mitwirken",
+  "close": "Schließen",
+  "zap": "Zap"
 }
