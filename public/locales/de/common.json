@@ -131,9 +131,9 @@
   "published-in": "Veröffentlicht auf",
   "publish": "Veröffentlichen",
   "publish-draft": "Entwurf veröffentlichen",
-  "ends": "ends",
-  "ended": "ended",
-  "contribute": "Contribute",
-  "close": "Close",
+  "ends": "endet",
+  "ended": "beendet",
+  "contribute": "Mitwirken",
+  "close": "Schließen",
   "zap": "Zap"
 }
