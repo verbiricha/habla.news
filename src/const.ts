@@ -3,6 +3,7 @@ export const NOTE = 1;
 export const CONTACTS = 3;
 export const REPOST = 16;
 export const REACTION = 7;
+export const ZAP_GOAL = 9041;
 export const ZAP = 9735;
 export const ZAP_REQUEST = 9734;
 export const PROFILE = 0;

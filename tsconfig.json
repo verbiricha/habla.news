@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "@habla/*": ["src/*"]
+      "@habla/*": ["./src/*"]
     },
     "target": "es5",
     "lib": [

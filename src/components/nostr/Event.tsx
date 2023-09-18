@@ -1,13 +1,21 @@
 import { Text } from "@chakra-ui/react";
-import { HIGHLIGHT, NOTE, BADGE, ZAPSTR_TRACK, JOB_RESULT } from "@habla/const";
+import {
+  HIGHLIGHT,
+  NOTE,
+  BADGE,
+  ZAPSTR_TRACK,
+  JOB_RESULT,
+  ZAP_GOAL,
+} from "@habla/const";
 
 import Blockquote from "@habla/components/Blockquote";
 
-import Highlight from "./feed/Highlight";
-import Note from "./Note";
-import Badge from "./Badge";
-import ZapstrTrack from "./ZapstrTrack";
-import JobResult from "./JobResult";
+import Highlight from "@habla/components/nostr/feed/Highlight";
+import Note from "@habla/components/nostr/Note";
+import Badge from "@habla/components/nostr/Badge";
+import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
+import JobResult from "@habla/components/nostr/JobResult";
+import Goal from "@habla/components/nostr/Goal";
 import UnknownKind from "@habla/components/nostr/UnknownKind";
 
 export default function Event(props) {
@@ -31,6 +39,10 @@ export default function Event(props) {
 
   if (event.kind === ZAPSTR_TRACK) {
     return <ZapstrTrack {...props} />;
+  }
+
+  if (event.kind === ZAP_GOAL) {
+    return <Goal {...props} />;
   }
 
   return <UnknownKind event={event} {...props} />;

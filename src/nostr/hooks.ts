@@ -136,6 +136,39 @@ export function useUser(pubkey) {
   return user;
 }
 
+export function useUsers(pubkeys) {
+  const { ndk } = useContext(NostrContext);
+
+  const users = useLiveQuery(
+    async () => {
+      try {
+        return await db.profile.where("id").anyOf(pubkeys).toArray();
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    },
+    [pubkeys],
+    []
+  );
+
+  useEffect(() => {
+    if (pubkeys) {
+      ndk.fetchEvents(
+        {
+          kinds: [PROFILE],
+          authors: pubkeys,
+        },
+        {
+          cacheUsage: "PARALLEL",
+        }
+      );
+    }
+  }, [pubkeys]);
+
+  return users;
+}
+
 function eventToFilter(ev: NDKEvent) {
   const [t, v] = ev.tagReference();
   return { [`#${t}`]: [v] };

@@ -1,6 +1,19 @@
 import { decode } from "light-bolt11-decoder";
 
-import { findTag } from "./tags";
+import { findTag } from "@habla/tags";
+
+export function getZapTags(ev) {
+  return ev.tags.filter((t) => t.at(0) === "zap" && t.length === 4);
+}
+
+export function getRelays(ev) {
+  const tag = ev.tags.find((t) => t.at(0) === "relays");
+  if (tag) {
+    return tag.slice(1);
+  } else {
+    return null;
+  }
+}
 
 export function getZapRequest(zap) {
   let zapRequest = findTag(zap, "description");
