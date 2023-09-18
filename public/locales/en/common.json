@@ -131,5 +131,10 @@
   "relays-saved": "Relay list saved",
   "published-in": "Published in",
   "publish": "Publish",
-  "publish-draft": "Publish draft"
+  "publish-draft": "Publish draft",
+  "ends": "ends",
+  "ended": "ended",
+  "contribute": "Contribute",
+  "close": "Close",
+  "zap": "Zap"
 }
