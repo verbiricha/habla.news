@@ -101,16 +101,19 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   );
 }
 
-function ZapSplitConfig({ relaySelection, onChange }) {
+function ZapSplitConfig({ initialZapSplits, relaySelection, onChange }) {
   // todo: use user relay for profile metadata
   const { t } = useTranslation("common");
   const [pubkey] = useAtom(pubkeyAtom);
+  console.log("INITI", initialZapSplits);
   const { data: relayMetadata } = useRelaysMetadata(relaySelection);
-  const [enableSplits, setEnableSplits] = useState(false);
-  const [zapSplits, setZapSplits] = useState([]);
+  const [enableSplits, setEnableSplits] = useState(Boolean(initialZapSplits));
+  const [zapSplits, setZapSplits] = useState(
+    initialZapSplits ? initialZapSplits : []
+  );
 
   useEffect(() => {
-    if (enableSplits) {
+    if (enableSplits && !initialZapSplits) {
       const relayOperators = relayMetadata
         .map((m) => m.pubkey)
         .filter((p) => p && p != pubkey);
@@ -131,7 +134,7 @@ function ZapSplitConfig({ relaySelection, onChange }) {
       ];
       setZapSplits(split);
       onChange(split);
-    } else {
+    } else if (!enableSplits) {
       setZapSplits([]);
       onChange();
     }
@@ -188,7 +191,7 @@ function ZapSplitConfig({ relaySelection, onChange }) {
   );
 }
 
-function PublishModal({ event, isDraft, isOpen, onClose }) {
+function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
   const { t } = useTranslation("common");
   const ndk = useNdk();
   const [relays] = useAtom(relaysAtom);
@@ -197,7 +200,7 @@ function PublishModal({ event, isDraft, isOpen, onClose }) {
   const [isPublishing, setIsPublishing] = useState(false);
   const [hasPublished, setHasPublished] = useState(false);
   const [publishedOn, setPublishedOn] = useState([]);
-  const [zapSplits, setZapSplits] = useState();
+  const [zapSplits, setZapSplits] = useState(initialZapSplits);
 
   async function onPost() {
     try {
@@ -250,6 +253,7 @@ function PublishModal({ event, isDraft, isOpen, onClose }) {
             />
             {!isDraft && (
               <ZapSplitConfig
+                initialZapSplits={initialZapSplits}
                 relaySelection={relaySelection}
                 onChange={setZapSplits}
               />
@@ -366,7 +370,12 @@ export default function MyEditor({ event, showPreview }) {
     <LongFormNote event={ev} isDraft excludeAuthor isEditingInline={true} />
   ) : (
     <>
-      <PublishModal event={ev} isDraft={isDraft} {...publishModal} />
+      <PublishModal
+        initialZapSplits={event?.tags.filter((t) => t.at(0) === "zap")}
+        event={ev}
+        isDraft={isDraft}
+        {...publishModal}
+      />
       <Flex flexDirection="column" alignItems="flex-start" mb={10}>
         <FormLabel htmlFor="title">{t("title")}</FormLabel>
         <Input
