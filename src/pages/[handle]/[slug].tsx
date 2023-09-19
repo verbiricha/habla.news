@@ -23,7 +23,11 @@ export default function Post({ pubkey, slug, event }) {
   }
 
   if (!event) {
-    return <HablaPost pubkey={pubkey} slug={slug} />;
+    return (
+      <Layout>
+        <HablaPost pubkey={pubkey} slug={slug} />
+      </Layout>
+    );
   }
 
   const { title, summary, image } = getMetadata(event);
