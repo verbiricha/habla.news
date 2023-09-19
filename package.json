@@ -16,7 +16,7 @@
     "@fontsource/source-serif-pro": "^4.5.9",
     "@fontsource/unbounded": "^4.5.1",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@nostr-dev-kit/ndk": "^1.0.0",
+    "@nostr-dev-kit/ndk": "^1.2.1",
     "@tanstack/react-query": "^4.35.0",
     "@void-cat/api": "^1.0.7",
     "bech32": "^2.0.0",
