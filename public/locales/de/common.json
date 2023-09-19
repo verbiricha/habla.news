@@ -135,5 +135,6 @@
   "ended": "beendet",
   "contribute": "Mitwirken",
   "close": "Schließen",
-  "zap": "Zap"
+  "zap": "Zap",
+  "enable-splits": "Zap-Aufteilungen aktivieren"
 }

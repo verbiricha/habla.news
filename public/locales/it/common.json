@@ -135,5 +135,6 @@
   "ended": "ended",
   "contribute": "Contribute",
   "close": "Close",
-  "zap": "Zap"
+  "zap": "Zap",
+  "enable-splits": "Enable zap splits"
 }
