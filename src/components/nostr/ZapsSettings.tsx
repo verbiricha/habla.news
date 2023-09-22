@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 import { nip19 } from "nostr-tools";
 import { useAtom } from "jotai";
@@ -24,6 +25,11 @@ import InputCopy from "@habla/components/InputCopy";
 import ExternalLink from "@habla/components/ExternalLink";
 import ImageUploader from "@habla/components/ImageUploader";
 import { PROFILE } from "@habla/const";
+
+const BitcoinConnectButton = dynamic(
+  () => import("@getalby/bitcoin-connect-react").then(({ Button }) => Button),
+  { ssr: false }
+);
 
 export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
   // todo: wallet selector: webln, nwc
@@ -57,15 +63,6 @@ export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
     }
   }
 
-  async function onDone() {
-    try {
-      const profile = await publishProfile();
-      onSave(profile);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
     <Stack spacing={4}>
       {skipText ? (
@@ -79,31 +76,8 @@ export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
           <Text>{t("zaps-settings-more")}</Text>
         </>
       )}
-      <FormControl>
-        <FormLabel>{t("lnaddress-label")}</FormLabel>
-        <Input
-          type="text"
-          value={lud16}
-          onChange={(e) => setLud16(e.target.value)}
-          placeholder={t("lnaddress-placeholder")}
-        />
-        <FormHelperText>{t("lnaddress-help")}</FormHelperText>
-      </FormControl>
-      <Flex gap={2}>
-        {onCancel && (
-          <Button variant="solid" maxW="120px" size="md" onClick={onCancel}>
-            {t("cancel")}
-          </Button>
-        )}
-        <Button
-          variant="solid"
-          colorScheme="purple"
-          maxW="120px"
-          size="md"
-          onClick={onDone}
-        >
-          {t("save")}
-        </Button>
+      <Flex mt={4}>
+        <BitcoinConnectButton onDisconnect={() => location.reload()} />
       </Flex>
     </Stack>
   );
