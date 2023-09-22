@@ -63,6 +63,15 @@ export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
     }
   }
 
+  async function onDone() {
+    try {
+      const profile = await publishProfile();
+      onSave(profile);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <Stack spacing={4}>
       {skipText ? (
@@ -76,8 +85,34 @@ export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
           <Text>{t("zaps-settings-more")}</Text>
         </>
       )}
+      <FormControl>
+        <FormLabel>{t("lnaddress-label")}</FormLabel>
+        <Input
+          type="text"
+          value={lud16}
+          onChange={(e) => setLud16(e.target.value)}
+          placeholder={t("lnaddress-placeholder")}
+        />
+        <FormHelperText>{t("lnaddress-help")}</FormHelperText>
+      </FormControl>
+      <Flex gap={2}>
+        {onCancel && (
+          <Button variant="solid" maxW="120px" size="md" onClick={onCancel}>
+            {t("cancel")}
+          </Button>
+        )}
+        <Button
+          variant="solid"
+          colorScheme="purple"
+          maxW="120px"
+          size="md"
+          onClick={onDone}
+        >
+          {t("save")}
+        </Button>
+      </Flex>
       <Flex mt={4}>
-        <BitcoinConnectButton onDisconnect={() => location.reload()} />
+        <BitcoinConnectButton />
       </Flex>
     </Stack>
   );
