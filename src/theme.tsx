@@ -42,6 +42,12 @@ const theme = extendTheme(
         fontFamily: "'Source Serif Pro', serif",
         fontSize: "lg",
       },
+      ul: {
+        fontFamily: "'Source Serif Pro', serif",
+      },
+      ol: {
+        fontFamily: "'Source Serif Pro', serif",
+      },
       blockquote: {
         fontSize: "lg",
       },
