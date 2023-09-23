@@ -37,6 +37,7 @@ import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import { ZAP_REQUEST } from "@habla/const";
 import useWebln from "@habla/hooks/useWebln";
+import useZapSplit from "@habla/hooks/useZapSplit";
 import InputCopy from "@habla/components/InputCopy";
 import { relaysAtom } from "@habla/state";
 import { useNdk, useUser, useUsers } from "@habla/nostr/hooks";
@@ -111,8 +112,8 @@ function SatSlider({ minSendable, maxSendable, onSelect }) {
   }
 
   return (
-    <Stack gap={1} width="100%">
-      <Stack align="center" gap={2}>
+    <Stack gap={2} width="100%">
+      <Stack align="center">
         <Heading sx={{ fontFeatureSettings: '"tnum"' }}>
           {formatShortNumber(amount)}
         </Heading>
@@ -170,19 +171,7 @@ export function ZapSplitModal({ event, isOpen, onClose }) {
   const profiles = useUsers(pubkeys);
   const hasAddresses = profiles?.length > 0 && profiles.every((p) => p.lud16);
   const [sats, setSats] = useState(defaultZapAmount);
-  const totalWeight = useMemo(() => {
-    return zapTags.reduce((acc, t) => {
-      return acc + Number(t.at(3) ?? "");
-    }, 0);
-  }, [zapTags]);
-  const split = useMemo(() => {
-    return zapTags.map((t) => {
-      const [, pubkey, , weight] = t;
-      const percentage = Number(weight) / totalWeight;
-      const gets = Number(sats) * percentage;
-      return { pubkey, gets, percentage };
-    });
-  }, [zapTags, sats]);
+  const split = useZapSplit(zapTags, sats);
   const [invoices, setInvoices] = useState();
   const [comment, setComment] = useState("");
 
@@ -507,7 +496,7 @@ function SingleZapModal({ event, isOpen, onClose }) {
               </Alert>
             )}
             {lnurl && !invoice && (
-              <>
+              <Stack spacing={2}>
                 <SatSlider
                   minSendable={lnurl.minSendable}
                   maxSendable={lnurl.maxSendable}
@@ -519,7 +508,7 @@ function SingleZapModal({ event, isOpen, onClose }) {
                   type="text"
                   placeholder="Comment (optional)"
                 />
-              </>
+              </Stack>
             )}
             {lnurl && invoice && (
               <>

@@ -10,7 +10,6 @@ import {
   Heading,
   Text,
   Icon,
-  IconButton,
   InputGroup,
   InputLeftElement,
   Input,

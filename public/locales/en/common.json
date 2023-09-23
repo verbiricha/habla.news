@@ -21,6 +21,7 @@
   "create-account": "Create account",
   "articles": "Articles",
   "drafts": "Drafts",
+  "highlight": "Highlight",
   "highlights": "Highlights",
   "search": "Search",
   "write": "Write",
@@ -137,5 +138,9 @@
   "contribute": "Contribute",
   "close": "Close",
   "zap": "Zap",
-  "enable-splits": "Enable zap splits"
+  "revenue": "Revenue",
+  "revenue-descr": "Configure how revenue is shared",
+  "enable-splits": "Enable revenue split",
+  "highlighted": "✍️ Highlighted",
+  "something-went-wrong": "Something went wrong"
 }

@@ -62,11 +62,21 @@ export function PublishedIn({ event, community }) {
   return (
     <Text color="secondary" fontSize="sm">
       {t("published-in")}{" "}
-      <Link href={`/c/${naddr}`} shallow>
+      {naddr ? (
+        <Link href={`/c/${naddr}`} shallow>
+          <Text
+            as="span"
+            textDecoration="underline"
+            textDecorationStyle="dotted"
+          >
+            {name}
+          </Text>
+        </Link>
+      ) : (
         <Text as="span" textDecoration="underline" textDecorationStyle="dotted">
           {name}
         </Text>
-      </Link>
+      )}
     </Text>
   );
 }

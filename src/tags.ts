@@ -3,7 +3,11 @@ export function findTag(ev: NDKEvent, tag) {
 }
 
 export function findTags(ev: NDKEvent, tag) {
-  return ev.tags.filter((t) => t.at(0) === tag).map((t) => t.at(1));
+  return filterTags(ev, tag).map((t) => t.at(1));
+}
+
+export function filterTags(ev: NDKEvent, tag) {
+  return ev.tags.filter((t) => t.at(0) === tag);
 }
 
 export function pickTopNHashtags(hashtags, n) {

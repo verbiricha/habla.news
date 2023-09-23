@@ -46,9 +46,11 @@ export default function ArticleLink({ event, children }) {
     return articleLink(event, profile);
   }, [event, profile]);
 
-  return (
+  return link ? (
     <Link href={link} shallow>
       {children}
     </Link>
+  ) : (
+    children
   );
 }

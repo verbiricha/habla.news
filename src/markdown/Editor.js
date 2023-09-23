@@ -25,12 +25,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalBody,
-  Checkbox,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
 } from "@chakra-ui/react";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
@@ -40,11 +34,19 @@ import slugify from "slugify";
 
 import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
-import { COMMUNITY, LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
+import {
+  HABLA_PUBKEY,
+  COMMUNITY,
+  LONG_FORM,
+  LONG_FORM_DRAFT,
+} from "@habla/const";
 import { useNdk, usePublishEvent } from "@habla/nostr/hooks";
 import { getMetadata } from "@habla/nip23";
 import Markdown from "@habla/markdown/Markdown";
+import AccordionMenu from "@habla/components/AccordionMenu";
 import LongFormNote from "@habla/components/LongFormNote";
+import FeedLongFormNote from "@habla/components/nostr/feed/LongFormNote";
+import ZapSplitConfig from "@habla/components/ZapSplitConfig";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import { articleLink } from "@habla/components/nostr/ArticleLink";
@@ -58,7 +60,6 @@ import {
 import { getHandle } from "@habla/nip05";
 import RelaySelector from "@habla/components/RelaySelector";
 import User from "@habla/components/nostr/User";
-import { formatShortNumber } from "@habla/format";
 
 function isCommunityTag(t) {
   return t.startsWith(`${COMMUNITY}:`);
@@ -101,119 +102,39 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   );
 }
 
-function ZapSplitConfig({ initialZapSplits, relaySelection, onChange }) {
-  // todo: use user relay for profile metadata
-  const { t } = useTranslation("common");
-  const [pubkey] = useAtom(pubkeyAtom);
-  console.log("INITI", initialZapSplits);
-  const { data: relayMetadata } = useRelaysMetadata(relaySelection);
-  const [enableSplits, setEnableSplits] = useState(Boolean(initialZapSplits));
-  const [zapSplits, setZapSplits] = useState(
-    initialZapSplits ? initialZapSplits : []
-  );
-
-  useEffect(() => {
-    if (enableSplits && !initialZapSplits) {
-      const relayOperators = relayMetadata
-        .map((m) => m.pubkey)
-        .filter((p) => p && p != pubkey);
-      const split = [
-        [
-          "zap",
-          pubkey,
-          "wss://purplepag.es",
-          String(100 - relayOperators.length - 1),
-        ],
-        ...relayOperators.map((p) => ["zap", p, "wss://purplepag.es", "1"]),
-        [
-          "zap",
-          "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c",
-          "wss://purplepag.es",
-          "1",
-        ],
-      ];
-      setZapSplits(split);
-      onChange(split);
-    } else if (!enableSplits) {
-      setZapSplits([]);
-      onChange();
-    }
-  }, [enableSplits]);
-  const totalWeight = useMemo(() => {
-    return zapSplits.reduce((acc, z) => acc + Number(z.at(3)), 0);
-  }, [zapSplits]);
-
-  return (
-    <>
-      <Checkbox
-        isChecked={enableSplits}
-        onChange={(e) => setEnableSplits(e.target.checked)}
-      >
-        <Text>{t("enable-splits")}</Text>
-      </Checkbox>
-      {enableSplits &&
-        zapSplits.map((z, idx) => {
-          const percentage = Number(z.at(3)) / totalWeight;
-
-          function changeWeight(v) {
-            const newSplits = zapSplits.map((oldZap, i) =>
-              i === idx ? ["zap", oldZap.at(1), oldZap.at(2), v] : oldZap
-            );
-            setZapSplits(newSplits);
-            onChange(newSplits);
-          }
-
-          return (
-            <Flex justifyContent="space-between">
-              <User pubkey={z.at(1)} size="xs" />
-              <Flex gap={2} align="center">
-                <Text as="span" fontSize="md" color="secondary">
-                  {formatShortNumber((percentage * 100).toFixed(0))}%
-                </Text>
-                <NumberInput
-                  w="80px"
-                  defaultValue={z.at(3)}
-                  min={0}
-                  step={1}
-                  onChange={changeWeight}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-              </Flex>
-            </Flex>
-          );
-        })}
-    </>
-  );
-}
-
 function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
   const { t } = useTranslation("common");
   const ndk = useNdk();
   const [relays] = useAtom(relaysAtom);
   const [link, setLink] = useState();
+  const [pubkey] = useAtom(pubkeyAtom);
   const [relaySelection, setRelaySelection] = useState(relays);
+  const { data: relayMetadata } = useRelaysMetadata(relaySelection);
+  const splitSuggestions = useMemo(() => {
+    const relayOperators =
+      relayMetadata?.map((m) => m.pubkey).filter((p) => p && p != pubkey) ?? [];
+    return relayOperators.concat([HABLA_PUBKEY]);
+  }, [relayMetadata]);
   const [isPublishing, setIsPublishing] = useState(false);
   const [hasPublished, setHasPublished] = useState(false);
   const [publishedOn, setPublishedOn] = useState([]);
   const [zapSplits, setZapSplits] = useState(initialZapSplits);
+  const nostrEvent = useMemo(() => {
+    const zapTags = zapSplits ? zapSplits.filter((z) => z.at(3) !== "0") : null;
+    const ev = isDraft
+      ? { ...event, pubkey, kind: LONG_FORM_DRAFT }
+      : { ...event, pubkey };
+    if (zapTags && zapTags.length > 1) {
+      ev.tags = ev.tags.concat(zapTags);
+    }
+    return ev;
+  }, [event, zapSplits]);
 
   async function onPost() {
     try {
       setIsPublishing(true);
-      const zapTags = zapSplits
-        ? zapSplits.filter((z) => z.at(3) !== "0")
-        : null;
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
-      const ev = isDraft ? { ...event, kind: LONG_FORM_DRAFT } : event;
-      if (zapTags && zapTags.length > 1) {
-        ev.tags = ev.tags.concat(zapTags);
-      }
-      const ndkEvent = new NDKEvent(ndk, ev);
+      const ndkEvent = new NDKEvent(ndk, nostrEvent);
       await ndkEvent.sign();
       const results = await ndkEvent.publish(relaySet);
       setPublishedOn(Array.from(results).map((r) => r.url));
@@ -237,27 +158,47 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
     setLink();
   }
 
+  const menu = [
+    {
+      title: t("relays"),
+      description: t("select-relays"),
+      panel: (
+        <RelaySelector
+          isPublishing={isPublishing}
+          hasPublished={hasPublished}
+          publishedOn={publishedOn}
+          onChange={setRelaySelection}
+        />
+      ),
+    },
+    ...(isDraft
+      ? []
+      : [
+          {
+            title: t("revenue"),
+            description: t("revenue-descr"),
+            panel: (
+              <ZapSplitConfig
+                splitSuggestions={splitSuggestions}
+                initialZapSplits={initialZapSplits}
+                relaySelection={relaySelection}
+                onChange={setZapSplits}
+              />
+            ),
+          },
+        ]),
+  ];
+
   return (
-    <Modal isOpen={isOpen} onClose={onCloseModal}>
+    <Modal isOpen={isOpen} onClose={onCloseModal} size="xl">
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{isDraft ? t("publish-draft") : t("publish")}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Stack spacing={4}>
-            <RelaySelector
-              isPublishing={isPublishing}
-              hasPublished={hasPublished}
-              publishedOn={publishedOn}
-              onChange={setRelaySelection}
-            />
-            {!isDraft && (
-              <ZapSplitConfig
-                initialZapSplits={initialZapSplits}
-                relaySelection={relaySelection}
-                onChange={setZapSplits}
-              />
-            )}
+            <FeedLongFormNote event={nostrEvent} />
+            <AccordionMenu items={menu} />
             {link && (
               <Text
                 as="span"

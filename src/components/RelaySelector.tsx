@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { useTranslation } from "next-i18next";
 
 import { useAtom } from "jotai";
 import {
   Flex,
-  Box,
   Stack,
-  Heading,
   Text,
   Checkbox,
   CheckboxGroup,
@@ -24,7 +21,6 @@ export default function RelaySelector({
   publishedOn,
   onChange,
 }) {
-  const { t } = useTranslation("common");
   const [relays] = useAtom(relaysAtom);
   const [publishOn, setPublishOn] = useState(() => {
     return relays.reduce((acc, r) => {
@@ -33,13 +29,11 @@ export default function RelaySelector({
   });
 
   return (
-    <Stack spacing={3} mt={2}>
-      <Heading fontSize="xl">{t("relays")}</Heading>
-      <Text>{t("select-relays")}</Text>
+    <Stack spacing={3} my={2}>
       <CheckboxGroup colorScheme="purple">
         <Stack spacing={2} direction={"column"}>
           {relays.map((r) => (
-            <Flex alignItems="center" justifyContent="space-between">
+            <Flex key={r} alignItems="center" justifyContent="space-between">
               <Checkbox
                 key={r}
                 isDisabled={isPublishing}
