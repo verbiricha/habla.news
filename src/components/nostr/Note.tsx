@@ -22,7 +22,7 @@ export default function Note({ event, highlights = [], ...props }) {
   }, [event]);
   return (
     <Card variant="outline" my={4} maxW="586px" {...props}>
-      <CardHeader py={1}>
+      <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />
           <ExternalLinkIcon href={`https://snort.social/e/${nevent}`} />

@@ -39,6 +39,7 @@ const theme = extendTheme(
     baseStyle: {
       fontSize: "lg",
       p: {
+        fontFamily: "'Source Serif Pro', serif",
         fontSize: "lg",
       },
       blockquote: {

@@ -1,5 +1,6 @@
 import {
   Flex,
+  Box,
   Stack,
   Card,
   CardHeader,
@@ -39,22 +40,22 @@ export default function LiveEvent({ naddr, event }) {
       sx={{
         textTransform: "uppercase",
         color: "white",
-        bg: "red",
         fontWeight: 600,
       }}
+      size="sm"
     >
-      Live
+      {t("live")}
     </Tag>
   );
   const offline = (
     <Tag
-      w={20}
+      fontSize="sm"
       sx={{
         textTransform: "uppercase",
         fontWeight: 600,
       }}
     >
-      offline
+      {t("offline")}
     </Tag>
   );
 
@@ -82,9 +83,11 @@ export default function LiveEvent({ naddr, event }) {
                 <Text as="h4" style={{ fontSize: "23px", margin: "0" }}>
                   {title}
                 </Text>
-                {status === "live" ? live : offline}
               </Flex>
-              {summary && <Text>{summary}</Text>}
+              <Box>
+                {status === "live" ? live : offline}
+                {summary && <Text>{summary}</Text>}
+              </Box>
               <Flex gap={20} flexWrap="wrap">
                 {people.map(([role, pubkey]) => (
                   <Stack align="center" spacing={3}>

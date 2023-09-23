@@ -85,8 +85,6 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
     );
   });
 
-  // todo: zapsort
-
   return (
     <Drawer size="md" isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
@@ -182,18 +180,24 @@ export default function LongFormNote({
   ) : (
     <>
       <Box sx={{ wordBreak: "break-word" }} ref={ref} dir="auto">
-        <Stack gap={2} mb={6}>
+        <Stack mb={6}>
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
           )}
-          <Heading as="h1" fontSize="4xl">
+          <Heading as="h1" fontSize="4xl" mt={2} mb={1}>
             {title}
           </Heading>
           {summary?.length > 0 && (
-            <Blockquote fontSize="lg">{summary}</Blockquote>
+            <Box my={1}>
+              <Blockquote fontSize="lg" fontFamily="'Source Serif Pro'">
+                {summary}
+              </Blockquote>
+            </Box>
           )}
-          <Hashtags hashtags={hashtags} />
-          {reactions}
+          <Box mb={2}>
+            <Hashtags hashtags={hashtags} />
+          </Box>
+          <Box mb={1.5}>{reactions}</Box>
           <Flex alignItems="center" justifyContent="space-between">
             <Flex align="center" gap={3} fontFamily="Inter">
               {event.pubkey && <User pubkey={event.pubkey} />}

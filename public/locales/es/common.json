@@ -136,5 +136,7 @@
   "contribute": "Contribute",
   "close": "Close",
   "zap": "Zap",
-  "enable-splits": "Enable zap splits"
+  "enable-splits": "Enable zap splits",
+  "live": "Live",
+  "offline": "Offline"
 }
