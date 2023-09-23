@@ -21,6 +21,7 @@
   "create-account": "Create account",
   "articles": "Articles",
   "drafts": "Drafts",
+  "highlight": "Highlight",
   "highlights": "Highlights",
   "search": "Search",
   "write": "Write",
@@ -74,8 +75,8 @@
   "share-cta": "Share this article with the world!",
   "share-url": "URL",
   "share-url-cta": "Human-readable URL, use this when sharing oustide of nostr.",
-  "share-nostr": "Nostr ID",
-  "share-nostr-cta": "Nostr ID, use this when sharing on nostr.",
+  "share-nostr": "Nostr URL",
+  "share-nostr-cta": "Nostr URL, use this when sharing on nostr.",
   "profile": "Profile",
   "relays": "Relays",
   "select-relays": "Select the relays you want to publish to.",
@@ -136,5 +137,11 @@
   "contribute": "Contribute",
   "close": "Close",
   "zap": "Zap",
-  "enable-splits": "Enable zap splits"
+  "revenue": "Revenue",
+  "revenue-descr": "Configure how revenue is shared",
+  "enable-splits": "Enable revenue split",
+  "highlighted": "✍️ Highlighted",
+  "something-went-wrong": "Something went wrong",
+  "repost": "Repost",
+  "reposted": "♻️ Reposted"
 }
