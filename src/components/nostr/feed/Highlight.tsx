@@ -4,6 +4,7 @@ import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
+  Box,
   Heading,
   Text,
   Icon,
@@ -104,26 +105,34 @@ export default function Highlight({
       <CardBody dir="auto">
         <Stack gap="1">
           {!e && (
-            <Blockquote style={{ margin: 0 }}>
-              {context && context.length > event.content.length + 1 ? (
-                <HighlightSubstring text={context} substring={event.content} />
-              ) : (
-                event.content
-              )}
-            </Blockquote>
+            <Box mb={2}>
+              <Blockquote style={{ margin: 0 }}>
+                {context && context.length > event.content.length + 1 ? (
+                  <HighlightSubstring
+                    text={context}
+                    substring={event.content}
+                  />
+                ) : (
+                  event.content
+                )}
+              </Blockquote>
+            </Box>
           )}
           {e && <EventId id={e} my={0} highlights={[event]} />}
           {naddr && (
-            <ArticleTitle
-              naddr={naddr}
-              kind={Number(kind)}
-              identifier={identifier}
-              pubkey={pubkey}
-              fontFamily="'Inter'"
-              fontWeight={600}
-              fontSize="sm"
-              color="secondary"
-            />
+            <Flex gap={2} direction="column">
+              <User pubkey={pubkey} size="xs" fontSize="xs" />
+              <ArticleTitle
+                naddr={naddr}
+                kind={Number(kind)}
+                identifier={identifier}
+                pubkey={pubkey}
+                fontFamily="'Inter'"
+                fontWeight={600}
+                fontSize="sm"
+                color="secondary"
+              />
+            </Flex>
           )}
           {r && !naddr && !r.startsWith("https://habla.news") && (
             <ExternalLink href={r}>

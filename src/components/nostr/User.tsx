@@ -28,7 +28,7 @@ export default function User({
     ? `/u/${user.nip05}`
     : `/p/${nip19.nprofileEncode({ pubkey, relays })}`;
   const username = (
-    <Text as="span" fontFamily="Inter">
+    <Text as="span" fontFamily="Inter" {...rest}>
       {user?.name || shortenString(pubkey, 6)}
     </Text>
   );
