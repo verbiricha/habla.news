@@ -1,16 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function useWebln(enable = true) {
   const maybeWebLn =
-    typeof window !== "undefined" && "webln" in window ? window.webln : null;
+    useRef(typeof window !== "undefined" && "webln" in window ? window.webln : null)
 
   useEffect(() => {
-    if (maybeWebLn && !maybeWebLn.enabled && enable) {
-      maybeWebLn.enable().catch(() => {
-        console.debug("Couldn't enable WebLN");
-      });
+    if (maybeWebLn.current && !maybeWebLn.current.enabled && enable) {
+      const enable = async () => {
+        await import('@getalby/bitcoin-connect-react')
+        return maybeWebLn.current.enable().catch(() => console.debug("Couldn't enable WebLN"))
+      }
+      enable()
     }
-  }, [maybeWebLn, enable]);
+  }, [enable]);
 
-  return maybeWebLn;
+  return maybeWebLn.current;
 }

@@ -15,6 +15,7 @@
     "@fontsource/inter": "^4.5.15",
     "@fontsource/source-serif-pro": "^4.5.9",
     "@fontsource/unbounded": "^4.5.1",
+    "@getalby/bitcoin-connect-react": "^1.1.0",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@nostr-dev-kit/ndk": "^1.2.1",
     "@tanstack/react-query": "^4.35.0",
