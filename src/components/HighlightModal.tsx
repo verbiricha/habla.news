@@ -83,7 +83,7 @@ export default function HighlightModal({
       ev.tags.push(["context", context.text]);
     }
     const zapTags = zapSplits ? zapSplits.filter((z) => z.at(3) !== "0") : null;
-    if (zapTags && zapTags.length > 1) {
+    if (zapTags && zapTags.length > 0) {
       ev.tags = ev.tags.concat(zapTags);
     }
     return ev;

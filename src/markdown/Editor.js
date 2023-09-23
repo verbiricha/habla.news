@@ -124,7 +124,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
     const ev = isDraft
       ? { ...event, pubkey, kind: LONG_FORM_DRAFT }
       : { ...event, pubkey };
-    if (zapTags && zapTags.length > 1) {
+    if (zapTags && zapTags.length > 0) {
       ev.tags = ev.tags.concat(zapTags);
     }
     return ev;
