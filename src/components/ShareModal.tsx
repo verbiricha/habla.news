@@ -50,7 +50,7 @@ export default function ShareModal({ event, isOpen, onClose }) {
             />
             <Heading fontSize="xl">{t("share-nostr")}</Heading>
             <Text>{t("share-nostr-cta")}</Text>
-            <InputCopy text={address} />
+            <InputCopy text={`nostr:${address}`} />
           </Stack>
         </ModalBody>
 

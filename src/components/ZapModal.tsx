@@ -25,7 +25,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Tooltip,
-  Input,
+  Textarea,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -299,10 +299,9 @@ export function ZapSplitModal({ event, isOpen, onClose }) {
                   maxSendable={Math.min(...lnurls.map((l) => l.maxSendable))}
                   onSelect={setSats}
                 />
-                <Input
+                <Textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  type="text"
                   placeholder="Comment (optional)"
                 />
               </>
@@ -502,10 +501,9 @@ function SingleZapModal({ event, isOpen, onClose }) {
                   maxSendable={lnurl.maxSendable}
                   onSelect={setSats}
                 />
-                <Input
+                <Textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  type="text"
                   placeholder="Comment (optional)"
                 />
               </Stack>

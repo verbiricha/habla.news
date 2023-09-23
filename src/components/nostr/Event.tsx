@@ -6,10 +6,12 @@ import {
   ZAPSTR_TRACK,
   JOB_RESULT,
   ZAP_GOAL,
+  LONG_FORM,
 } from "@habla/const";
 
 import Blockquote from "@habla/components/Blockquote";
 
+import LongFormNote from "@habla/components/nostr/feed/LongFormNote";
 import Highlight from "@habla/components/nostr/feed/Highlight";
 import Note from "@habla/components/nostr/Note";
 import Badge from "@habla/components/nostr/Badge";
@@ -31,6 +33,10 @@ export default function Event(props) {
 
   if (event.kind === JOB_RESULT) {
     return <JobResult {...props} />;
+  }
+
+  if (event.kind === LONG_FORM) {
+    return <LongFormNote {...props} />;
   }
 
   if (event.kind === BADGE) {
