@@ -27,20 +27,9 @@ import Hashtags from "@habla/components/Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import ArticleLink from "@habla/components/nostr/ArticleLink";
 
-function LongFormTime({ content, publishedAt, updatedAt }) {
+function LongFormTime({ content, publishedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
-  const updated = useMemo(() => formatDay(updatedAt), [updatedAt]);
-  return (
-    <>
-      <Text color="secondary">{day}</Text>
-      {day !== updated && (
-        <Flex align="center" color="secondary" gap={2}>
-          <Icon as={EditIcon} />
-          <Text>{updated}</Text>
-        </Flex>
-      )}
-    </>
-  );
+  return <Text color="secondary">{day}</Text>;
 }
 
 export function PublishedIn({ event, community }) {
@@ -83,7 +72,7 @@ export function PublishedIn({ event, community }) {
 
 export default function LongFormNote({
   event,
-  excludeAuthor,
+  excludeAuthor = false,
   excludeReactions = true,
 }) {
   const [defaultRelays] = useAtom(relaysAtom);
@@ -104,8 +93,8 @@ export default function LongFormNote({
           {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
           {community && <PublishedIn community={community} event={event} />}
           <LongFormTime
-            publishedAt={publishedAt}
-            updatedAt={event.created_at}
+            publishedAt={publishedAt || event.created_at}
+            //updatedAt={event.created_at}
             content={event.content}
           />
         </Flex>

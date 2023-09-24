@@ -100,7 +100,7 @@ export default function Goal({ event }) {
           </Flex>
           <User size="xs" fontSize="md" pubkey={event.pubkey} />
         </CardHeader>
-        <CardBody>
+        <CardBody fontFamily="'Inter', serif">
           {url && (
             <Flex align="center" gap={2}>
               <Icon as={ExternalLinkIcon} boxSize={3} color="gray.500" />
@@ -133,7 +133,7 @@ export default function Goal({ event }) {
             </Flex>
             <Progress value={progress} colorScheme="green" />
             {zapTags.length > 0 && (
-              <Stack spacing={0}>
+              <Stack mt={2} spacing={2}>
                 {zapTags.map((t) => {
                   const [, pk, relay, weight] = t;
                   const percentage = Number(weight) / totalWeight;
