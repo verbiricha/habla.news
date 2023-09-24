@@ -6,13 +6,42 @@ import { Flex, Box, AspectRatio, Image, Text } from "@chakra-ui/react";
 import { findTag, findTags } from "@habla/tags";
 
 function Video({ alt, url }) {
-  return <video alt={alt} key={url} controls src={url} />;
+  return (
+    <Flex direction="column" w="100%" align="center">
+      <video alt={alt} key={url} controls src={url} />
+
+      {alt.length > 0 && (
+        <Box ml={2}>
+          <Text
+            as="span"
+            color="secondary"
+            fontSize="xs"
+            fontFamily="sans-serif"
+          >
+            {alt}
+          </Text>
+        </Box>
+      )}
+    </Flex>
+  );
 }
 
 function Audio({ alt, url }) {
   return (
     <Flex direction="column" w="100%" align="center">
       <audio key={url} controls src={url} />
+      {alt.length > 0 && (
+        <Box ml={2}>
+          <Text
+            as="span"
+            color="secondary"
+            fontSize="xs"
+            fontFamily="sans-serif"
+          >
+            {alt}
+          </Text>
+        </Box>
+      )}
     </Flex>
   );
 }
