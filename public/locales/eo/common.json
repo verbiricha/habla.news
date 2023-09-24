@@ -32,11 +32,11 @@
   "content": "Enhavo",
   "content-placeholder": "Esprimu vian opinion",
   "image": "Bildo",
-  "image-placeholder": "Ligilo al bildo",
+  "image-helper": "Link to an image",
   "summary": "Resumo",
-  "summary-placeholder": "Resumeto de via artikolo",
+  "summary-helper": "A brief summary of your article",
   "tags": "Etikedoj",
-  "tags-placeholder": "Listo de perkome disigitaj etikedoj: nostr, markdown",
+  "tags-helper": "List of tags separated by comma: nostr, markdown",
   "save-draft": "Konservi malneton",
   "post": "Afiŝi",
   "update": "Ĝisdatigi",
@@ -143,5 +143,7 @@
   "highlighted": "✍️ Highlighted",
   "something-went-wrong": "Something went wrong",
   "repost": "Repost",
-  "reposted": "♻️ Reposted"
+  "reposted": "♻️ Reposted",
+  "published-at": "Published at",
+  "published-at-helper": "If you are cross posting past content to nostr use this to set the publication date."
 }
