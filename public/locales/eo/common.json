@@ -21,6 +21,7 @@
   "create-account": "Krei konton",
   "articles": "Artikoloj",
   "drafts": "Malnetoj",
+  "highlight": "Highlight",
   "highlights": "Elstaraĵoj",
   "search": "Serĉi",
   "write": "Skribi",
@@ -74,8 +75,8 @@
   "share-cta": "Konigi ĉi tiun artikolon kun la mondo!",
   "share-url": "URL",
   "share-url-cta": "Homo-legebla URL, uzu ĉi tiun kiam vi kunigus ekster nostr.",
-  "share-nostr": "Nostr ID",
-  "share-nostr-cta": "Nostr-identigilo, uzu ĉi tiun kiam vi kunigus en nostr.",
+  "share-nostr": "Nostr URL",
+  "share-nostr-cta": "Nostr URL, use this when sharing on nostr.",
   "profile": "Profilo",
   "relays": "Ripetiloj",
   "select-relays": "Select the relays you want to publish to.",
@@ -136,5 +137,11 @@
   "contribute": "Contribute",
   "close": "Close",
   "zap": "Zap",
-  "enable-splits": "Enable zap splits"
+  "revenue": "Revenue",
+  "revenue-descr": "Configure how revenue is shared",
+  "enable-splits": "Enable revenue split",
+  "highlighted": "✍️ Highlighted",
+  "something-went-wrong": "Something went wrong",
+  "repost": "Repost",
+  "reposted": "♻️ Reposted"
 }

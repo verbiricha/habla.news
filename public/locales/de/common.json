@@ -21,6 +21,7 @@
   "create-account": "Account erstellen",
   "articles": "Beiträge",
   "drafts": "Entwürfe",
+  "highlight": "Hervorhebung",
   "highlights": "Highlights",
   "search": "Suche",
   "write": "Schreiben",
@@ -74,8 +75,8 @@
   "share-cta": "Teile diesen Artikel mit der Welt!",
   "share-url": "URL",
   "share-url-cta": "Verwende die von Menschen lesbare URL, wenn du den Text außerhalb von Nostr teilen willst.",
-  "share-nostr": "Nostr ID",
-  "share-nostr-cta": "Verwende die Nostr-ID, wenn du den Text auf Nostr teilen willst.",
+  "share-nostr": "Nostr-URL",
+  "share-nostr-cta": "Nostr-URL, verwende diese beim Teilen auf nostr.",
   "profile": "Profil",
   "relays": "Relays",
   "select-relays": "Wähle die Relais aus, auf denen du veröffentlichen möchtest.",
@@ -136,5 +137,11 @@
   "contribute": "Mitwirken",
   "close": "Schließen",
   "zap": "Zap",
-  "enable-splits": "Zap-Aufteilungen aktivieren"
+  "revenue": "Einnahmen",
+  "revenue-descr": "Konfiguriere die Aufteilung der Einnahmen",
+  "enable-splits": "Einnahmenaufteilung aktivieren",
+  "highlighted": "✍️ Hervorgehoben",
+  "something-went-wrong": "Etwas ist schief gelaufen",
+  "repost": "Repost",
+  "reposted": "♻️ Gereposted"
 }

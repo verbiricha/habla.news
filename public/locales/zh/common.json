@@ -21,6 +21,7 @@
   "create-account": "創建帳戶",
   "articles": "文章",
   "drafts": "草稿",
+  "highlight": "Highlight",
   "highlights": "亮點",
   "search": "搜索",
   "write": "撰寫",
@@ -74,8 +75,8 @@
   "share-cta": "与世界分享这篇文章！",
   "share-url": "网址",
   "share-url-cta": "人类可读的 URL，在 Nostr 之外分享时使用。",
-  "share-nostr": "Nostr ID",
-  "share-nostr-cta": "Nostr ID，在 Nostr 上分享时使用。",
+  "share-nostr": "Nostr URL",
+  "share-nostr-cta": "Nostr URL, use this when sharing on nostr.",
   "profile": "个人档案",
   "relays": "中继器",
   "select-relays": "选择你想要发布到的中继器。",
@@ -136,5 +137,11 @@
   "contribute": "贡献",
   "close": "关闭",
   "zap": "打闪",
-  "enable-splits": "启用打闪拆分"
+  "revenue": "Revenue",
+  "revenue-descr": "Configure how revenue is shared",
+  "enable-splits": "启用打闪拆分",
+  "highlighted": "✍️ Highlighted",
+  "something-went-wrong": "Something went wrong",
+  "repost": "Repost",
+  "reposted": "♻️ Reposted"
 }
