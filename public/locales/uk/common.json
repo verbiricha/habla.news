@@ -32,11 +32,11 @@
   "content": "Зміст",
   "content-placeholder": " Поділіться своїми думками",
   "image": "Зображення",
-  "image-placeholder": "Посилання на зображення",
+  "image-helper": "Link to an image",
   "summary": "Короткий опис",
-  "summary-placeholder": "Короткий опис вашої статті",
+  "summary-helper": "A brief summary of your article",
   "tags": "Теги",
-  "tags-placeholder": "Список тегів, розділених комами: ностр, markdown",
+  "tags-helper": "List of tags separated by comma: nostr, markdown",
   "save-draft": "Зберегти чернетку",
   "post": "Опубліковати",
   "update": "Оновити",
@@ -143,5 +143,7 @@
   "highlighted": "✍️ Highlighted",
   "something-went-wrong": "Something went wrong",
   "repost": "Repost",
-  "reposted": "♻️ Reposted"
+  "reposted": "♻️ Reposted",
+  "published-at": "Published at",
+  "published-at-helper": "If you are cross posting past content to nostr use this to set the publication date."
 }
