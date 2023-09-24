@@ -145,5 +145,9 @@
   "repost": "Neuveröffentlichung",
   "reposted": "♻️ Gereposted",
   "published-at": "Veröffentlicht am",
-  "published-at-helper": "Wenn du vergangene Inhalte auf nostr überträgst, kannst du hier das Veröffentlichungsdatum festlegen."
+  "published-at-helper": "Wenn du vergangene Inhalte auf nostr überträgst, kannst du hier das Veröffentlichungsdatum festlegen.",
+  "add-pubkey": "Add to split",
+  "add-pubkey-helper": "Use a nostr npub, nprofile or nip-05 nostr address",
+  "add": "Add",
+  "pubkey-already-added": "This pubkey is already added"
 }
