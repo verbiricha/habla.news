@@ -29,14 +29,13 @@ import ArticleLink from "@habla/components/nostr/ArticleLink";
 
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
-  const updated = useMemo(() => formatDay(updatedAt), [updatedAt]);
   return (
     <>
       <Text color="secondary">{day}</Text>
-      {day !== updated && (
+      {updatedAt < publishedAt && (
         <Flex align="center" color="secondary" gap={2}>
           <Icon as={EditIcon} />
-          <Text>{updated}</Text>
+          <Text>{formatDay(updatedAt)}</Text>
         </Flex>
       )}
     </>
@@ -83,7 +82,7 @@ export function PublishedIn({ event, community }) {
 
 export default function LongFormNote({
   event,
-  excludeAuthor,
+  excludeAuthor = false,
   excludeReactions = true,
 }) {
   const [defaultRelays] = useAtom(relaysAtom);
@@ -97,14 +96,14 @@ export default function LongFormNote({
     publishedAt,
     community,
   } = useMemo(() => getMetadata(event), [event]);
-  return title.length > 0 && event.content.length > 0 ? (
+  return title.length > 0 ? (
     <Card variant="article" my={4}>
       <CardHeader>
         <Flex align="center" direction="row" gap={2} fontFamily="Inter">
           {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
           {community && <PublishedIn community={community} event={event} />}
           <LongFormTime
-            publishedAt={publishedAt}
+            publishedAt={publishedAt || event.created_at}
             updatedAt={event.created_at}
             content={event.content}
           />

@@ -7,6 +7,14 @@ import {
   Stack,
   Text,
   Checkbox,
+  FormControl,
+  InputGroup,
+  Input,
+  InputRightElement,
+  Button,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -20,6 +28,96 @@ import User from "@habla/components/nostr/User";
 import { useRelaysMetadata } from "@habla/hooks/useRelayMetadata";
 import { pubkeyAtom, relaysAtom } from "@habla/state";
 import { formatShortNumber } from "@habla/format";
+import { nip05, nip19 } from "nostr-tools";
+
+function ProfileSelector({ selectedPubkeys, onPubkeySelect, ...rest }) {
+  const { t } = useTranslation("common");
+  const [search, setSearch] = useState("");
+  const [error, setError] = useState();
+  const [isFetching, setIsFetching] = useState(false);
+
+  function onChange(ev) {
+    setSearch(ev.target.value);
+    setError();
+  }
+
+  async function onAdd() {
+    try {
+      let pubkey;
+      const decoded = nip19.decode(search);
+      if (decoded?.type === "npub") {
+        pubkey = decoded.data;
+      } else if (decoded?.type === "nprofile") {
+        pubkey = decoded.data.pubkey;
+      }
+
+      if (pubkey) {
+        if (selectedPubkeys.includes(pubkey)) {
+          setError(t("pubkey-already-added"));
+        } else {
+          onPubkeySelect(pubkey);
+          setSearch("");
+          return;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    try {
+      setIsFetching(true);
+      let pubkey;
+      const profile = await nip05.queryProfile(search);
+      if (profile) {
+        pubkey = profile.pubkey;
+      }
+
+      if (pubkey) {
+        if (selectedPubkeys.includes(pubkey)) {
+          setError(t("pubkey-already-added"));
+        } else {
+          onPubkeySelect(pubkey);
+          setSearch("");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      setError(error?.message);
+    } finally {
+      setIsFetching(false);
+    }
+  }
+
+  return (
+    <FormControl isInvalid={error}>
+      <FormLabel>{t("add-pubkey")}</FormLabel>
+      <InputGroup>
+        <Input
+          paddingRight={"4.5em"}
+          value={search}
+          onChange={onChange}
+          {...rest}
+        />
+        <InputRightElement width="4.5rem">
+          <Button
+            isLoading={isFetching}
+            isDisabled={isFetching}
+            h="1.75rem"
+            size="sm"
+            onClick={onAdd}
+          >
+            {t("add")}
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+      {error ? (
+        <FormErrorMessage>{error}</FormErrorMessage>
+      ) : (
+        <FormHelperText>{t("add-pubkey-helper")}</FormHelperText>
+      )}
+    </FormControl>
+  );
+}
 
 export default function ZapSplitConfig({
   initialZapSplits,
@@ -27,8 +125,6 @@ export default function ZapSplitConfig({
   onChange,
   splitSuggestions,
 }) {
-  // todo: use user relay for profile metadata
-  // todo: add/remove pubkey/nip05
   const { t } = useTranslation("common");
   const [pubkey] = useAtom(pubkeyAtom);
   const hasDefaults = Boolean(initialZapSplits?.length);
@@ -36,6 +132,7 @@ export default function ZapSplitConfig({
   const [zapSplits, setZapSplits] = useState(
     hasDefaults ? initialZapSplits : []
   );
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (enableSplits && !hasDefaults) {
@@ -64,6 +161,11 @@ export default function ZapSplitConfig({
   const canTweak = useMemo(() => {
     return zapSplits?.length > 1;
   }, [zapSplits]);
+
+  function addPubkey(pk: string) {
+    const tag = ["zap", pk, "wss://purplepag.es", "1"];
+    setZapSplits(zapSplits ? zapSplits.concat([tag]) : [tag]);
+  }
 
   return (
     <Stack spacing={3} my={2}>
@@ -129,6 +231,12 @@ export default function ZapSplitConfig({
             </Flex>
           );
         })}
+      {enableSplits && (
+        <ProfileSelector
+          selectedPubkeys={zapSplits.map((z) => z.at(1))}
+          onPubkeySelect={addPubkey}
+        />
+      )}
     </Stack>
   );
 }

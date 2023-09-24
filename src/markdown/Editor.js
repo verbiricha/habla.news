@@ -9,11 +9,12 @@ import { useDisclosure } from "@chakra-ui/react";
 import {
   useToast,
   Flex,
-  Code,
   Box,
   Button,
   Stack,
+  FormControl,
   FormLabel,
+  FormHelperText,
   Input,
   Text,
   Textarea,
@@ -28,6 +29,8 @@ import {
 } from "@chakra-ui/react";
 import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { nip19 } from "nostr-tools";
 import slugify from "slugify";
@@ -83,10 +86,8 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   }
 
   return (
-    <>
-      <FormLabel htmlFor="identifer" mt={2}>
-        {t("community")}
-      </FormLabel>
+    <FormControl>
+      <FormLabel htmlFor="identifer">{t("community")}</FormLabel>
       <Select
         placeholder={t("select-community")}
         value={selected}
@@ -98,7 +99,7 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
           return <option value={address}>{d}</option>;
         })}
       </Select>
-    </>
+    </FormControl>
   );
 }
 
@@ -225,7 +226,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
   );
 }
 
-export default function MyEditor({ event, showPreview }) {
+export default function EventEditor({ event, showPreview }) {
   const { t } = useTranslation("common");
   const toast = useToast();
   const publish = usePublishEvent({ showToast: true });
@@ -241,7 +242,17 @@ export default function MyEditor({ event, showPreview }) {
   const [slug, setSlug] = useState(metadata?.identifier ?? String(Date.now()));
   const [summary, setSummary] = useState(metadata?.summary ?? "");
   const [image, setImage] = useState(metadata?.image ?? "");
-  const [publishedAt] = useState(metadata?.publishedAt);
+  const [publishedAt, setPublishedAt] = useState(metadata?.publishedAt);
+  const [publishedDate, setPublishedDate] = useState(
+    publishedAt ? new Date(publishedAt * 1000) : null
+  );
+
+  function onDateChange(d) {
+    const unixTs = d.getTime() / 1000;
+    setPublishedAt(unixTs);
+    setPublishedDate(d);
+  }
+
   const [hashtags, setHashtags] = useState(
     metadata?.hashtags?.join(", ") ?? ""
   );
@@ -253,18 +264,19 @@ export default function MyEditor({ event, showPreview }) {
     })
     ?.at(1);
   const [community, setCommunity] = useState(initialCommunity);
+  const createdAt = dateToUnix();
   const htags = hashtags
     .split(",")
     .map((s) => s.trim())
-    .filter((s) => s.length > 0)
-    .map((t) => ["t", t]);
-  const createdAt = dateToUnix();
+    .filter((s) => s.length > 0);
+
+  const ttags = htags.map((t) => ["t", t]);
   const tags = [
     ["d", slug],
     ["title", title],
     ["summary", summary],
     ["published_at", publishedAt ? String(publishedAt) : String(createdAt)],
-    ...htags,
+    ...ttags,
   ];
   if (image?.length > 0) {
     tags.push(["image", image]);
@@ -307,17 +319,9 @@ export default function MyEditor({ event, showPreview }) {
     //}
   }
 
-  return showPreview ? (
-    <LongFormNote event={ev} isDraft excludeAuthor isEditingInline={true} />
-  ) : (
-    <>
-      <PublishModal
-        initialZapSplits={event?.tags.filter((t) => t.at(0) === "zap")}
-        event={ev}
-        isDraft={isDraft}
-        {...publishModal}
-      />
-      <Flex flexDirection="column" alignItems="flex-start" mb={10}>
+  const editor = (
+    <Flex flexDirection="column" gap={3} alignItems="flex-start" mb={10}>
+      <FormControl>
         <FormLabel htmlFor="title">{t("title")}</FormLabel>
         <Input
           dir="auto"
@@ -328,6 +332,8 @@ export default function MyEditor({ event, showPreview }) {
           size="md"
           mb={2}
         />
+      </FormControl>
+      <FormControl>
         <FormLabel>{t("content")}</FormLabel>
         <MdEditor
           ref={ref}
@@ -351,53 +357,60 @@ export default function MyEditor({ event, showPreview }) {
           }}
           onChange={onChange}
         />
+      </FormControl>
+      <FormControl>
         <FormLabel htmlFor="image">{t("image")}</FormLabel>
         <Input
           id="image"
-          placeholder={t("image-placeholder")}
           value={image}
           onChange={(ev) => setImage(ev.target.value)}
           size="md"
           mb={2}
         />
+        <FormHelperText>{t("image-helper")}</FormHelperText>
+      </FormControl>
+      <FormControl>
         <FormLabel htmlFor="summary">{t("summary")}</FormLabel>
         <Textarea
           id="summary"
           dir="auto"
-          placeholder={t("summary-placeholder")}
           value={summary}
           onChange={(ev) => setSummary(ev.target.value)}
           size="md"
         />
-        <CommunitySelector
-          initialCommunity={initialCommunity}
-          onCommunitySelect={setCommunity}
-        />
-        <FormLabel htmlFor="tags" mt={2}>
-          {t("tags")}
-        </FormLabel>
+        <FormHelperText>{t("summary-helper")}</FormHelperText>
+      </FormControl>
+
+      <FormControl>
+        <FormLabel htmlFor="tags">{t("tags")}</FormLabel>
         <Input
           id="tags"
           dir="auto"
           value={hashtags}
-          placeholder={t("tags-placeholder")}
+          placeholder={""}
           onChange={(ev) => setHashtags(ev.target.value)}
           size="md"
           mb={2}
         />
+        <FormHelperText>{t("tags-helper")}</FormHelperText>
+      </FormControl>
 
-        <Flex my={4} justifyContent="space-between" width="100%">
-          <Button variant="solid" onClick={onSaveDraft}>
-            {t("save-draft")}
-          </Button>
-          <Button variant="solid" colorScheme="orange" onClick={onSave}>
-            {event?.kind === 30023 && event?.sig ? t("update") : t("post")}
-          </Button>
-        </Flex>
+      <CommunitySelector
+        initialCommunity={initialCommunity}
+        onCommunitySelect={setCommunity}
+      />
 
-        <FormLabel htmlFor="identifer" mt={2}>
-          {t("identifier")}
-        </FormLabel>
+      <Flex my={4} justifyContent="space-between" width="100%">
+        <Button variant="solid" onClick={onSaveDraft}>
+          {t("save-draft")}
+        </Button>
+        <Button variant="solid" colorScheme="orange" onClick={onSave}>
+          {event?.kind === LONG_FORM && event?.sig ? t("update") : t("post")}
+        </Button>
+      </Flex>
+
+      <FormControl>
+        <FormLabel htmlFor="identifer">{t("identifier")}</FormLabel>
         <Input
           id="identifier"
           value={slug}
@@ -405,29 +418,52 @@ export default function MyEditor({ event, showPreview }) {
           size="md"
           mb={2}
         />
-        {handle && (
-          <Text
-            fontFamily="Inter"
-            textDecoration="underline"
-            textDecorationStyle="dotted"
-          >
-            <Link href={`/${handle}/${slug}`}>
-              {`habla.news/${handle}/${slug}`}
-            </Link>
-          </Text>
-        )}
-        {!handle && profile && profile.nip05 && (
-          <Text
-            fontFamily="Inter"
-            textDecoration="underline"
-            textDecorationStyle="dotted"
-          >
-            <Link href={`/u/${profile.nip05}/${slug}`}>
-              {`habla.news/u/${profile.nip05}/${slug}`}
-            </Link>
-          </Text>
-        )}
-      </Flex>
+      </FormControl>
+      {handle && (
+        <Text
+          fontFamily="Inter"
+          textDecoration="underline"
+          textDecorationStyle="dotted"
+        >
+          <Link href={`/${handle}/${slug}`}>
+            {`habla.news/${handle}/${slug}`}
+          </Link>
+        </Text>
+      )}
+      {!handle && profile && profile.nip05 && (
+        <Text
+          fontFamily="Inter"
+          textDecoration="underline"
+          textDecorationStyle="dotted"
+        >
+          <Link href={`/u/${profile.nip05}/${slug}`}>
+            {`habla.news/u/${profile.nip05}/${slug}`}
+          </Link>
+        </Text>
+      )}
+      <FormControl>
+        <FormLabel>{t("published-at")}</FormLabel>
+        <DatePicker
+          className="date-picker"
+          selected={publishedDate}
+          onChange={onDateChange}
+        />
+        <FormHelperText>{t("published-at-helper")}</FormHelperText>
+      </FormControl>
+    </Flex>
+  );
+
+  return showPreview ? (
+    <LongFormNote event={ev} isDraft excludeAuthor isEditingInline={true} />
+  ) : (
+    <>
+      <PublishModal
+        initialZapSplits={event?.tags.filter((t) => t.at(0) === "zap")}
+        event={ev}
+        isDraft={isDraft}
+        {...publishModal}
+      />
+      {editor}
     </>
   );
 }

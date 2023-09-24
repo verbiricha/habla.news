@@ -201,9 +201,11 @@ export default function LongFormNote({
           <Flex alignItems="center" justifyContent="space-between">
             <Flex align="center" gap={3} fontFamily="Inter">
               {event.pubkey && <User pubkey={event.pubkey} />}
-              <Text color="secondary" fontSize="sm">
-                {formatDay(publishedAt)}
-              </Text>
+              {publishedAt && (
+                <Text color="secondary" fontSize="sm">
+                  {formatDay(publishedAt)}
+                </Text>
+              )}
             </Flex>
             <Flex gap={1}>
               {!isEditingInline && isMine && (

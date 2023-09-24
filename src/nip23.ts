@@ -17,13 +17,15 @@ export function getMetadata(ev: NDKEvent): PostMetadata {
   if (pubAt) {
     try {
       publishedAt = Number(pubAt);
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
   const metadata = {
     title: findTag(ev, "title") || findTag(ev, "subject") || "",
     identifier: findTag(ev, "d"),
     hashtags: findTags(ev, "t"),
-    publishedAt: publishedAt ? publishedAt : ev.created_at * 1000,
+    publishedAt,
   };
   const image = findTag(ev, "image");
   if (image) {
