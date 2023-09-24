@@ -7,6 +7,7 @@ import {
   JOB_RESULT,
   ZAP_GOAL,
   LONG_FORM,
+  FILE,
 } from "@habla/const";
 
 import Blockquote from "@habla/components/Blockquote";
@@ -18,6 +19,7 @@ import Badge from "@habla/components/nostr/Badge";
 import ZapstrTrack from "@habla/components/nostr/ZapstrTrack";
 import JobResult from "@habla/components/nostr/JobResult";
 import Goal from "@habla/components/nostr/Goal";
+import File from "@habla/components/nostr/File";
 import UnknownKind from "@habla/components/nostr/UnknownKind";
 
 export default function Event(props) {
@@ -49,6 +51,10 @@ export default function Event(props) {
 
   if (event.kind === ZAP_GOAL) {
     return <Goal {...props} />;
+  }
+
+  if (event.kind === FILE) {
+    return <File {...props} />;
   }
 
   return <UnknownKind event={event} {...props} />;
