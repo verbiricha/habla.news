@@ -32,11 +32,11 @@
   "content": "Содержание",
   "content-placeholder": "Поделитесь своими мыслями",
   "image": "Изображение",
-  "image-placeholder": "Ссылка на изображение",
+  "image-helper": "Link to an image",
   "summary": "Краткое описание",
-  "summary-placeholder": "Краткое описание вашей статьи",
+  "summary-helper": "A brief summary of your article",
   "tags": "Теги",
-  "tags-placeholder": "Список тегов, разделенных запятыми: nostr, markdown",
+  "tags-helper": "List of tags separated by comma: nostr, markdown",
   "save-draft": "Сохранить черновик",
   "post": "Опубликовать",
   "update": "Обновить",
@@ -143,5 +143,11 @@
   "highlighted": "✍️ Highlighted",
   "something-went-wrong": "Something went wrong",
   "repost": "Repost",
-  "reposted": "♻️ Reposted"
+  "reposted": "♻️ Reposted",
+  "published-at": "Published at",
+  "published-at-helper": "If you are cross posting past content to nostr use this to set the publication date.",
+  "add-pubkey": "Add to split",
+  "add-pubkey-helper": "Use a nostr npub, nprofile or nip-05 nostr address",
+  "add": "Add",
+  "pubkey-already-added": "This pubkey is already added"
 }

@@ -32,11 +32,11 @@
   "content": "محتوا",
   "content-placeholder": "فکرت را بیان کن",
   "image": "تصویر",
-  "image-placeholder": "لینک تصویر",
+  "image-helper": "Link to an image",
   "summary": "چکیده",
-  "summary-placeholder": "چکیده ای از گفتار شما",
+  "summary-helper": "A brief summary of your article",
   "tags": "برچسب ها",
-  "tags-placeholder": "لیست برچسب ها که با ویرگول جدا شده: ناستر، مارک داون",
+  "tags-helper": "List of tags separated by comma: nostr, markdown",
   "save-draft": "ذخیره پیش نویس",
   "post": "ارسال",
   "update": "بروز رسانی",
@@ -143,5 +143,11 @@
   "highlighted": "✍️ Highlighted",
   "something-went-wrong": "Something went wrong",
   "repost": "Repost",
-  "reposted": "♻️ Reposted"
+  "reposted": "♻️ Reposted",
+  "published-at": "Published at",
+  "published-at-helper": "If you are cross posting past content to nostr use this to set the publication date.",
+  "add-pubkey": "Add to split",
+  "add-pubkey-helper": "Use a nostr npub, nprofile or nip-05 nostr address",
+  "add": "Add",
+  "pubkey-already-added": "This pubkey is already added"
 }

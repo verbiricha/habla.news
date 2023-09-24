@@ -32,11 +32,11 @@
   "content": "本文",
   "content-placeholder": "思ってることを話してみて",
   "image": "画像",
-  "image-placeholder": "画像へのリンク",
+  "image-helper": "Link to an image",
   "summary": "概要",
-  "summary-placeholder": "記事の簡単な概要",
+  "summary-helper": "A brief summary of your article",
   "tags": "タグ",
-  "tags-placeholder": "カンマ区切りのタグのリスト: nostr, markdown",
+  "tags-helper": "List of tags separated by comma: nostr, markdown",
   "save-draft": "下書きを保存",
   "post": "投稿",
   "update": "更新",
@@ -143,5 +143,11 @@
   "highlighted": "✍️ Highlighted",
   "something-went-wrong": "Something went wrong",
   "repost": "Repost",
-  "reposted": "♻️ Reposted"
+  "reposted": "♻️ Reposted",
+  "published-at": "Published at",
+  "published-at-helper": "If you are cross posting past content to nostr use this to set the publication date.",
+  "add-pubkey": "Add to split",
+  "add-pubkey-helper": "Use a nostr npub, nprofile or nip-05 nostr address",
+  "add": "Add",
+  "pubkey-already-added": "This pubkey is already added"
 }
