@@ -96,7 +96,7 @@ export default function LongFormNote({
     publishedAt,
     community,
   } = useMemo(() => getMetadata(event), [event]);
-  return title.length > 0 && event.content.length > 0 ? (
+  return title.length > 0 ? (
     <Card variant="article" my={4}>
       <CardHeader>
         <Flex align="center" direction="row" gap={2} fontFamily="Inter">

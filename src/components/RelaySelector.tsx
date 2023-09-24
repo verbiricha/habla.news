@@ -59,6 +59,7 @@ export default function RelaySelector({
               <Flex alignItems="center" justifyContent="center">
                 {isPublishing && <Spinner size="sm" />}
                 {hasPublished &&
+                  publishOn[r] &&
                   (publishedOn.includes(r) ? (
                     <Icon boxSize={3} color="green.500" as={CheckIcon} />
                   ) : (
