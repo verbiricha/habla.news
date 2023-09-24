@@ -27,9 +27,19 @@ import Hashtags from "@habla/components/Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import ArticleLink from "@habla/components/nostr/ArticleLink";
 
-function LongFormTime({ content, publishedAt }) {
+function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
-  return <Text color="secondary">{day}</Text>;
+  return (
+    <>
+      <Text color="secondary">{day}</Text>
+      {updatedAt < publishedAt && (
+        <Flex align="center" color="secondary" gap={2}>
+          <Icon as={EditIcon} />
+          <Text>{formatDay(updatedAt)}</Text>
+        </Flex>
+      )}
+    </>
+  );
 }
 
 export function PublishedIn({ event, community }) {
@@ -94,7 +104,7 @@ export default function LongFormNote({
           {community && <PublishedIn community={community} event={event} />}
           <LongFormTime
             publishedAt={publishedAt || event.created_at}
-            //updatedAt={event.created_at}
+            updatedAt={event.created_at}
             content={event.content}
           />
         </Flex>

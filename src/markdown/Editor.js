@@ -9,7 +9,6 @@ import { useDisclosure } from "@chakra-ui/react";
 import {
   useToast,
   Flex,
-  Code,
   Box,
   Button,
   Stack,
@@ -465,7 +464,6 @@ export default function EventEditor({ event, showPreview }) {
         {...publishModal}
       />
       {editor}
-      <code>{JSON.stringify(tags, null, 2)}</code>
     </>
   );
 }
