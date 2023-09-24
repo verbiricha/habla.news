@@ -32,11 +32,11 @@
   "content": "Inhalt",
   "content-placeholder": "Verfasse deine Gedanken",
   "image": "Bild",
-  "image-placeholder": "Link zu einem Bild",
+  "image-helper": "Link to an image",
   "summary": "Zusammenfassung",
-  "summary-placeholder": "Eine kurze Zusammenfassung des Artikels",
+  "summary-helper": "A brief summary of your article",
   "tags": "Schlagwörter",
-  "tags-placeholder": "Liste von Schlagwörtern durch Kommas getrennt: Nostr, Markdown",
+  "tags-helper": "List of tags separated by comma: nostr, markdown",
   "save-draft": "Entwurf speichern",
   "post": "Veröffentlichen",
   "update": "Aktualisieren",
@@ -143,5 +143,7 @@
   "highlighted": "✍️ Hervorgehoben",
   "something-went-wrong": "Etwas ist schief gelaufen",
   "repost": "Repost",
-  "reposted": "♻️ Gereposted"
+  "reposted": "♻️ Gereposted",
+  "published-at": "Published at",
+  "published-at-helper": "If you are cross posting past content to nostr use this to set the publication date."
 }
