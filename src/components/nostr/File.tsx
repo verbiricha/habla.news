@@ -6,11 +6,7 @@ import { Flex, Box, AspectRatio, Image, Text } from "@chakra-ui/react";
 import { findTag, findTags } from "@habla/tags";
 
 function Video({ alt, url }) {
-  return (
-    <AspectRatio ratio={4 / 3}>
-      <video alt={alt} key={url} controls src={url} />
-    </AspectRatio>
-  );
+  return <video alt={alt} key={url} controls src={url} />;
 }
 
 function Audio({ alt, url }) {

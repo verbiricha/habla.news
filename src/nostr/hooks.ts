@@ -53,7 +53,7 @@ export function useEvents(filter, options = {}) {
   let relaySet;
   if (relays?.length > 0) {
     relaySet = NDKRelaySet.fromRelayUrls(relays, ndk);
-  } else if (defaultRelays) {
+  } else {
     relaySet = NDKRelaySet.fromRelayUrls(defaultRelays, ndk);
   }
 
