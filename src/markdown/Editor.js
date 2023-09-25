@@ -138,7 +138,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
       const ndkEvent = new NDKEvent(ndk, nostrEvent);
       await ndkEvent.sign();
-      const results = await ndkEvent.publish(relaySet);
+      const results = await ndkEvent.publish(relaySet, 5_000);
       setPublishedOn(Array.from(results).map((r) => r.url));
       setHasPublished(true);
       onCloseModal();
