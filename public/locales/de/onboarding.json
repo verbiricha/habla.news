@@ -3,7 +3,7 @@
   "brief-intro": "Kurze Einleitung",
   "brief-intro-descr": "Ein 45-Sekunden-Überblick über Habla und wie es funktioniert 🚀",
   "backup-keys": "Sichere deine Login-Daten",
-  "backup-keys-descr": "In Habla nutzt du Schlüssel, um auf deinen Account zuzugreifen. Damit bist du der Meister deines Königreichs, bewahre sie deshalb sicher auf! 👑",
+  "backup-keys-descr": "In Habla benutzt du Schlüssel, um auf dein Konto zuzugreifen. Du bist der Herr deines Königreichs, am besten bewahrst du sie sicher auf! 👑",
   "backup-keys-cta": "Schlüssel-Backup anschauen",
   "fill-profile": "Profil ausfüllen",
   "fill-profile-descr": "Erzähle anderen von dir, damit sie einen Grund haben, dir zu folgen. Du musst natürlich nicht alles teilen, sondern nur das, womit du dich auch wohlfühlst 😌",
@@ -20,8 +20,8 @@
   "public-key": "Dein öffentlicher Schlüssel",
   "public-key-descr": "Dein öffentlicher Schlüssel ist wie ein Benutzername und erlaubt es anderen dir zu folgen und deine Aktivitäten zu sehen.",
   "private-key": "Dein privater Schlüssel",
-  "private-key-descr": "Dein privater Schlüssel ist wie ein Passwort und erlaubt es dir Sachen zu posten und Änderungen an deinem Account vorzunehmen. Bewahren deinen privaten Schlüssel an einem sicheren Ort auf.",
-  "private-key-more": "Wir empfehlen dir einen Passwort-Manager oder Browser-Erweiterung zu nutzen, um sicher in deinen Nostr-Account einzuloggen.",
+  "private-key-descr": "Dein privater Schlüssel ist wie ein Passwort, mit dem du von deinem Konto aus Beiträge schreiben kannst. Bitte bewahre deinen privaten Schlüssel an einem sicheren Ort auf.",
+  "private-key-more": "Wir empfehlen die Verwendung von Schlüsselverwaltungs-Erweiterungen für den sicheren Zugriff auf deine Nostr-Konten.",
   "private-key-backup": "Ich habe meine Schlüssel gesichert",
   "got-it": "Verstanden!"
 }
