@@ -106,6 +106,7 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
 function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
   const { t } = useTranslation("common");
   const ndk = useNdk();
+  const router = useRouter();
   const [relays] = useAtom(relaysAtom);
   const [link, setLink] = useState();
   const [pubkey] = useAtom(pubkeyAtom);
@@ -140,9 +141,10 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       const results = await ndkEvent.publish(relaySet);
       setPublishedOn(Array.from(results).map((r) => r.url));
       setHasPublished(true);
+      onCloseModal();
       if (!isDraft) {
         const link = articleLink(ndkEvent);
-        setLink(link);
+        await router.push(link, undefined, { shallow: true });
       }
     } finally {
       setIsPublishing(false);
@@ -214,6 +216,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
         </ModalBody>
         <ModalFooter>
           <Button
+            isLoading={isPublishing}
             isDisabled={relaySelection.length === 0}
             colorScheme="orange"
             onClick={onPost}
