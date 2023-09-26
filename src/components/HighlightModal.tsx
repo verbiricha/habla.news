@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { NDKEvent, NDKRelaySet } from "@nostr-dev-kit/ndk";
 import { useTranslation } from "next-i18next";
+import { nip19 } from "nostr-tools";
 
 import AccordionMenu from "@habla/components/AccordionMenu";
 import RelaySelector from "@habla/components/RelaySelector";
