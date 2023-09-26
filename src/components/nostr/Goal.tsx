@@ -64,7 +64,7 @@ export default function Goal({ event }) {
     },
     {
       relays,
-      closeOnEose: !isExpired,
+      closeOnEose: isExpired,
     }
   );
   const { zappers, total } = useZapsSummary(zapEvents, pubkey);
@@ -84,14 +84,19 @@ export default function Goal({ event }) {
     <>
       <Card sx={isExpired ? { opacity: 0.5 } : {}}>
         <CardHeader>
-          <Flex align="center" justifyContent="space-between">
+          <Flex align="flex-start" justifyContent="space-between">
             {event.content.length > 0 && (
               <Heading fontSize="md" style={{ margin: 0, marginBottom: 3 }}>
                 {event.content}
               </Heading>
             )}
             {closedAt && (
-              <Text as="span" color="secondary" fontSize="xs">
+              <Text
+                fontFamily="sans-serif"
+                as="span"
+                color="secondary"
+                fontSize="xs"
+              >
                 {isExpired && t("ended")}
                 {!isExpired && `${t("ends")} `}
                 {!isExpired && formatRemainingTime(closedAt)}
@@ -118,7 +123,7 @@ export default function Goal({ event }) {
                   isAchieved
                     ? { color: "green.500" }
                     : {
-                        color: progress === 0 ? "gray.500" : "black",
+                        color: progress === 0 ? "secondary" : "primary",
                       }
                 }
               >

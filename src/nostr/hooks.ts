@@ -91,13 +91,23 @@ export function useEvents(filter, options = {}) {
   return { eose, events, opts };
 }
 
-export function useEvent(filter, opts = defaultOpts) {
+export function useEvent(filter, options = {}) {
   const [defaultRelays] = useAtom(relaysAtom);
   const { ndk } = useContext(NostrContext);
   const [event, setEvent] = useState();
 
+  const { relays, ...rest } = options;
+
+  let opts = { ...defaultOpts, ...rest };
+  let relaySet;
+  if (relays?.length > 0) {
+    relaySet = NDKRelaySet.fromRelayUrls(relays, ndk);
+  } else {
+    relaySet = NDKRelaySet.fromRelayUrls(defaultRelays, ndk);
+  }
+
   useEffect(() => {
-    ndk.fetchEvent(filter, opts).then(setEvent);
+    ndk.fetchEvent(filter, opts, relaySet).then(setEvent);
   }, []);
 
   return event;

@@ -14,11 +14,9 @@ export default function Zaps({ event, zaps }) {
   const [pubkey] = useAtom(pubkeyAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const zappers = useMemo(() => {
-    return zaps
-      .map((z) => {
-        return { ...getZapRequest(z), amount: getZapAmount(z) };
-      })
-      .filter((z) => z.pubkey !== event.pubkey);
+    return zaps.map((z) => {
+      return { ...getZapRequest(z), amount: getZapAmount(z) };
+    });
   }, [zaps]);
   const zapped = zappers.some((z) => z.pubkey === pubkey);
   const zapsTotal = useMemo(() => {
