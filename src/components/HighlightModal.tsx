@@ -49,7 +49,17 @@ export default function HighlightModal({
   const { data: relayMetadata } = useRelaysMetadata(relaySelection);
   const splitSuggestions = useMemo(() => {
     const relayOperators =
-      relayMetadata?.map((m) => m.pubkey).filter((p) => p && p != pubkey) ?? [];
+      relayMetadata
+        ?.map((m) => m.pubkey)
+        .filter((p) => p && p != pubkey)
+        .map((p) => {
+          if (p.startsWith("npub")) {
+            return nip19.decode(p)?.data;
+          } else {
+            return p;
+          }
+        })
+        .filter((p) => p) ?? [];
     return relayOperators.concat([HABLA_PUBKEY]);
   }, [relayMetadata]);
   const initialZapSplits = useMemo(() => {
