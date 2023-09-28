@@ -172,10 +172,16 @@ function LoginModal({ isOpen, onClose }) {
   const { t } = useTranslation("common");
   const onboardingModal = useDisclosure("onboarding");
   const [pubkey, setPubkey] = useAtom(pubkeyAtom);
+  const [privkey, setPrivkey] = useAtom(privkeyAtom);
 
   async function autoLogin(shouldRetry = true) {
     try {
-      if ("nostr" in window) {
+      if (privkey) {
+        const signer = new NDKPrivateKeySigner(privkey);
+        ndk.signer = signer;
+        const user = await signer.blockUntilReady();
+        setPubkey(user.hexpubkey);
+      } else if ("nostr" in window) {
         const signer = new NDKNip07Signer();
         ndk.signer = signer;
         const user = await signer.blockUntilReady();
