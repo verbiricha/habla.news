@@ -106,7 +106,7 @@ export default function HighlightModal({
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
       const signed = new NDKEvent(ndk, highlight);
       await signed.sign();
-      const results = await signed.publish(relaySet);
+      const results = await signed.publish(relaySet, 5_000);
       setPublishedOn(Array.from(results).map((r) => r.url));
       setHasPublished(true);
       toast({
@@ -176,7 +176,11 @@ export default function HighlightModal({
           <Button variant="outline" mr={3} onClick={onClose}>
             {t("close")}
           </Button>
-          <Button onClick={onHighlight} colorScheme="orange">
+          <Button
+            isLoading={isPublishing}
+            onClick={onHighlight}
+            colorScheme="orange"
+          >
             {t("highlight")}
           </Button>
         </ModalFooter>
