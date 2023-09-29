@@ -121,7 +121,6 @@ export default function Highlight({
           {e && <EventId id={e} my={0} highlights={[event]} />}
           {naddr && (
             <Flex gap={2} direction="column">
-              <User pubkey={pubkey} size="xs" fontSize="xs" />
               <ArticleTitle
                 naddr={naddr}
                 kind={Number(kind)}
@@ -132,6 +131,7 @@ export default function Highlight({
                 fontSize="sm"
                 color="secondary"
               />
+              <User pubkey={pubkey} size="xs" fontSize="xs" />
             </Flex>
           )}
           {r && !naddr && !r.startsWith("https://habla.news") && (

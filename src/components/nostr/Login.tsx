@@ -174,31 +174,22 @@ function LoginModal({ isOpen, onClose }) {
   const [pubkey, setPubkey] = useAtom(pubkeyAtom);
   const [privkey, setPrivkey] = useAtom(privkeyAtom);
 
-  async function autoLogin(shouldRetry = true) {
+  async function loginWithPrivateKey() {
     try {
-      if (privkey) {
-        const signer = new NDKPrivateKeySigner(privkey);
-        ndk.signer = signer;
-        const user = await signer.blockUntilReady();
-        setPubkey(user.hexpubkey);
-      } else if ("nostr" in window) {
-        const signer = new NDKNip07Signer();
-        ndk.signer = signer;
-        const user = await signer.blockUntilReady();
-        setPubkey(user.hexpubkey);
-      } else if (shouldRetry) {
-        setTimeout(() => autoLogin(false), 1_000);
-      }
+      const signer = new NDKPrivateKeySigner(privkey);
+      ndk.signer = signer;
+      const user = await signer.blockUntilReady();
+      setPubkey(user.hexpubkey);
     } catch (error) {
       console.error(`Autologin failed: ${error}`);
     }
   }
 
   useEffect(() => {
-    if (pubkey === undefined) {
-      autoLogin();
+    if (pubkey === undefined && privkey) {
+      loginWithPrivateKey();
     }
-  }, [pubkey]);
+  }, [pubkey, privkey]);
 
   function continueOnboarding() {
     closeModal();
