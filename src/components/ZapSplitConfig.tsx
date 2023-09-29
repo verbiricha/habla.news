@@ -164,7 +164,9 @@ export default function ZapSplitConfig({
 
   function addPubkey(pk: string) {
     const tag = ["zap", pk, "wss://purplepag.es", "1"];
-    setZapSplits(zapSplits ? zapSplits.concat([tag]) : [tag]);
+    const newZapSplits = zapSplits ? zapSplits.concat([tag]) : [tag];
+    setZapSplits(newZapSplits);
+    onChange(newZapSplits);
   }
 
   return (
