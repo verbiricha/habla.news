@@ -25,6 +25,7 @@ import theme from "@habla/theme";
 import { pubkeyAtom, privkeyAtom, relaysAtom } from "@habla/state";
 import { createNdk } from "@habla/nostr";
 import cacheAdapter from "@habla/cache/indexeddb";
+import Head from "next/head";
 
 // this changes the default local storage key name to ensure that no user has light mode cached in
 const colorModeManager = createLocalStorageManager("habla-ui-color");
@@ -65,13 +66,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <NostrContext.Provider value={{ ndk }}>
-      <ChakraProvider theme={theme} colorModeManager={colorModeManager}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      </ChakraProvider>
-    </NostrContext.Provider>
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+        />
+      </Head>
+      <NostrContext.Provider value={{ ndk }}>
+        <ChakraProvider theme={theme} colorModeManager={colorModeManager}>
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
+        </ChakraProvider>
+      </NostrContext.Provider>
+    </>
   );
 }
 
