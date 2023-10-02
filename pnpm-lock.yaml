@@ -30,8 +30,8 @@ dependencies:
     specifier: ^4.5.1
     version: 4.5.1
   '@getalby/bitcoin-connect-react':
-    specifier: ^1.1.0
-    version: 1.1.0(@types/react@18.2.15)(react@18.2.0)
+    specifier: ^2.0.0
+    version: 2.0.0(@types/react@18.2.15)(react@18.2.0)
   '@nikolovlazar/chakra-ui-prose':
     specifier: ^1.2.1
     version: 1.2.1(@chakra-ui/react@2.7.1)(@chakra-ui/system@2.5.8)(react@18.2.0)
@@ -157,6 +157,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.0.0
     version: 18.2.7
+  '@webbtc/webln-types':
+    specifier: ^2.0.1
+    version: 2.0.1
   typescript:
     specifier: ^4.7.2
     version: 4.9.5
@@ -1452,20 +1455,20 @@ packages:
     resolution: {integrity: sha512-IDC84Vp89QMe8IYqYufViSJ7jdBjA+yaaqb3b5d1pSc0oJFG5DAQksxIGf1U7cheSB2JDE/aFRztuT5H6/WMmQ==}
     dev: false
 
-  /@getalby/bitcoin-connect-react@1.1.0(@types/react@18.2.15)(react@18.2.0):
-    resolution: {integrity: sha512-oX43GwUffdS2DYCPS7a6hECVWgbw1HZr0zHmR3uX16f7ov9vGjNHj8mSg4aWgYnatrxoNt12gklr1MRf6nYYKg==}
+  /@getalby/bitcoin-connect-react@2.0.0(@types/react@18.2.15)(react@18.2.0):
+    resolution: {integrity: sha512-PlpXDk/p3y+2zyWRlgkKc+t5XN6wbJr9xZSWYayYFs+i988lrE1BqcydGAoYI6SotoaYpt3FDyOKgGfB4dyzsw==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
-      '@getalby/bitcoin-connect': 1.1.2(@types/react@18.2.15)(react@18.2.0)
+      '@getalby/bitcoin-connect': 2.0.0(@types/react@18.2.15)(react@18.2.0)
       react: 18.2.0
     transitivePeerDependencies:
       - '@types/react'
       - immer
     dev: false
 
-  /@getalby/bitcoin-connect@1.1.2(@types/react@18.2.15)(react@18.2.0):
-    resolution: {integrity: sha512-SPYJyXri4QKxekdLluNypb0jWDTAuvY7FF/Zjmx/C4RVynxHpW1LIdQJ1p9XDXCnkgxKhuLKE1bxfAzwLEEKXA==}
+  /@getalby/bitcoin-connect@2.0.0(@types/react@18.2.15)(react@18.2.0):
+    resolution: {integrity: sha512-cLtEHenPiF8n/gbC8jG81D8lgPgRhSsNM3TeIBHbMQComyciuB2/Yth6sh4CNUefAbAN5Br97guaNGur4umBZg==}
     dependencies:
       '@getalby/sdk': 2.4.0
       lit: 2.8.0
@@ -2924,6 +2927,10 @@ packages:
     dependencies:
       sjcl: 1.0.8
     dev: false
+
+  /@webbtc/webln-types@2.0.1:
+    resolution: {integrity: sha512-magyMAiN8u7PsECuj7PfFsStMne30E3QiyNfurL4mTTHse3lmG2Pkh3hDv3jh+D3PTWMfCgv1WFUKVmEgKbBkA==}
+    dev: true
 
   /@zag-js/element-size@0.3.2:
     resolution: {integrity: sha512-bVvvigUGvAuj7PCkE5AbzvTJDTw5f3bg9nQdv+ErhVN8SfPPppLJEmmWdxqsRzrHXgx8ypJt/+Ty0kjtISVDsQ==}
