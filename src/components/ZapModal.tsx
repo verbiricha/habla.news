@@ -36,7 +36,6 @@ import { useAtom } from "jotai";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import { ZAP_REQUEST } from "@habla/const";
-import useWebln from "@habla/hooks/useWebln";
 import useZapSplit from "@habla/hooks/useZapSplit";
 import InputCopy from "@habla/components/InputCopy";
 import { relaysAtom } from "@habla/state";
@@ -45,6 +44,7 @@ import { loadService, loadInvoice } from "@habla/lnurl";
 import { formatShortNumber, formatSats } from "@habla/format";
 import User from "@habla/components/nostr/User";
 import { getZapTags, getRelays } from "@habla/nip57";
+import("@getalby/bitcoin-connect-react"); // enable NWC
 
 const QrCode = dynamic(() => import("@habla/components/QrCode"), {
   ssr: false,
@@ -157,7 +157,6 @@ export function ZapSplitModal({ event, isOpen, onClose }) {
   const [defaultRelays] = useAtom(relaysAtom);
   const relays = getRelays(event) || defaultRelays;
   const [isFetchingInvoices, setIsFetchingInvoices] = useState(false);
-  const webln = useWebln(isOpen);
   const [lnurls, setLnurls] = useState();
   const [canZap, setCanZap] = useState(false);
   const zapTags = useMemo(() => {
@@ -226,10 +225,20 @@ export function ZapSplitModal({ event, isOpen, onClose }) {
         })
       );
       const hasFetchedInvoices = fetchedInvoices.every((i) => i?.pr);
-      if (webln?.enabled && hasFetchedInvoices) {
+
+      if (!hasFetchedInvoices) {
+        toast({
+          title: "Could not get invoices",
+          status: "error",
+        });
+        return;
+      }
+
+      if (window.webln) {
         try {
+          await window.webln.enable();
           for (const i of fetchedInvoices) {
-            await webln.sendPayment(i.pr);
+            await window.webln.sendPayment(i.pr);
           }
           toast({
             title: "⚡️ Zapped",
@@ -242,14 +251,7 @@ export function ZapSplitModal({ event, isOpen, onClose }) {
           setInvoices(fetchedInvoices.map((i) => i.pr));
         }
       } else {
-        if (hasFetchedInvoices) {
-          setInvoices(fetchedInvoices.map((i) => i.pr));
-        } else {
-          toast({
-            title: "Could not get invoices",
-            status: "error",
-          });
-        }
+        setInvoices(fetchedInvoices.map((i) => i.pr));
       }
     } catch (error) {
       console.error(error);
@@ -376,7 +378,6 @@ function SingleZapModal({ event, isOpen, onClose }) {
   const [defaultRelays] = useAtom(relaysAtom);
   const relays = getRelays(event) || defaultRelays;
   const [isFetchingInvoice, setIsFetchingInvoice] = useState(false);
-  const webln = useWebln(isOpen);
   const [lnurl, setLnurl] = useState();
   const [canZap, setCanZap] = useState(false);
   const [sats, setSats] = useState(defaultZapAmount);
@@ -430,9 +431,17 @@ function SingleZapModal({ event, isOpen, onClose }) {
       setIsFetchingInvoice(true);
       const zr = await zapRequest();
       const invoice = await loadInvoice(lnurl, sats, comment, zr);
-      if (webln?.enabled && invoice?.pr) {
+      if (!invoice?.pr) {
+        toast({
+          title: "Could not get invoice",
+          status: "error",
+        });
+        return;
+      }
+      if (window.webln) {
         try {
-          await webln.sendPayment(invoice.pr);
+          await window.webln.enable();
+          await window.webln.sendPayment(invoice.pr);
           toast({
             title: "⚡️ Zapped",
             description: `${sats} sats sent to ${profile.lud16}`,
@@ -440,16 +449,12 @@ function SingleZapModal({ event, isOpen, onClose }) {
           });
           closeModal();
         } catch (error) {
+          console.error(error);
           setInvoice(invoice.pr);
         }
       } else {
         if (invoice?.pr) {
           setInvoice(invoice.pr);
-        } else {
-          toast({
-            title: "Could not get invoice",
-            status: "error",
-          });
         }
       }
     } catch (error) {
