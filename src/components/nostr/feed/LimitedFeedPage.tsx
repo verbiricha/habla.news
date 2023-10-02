@@ -24,7 +24,7 @@ export default function LimitedFeedPage({
         },
     {
       ...options,
-      cacheUsage: "RELAY_ONLY",
+      cacheUsage: "ONLY_RELAY",
       closeOnEose: true,
     }
   );

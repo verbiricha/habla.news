@@ -30,8 +30,8 @@ dependencies:
     specifier: ^4.5.1
     version: 4.5.1
   '@getalby/bitcoin-connect-react':
-    specifier: ^1.1.0
-    version: 1.1.0(@types/react@18.2.15)(react@18.2.0)
+    specifier: ^2.0.0
+    version: 2.0.0(@types/react@18.2.15)(react@18.2.0)
   '@nikolovlazar/chakra-ui-prose':
     specifier: ^1.2.1
     version: 1.2.1(@chakra-ui/react@2.7.1)(@chakra-ui/system@2.5.8)(react@18.2.0)
@@ -160,6 +160,9 @@ devDependencies:
   '@types/react-dom':
     specifier: ^18.0.0
     version: 18.2.7
+  '@webbtc/webln-types':
+    specifier: ^2.0.1
+    version: 2.0.1
   typescript:
     specifier: ^4.7.2
     version: 4.9.5
@@ -2617,20 +2620,20 @@ packages:
     resolution: {integrity: sha512-IDC84Vp89QMe8IYqYufViSJ7jdBjA+yaaqb3b5d1pSc0oJFG5DAQksxIGf1U7cheSB2JDE/aFRztuT5H6/WMmQ==}
     dev: false
 
-  /@getalby/bitcoin-connect-react@1.1.0(@types/react@18.2.15)(react@18.2.0):
-    resolution: {integrity: sha512-oX43GwUffdS2DYCPS7a6hECVWgbw1HZr0zHmR3uX16f7ov9vGjNHj8mSg4aWgYnatrxoNt12gklr1MRf6nYYKg==}
+  /@getalby/bitcoin-connect-react@2.0.0(@types/react@18.2.15)(react@18.2.0):
+    resolution: {integrity: sha512-PlpXDk/p3y+2zyWRlgkKc+t5XN6wbJr9xZSWYayYFs+i988lrE1BqcydGAoYI6SotoaYpt3FDyOKgGfB4dyzsw==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
-      '@getalby/bitcoin-connect': 1.1.2(@types/react@18.2.15)(react@18.2.0)
+      '@getalby/bitcoin-connect': 2.0.0(@types/react@18.2.15)(react@18.2.0)
       react: 18.2.0
     transitivePeerDependencies:
       - '@types/react'
       - immer
     dev: false
 
-  /@getalby/bitcoin-connect@1.1.2(@types/react@18.2.15)(react@18.2.0):
-    resolution: {integrity: sha512-SPYJyXri4QKxekdLluNypb0jWDTAuvY7FF/Zjmx/C4RVynxHpW1LIdQJ1p9XDXCnkgxKhuLKE1bxfAzwLEEKXA==}
+  /@getalby/bitcoin-connect@2.0.0(@types/react@18.2.15)(react@18.2.0):
+    resolution: {integrity: sha512-cLtEHenPiF8n/gbC8jG81D8lgPgRhSsNM3TeIBHbMQComyciuB2/Yth6sh4CNUefAbAN5Br97guaNGur4umBZg==}
     dependencies:
       '@getalby/sdk': 2.4.0
       lit: 2.8.0
@@ -4359,6 +4362,10 @@ packages:
       '@xtuc/long': 4.2.2
     dev: false
 
+  /@webbtc/webln-types@2.0.1:
+    resolution: {integrity: sha512-magyMAiN8u7PsECuj7PfFsStMne30E3QiyNfurL4mTTHse3lmG2Pkh3hDv3jh+D3PTWMfCgv1WFUKVmEgKbBkA==}
+    dev: true
+
   /@xtuc/ieee754@1.2.0:
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
     dev: false
@@ -4606,7 +4613,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001516
+      caniuse-lite: 1.0.30001541
       electron-to-chromium: 1.4.463
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.9)
@@ -4657,10 +4664,6 @@ packages:
   /callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
-    dev: false
-
-  /caniuse-lite@1.0.30001516:
-    resolution: {integrity: sha512-Wmec9pCBY8CWbmI4HsjBeQLqDTqV91nFVR83DnZpYyRnPI1wePDsTg0bGLPC5VU/3OIZV1fmxEea1b+tFKe86g==}
     dev: false
 
   /caniuse-lite@1.0.30001541:
@@ -6887,7 +6890,7 @@ packages:
       '@next/env': 13.5.3
       '@swc/helpers': 0.5.2
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001516
+      caniuse-lite: 1.0.30001541
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -8549,7 +8552,7 @@ packages:
       '@webassemblyjs/wasm-parser': 1.11.6
       acorn: 8.10.0
       acorn-import-assertions: 1.9.0(acorn@8.10.0)
-      browserslist: 4.21.9
+      browserslist: 4.22.1
       chrome-trace-event: 1.0.3
       enhanced-resolve: 5.15.0
       es-module-lexer: 1.3.1

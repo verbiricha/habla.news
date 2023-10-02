@@ -26,7 +26,7 @@ export default function Community({ event }) {
       "#a": [address],
     },
     {
-      cacheUsage: "RELAY_ONLY",
+      cacheUsage: "ONLY_RELAY",
     }
   );
 

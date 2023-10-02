@@ -14,7 +14,7 @@ import Comments from "../Comments";
 export default function Reactions({
   event,
   kinds = [ZAP, REACTION, REPOST, NOTE, HIGHLIGHT],
-  opts = { cacheUsage: "CACHE_ONLY", closeOnEose: true },
+  opts = { cacheUsage: "ONLY_CACHE", closeOnEose: true },
 }) {
   const reactionEvents = useLiveQuery(
     async () => {

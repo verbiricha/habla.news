@@ -15,7 +15,7 @@
     "@fontsource/inter": "^4.5.15",
     "@fontsource/source-serif-pro": "^4.5.9",
     "@fontsource/unbounded": "^4.5.1",
-    "@getalby/bitcoin-connect-react": "^1.1.0",
+    "@getalby/bitcoin-connect-react": "^2.0.0",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@nostr-dev-kit/ndk": "^1.3.0",
     "@tanstack/react-query": "^4.35.0",
@@ -60,6 +60,7 @@
     "@types/node": "^20.4.2",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@webbtc/webln-types": "^2.0.1",
     "typescript": "^4.7.2"
   }
 }
