@@ -13,7 +13,7 @@ import Reposts from "../Reposts";
 export default function Reactions({
   event,
   kinds = [ZAP, REACTION, REPOST, NOTE, HIGHLIGHT],
-  opts = { cacheUsage: "CACHE_ONLY", closeOnEose: true },
+  opts = { cacheUsage: "ONLY_CACHE", closeOnEose: true },
 }) {
   const { zaps, reactions, reposts, notes, highlights } = useReactions(
     event,

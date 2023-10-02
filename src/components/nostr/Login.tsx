@@ -316,7 +316,7 @@ function LoggedInUser({ pubkey, onClose }) {
       authors: [pubkey],
     },
     {
-      cacheUsage: "RELAY_ONLY",
+      cacheUsage: "ONLY_RELAY",
       closeOnEose: false,
     }
   );

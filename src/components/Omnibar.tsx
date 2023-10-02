@@ -123,7 +123,7 @@ export default function Omnibar() {
           key={search}
           filter={{ kinds: [LONG_FORM], search }}
           options={{
-            cacheUsage: "CACHE_ONLY",
+            cacheUsage: "ONLY_CACHE",
           }}
         />
       )}
