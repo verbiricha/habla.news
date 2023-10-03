@@ -105,8 +105,7 @@ export default function HomeFeeds() {
             {t("follows")}
           </MenuItem>
         )}
-        {peopleLists.map((e) => {
-          const d = findTag(e, "d");
+        {Object.entries(peopleLists).map(([d, e]) => {
           const onClick = () => {
             setList(e);
             setFeed(Feeds.PeopleList);

@@ -262,7 +262,7 @@ function ProfileMenu({ pubkey, relays, onClose }) {
   }, [pubkey, relays]);
 
   function logOut(ev) {
-    setPeopleLists([]);
+    setPeopleLists({});
     setPubkey(null);
     setPrivkey(null);
     setContactList(null);
@@ -312,7 +312,7 @@ function LoggedInUser({ pubkey, onClose }) {
   const [contacts, setContactList] = useAtom(contactListAtom);
   const { events } = useEvents(
     {
-      kinds: [CONTACTS, RELAYS],
+      kinds: [CONTACTS, RELAYS, PEOPLE],
       authors: [pubkey],
     },
     {
@@ -323,7 +323,7 @@ function LoggedInUser({ pubkey, onClose }) {
   const { t } = useTranslation("common");
   const [relayList, setRelayList] = useAtom(relayListAtom);
   const [communities, setCommunities] = useAtom(communitiesAtom);
-  const [, setPeopleLists] = useAtom(peopleListsAtom);
+  const [peopleLists, setPeopleLists] = useAtom(peopleListsAtom);
 
   useEffect(() => {
     const fn = async () => {
@@ -342,32 +342,20 @@ function LoggedInUser({ pubkey, onClose }) {
             setRelayList(nostrEvent);
           }
         }
+        if (event.kind === PEOPLE) {
+          const d = findTag(event, "d");
+          const t = findTag(event, "t");
+          const outdatedD = ["mute", "p:mute", "pin", "pinned"];
+          if (!outdatedD.includes(d) && !outdatedD.includes(t)) {
+            setPeopleLists({ ...peopleLists, [d]: event });
+          }
+        }
       }
     };
     fn();
   }, [events]);
 
   useEffect(() => {
-    // People lists
-    ndk
-      .fetchEvents({
-        kinds: [PEOPLE],
-        authors: [pubkey],
-      })
-      .then((people) => {
-        if (people) {
-          const peopleLists = Array.from(people)
-            .filter((p) => {
-              const d = findTag(p, "d");
-              const t = findTag(p, "t");
-              const outdatedD = ["mute", "p:mute", "pin", "pinned"];
-              // discard outdated pre nip-51 lists
-              return !outdatedD.includes(d) && !outdatedD.includes(t);
-            })
-            .filter((p) => p.tags.find((t) => t.at(0) === "p"));
-          setPeopleLists(peopleLists);
-        }
-      });
     // Communities
     ndk
       .fetchEvent({

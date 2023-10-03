@@ -53,4 +53,4 @@ export const bookmarksAtom = atomWithLocalStorage<string[][]>(
   []
 );
 
-export const peopleListsAtom = atom<NDKEvent[]>([]);
+export const peopleListsAtom = atom<Record<string, NDKEvent[]>>({});
