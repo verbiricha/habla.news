@@ -1,3 +1,4 @@
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 import { LONG_FORM } from "@habla/const";
 
 import Feed from "@habla/components/nostr/Feed";
@@ -10,7 +11,7 @@ export default function SearchFeed({ query, relays }) {
   };
   const options = {
     relays,
-    cacheUsage: "ONLY_RELAY",
+    cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
     closeOnEose: true,
   };
   return (

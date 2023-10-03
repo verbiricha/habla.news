@@ -15,8 +15,8 @@ export function Hashtag({ tag, ...rest }) {
 export default function Hashtags({ hashtags, gap = 2, ...rest }) {
   return (
     <Flex flexWrap="wrap" gap={gap} {...rest}>
-      {hashtags.map((t) => (
-        <Box key={t}>
+      {hashtags.map((t, idx) => (
+        <Box key={`${t}-${idx}`}>
           <Hashtag tag={t} {...rest} />
         </Box>
       ))}

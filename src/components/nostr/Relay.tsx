@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { nip19 } from "nostr-tools";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import { Stack, Heading, Text } from "@chakra-ui/react";
 
@@ -31,7 +32,7 @@ export default function Relay({ relay }) {
             offset={2 * DAY}
             options={{
               relays,
-              cacheUsage: "ONLY_RELAY",
+              cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
             }}
           />
         ),
@@ -45,7 +46,7 @@ export default function Relay({ relay }) {
             offset={WEEK}
             options={{
               relays,
-              cacheUsage: "ONLY_RELAY",
+              cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
             }}
           />
         ),

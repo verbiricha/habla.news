@@ -14,11 +14,11 @@ import {
   ButtonGroup,
   Icon,
   Menu,
+  MenuGroup,
   MenuButton,
   MenuList,
   MenuItem,
   MenuItemOption,
-  MenuGroup,
   MenuOptionGroup,
   MenuDivider,
   AvatarGroup,
@@ -87,6 +87,11 @@ export default function HomeFeeds() {
   const [feed, setFeed] = useState(hasFollows ? Feeds.Follows : Feeds.All);
   const needsBackup = useNeedsBackup();
   const router = useRouter();
+  const enableRelays = false;
+  // Lists
+  const lists = useMemo(() => {
+    return Object.entries(peopleLists);
+  }, [peopleLists]);
   const listName = useMemo(() => {
     if (list) {
       return findTag(list, "title") || findTag(list, "d");
@@ -123,7 +128,7 @@ export default function HomeFeeds() {
         )}
         {feed === Feeds.Relay && (
           <Flex align="center" gap={2}>
-            <RelayFavicon includeTooltip={false} url={relay} />
+            <RelayFavicon size="2xs" includeTooltip={false} url={relay} />
             <Text>{relay}</Text>
           </Flex>
         )}
@@ -138,43 +143,69 @@ export default function HomeFeeds() {
             {t("follows")}
           </MenuItem>
         )}
-        {Object.entries(peopleLists).map(([d, e]) => {
-          const onClick = () => {
-            setList(e);
-            setFeed(Feeds.PeopleList);
-          };
-          return (
-            <MenuItem icon={feedIcon(Feeds.PeopleList)} onClick={onClick}>
-              {findTag(e, "title") || d}
-            </MenuItem>
-          );
-        })}
-        {tags.map((t) => {
-          const onClick = () => {
-            setTag(t);
-            setFeed(Feeds.Tag);
-          };
-          return (
-            <MenuItem key={t} icon={feedIcon(Feeds.Tag)} onClick={onClick}>
-              {t}
-            </MenuItem>
-          );
-        })}
         <MenuItem icon={feedIcon(Feeds.All)} onClick={() => setFeed(Feeds.All)}>
           {t("all")}
         </MenuItem>
-        {enableRelays &&
-          relays.map((r) => {
-            const onClick = () => {
-              setRelay(r);
-              setFeed(Feeds.Relay);
-            };
-            return (
-              <MenuItem key={r} icon={feedIcon(Feeds.Relay)} onClick={onClick}>
-                {r}
-              </MenuItem>
-            );
-          })}
+        {lists.length > 0 && (
+          <>
+            <MenuDivider />
+            <MenuGroup title={t("lists")}>
+              {lists.map(([d, e]) => {
+                const onClick = () => {
+                  setList(e);
+                  setFeed(Feeds.PeopleList);
+                };
+                return (
+                  <MenuItem icon={feedIcon(Feeds.PeopleList)} onClick={onClick}>
+                    {findTag(e, "title") || d}
+                  </MenuItem>
+                );
+              })}
+            </MenuGroup>
+          </>
+        )}
+        {tags.length > 0 && (
+          <>
+            <MenuDivider />
+            <MenuGroup title={t("tags")}>
+              {tags.map((t) => {
+                const onClick = () => {
+                  setTag(t);
+                  setFeed(Feeds.Tag);
+                };
+                return (
+                  <MenuItem
+                    key={t}
+                    icon={feedIcon(Feeds.Tag)}
+                    onClick={onClick}
+                  >
+                    {t}
+                  </MenuItem>
+                );
+              })}
+            </MenuGroup>
+          </>
+        )}
+        <MenuDivider />
+        {enableRelays && (
+          <MenuGroup title={t("Relays")}>
+            {relays.map((r) => {
+              const onClick = () => {
+                setRelay(r);
+                setFeed(Feeds.Relay);
+              };
+              return (
+                <MenuItem
+                  key={r}
+                  icon={<RelayFavicon size="2xs" url={r} />}
+                  onClick={onClick}
+                >
+                  {r}
+                </MenuItem>
+              );
+            })}
+          </MenuGroup>
+        )}
       </MenuList>
     </Menu>
   );

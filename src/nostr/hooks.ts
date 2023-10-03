@@ -2,7 +2,12 @@ import { useMemo, useEffect, useState, useContext } from "react";
 import { useAtom } from "jotai";
 import { useToast } from "@chakra-ui/react";
 
-import { NDKEvent, NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
+import {
+  NDKEvent,
+  NDKRelay,
+  NDKRelaySet,
+  NDKSubscriptionCacheUsage,
+} from "@nostr-dev-kit/ndk";
 import { useLiveQuery } from "dexie-react-hooks";
 import { utils } from "nostr-tools";
 
@@ -26,22 +31,6 @@ const defaultOpts = {
   cacheUsage: "CACHE_FIRST",
 };
 
-async function updateIdUrls(id, url) {
-  return db.transaction("rw", db.relaySet, async () => {
-    const existingUrl = await db.relaySet.get({ id });
-
-    if (existingUrl) {
-      if (existingUrl.urls.includes(url)) {
-        return;
-      }
-      const updatedUrls = [...existingUrl.urls, url];
-      await db.relaySet.put({ id, urls: updatedUrls });
-    } else {
-      await db.relaySet.put({ id, urls: [url] });
-    }
-  });
-}
-
 export function useEvents(filter, options = {}) {
   const { ndk } = useContext(NostrContext);
   const [defaultRelays] = useAtom(relaysAtom);
@@ -64,18 +53,9 @@ export function useEvents(filter, options = {}) {
       sub.on("event", (ev, relay) => {
         setEvents((evs) =>
           uniqByFn(utils.insertEventIntoDescendingList(evs, ev), (e) =>
-            e.kind === PROFILE ? `0:${e.pubkey}` : e.tagId()
+            e.tagId()
           )
         );
-        if (relay && ev.kind === LONG_FORM) {
-          updateIdUrls(ev.tagId(), normalizeURL(relay.url));
-        }
-      });
-
-      sub.on("event:dup", (ev, relay) => {
-        if (relay && ev.kind === LONG_FORM) {
-          updateIdUrls(ev.tagId(), normalizeURL(relay.url));
-        }
       });
 
       sub.on("eose", () => {
@@ -130,14 +110,15 @@ export function useUser(pubkey) {
   );
 
   useEffect(() => {
-    if (pubkey) {
+    if (pubkey && !user) {
       ndk.fetchEvent(
         {
           kinds: [PROFILE],
           authors: [pubkey],
         },
         {
-          cacheUsage: "PARALLEL",
+          groupable: true,
+          cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
         }
       );
     }
@@ -170,7 +151,7 @@ export function useUsers(pubkeys) {
           authors: pubkeys,
         },
         {
-          cacheUsage: "PARALLEL",
+          cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
         }
       );
     }
@@ -191,7 +172,11 @@ export function useReactions(
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },
-    { cacheUsage: "CACHE_FIRST", closeOnEose: true, ...opts }
+    {
+      cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+      closeOnEose: true,
+      ...opts,
+    }
   );
 
   const zaps = events.filter((e) => e.kind === ZAP);
@@ -226,9 +211,7 @@ export function usePublishEvent(options) {
     try {
       const ndkEvent = new NDKEvent(ndk, ev);
       await ndkEvent.sign();
-      if (ndkEvent.kind === PROFILE) {
-        await storeEvent(db, ndkEvent);
-      }
+      await storeEvent(db, ndkEvent);
       if (debug) {
         console.debug(ndkEvent);
       } else {
