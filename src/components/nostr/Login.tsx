@@ -402,7 +402,6 @@ function LoggedInUser({ pubkey, onClose }) {
 
 export default function Login() {
   const toast = useToast();
-  const [contacts] = useAtom(contactListAtom);
   const [pubkey] = useAtom(pubkeyAtom);
   const [privkey, setPrivkey] = useAtom(privkeyAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
