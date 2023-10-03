@@ -52,6 +52,7 @@ function TagSelector({ tags, onChange }) {
             variant={isSelected ? "outline" : "subtle"}
             colorScheme={isSelected ? "purple" : null}
             key={t}
+            color="chakra-body-text"
             size="sm"
             fontWeight={300}
             onClick={() =>
