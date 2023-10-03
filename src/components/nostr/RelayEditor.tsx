@@ -37,7 +37,6 @@ export default function RelayEditor({ relayList, skipText, onCancel, onSave }) {
   const [relays, setRelays] = useState(
     relayList?.tags.map((r) => r.at(1)) ?? defaultRelays
   );
-  // todo: better validation
   const isValidRelay =
     relay?.startsWith("ws://") || relay?.startsWith("wss://");
   const publish = usePublishEvent({ showToast: false });

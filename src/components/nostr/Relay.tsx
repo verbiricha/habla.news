@@ -7,7 +7,7 @@ import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import { Stack, Heading, Text } from "@chakra-ui/react";
 
-import { LONG_FORM, HIGHLIGHT, DAY, WEEK } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, MONTH } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
 import Events from "@habla/components/nostr/feed/Events";
 import RelayFavicon from "@habla/components/RelayFavicon";
@@ -29,7 +29,7 @@ export default function Relay({ relay }) {
           <FeedPage
             key={`${relay}-posts`}
             filter={{ kinds: [LONG_FORM] }}
-            offset={2 * DAY}
+            offset={MONTH}
             options={{
               relays,
               cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
@@ -43,7 +43,7 @@ export default function Relay({ relay }) {
           <FeedPage
             key={`${relay}-highlights`}
             filter={{ kinds: [HIGHLIGHT] }}
-            offset={WEEK}
+            offset={MONTH}
             options={{
               relays,
               cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
@@ -62,11 +62,11 @@ export default function Relay({ relay }) {
   }, [data, relays]);
   return (
     <>
-      <Stack align="center" direction="row" gap={1} wordBreak="break-word">
+      <Stack align="center" direction="row" gap={3} wordBreak="break-word">
         <RelayFavicon url={relay} size="md" />
         <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
       </Stack>
-      <Text>{data?.description}</Text>
+      {data?.description && <Text>{data?.description}</Text>}
       {data && <Nips info={data} />}
       <Tabs tabs={tabs} />
     </>

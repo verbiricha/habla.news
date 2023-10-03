@@ -16,9 +16,9 @@ import {
 } from "@chakra-ui/react";
 import { nip05, nip19 } from "nostr-tools";
 
-import { LONG_FORM, HIGHLIGHT, HASHTAG_REGEX } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, HASHTAG_REGEX, MONTH } from "@habla/const";
 import { urlsToNip27 } from "@habla/nip27";
-import Feed from "@habla/components/nostr/Feed";
+import FeedPage from "@habla/components/nostr/feed/FeedPage";
 import SearchIcon from "@habla/icons/Search";
 
 export default function Omnibar() {
@@ -108,23 +108,18 @@ export default function Omnibar() {
         />
       </InputGroup>
       {isTagSearch && (
-        <Feed
+        <FeedPage
           key={tags.join("")}
+          offset={MONTH}
           filter={{ kinds: [LONG_FORM], "#t": tags }}
-          options={{
-            cacheUsage: "PARALLEL",
-            closeOnEose: true,
-          }}
         />
       )}
       // todo: add when it works
       {!isTagSearch && search?.length > 2 && (
-        <Feed
+        <FeedPage
           key={search}
+          offset={MONTH}
           filter={{ kinds: [LONG_FORM], search }}
-          options={{
-            cacheUsage: "ONLY_CACHE",
-          }}
         />
       )}
     </Stack>

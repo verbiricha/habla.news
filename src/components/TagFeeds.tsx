@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
 import { Flex, Heading } from "@chakra-ui/react";
 
-import { LONG_FORM } from "@habla/const";
-import Feed from "@habla/components/nostr/Feed";
+import FeedPage from "@habla/components/nostr/feed/FeedPage";
 import { FollowTagButton } from "@habla/components/nostr/FollowButton";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
+import { LONG_FORM, MONTH } from "@habla/const";
 
 export default function TagFeeds({ tag }) {
   return (
@@ -12,10 +13,7 @@ export default function TagFeeds({ tag }) {
         <Heading>#{tag}</Heading>
         <FollowTagButton tag={tag} />
       </Flex>
-      <Feed
-        filter={{ kinds: [LONG_FORM], "#t": [tag], limit: 100 }}
-        options={{ cacheUsage: "PARALLEL", closeOnEose: true }}
-      />
+      <FeedPage filter={{ kinds: [LONG_FORM], "#t": [tag] }} offset={MONTH} />
     </>
   );
 }

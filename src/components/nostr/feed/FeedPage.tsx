@@ -23,6 +23,7 @@ export default function FeedPage({ filter, until, offset, options = {} }) {
       until: now,
     },
     {
+      closeOnEose: true,
       cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
       ...options,
     }

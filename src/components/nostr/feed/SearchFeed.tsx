@@ -1,7 +1,7 @@
 import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
-import { LONG_FORM } from "@habla/const";
 
-import Feed from "@habla/components/nostr/Feed";
+import FeedPage from "@habla/components/nostr/feed/FeedPage";
+import { LONG_FORM, MONTH } from "@habla/const";
 
 export default function SearchFeed({ query, relays }) {
   const filter = {
@@ -12,9 +12,10 @@ export default function SearchFeed({ query, relays }) {
   const options = {
     relays,
     cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
-    closeOnEose: true,
   };
   return (
-    query.length > 2 && <Feed key={query} filter={filter} options={options} />
+    query.length > 2 && (
+      <FeedPage key={query} offset={MONTH} filter={filter} options={options} />
+    )
   );
 }

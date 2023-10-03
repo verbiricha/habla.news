@@ -63,6 +63,7 @@ import {
 import { getHandle } from "@habla/nip05";
 import RelaySelector from "@habla/components/RelaySelector";
 import User from "@habla/components/nostr/User";
+import { toPubkey } from "@habla/util";
 
 function isCommunityTag(t) {
   return t.startsWith(`${COMMUNITY}:`);
@@ -117,13 +118,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       relayMetadata
         ?.map((m) => m.pubkey)
         .filter((p) => p && p != pubkey)
-        .map((p) => {
-          if (p.startsWith("npub")) {
-            return nip19.decode(p)?.data;
-          } else {
-            return p;
-          }
-        })
+        .map(toPubkey)
         .filter((p) => p) ?? [];
     return relayOperators.concat([HABLA_PUBKEY]);
   }, [relayMetadata]);

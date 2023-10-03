@@ -6,6 +6,7 @@ import {
   NDKUser,
   NDKNip07Signer,
   NDKPrivateKeySigner,
+  NDKSubscriptionCacheUsage,
 } from "@nostr-dev-kit/ndk";
 import { useAtom } from "jotai";
 import { nip05, nip19 } from "nostr-tools";
@@ -308,6 +309,7 @@ function ProfileMenu({ pubkey, relays, onClose }) {
 
 function LoggedInUser({ pubkey, onClose }) {
   const ndk = useNdk();
+  const { t } = useTranslation("common");
   const [relays] = useAtom(relaysAtom);
   const [contacts, setContactList] = useAtom(contactListAtom);
   const { events } = useEvents(
@@ -316,43 +318,39 @@ function LoggedInUser({ pubkey, onClose }) {
       authors: [pubkey],
     },
     {
-      cacheUsage: "ONLY_RELAY",
+      cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
       closeOnEose: false,
     }
   );
-  const { t } = useTranslation("common");
   const [relayList, setRelayList] = useAtom(relayListAtom);
   const [communities, setCommunities] = useAtom(communitiesAtom);
   const [peopleLists, setPeopleLists] = useAtom(peopleListsAtom);
 
   useEffect(() => {
-    const fn = async () => {
-      for (const event of events) {
-        const nostrEvent = await event.toNostrEvent();
-        if (event.kind === CONTACTS) {
-          const lastSeen = contacts?.created_at ?? 0;
-          if (nostrEvent.created_at > lastSeen) {
-            setContactList(nostrEvent);
-          }
-        }
-        if (event.kind === RELAYS) {
-          const relays = nostrEvent.tags.map((r) => r.at(1));
-          const lastSeen = relayList?.created_at ?? 0;
-          if (nostrEvent.created_at > lastSeen) {
-            setRelayList(nostrEvent);
-          }
-        }
-        if (event.kind === PEOPLE) {
-          const d = findTag(event, "d");
-          const t = findTag(event, "t");
-          const outdatedD = ["mute", "p:mute", "pin", "pinned"];
-          if (!outdatedD.includes(d) && !outdatedD.includes(t)) {
-            setPeopleLists({ ...peopleLists, [d]: event });
-          }
+    for (const event of events) {
+      const nostrEvent = event.rawEvent();
+      if (event.kind === CONTACTS) {
+        const lastSeen = contacts?.created_at ?? 0;
+        if (nostrEvent.created_at > lastSeen) {
+          setContactList(nostrEvent);
         }
       }
-    };
-    fn();
+      if (event.kind === RELAYS) {
+        const relays = nostrEvent.tags.map((r) => r.at(1));
+        const lastSeen = relayList?.created_at ?? 0;
+        if (nostrEvent.created_at > lastSeen) {
+          setRelayList(nostrEvent);
+        }
+      }
+      if (event.kind === PEOPLE) {
+        const d = findTag(nostrEvent, "d");
+        const t = findTag(nostrEvent, "t");
+        const outdatedD = ["mute", "p:mute", "pin", "pinned"];
+        if (!outdatedD.includes(d) && !outdatedD.includes(t)) {
+          setPeopleLists({ ...peopleLists, [d]: nostrEvent });
+        }
+      }
+    }
   }, [events]);
 
   useEffect(() => {

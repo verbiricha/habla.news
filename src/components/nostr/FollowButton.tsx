@@ -15,6 +15,10 @@ import {
 } from "@habla/state";
 import { useNdk } from "@habla/nostr/hooks";
 
+// todo: communities NIP follow
+//export function FollowCommunityButton({ reference }) {
+//  return <FollowReferenceButton reference={["a", address]} />;
+//}
 export function FollowCommunityButton({ reference }) {
   const [tag, value] = reference;
   const { t } = useTranslation("common");
@@ -101,6 +105,13 @@ export function FollowReferenceButton({ reference }) {
   );
 
   async function followReference() {
+    if (!contactList || contactList?.tags.length === 0) {
+      toast({
+        title: "Could not find contact list",
+        status: "error",
+      });
+      return;
+    }
     try {
       const newFollows =
         contactList?.tags.length > 0
@@ -126,10 +137,18 @@ export function FollowReferenceButton({ reference }) {
   }
 
   async function unfollowReference() {
+    if (!contactList || contactList?.tags.length === 0) {
+      toast({
+        title: "Could not find contact list",
+        status: "error",
+      });
+      return;
+    }
     try {
       const newFollows =
-        contactList?.tags.filter((t) => t.at(0) !== tag && t.at(1) !== value) ||
-        [];
+        contactList?.tags.filter(
+          (t) => !(t.at(0) === tag && t.at(1) === value)
+        ) || [];
       const newContacts = {
         kind: CONTACTS,
         created_at: dateToUnix(),

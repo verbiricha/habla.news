@@ -1,3 +1,5 @@
+import { nip19 } from "nostr-tools";
+
 export function combineLists(lists) {
   const result = [];
 
@@ -50,3 +52,11 @@ export const uniqByFn = <T>(arr: T[], keyFn: any): T[] => {
     }, {})
   );
 };
+
+export function toPubkey(p?: string) {
+  if (p?.startsWith("npub")) {
+    return nip19.decode(p)?.data;
+  } else {
+    return p;
+  }
+}

@@ -43,10 +43,12 @@ import SectionHeading from "@habla/components/SectionHeading";
 import RelayFavicon from "@habla/components/RelayFavicon";
 import Hashtags from "@habla/components/Hashtags";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
-import Feed from "@habla/components/nostr/Feed";
 import Avatar from "@habla/components/nostr/Avatar";
+import User from "@habla/components/nostr/User";
 import { findTag, findTags } from "@habla/tags";
 import { useNeedsBackup } from "@habla/onboarding/hooks";
+import useRelayMetadata from "@habla/hooks/useRelayMetadata";
+import { toPubkey } from "@habla/util";
 
 enum Feeds {
   All = "All",
@@ -71,8 +73,69 @@ function feedIcon(f: Feeds) {
   }
 }
 
+function RelayHeading({ url }) {
+  const { data } = useRelayMetadata(url);
+  const operator = useMemo(() => {
+    return toPubkey(data?.pubkey);
+  }, [data]);
+  return (
+    <Flex
+      align={["flex-start", "center"]}
+      flexDir={["column", "row"]}
+      justifyContent="space-between"
+      gap={2}
+    >
+      <Stack align="center" direction="row" gap={3} wordBreak="break-word">
+        <RelayFavicon url={url} size={["sm", "md"]} />
+        <Heading textOverflow="ellipsis" fontSize={["xl", "2xl"]}>
+          {data?.name || url}
+        </Heading>
+      </Stack>
+      {operator && (
+        <User
+          key={operator}
+          pubkey={operator}
+          size={["xs", "sm"]}
+          fontSize={["xs", "sm"]}
+        />
+      )}
+    </Flex>
+  );
+}
+
+function ListHeading({ name, list }) {
+  const listPeople = useMemo(() => {
+    if (list) {
+      return findTags(list, "p");
+    }
+    return [];
+  }, [list]);
+  const listDescription = useMemo(() => {
+    if (list) return findTag(list, "description");
+
+    return null;
+  }, [list]);
+
+  return (
+    <Stack>
+      <Flex flexDir={["column", "row"]} justifyContent="space-between">
+        <Heading textOverflow="ellipsis" fontSize={["xl", "2xl"]}>
+          {name}
+        </Heading>
+        <AvatarGroup size="sm" max={6} spacing="-0.5rem">
+          {listPeople.map((pk) => (
+            <Avatar key={pk} pubkey={pk} />
+          ))}
+        </AvatarGroup>
+      </Flex>
+      {listDescription && <Text>{listDescription}</Text>}
+    </Stack>
+  );
+}
+
 export default function HomeFeeds() {
   const { t } = useTranslation("common");
+  const router = useRouter();
   const [pubkey] = useAtom(pubkeyAtom);
   const [follows] = useAtom(followsAtom);
   const [peopleLists] = useAtom(peopleListsAtom);
@@ -86,9 +149,6 @@ export default function HomeFeeds() {
   const hasFollows = pubkey && follows.length > 0;
   const [feed, setFeed] = useState(hasFollows ? Feeds.Follows : Feeds.All);
   const needsBackup = useNeedsBackup();
-  const router = useRouter();
-  const enableRelays = false;
-  // Lists
   const lists = useMemo(() => {
     return Object.entries(peopleLists);
   }, [peopleLists]);
@@ -103,12 +163,6 @@ export default function HomeFeeds() {
       return findTags(list, "p");
     }
     return [];
-  }, [list]);
-
-  const listDescription = useMemo(() => {
-    if (list) return findTag(list, "description");
-
-    return null;
   }, [list]);
 
   const feedSelector = (
@@ -185,28 +239,26 @@ export default function HomeFeeds() {
             </MenuGroup>
           </>
         )}
-        {enableRelays && (
-          <>
-            <MenuDivider />
-            <MenuGroup title={t("Relays")}>
-              {relays.map((r) => {
-                const onClick = () => {
-                  setRelay(r);
-                  setFeed(Feeds.Relay);
-                };
-                return (
-                  <MenuItem
-                    key={r}
-                    icon={<RelayFavicon size="2xs" url={r} />}
-                    onClick={onClick}
-                  >
-                    {r}
-                  </MenuItem>
-                );
-              })}
-            </MenuGroup>
-          </>
-        )}
+        <>
+          <MenuDivider />
+          <MenuGroup title={t("Relays")}>
+            {relays.map((r) => {
+              const onClick = () => {
+                setRelay(r);
+                setFeed(Feeds.Relay);
+              };
+              return (
+                <MenuItem
+                  key={r}
+                  icon={<RelayFavicon size="2xs" url={r} />}
+                  onClick={onClick}
+                >
+                  {r}
+                </MenuItem>
+              );
+            })}
+          </MenuGroup>
+        </>
       </MenuList>
     </Menu>
   );
@@ -261,7 +313,6 @@ export default function HomeFeeds() {
     }
 
     if (feed === Feeds.Relay && relay) {
-      // fixme: not re-rendering after changing IDs, why?
       return {
         id: `${relay}-${kinds.join("-")}`,
         filter: {
@@ -275,7 +326,7 @@ export default function HomeFeeds() {
       };
     }
     return null;
-  }, [pubkey, follows, kinds, feed, list, tag]);
+  }, [pubkey, follows, kinds, feed, list, tag, relay]);
 
   useEffect(() => {
     if (pubkey && hasFollows && feed === Feeds.All) {
@@ -348,18 +399,9 @@ export default function HomeFeeds() {
         {feedSelector}
       </Flex>
       {feed === Feeds.PeopleList && list && (
-        <Stack>
-          <Flex flexDir={["column", "row"]} justifyContent="space-between">
-            <Heading my={0}>{listName}</Heading>
-            <AvatarGroup size="sm" max={6} spacing="-0.5rem">
-              {listPeople.map((pk) => (
-                <Avatar key={pk} pubkey={pk} />
-              ))}
-            </AvatarGroup>
-          </Flex>
-          {listDescription && <Text>{listDescription}</Text>}
-        </Stack>
+        <ListHeading name={listName} list={list} />
       )}
+      {feed === Feeds.Relay && relay && <RelayHeading url={relay} />}
       {filter ? (
         <FeedPage
           key={filter.id}
