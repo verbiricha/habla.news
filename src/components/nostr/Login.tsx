@@ -403,16 +403,10 @@ function LoggedInUser({ pubkey, onClose }) {
 export default function Login() {
   const toast = useToast();
   const [contacts] = useAtom(contactListAtom);
-  const [pubkey, setPubkey] = useAtom(pubkeyAtom);
+  const [pubkey] = useAtom(pubkeyAtom);
   const [privkey, setPrivkey] = useAtom(privkeyAtom);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation("common");
-
-  useEffect(() => {
-    if (contacts?.pubkey) {
-      setPubkey(contacts.pubkey);
-    }
-  }, [setPubkey, contacts]);
 
   return pubkey ? (
     <LoggedInUser pubkey={pubkey} onClose={onClose} />
