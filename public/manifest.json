@@ -1,0 +1,17 @@
+{
+  "theme_color": "#151220",
+  "background_color": "#151220",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Habla",
+  "short_name": "Habla",
+  "description": "Speak your mind",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "640x640",
+      "type": "image/png"
+    }
+  ]
+}
