@@ -110,7 +110,6 @@ export default function HomeFeeds() {
 
     return null;
   }, [list]);
-  const enableRelays = false;
 
   const feedSelector = (
     <Menu>
@@ -186,25 +185,27 @@ export default function HomeFeeds() {
             </MenuGroup>
           </>
         )}
-        <MenuDivider />
         {enableRelays && (
-          <MenuGroup title={t("Relays")}>
-            {relays.map((r) => {
-              const onClick = () => {
-                setRelay(r);
-                setFeed(Feeds.Relay);
-              };
-              return (
-                <MenuItem
-                  key={r}
-                  icon={<RelayFavicon size="2xs" url={r} />}
-                  onClick={onClick}
-                >
-                  {r}
-                </MenuItem>
-              );
-            })}
-          </MenuGroup>
+          <>
+            <MenuDivider />
+            <MenuGroup title={t("Relays")}>
+              {relays.map((r) => {
+                const onClick = () => {
+                  setRelay(r);
+                  setFeed(Feeds.Relay);
+                };
+                return (
+                  <MenuItem
+                    key={r}
+                    icon={<RelayFavicon size="2xs" url={r} />}
+                    onClick={onClick}
+                  >
+                    {r}
+                  </MenuItem>
+                );
+              })}
+            </MenuGroup>
+          </>
         )}
       </MenuList>
     </Menu>
