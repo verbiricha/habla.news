@@ -150,7 +150,7 @@
   "add-pubkey-helper": "Verwende ein Nostr-npub, -nprofile oder eine NIP-05 Nostr-Adresse",
   "add": "Hinzufügen",
   "pubkey-already-added": "Dieser öffentliche Schlüssel ist bereits hinzugefügt",
-  "lists": "Lists",
-  "load-more": "Load more",
-  "no-more-events": "No events found"
+  "lists": "Listen",
+  "load-more": "Mehr laden",
+  "no-more-events": "Keine Events gefunden"
 }
