@@ -39,7 +39,7 @@ export default function Community({ event }) {
               />
             </Link>
           )}
-          <Flex direction="column" flex="1">
+          <Flex direction="column" flex="1" width="100%">
             <Flex
               alignItems={["flex-start", "center"]}
               justify="space-between"

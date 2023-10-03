@@ -59,7 +59,8 @@ export function PublishedIn({ event, community }) {
     };
   }, [community]);
   return (
-    <Text color="secondary" fontSize="sm">
+    <Text color="secondary">
+      {" ― "}
       {t("published-in")}{" "}
       {naddr ? (
         <Link href={`/c/${naddr}`} shallow>
@@ -101,12 +102,12 @@ export default function LongFormNote({
       <CardHeader>
         <Flex align="center" direction="row" gap={2} fontFamily="Inter">
           {!excludeAuthor && <User pubkey={event.pubkey} size="sm" />}
-          {community && <PublishedIn community={community} event={event} />}
           <LongFormTime
             publishedAt={publishedAt || event.created_at}
             updatedAt={event.created_at}
             content={event.content}
           />
+          {community && <PublishedIn community={community} event={event} />}
         </Flex>
       </CardHeader>
       <CardBody>

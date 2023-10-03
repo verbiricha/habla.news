@@ -1,9 +1,8 @@
 import { atom } from "jotai";
 import { NDKEvent, NDKUser } from "@nostr-dev-kit/ndk";
 import { atomWithLocalStorage } from "@habla/storage";
-
-type Pubkey = string;
-type Privkey = string;
+import type { Pubkey, Privkey } from "@habla/types";
+import { findTags } from "@habla/tags";
 
 export const pubkeyAtom = atom<Pubkey | null | undefined>(undefined);
 export const privkeyAtom = atomWithLocalStorage<Privkey | null>("nsec", null);
@@ -27,30 +26,21 @@ export const defaultRelays = [
   "wss://offchain.pub",
 ];
 export const relaysAtom = atom<string[]>((get) => {
-  const relayList = get(relayListAtom);
-  if (relayList) {
-    return (
-      relayList?.tags?.filter((t) => t.at(0) === "r").map((t) => t.at(1)) ??
-      defaultRelays
-    );
-  }
-  return defaultRelays;
+  const relayListEv = get(relayListAtom);
+  return relayListEv ? findTags(relayListEv, "r") : defaultRelays;
 });
-export const followsAtom = atom<string[]>(
-  (get) =>
-    get(contactListAtom)
-      ?.tags.filter((t) => t.at(0) === "p")
-      .map((t) => t.at(1)) ?? []
-);
-export const tagsAtom = atom<string[]>(
-  (get) =>
-    get(contactListAtom)
-      ?.tags.filter((t) => t.at(0) === "t")
-      .map((t) => t.at(1)) ?? []
-);
-export const bookmarksAtom = atomWithLocalStorage<string[][]>(
-  "userBookmarks",
-  []
-);
+export const followsAtom = atom<Pubkey[]>((get) => {
+  const contactsEv = get(contactListAtom);
+  return contactsEv ? findTags(contactsEv, "p") : [];
+});
+export const tagsAtom = atom<string[]>((get) => {
+  const contactsEv = get(contactListAtom);
+  return contactsEv ? findTags(contactsEv, "t") : [];
+});
 
 export const peopleListsAtom = atom<Record<string, NDKEvent[]>>({});
+export const mutedAtom = atom<NDKEvent | null>(null);
+export const mutedWordsAtom = atom<string[]>((get) => {
+  const mutedEv = get(mutedAtom);
+  return mutedEv ? findTags(mutedEv, "word") : [];
+});

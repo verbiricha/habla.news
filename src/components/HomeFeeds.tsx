@@ -1,10 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import { useAtom } from "jotai";
 import {
   Flex,
+  Box,
   Stack,
   Heading,
   Text,
@@ -27,21 +29,23 @@ import HashtagIcon from "@habla/icons/Hashtag";
 import ListIcon from "@habla/icons/List";
 import UsersIcon from "@habla/icons/Users";
 import GlobeIcon from "@habla/icons/Globe";
+import RelayIcon from "@habla/icons/Relay";
 
 import { LONG_FORM, HIGHLIGHT, DAY, WEEK, MONTH } from "@habla/const";
 import {
   pubkeyAtom,
   followsAtom,
   tagsAtom,
-  //bookmarksAtom,
   peopleListsAtom,
+  relaysAtom,
 } from "@habla/state";
 import SectionHeading from "@habla/components/SectionHeading";
+import RelayFavicon from "@habla/components/RelayFavicon";
 import Hashtags from "@habla/components/Hashtags";
 import FeedPage from "@habla/components/nostr/feed/FeedPage";
 import Feed from "@habla/components/nostr/Feed";
 import Avatar from "@habla/components/nostr/Avatar";
-import { findTag } from "@habla/tags";
+import { findTag, findTags } from "@habla/tags";
 import { useNeedsBackup } from "@habla/onboarding/hooks";
 
 enum Feeds {
@@ -50,17 +54,32 @@ enum Feeds {
   Follows = "Follows",
   PeopleList = "PeopleList",
   //Community = "Community",
-  //Relay = "Relay",
+  Relay = "Relay",
+}
+
+function feedIcon(f: Feeds) {
+  if (f === Feeds.All) {
+    return <Icon as={GlobeIcon} />;
+  } else if (f === Feeds.Tag) {
+    return <Icon as={HashtagIcon} />;
+  } else if (f === Feeds.Follows) {
+    return <Icon as={UsersIcon} />;
+  } else if (f === Feeds.PeopleList) {
+    return <Icon as={ListIcon} />;
+  } else if (f === Feeds.Relay) {
+    return <Icon as={RelayIcon} />;
+  }
 }
 
 export default function HomeFeeds() {
   const { t } = useTranslation("common");
   const [pubkey] = useAtom(pubkeyAtom);
   const [follows] = useAtom(followsAtom);
-  //const [bookmarks] = useAtom(bookmarksAtom);
   const [peopleLists] = useAtom(peopleListsAtom);
   const [list, setList] = useState();
   const [tag, setTag] = useState();
+  const [relay, setRelay] = useState();
+  const [relays] = useAtom(relaysAtom);
   const [tags] = useAtom(tagsAtom);
   const isLoggedIn = pubkey && follows.length > 0;
   const [kinds, setKinds] = useState([LONG_FORM]);
@@ -70,13 +89,13 @@ export default function HomeFeeds() {
   const router = useRouter();
   const listName = useMemo(() => {
     if (list) {
-      return findTag(list, "name") || findTag(list, "d");
+      return findTag(list, "title") || findTag(list, "d");
     }
     return "";
   }, [list]);
   const listPeople = useMemo(() => {
     if (list) {
-      return list.tags.filter((t) => t.at(0) === "p").map((t) => t.at(1));
+      return findTags(list, "p");
     }
     return [];
   }, [list]);
@@ -86,21 +105,35 @@ export default function HomeFeeds() {
 
     return null;
   }, [list]);
+  const enableRelays = false;
 
   const feedSelector = (
     <Menu>
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-        {feed === Feeds.All && t("all")}
-        {feed === Feeds.Follows && t("follows")}
-        {feed === Feeds.PeopleList && listName}
-        {feed === Feeds.Tag && `# ${tag}`}
+        {feed !== Feeds.Relay && (
+          <Flex align="center" gap={2}>
+            {feedIcon(feed)}
+            <Text>
+              {feed === Feeds.All && t("all")}
+              {feed === Feeds.Follows && t("follows")}
+              {feed === Feeds.PeopleList && listName}
+              {feed === Feeds.Tag && `# ${tag}`}
+            </Text>
+          </Flex>
+        )}
+        {feed === Feeds.Relay && (
+          <Flex align="center" gap={2}>
+            <RelayFavicon includeTooltip={false} url={relay} />
+            <Text>{relay}</Text>
+          </Flex>
+        )}
       </MenuButton>
       <MenuList>
         {hasFollows && (
           <MenuItem
             isDisabled={!isLoggedIn}
             onClick={() => setFeed(Feeds.Follows)}
-            icon={<Icon as={UsersIcon} />}
+            icon={feedIcon(Feeds.Follows)}
           >
             {t("follows")}
           </MenuItem>
@@ -111,8 +144,8 @@ export default function HomeFeeds() {
             setFeed(Feeds.PeopleList);
           };
           return (
-            <MenuItem icon={<Icon as={ListIcon} />} onClick={onClick}>
-              {d}
+            <MenuItem icon={feedIcon(Feeds.PeopleList)} onClick={onClick}>
+              {findTag(e, "title") || d}
             </MenuItem>
           );
         })}
@@ -122,21 +155,26 @@ export default function HomeFeeds() {
             setFeed(Feeds.Tag);
           };
           return (
-            <MenuItem
-              key={t}
-              icon={<Icon as={HashtagIcon} />}
-              onClick={onClick}
-            >
+            <MenuItem key={t} icon={feedIcon(Feeds.Tag)} onClick={onClick}>
               {t}
             </MenuItem>
           );
         })}
-        <MenuItem
-          icon={<Icon as={GlobeIcon} />}
-          onClick={() => setFeed(Feeds.All)}
-        >
+        <MenuItem icon={feedIcon(Feeds.All)} onClick={() => setFeed(Feeds.All)}>
           {t("all")}
         </MenuItem>
+        {enableRelays &&
+          relays.map((r) => {
+            const onClick = () => {
+              setRelay(r);
+              setFeed(Feeds.Relay);
+            };
+            return (
+              <MenuItem key={r} icon={feedIcon(Feeds.Relay)} onClick={onClick}>
+                {r}
+              </MenuItem>
+            );
+          })}
       </MenuList>
     </Menu>
   );
@@ -163,9 +201,12 @@ export default function HomeFeeds() {
         offset: MONTH,
       };
     }
+
     if (feed === Feeds.All) {
       return {
-        id: `posts-${pubkey}-${kinds.join("-")}`,
+        id: pubkey
+          ? `posts-${pubkey}-${kinds.join("-")}`
+          : `posts-${kinds.join("-")}`,
         filter: {
           kinds,
         },
@@ -182,11 +223,25 @@ export default function HomeFeeds() {
         },
         offset: 12 * MONTH,
         options: {
-          cacheUsage: "RELAY_FIRST",
+          cacheUsage: NDKSubscriptionCacheUsage.RELAY_FIRST,
         },
       };
     }
 
+    if (feed === Feeds.Relay && relay) {
+      // fixme: not re-rendering after changing IDs, why?
+      return {
+        id: `${relay}-${kinds.join("-")}`,
+        filter: {
+          kinds,
+        },
+        offset: MONTH,
+        options: {
+          relays: [relay],
+          cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
+        },
+      };
+    }
     return null;
   }, [pubkey, follows, kinds, feed, list, tag]);
 
