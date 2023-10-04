@@ -96,18 +96,14 @@ export function useEvent(filter, options = {}) {
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
 
-  const user = useLiveQuery(
-    async () => {
-      try {
-        return await db.profile.get(pubkey);
-      } catch (error) {
-        console.error(error);
-        return {};
-      }
-    },
-    [pubkey],
-    {}
-  );
+  const user = useLiveQuery(async () => {
+    try {
+      return await db.profile.get(pubkey);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }, [pubkey]);
 
   useEffect(() => {
     if (pubkey && !user) {
@@ -124,7 +120,7 @@ export function useUser(pubkey) {
     }
   }, [pubkey]);
 
-  return user;
+  return user || {};
 }
 
 export function useUsers(pubkeys) {
