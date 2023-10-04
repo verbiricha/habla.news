@@ -149,5 +149,8 @@
   "add-pubkey": "Add to split",
   "add-pubkey-helper": "Use a nostr npub, nprofile or nip-05 nostr address",
   "add": "Add",
-  "pubkey-already-added": "This pubkey is already added"
+  "pubkey-already-added": "This pubkey is already added",
+  "lists": "Lists",
+  "load-more": "Load more",
+  "no-more-events": "No events found"
 }

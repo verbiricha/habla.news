@@ -36,7 +36,7 @@
   "summary": "Zusammenfassung",
   "summary-helper": "Eine kurze Zusammenfassung des Artikels",
   "tags": "Schlagwörter",
-  "tags-helper": "Liste von Schlagwörtern durch Kommas getrennt: nostr, markdown",
+  "tags-helper": "Liste von Tags getrennt durch Komma: nostr, Markdown",
   "save-draft": "Entwurf speichern",
   "post": "Veröffentlichen",
   "update": "Aktualisieren",
@@ -114,7 +114,7 @@
   "save": "Speichern",
   "your-relays": "Deine Relais",
   "your-relays-descr": "Relais sind der Ort, an dem die Inhalte in Nostr gespeichert werden, und sie machen es zu einem dezentralen und zensurresistenten Netzwerk.",
-  "your-relays-more": "Dein Nostr-Konto ist bereits mit einer Auswahl bekannter Relais ausgestattet, aber du kannst die Liste deiner Relais nach Belieben anpassen.",
+  "your-relays-more": "In deinem Nostr-Account wurden bekannte Relais voreingestellt, aber du kannst diese Liste jederzeit anpassen.",
   "add-relay-label": "Relais hinzufügen",
   "add-relay-placeholder": "URL beginnt mit wss:// oder ws://",
   "add-relay-cta": "Hinzufügen",
@@ -149,5 +149,8 @@
   "add-pubkey": "Zur Aufteilung hinzufügen",
   "add-pubkey-helper": "Verwende ein Nostr-npub, -nprofile oder eine NIP-05 Nostr-Adresse",
   "add": "Hinzufügen",
-  "pubkey-already-added": "Dieser öffentliche Schlüssel ist bereits hinzugefügt"
+  "pubkey-already-added": "Dieser öffentliche Schlüssel ist bereits hinzugefügt",
+  "lists": "Listen",
+  "load-more": "Mehr laden",
+  "no-more-events": "Keine Events gefunden"
 }
