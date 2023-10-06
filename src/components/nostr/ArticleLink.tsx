@@ -20,7 +20,7 @@ export function articleLink(event, profile) {
   const { identifier } = getMetadata(event);
   const handle = getHandle(pubkey);
 
-  if (handle && identifier) {
+  if (handle && identifier && !identifier.includes("/")) {
     return `/${handle}/${identifier}`;
   }
 
