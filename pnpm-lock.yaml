@@ -47,6 +47,9 @@ dependencies:
   bech32:
     specifier: ^2.0.0
     version: 2.0.0
+  core-js:
+    specifier: ^3.33.0
+    version: 3.33.0
   dexie:
     specifier: ^3.2.3
     version: 3.2.4
@@ -4799,8 +4802,8 @@ packages:
       browserslist: 4.22.1
     dev: false
 
-  /core-js@3.31.1:
-    resolution: {integrity: sha512-2sKLtfq1eFST7l7v62zaqXacPc7uG8ZAya8ogijLhTtaKNcpzpB4TMoTw2Si+8GYKRwFPMMtUT0263QFWFfqyQ==}
+  /core-js@3.33.0:
+    resolution: {integrity: sha512-HoZr92+ZjFEKar5HS6MC776gYslNOKHt75mEBKWKnPeFDpZ6nH5OeF3S6HFT1mUAUZKrzkez05VboaX8myjSuw==}
     requiresBuild: true
     dev: false
 
@@ -6829,7 +6832,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.6
       '@types/hoist-non-react-statics': 3.3.1
-      core-js: 3.31.1
+      core-js: 3.33.0
       hoist-non-react-statics: 3.3.2
       i18next: 22.5.1
       i18next-fs-backend: 2.1.5
