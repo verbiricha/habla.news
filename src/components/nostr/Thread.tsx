@@ -18,7 +18,7 @@ export default function Thread({ anchor }) {
       anchor={anchor}
       npub={npub}
       relays={defaultRelays}
-      disable="likes,zaps"
+      disable="likes: true,zaps: true, watch: true"
     />
   );
 }
