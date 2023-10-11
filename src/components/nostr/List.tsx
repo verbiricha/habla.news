@@ -10,7 +10,7 @@ import {
 
 import { nip19 } from "nostr-tools";
 
-import { findTag, findTags } from "@habla/tags";
+import { findTag } from "@habla/tags";
 import Username from "./Username";
 import User from "./User";
 import FollowButton from "@habla/components/nostr/FollowButton";
@@ -21,6 +21,7 @@ import Address from "@habla/components/nostr/Address";
 import { RelayItem } from "@habla/components/Relays";
 import ExternalLink from "@habla/components/ExternalLink";
 import { EMOJIS } from "@habla/const";
+import useHashtags from "@habla/hooks/useHashtags";
 
 export function ListTag({ tag }) {
   const [t, value, relay] = tag;
@@ -80,7 +81,7 @@ export default function List({ event }) {
   const identifier = findTag(event, "d");
   const subject = findTag(event, "title") || findTag(event, "subject");
   const description = findTag(event, "description");
-  const hashtags = findTags(event, "t");
+  const hashtags = useHashtags(event);
   const isEmojiPack = event.kind === EMOJIS;
   const content = event.tags.map((t) => <ListTag tag={t} />);
   return (

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import Link from "next/link";
 import { nip19 } from "nostr-tools";
 import {
@@ -15,15 +16,30 @@ import User from "@habla/components/nostr/User";
 import { useTranslation } from "next-i18next";
 import { FollowCommunityButton } from "@habla/components/nostr/FollowButton";
 import { getMetadata } from "@habla/nip72";
+import useModeration from "@habla/hooks/useModeration";
+import useHashtags from "@habla/hooks/useHashtags";
 
 export default function Community({ event }) {
   const { name, description, image } = getMetadata(event);
-  //const moderators = event.tags.filter(
-  //  (t) => t.at(0) === "p" && t.includes("moderator")
-  //);
+  const { mutedWords, isTagMuted } = useModeration();
+  const hashtags = useHashtags(event);
+  const isHidden = useMemo(() => {
+    return (
+      isTagMuted(["p", event.pubkey]) ||
+      isTagMuted(event.tagReference()) ||
+      hashtags.some((t) => isTagMuted(["t", t])) ||
+      mutedWords.some((w) => {
+        const word = w.toLowerCase();
+        return (
+          name.toLowerCase().includes(word) ||
+          description?.toLowerCase().includes(word)
+        );
+      })
+    );
+  }, [mutedWords, isTagMuted]);
   const relays = event.tags.filter((t) => t.at(0) === "relay");
   const { t } = useTranslation("common");
-  return (
+  return isHidden ? null : (
     <Card>
       <CardBody dir="auto">
         <Flex align="center" direction={["column", "row"]} gap={3}>

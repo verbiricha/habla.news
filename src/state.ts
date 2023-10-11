@@ -1,19 +1,23 @@
 import { atom } from "jotai";
-import { NostrEvent, NDKUser } from "@nostr-dev-kit/ndk";
+import { NostrEvent } from "@nostr-dev-kit/ndk";
+
 import { atomWithLocalStorage } from "@habla/storage";
-import type { Pubkey, Privkey } from "@habla/types";
+import type { Session, Pubkey, Privkey, Tags } from "@habla/types";
 import { findTags } from "@habla/tags";
 
-export const pubkeyAtom = atom<Pubkey | null | undefined>(undefined);
+// Login
+export const sessionAtom = atomWithLocalStorage<Session | null>(
+  "session",
+  null
+);
+export const pubkeyAtom = atom<Pubkey | undefined>((get) => {
+  const session = get(sessionAtom);
+  return session?.pubkey;
+});
+// deprecated
 export const privkeyAtom = atomWithLocalStorage<Privkey | null>("nsec", null);
-export const contactListAtom = atomWithLocalStorage<NostrEvent | null>(
-  "contactList",
-  null
-);
-export const communitiesAtom = atomWithLocalStorage<NostrEvent | null>(
-  "communities",
-  null
-);
+
+// Relays
 export const relayListAtom = atomWithLocalStorage<NostrEvent | null>(
   "relayList",
   null
@@ -29,6 +33,12 @@ export const relaysAtom = atom<string[]>((get) => {
   const relayListEv = get(relayListAtom);
   return relayListEv ? findTags(relayListEv, "r") : defaultRelays;
 });
+
+// Contacts
+export const contactListAtom = atomWithLocalStorage<NostrEvent | null>(
+  "contactList",
+  null
+);
 export const followsAtom = atom<Pubkey[]>((get) => {
   const contactsEv = get(contactListAtom);
   return contactsEv ? findTags(contactsEv, "p") : [];
@@ -38,9 +48,14 @@ export const tagsAtom = atom<string[]>((get) => {
   return contactsEv ? findTags(contactsEv, "t") : [];
 });
 
+// NIP-51
 export const peopleListsAtom = atom<Record<string, NostrEvent[]>>({});
 export const mutedAtom = atom<NostrEvent | null>(null);
-export const mutedWordsAtom = atom<string[]>((get) => {
-  const mutedEv = get(mutedAtom);
-  return mutedEv ? findTags(mutedEv, "word") : [];
-});
+export const privateMutedAtom = atom<Tags>([]);
+export const couldDecryptMutedAtom = atom<boolean>(false);
+
+// Communities
+export const communitiesAtom = atomWithLocalStorage<NostrEvent | null>(
+  "communities",
+  null
+);

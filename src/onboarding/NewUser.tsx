@@ -1,12 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useTranslation } from "next-i18next";
 import { generatePrivateKey, getPublicKey } from "nostr-tools";
-import { useNdk, usePublishEvent } from "@habla/nostr/hooks";
-import { NDKPrivateKeySigner } from "@nostr-dev-kit/ndk";
+import { NDKEvent, NDKPrivateKeySigner } from "@nostr-dev-kit/ndk";
 
 import {
   useDisclosure,
+  useToast,
   Flex,
   Box,
   Image,
@@ -18,19 +18,21 @@ import {
   Button,
 } from "@chakra-ui/react";
 
+import { useNdk } from "@habla/nostr/hooks";
+import User from "@habla/components/nostr/User";
+import ImageUploader from "@habla/components/ImageUploader";
+import useTopTags from "@habla/hooks/useTopTags";
+import { dateToUnix } from "@habla/time";
+import { getPubkey, featured } from "@habla/nip05";
+import { PROFILE, CONTACTS, RELAYS } from "@habla/const";
 import {
   defaultRelays,
-  pubkeyAtom,
-  privkeyAtom,
+  relayListAtom,
+  sessionAtom,
+  contactListAtom,
   relaysAtom,
 } from "@habla/state";
 import { initialSteps, stepsAtom } from "@habla/onboarding/state";
-import { dateToUnix } from "@habla/time";
-import User from "@habla/components/nostr/User";
-import useTopTags from "@habla/hooks/useTopTags";
-import { getPubkey, featured } from "@habla/nip05";
-import ImageUploader from "@habla/components/ImageUploader";
-import { PROFILE, CONTACTS, RELAY_LIST } from "@habla/const";
 
 enum Steps {
   NAME = "NAME",
@@ -71,11 +73,12 @@ function TagSelector({ tags, onChange }) {
 
 export default function NewUser({ onDone }) {
   const ndk = useNdk();
-  const [, setPubkey] = useAtom(pubkeyAtom);
-  const [, setPrivkey] = useAtom(privkeyAtom);
-  const [relays] = useAtom(relaysAtom);
+  const toast = useToast();
+  const [session, setSession] = useAtom(sessionAtom);
+  const [, setRelayList] = useAtom(relayListAtom);
+  const [isPublishing, setIsPublishing] = useState(false);
   const [, setSteps] = useAtom(stepsAtom);
-  const publish = usePublishEvent({ showToast: false });
+  const [, setContactList] = useAtom(contactListAtom);
   const privkey = useMemo(() => {
     return generatePrivateKey();
   }, []);
@@ -88,6 +91,7 @@ export default function NewUser({ onDone }) {
   const [tags, setTags] = useState([]);
   const [follows, setFollows] = useState([]);
   const { t } = useTranslation("common");
+  const signer = useMemo(() => new NDKPrivateKeySigner(privkey), [privkey]);
 
   useEffect(() => {
     setSteps(initialSteps);
@@ -105,13 +109,10 @@ export default function NewUser({ onDone }) {
     }
   }
 
-  function loginWithPrivkey() {
-    try {
-      const signer = new NDKPrivateKeySigner(privkey);
-      ndk.signer = signer;
-    } catch (error) {
-      console.error(error);
-    }
+  async function publish(ev) {
+    const ndkEvent = new NDKEvent(ndk, ev);
+    await ndkEvent.sign(signer);
+    await ndkEvent.publish();
   }
 
   async function publishProfile() {
@@ -123,6 +124,7 @@ export default function NewUser({ onDone }) {
     }
 
     const profile = {
+      pubkey,
       kind: PROFILE,
       content: JSON.stringify(user),
       created_at,
@@ -130,9 +132,11 @@ export default function NewUser({ onDone }) {
     };
 
     try {
-      setPubkey(pubkey);
-      setPrivkey(privkey);
-      await publish(profile, {});
+      await publish(profile);
+      toast({
+        description: t("profile-saved"),
+        status: "success",
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -144,35 +148,46 @@ export default function NewUser({ onDone }) {
     const created_at = dateToUnix();
 
     const contactHashtags = tags.map((t) => ["t", t]);
-    const contactPubkeys = follows.map((p) => ["p", p, "wss://purplepag.es"]);
+    const contactPubkeys = follows.map((p) => ["p", p]);
 
-    const contactList = {
+    const contacts = {
+      pubkey,
       kind: CONTACTS,
       content: "",
       created_at,
       tags: contactPubkeys.concat(contactHashtags),
     };
-
     try {
-      await publish(contactList, {});
+      await publish(contacts);
+      setContactList(contacts);
+      toast({
+        description: t("contacts-saved"),
+        status: "success",
+      });
     } catch (error) {
       console.error(error);
     } finally {
-      return contactList;
+      return contacts;
     }
   }
 
   async function publishRelayList() {
     const created_at = dateToUnix();
-    const relayTags = relays.map((r) => ["r", r]);
+    const relayTags = defaultRelays.map((r) => ["r", r]);
     const relayList = {
-      kind: RELAY_LIST,
+      pubkey,
+      kind: RELAYS,
       content: "",
       created_at,
       tags: relayTags,
     };
     try {
-      await publish(relayList, {});
+      await publish(relayList);
+      setRelayList(relayList);
+      toast({
+        description: t("relays-saved"),
+        status: "success",
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -183,14 +198,21 @@ export default function NewUser({ onDone }) {
   useEffect(() => {
     const fn = async () => {
       if (step === Steps.FINISHED) {
-        loginWithPrivkey();
         try {
+          ndk.signer = signer;
+          setIsPublishing(true);
           await publishProfile();
           await publishContactList();
           await publishRelayList();
-          onDone();
+          setSession({
+            method: "privkey",
+            pubkey,
+            privkey,
+          });
         } catch (error) {
           console.error(error);
+        } finally {
+          setIsPublishing(false);
         }
       }
     };
@@ -276,7 +298,11 @@ export default function NewUser({ onDone }) {
       </Stack>
       <Stack w="100%">
         {step === Steps.FINISHED ? (
-          <Button colorScheme="purple" onClick={onDone}>
+          <Button
+            isLoading={isPublishing}
+            colorScheme="purple"
+            onClick={onDone}
+          >
             {t("discover")}
           </Button>
         ) : (

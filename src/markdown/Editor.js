@@ -134,7 +134,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
     if (zapTags && zapTags.length > 0) {
       ev.tags = ev.tags.concat(zapTags);
     }
-    return ev;
+    return new NDKEvent(ndk, ev);
   }, [event, zapSplits]);
 
   async function onPost() {
@@ -256,9 +256,14 @@ export default function EventEditor({ event, showPreview }) {
   );
 
   function onDateChange(d) {
-    const unixTs = d.getTime() / 1000;
-    setPublishedAt(unixTs);
-    setPublishedDate(d);
+    if (d) {
+      const unixTs = d.getTime() / 1000;
+      setPublishedAt(unixTs);
+      setPublishedDate(d);
+    } else {
+      setPublishedAt();
+      setPublishedDate(null);
+    }
   }
 
   const [hashtags, setHashtags] = useState(

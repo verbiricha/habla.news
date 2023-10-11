@@ -60,3 +60,11 @@ export function toPubkey(p?: string) {
     return p;
   }
 }
+
+export function parseJSON<T>(raw: string, defaultValue: T) {
+  try {
+    return JSON.parse(raw) as T;
+  } catch (error) {
+    return defaultValue;
+  }
+}

@@ -12,6 +12,7 @@ import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";
 
 import FollowButton from "@habla/components/nostr/FollowButton";
+import { ProfileHeading } from "@habla/components/nostr/Profile";
 import UserContent from "@habla/components/nostr/UserContent";
 
 export default function Profile({
@@ -36,18 +37,7 @@ export default function Profile({
         {profile?.picture && <meta name="og:image" content={profile.picture} />}
       </Head>
       <Layout>
-        <Stack spacing="2">
-          <Flex justifyContent="space-between">
-            <User
-              pubkey={pubkey}
-              user={profile}
-              size="xl"
-              flexDirection="column"
-            />
-            <FollowButton pubkey={pubkey} />
-          </Flex>
-          {profile?.about && <Markdown content={profile?.about} />}
-        </Stack>
+        <ProfileHeading profile={profile} pubkey={pubkey} relays={relays} />
         <UserContent events={ndkEvents} pubkey={pubkey} />
       </Layout>
     </>

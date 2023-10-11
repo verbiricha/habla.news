@@ -1,13 +1,16 @@
 import { Helmet } from "react-helmet";
 import { useMemo } from "react";
-import { Flex, Stack, Heading, Text, Image } from "@chakra-ui/react";
+import { Flex, Stack, HStack, Heading, Text, Image } from "@chakra-ui/react";
 import { findTag } from "@habla/tags";
 import { POST_APPROVAL, HIGHLIGHT, LONG_FORM, NOTE } from "@habla/const";
 import { useEvents } from "@habla/nostr/hooks";
 import User from "@habla/components/nostr/User";
 import Events from "@habla/components/nostr/feed/Events";
 import { FollowCommunityButton } from "@habla/components/nostr/FollowButton";
+import { MuteReferenceButton } from "@habla/components/nostr/MuteButton";
 import { getMetadata } from "@habla/nip72";
+import useModeration from "@habla/hooks/useModeration";
+import useHashtags from "@habla/hooks/useHashtags";
 
 export default function Community({ event }) {
   const { name, description, image, rules } = getMetadata(event);
@@ -46,8 +49,24 @@ export default function Community({ event }) {
       );
     });
   }, [events, approvals.events]);
+  const hashtags = useHashtags(event);
+  const { mutedWords, isTagMuted } = useModeration();
+  const isHidden = useMemo(() => {
+    return (
+      isTagMuted(["p", event.pubkey]) ||
+      isTagMuted(event.tagReference()) ||
+      hashtags.some((t) => isTagMuted(["t", t])) ||
+      mutedWords.some((w) => {
+        const word = w.toLowerCase();
+        return (
+          name.toLowerCase().includes(word) ||
+          description?.toLowerCase().includes(word)
+        );
+      })
+    );
+  }, [mutedWords, isTagMuted]);
 
-  return (
+  return isHidden ? null : (
     <>
       <Helmet>
         <title>{name}</title>

@@ -14,6 +14,7 @@ import {
   contactListAtom,
 } from "@habla/state";
 import { useNdk } from "@habla/nostr/hooks";
+import type { Tag } from "@habla/types";
 
 // todo: communities NIP follow
 //export function FollowCommunityButton({ reference }) {
@@ -93,7 +94,13 @@ export function FollowCommunityButton({ reference }) {
   );
 }
 
-export function FollowReferenceButton({ reference }) {
+interface FollowReferenceButtonProps {
+  reference: Tag;
+}
+
+export function FollowReferenceButton({
+  reference,
+}: FollowReferenceButtonProps) {
   const [tag, value] = reference;
   const { t } = useTranslation("common");
   const ndk = useNdk();

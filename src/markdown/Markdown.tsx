@@ -3,11 +3,9 @@ import { useMemo, useCallback } from "react";
 import ReactMarkdown, { uriTransformer } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import slugify from "slugify";
-import { Text, Image } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 import { visit, SKIP } from "unist-util-visit";
 import { nip19 } from "nostr-tools";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import HyperText from "./HyperText";
 import Hashtag from "./Hashtag";

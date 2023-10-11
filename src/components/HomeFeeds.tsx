@@ -187,18 +187,23 @@ export default function HomeFeeds() {
         )}
       </MenuButton>
       <MenuList>
-        {hasFollows && (
+        <MenuGroup title={t("people")}>
+          {hasFollows && (
+            <MenuItem
+              isDisabled={!isLoggedIn}
+              onClick={() => setFeed(Feeds.Follows)}
+              icon={feedIcon(Feeds.Follows)}
+            >
+              {t("follows")}
+            </MenuItem>
+          )}
           <MenuItem
-            isDisabled={!isLoggedIn}
-            onClick={() => setFeed(Feeds.Follows)}
-            icon={feedIcon(Feeds.Follows)}
+            icon={feedIcon(Feeds.All)}
+            onClick={() => setFeed(Feeds.All)}
           >
-            {t("follows")}
+            {t("all")}
           </MenuItem>
-        )}
-        <MenuItem icon={feedIcon(Feeds.All)} onClick={() => setFeed(Feeds.All)}>
-          {t("all")}
-        </MenuItem>
+        </MenuGroup>
         {lists.length > 0 && (
           <>
             <MenuDivider />
@@ -209,7 +214,11 @@ export default function HomeFeeds() {
                   setFeed(Feeds.PeopleList);
                 };
                 return (
-                  <MenuItem icon={feedIcon(Feeds.PeopleList)} onClick={onClick}>
+                  <MenuItem
+                    key={d}
+                    icon={feedIcon(Feeds.PeopleList)}
+                    onClick={onClick}
+                  >
                     {findTag(e, "title") || d}
                   </MenuItem>
                 );

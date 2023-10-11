@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-type Tags = string[][];
+import type { Tags } from "@habla/types";
 
 interface Split {
   pubkey: string;

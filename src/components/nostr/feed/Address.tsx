@@ -11,6 +11,7 @@ import LongFormNote from "./LongFormNote";
 import List from "@habla/components/nostr/List";
 import Badge from "../Badge";
 import ZapstrTrack from "../ZapstrTrack";
+import useModeration from "@habla/hooks/useModeration";
 
 export default function Address({
   naddr,
@@ -25,6 +26,14 @@ export default function Address({
     "#d": [identifier],
     authors: [pubkey],
   });
+  const { isTagMuted } = useModeration();
+  const isHidden = useMemo(() => {
+    return isTagMuted(["p", pubkey]);
+  }, [pubkey]);
+
+  if (isHidden) {
+    return null;
+  }
 
   if (event && (kind === LONG_FORM || kind === LONG_FORM_DRAFT)) {
     return <LongFormNote event={event} relays={relays} {...props} />;

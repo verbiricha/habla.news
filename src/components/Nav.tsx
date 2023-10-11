@@ -41,15 +41,6 @@ export default function Nav() {
           sx={path === "/" ? activeNav : nav}
         />
       </Link>
-      {/*
-      <Link href="/bookmarks">
-        <IconButton
-          icon={<BookmarkIcon />}
-          aria-label="Bookmarks"
-          sx={path === "/bookmarks" ? activeNav : nav}
-        />
-      </Link>
-      */}
       <Link href="/search" shallow>
         <IconButton
           icon={<SearchIcon />}
@@ -64,6 +55,15 @@ export default function Nav() {
           sx={path === "/c" ? activeNav : nav}
         />
       </Link>
+      {/*
+      <Link href="/bookmarks">
+        <IconButton
+          aria-label="Bookmarks"
+          icon={<BookmarkIcon />}
+          sx={path === "/bookmarks" ? activeNav : nav}
+        />
+      </Link>
+      */}
     </Flex>
   );
 }

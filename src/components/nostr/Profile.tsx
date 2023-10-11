@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet";
-import { Flex, Box, Stack, Text } from "@chakra-ui/react";
+import { Flex, HStack, Box, Stack, Text } from "@chakra-ui/react";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import Markdown from "@habla/markdown/Markdown";
+import MuteButton from "@habla/components/nostr/MuteButton";
 import FollowButton from "@habla/components/nostr/FollowButton";
 
 import Username from "./Username";
@@ -17,6 +18,34 @@ function Bio({ profile }) {
       <Markdown content={profile?.about} />
     </Prose>
   ) : null;
+}
+
+export function ProfileHeading({ profile, pubkey, relays }) {
+  return (
+    <Flex
+      gap="4"
+      flexDirection={["column", "row"]}
+      alignItems={["center", "flex-start"]}
+      mb={5}
+      width="100%"
+    >
+      <UserAvatar pubkey={pubkey} user={profile} size="xl" />
+      <Stack flex={1}>
+        <Flex
+          flexDir={["column", "row"]}
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Username pubkey={pubkey} fontSize="2xl" fontWeight="500" />
+          <HStack>
+            <MuteButton pubkey={pubkey} />
+            <FollowButton pubkey={pubkey} />
+          </HStack>
+        </Flex>
+        <Bio profile={profile} />
+      </Stack>
+    </Flex>
+  );
 }
 
 export default function Profile({ pubkey, relays }) {
@@ -34,26 +63,7 @@ export default function Profile({ pubkey, relays }) {
         <title>{profile?.name || pubkey}</title>
       </Helmet>
       <Stack align="center">
-        <Flex
-          gap="4"
-          flexDirection={["column", "row"]}
-          alignItems={["center", "flex-start"]}
-          mb={5}
-          width="100%"
-        >
-          <UserAvatar pubkey={pubkey} user={profile} size="xl" />
-          <Stack flex={1}>
-            <Flex
-              flexDir={["column", "row"]}
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Username pubkey={pubkey} fontSize="2xl" fontWeight="500" />
-              <FollowButton pubkey={pubkey} />
-            </Flex>
-            <Bio profile={profile} />
-          </Stack>
-        </Flex>
+        <ProfileHeading profile={profile} pubkey={pubkey} relays={relays} />
         <UserContent pubkey={pubkey} events={events} />
       </Stack>
     </>

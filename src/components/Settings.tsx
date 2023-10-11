@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useTranslation } from "next-i18next";
 
 import { useToast, Heading, Stack } from "@chakra-ui/react";
@@ -13,8 +13,8 @@ import Tabs from "@habla/components/Tabs";
 
 export default function Settings() {
   const { t } = useTranslation("common");
-  const [pubkey] = useAtom(pubkeyAtom);
-  const [relayList] = useAtom(relayListAtom);
+  const pubkey = useAtomValue(pubkeyAtom);
+  const relayList = useAtomValue(relayListAtom);
   const profile = useUser(pubkey);
   const toast = useToast();
   const router = useRouter();
@@ -55,7 +55,7 @@ export default function Settings() {
 
   return (
     <>
-      <Heading fontSize="6xl">{t("settings")}</Heading>
+      <Heading>{t("settings")}</Heading>
       {profile?.id && <Tabs tabs={tabs} />}
     </>
   );

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useTranslation } from "next-i18next";
 import { nip19 } from "nostr-tools";
 
@@ -17,7 +17,7 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 
-import { pubkeyAtom, privkeyAtom } from "@habla/state";
+import { pubkeyAtom, sessionAtom } from "@habla/state";
 import { stepsAtom } from "@habla/onboarding/state";
 import InputCopy from "@habla/components/InputCopy";
 import ExternalLink from "@habla/components/ExternalLink";
@@ -27,7 +27,8 @@ export default function Backup() {
   const [pubkey] = useAtom(pubkeyAtom);
   const [gotIt, setGotIt] = useState(false);
   const [steps, setSteps] = useAtom(stepsAtom);
-  const [privkey] = useAtom(privkeyAtom);
+  const session = useAtomValue(sessionAtom);
+  const privkey = session?.privkey;
   const router = useRouter();
 
   async function onDone() {

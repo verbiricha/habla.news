@@ -14,16 +14,9 @@ import {
 import ExternalLinkIcon from "@habla/components/ExternalLinkIcon";
 import User from "@habla/components/nostr/User";
 import { useUser } from "@habla/nostr/hooks";
+import { parseJSON } from "@habla/util";
 import Hashtags from "@habla/components/Hashtags";
-import { findTags } from "@habla/tags";
-
-function parseJSON<T>(raw: string, defaultValue: T) {
-  try {
-    return JSON.parse(raw) as T;
-  } catch (error) {
-    return defaultValue;
-  }
-}
+import useHashtags from "@habla/hooks/useHashtags";
 
 export default function App({ event }) {
   const publisherPubkey = event.pubkey;
@@ -36,9 +29,7 @@ export default function App({ event }) {
   const naddr = useMemo(() => {
     return event.encode();
   }, [event]);
-  const hashtags = useMemo(() => {
-    return findTags(event, "t");
-  }, [event]);
+  const hashtags = useHashtags(event);
   const author = useUser(authorPubkey);
   const appProfile = useMemo(() => {
     return parseJSON(event.content, author);

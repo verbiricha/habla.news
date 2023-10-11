@@ -75,9 +75,9 @@ export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
   return (
     <Stack spacing={4}>
       {skipText ? (
-        <Heading>{t("lnaddress-label")}</Heading>
+        <Heading fontSize="xl">{t("lnaddress-label")}</Heading>
       ) : (
-        <Heading>{t("zaps-settings")}</Heading>
+        <Heading fontSize="xl">{t("zaps-settings")}</Heading>
       )}
       {!skipText && (
         <>

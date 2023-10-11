@@ -17,7 +17,9 @@ import { LinkIcon } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 
 import Markdown from "@habla/markdown/Markdown";
-import User from "../User";
+import User from "@habla/components/nostr/User";
+import useModeration from "@habla/hooks/useModeration";
+import useHashtags from "@habla/hooks/useHashtags";
 
 export default function Note({ event, highlights = [], ...props }) {
   const router = useRouter();
@@ -27,7 +29,19 @@ export default function Note({ event, highlights = [], ...props }) {
       author: event.pubkey,
     });
   }, [event]);
-  return (
+  const hashtags = useHashtags(event);
+  const { mutedWords, isTagMuted } = useModeration();
+  const isHidden = useMemo(() => {
+    return (
+      isTagMuted(["p", event.pubkey]) ||
+      isTagMuted(event.tagReference()) ||
+      hashtags.some((t) => isTagMuted(["t", t])) ||
+      mutedWords.some((word) => {
+        return event.content.toLowerCase().includes(word.toLowerCase());
+      })
+    );
+  }, [mutedWords, isTagMuted]);
+  return isHidden ? null : (
     <Card variant="outline" my={4} {...props}>
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">

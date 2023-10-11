@@ -16,7 +16,6 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { LinkIcon } from "@chakra-ui/icons";
-
 import { nip19 } from "nostr-tools";
 
 import { ZAP, REPOST, NOTE } from "@habla/const";
@@ -28,6 +27,8 @@ import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import EventId from "@habla/markdown/EventId";
 import ExternalLink from "@habla/components/ExternalLink";
+import useModeration from "@habla/hooks/useModeration";
+import useHashtags from "@habla/hooks/useHashtags";
 
 const HighlightSubstring = ({ text, substring }) => {
   const startIndex = text.indexOf(substring);
@@ -84,8 +85,20 @@ export default function Highlight({
   }, [kind, pubkey, identifier]);
 
   const { colorMode } = useColorMode();
+  const { mutedWords, isTagMuted } = useModeration();
+  const hashtags = useHashtags(event);
+  const isHidden = useMemo(() => {
+    return (
+      isTagMuted(["p", event.pubkey]) ||
+      isTagMuted(event.tagReference()) ||
+      hashtags.some((t) => isTagMuted(["t", t])) ||
+      mutedWords.some((word) => {
+        return event.content.toLowerCase().includes(word.toLowerCase());
+      })
+    );
+  }, [mutedWords, isTagMuted]);
 
-  return event.content.length < 4200 ? (
+  return event.content.length < 4200 && !isHidden ? (
     <Card variant="highlight" key={event.id} ref={ref} my={4} {...props}>
       {showHeader && (
         <CardHeader>

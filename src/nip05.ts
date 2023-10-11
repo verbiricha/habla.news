@@ -47,16 +47,16 @@ export const names = {
 
 // todo: group by category
 export const featured = [
+  "nostreport",
+  "tony",
   "jack",
   "rabble",
   "fiatjaf",
   "dergigi",
   "karnage",
-  "tony",
-  "isolabellart",
   "moon",
+  "isolabellart",
   "herald",
-  "nostreport",
 ];
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {

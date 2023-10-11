@@ -47,7 +47,7 @@ export function useEvents(filter, options = {}) {
   }
 
   useEffect(() => {
-    if (filter) {
+    if (filter && !options.disable) {
       const sub = ndk.subscribe(filter, opts, relaySet);
 
       sub.on("event", (ev, relay) => {
@@ -66,7 +66,7 @@ export function useEvents(filter, options = {}) {
         sub.stop();
       };
     }
-  }, []);
+  }, [options?.disable]);
 
   return { eose, events, opts };
 }
@@ -114,6 +114,7 @@ export function useUser(pubkey) {
         },
         {
           groupable: true,
+          groupableDelay: 1_000,
           cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
         }
       );

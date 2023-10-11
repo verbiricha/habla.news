@@ -80,9 +80,9 @@ export default function RelayEditor({ relayList, skipText, onCancel, onSave }) {
   return (
     <Stack spacing={4}>
       {skipText ? (
-        <Heading>{t("relays")}</Heading>
+        <Heading fontSize="xl">{t("relays")}</Heading>
       ) : (
-        <Heading>{t("your-relays")}</Heading>
+        <Heading fontSize="xl">{t("your-relays")}</Heading>
       )}
       {!skipText && (
         <>
