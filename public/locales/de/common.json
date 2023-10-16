@@ -182,6 +182,6 @@
   "word-unmuted": "'{{ value }}' ist nicht mehr stummgeschalten",
   "mute-fail": "Fehler beim Speichern der Mute-Liste",
   "contacts-saved": "Kontakte gespeichert",
-  "moderators": "Moderators",
-  "rules": "Rules"
+  "moderators": "Moderatoren",
+  "rules": "Regeln"
 }
