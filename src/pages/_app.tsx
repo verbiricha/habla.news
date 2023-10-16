@@ -18,7 +18,7 @@ import NostrContext from "@habla/nostr/provider";
 import theme from "@habla/theme";
 import { relaysAtom } from "@habla/state";
 import { createNdk } from "@habla/nostr";
-import cacheAdapter from "@habla/cache/indexeddb";
+import cacheAdapter from "@habla/cache/dexie";
 
 // this changes the default local storage key name to ensure that no user has light mode cached in
 const colorModeManager = createLocalStorageManager("habla-ui-color");
@@ -30,8 +30,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   const explicitRelayUrls = useAtomValue(relaysAtom);
   const options =
     typeof window === "undefined"
-      ? { explicitRelayUrls }
+      ? { autoConnectUserRelays: false, explicitRelayUrls }
       : {
+          autoConnectUserRelays: false,
           explicitRelayUrls,
           cacheAdapter,
         };

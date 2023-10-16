@@ -1,3 +1,5 @@
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
+
 import { useEvent, useReactions } from "@habla/nostr/hooks";
 import {
   LONG_FORM,
@@ -37,7 +39,7 @@ export default function Address({
       "#d": [identifier],
       authors: [pubkey],
     },
-    { cacheUsage: "PARALLEL" }
+    { cacheUsage: NDKSubscriptionCacheUsage.PARALLEL }
   );
 
   if (event && (kind === LONG_FORM || kind === LONG_FORM_DRAFT)) {

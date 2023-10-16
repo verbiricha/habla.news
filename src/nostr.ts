@@ -2,10 +2,9 @@ import { useEffect, useState, useMemo } from "react";
 
 import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
 import { nip05, nip19 } from "nostr-tools";
-import cacheAdapter from "@habla/cache/indexeddb";
 
 export function createNdk(options) {
-  const ndk = new NDK({ cacheAdapter, ...options });
+  const ndk = new NDK(options);
   try {
     ndk.connect();
   } catch (error) {

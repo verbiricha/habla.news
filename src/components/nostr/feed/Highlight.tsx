@@ -19,7 +19,6 @@ import { LinkIcon } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 
 import { ZAP, REPOST, NOTE } from "@habla/const";
-import { useEvent } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";

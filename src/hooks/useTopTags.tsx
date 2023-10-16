@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 
 import { LONG_FORM } from "@habla/const";
-import db from "@habla/cache/db";
+import { db } from "@nostr-dev-kit/ndk-cache-dexie";
 import { pickTopNHashtags } from "@habla/tags";
 import useModeration from "@habla/hooks/useModeration";
 
@@ -12,9 +12,9 @@ export default function useTopTags(n = 10) {
   const { isTagMuted } = useModeration();
   const tags = useLiveQuery(async () => {
     try {
-      const evs = await db.event.where("kind").equals(LONG_FORM).toArray();
+      const evs = await db.eventTags.where("tag").equals("t").toArray();
       return evs
-        .map((e) => e.t)
+        .map((e) => e.value)
         .flat()
         .filter((t) => t.length <= TAG_MAX_LENGTH);
     } catch (error) {

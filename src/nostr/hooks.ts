@@ -20,9 +20,9 @@ import {
   LONG_FORM,
   NOTE,
 } from "@habla/const";
-import db, { storeEvent } from "@habla/cache/db";
 import { relaysAtom } from "@habla/state";
 import { uniqByFn } from "@habla/util";
+import db from "@habla/cache/dexie";
 
 import NostrContext from "./provider";
 
@@ -95,66 +95,55 @@ export function useEvent(filter, options = {}) {
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
-
-  const user = useLiveQuery(async () => {
-    try {
-      return await db.profile.get(pubkey);
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  }, [pubkey]);
+  const [profile, setProfile] = useState({});
 
   useEffect(() => {
-    if (pubkey && !user) {
-      ndk.fetchEvent(
-        {
-          kinds: [PROFILE],
-          authors: [pubkey],
-        },
-        {
-          groupable: true,
-          groupableDelay: 1_000,
-          cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+    const fn = async () => {
+      try {
+        const cached = await db.fetchProfile(pubkey);
+        if (cached) {
+          setProfile(cached);
+          return;
         }
-      );
-    }
+      } catch (error) {
+        console.error("Cache miss");
+      }
+      const user = ndk.getUser({ hexpubkey: pubkey });
+      const fetched = await user.fetchProfile({
+        cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+      });
+      setProfile(fetched);
+    };
+
+    fn();
   }, [pubkey]);
 
-  return user || {};
+  return profile;
 }
 
 export function useUsers(pubkeys) {
   const { ndk } = useContext(NostrContext);
-
-  const users = useLiveQuery(
-    async () => {
-      try {
-        return await db.profile.where("id").anyOf(pubkeys).toArray();
-      } catch (error) {
-        console.error(error);
-        return [];
-      }
-    },
-    [pubkeys],
-    []
-  );
+  const [events, setEvents] = useState([]);
 
   useEffect(() => {
     if (pubkeys) {
-      ndk.fetchEvents(
-        {
-          kinds: [PROFILE],
-          authors: pubkeys,
-        },
-        {
-          cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
-        }
-      );
+      ndk
+        .fetchEvents(
+          {
+            kinds: [PROFILE],
+            authors: pubkeys,
+          },
+          {
+            cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+          }
+        )
+        .then((profiles) => {
+          setEvents([...profiles].map((p) => JSON.parse(p.content)));
+        });
     }
   }, [pubkeys]);
 
-  return users;
+  return events;
 }
 
 function eventToFilter(ev: NDKEvent) {
@@ -208,7 +197,6 @@ export function usePublishEvent(options) {
     try {
       const ndkEvent = new NDKEvent(ndk, ev);
       await ndkEvent.sign();
-      await storeEvent(db, ndkEvent);
       if (debug) {
         console.debug(ndkEvent);
       } else {

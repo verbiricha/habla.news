@@ -122,7 +122,7 @@ function LoginDialog({ isOpen, onClose }) {
       signer.blockUntilReady().then((user) => {
         setSession({
           method: "nip7",
-          pubkey: user.hexpubkey,
+          pubkey: user.pubkey,
         });
       });
     } catch (error) {
@@ -452,7 +452,7 @@ export default function Login() {
       setSession({
         method: "privkey",
         privkey,
-        pubkey: user.hexpubkey,
+        pubkey: user.pubkey,
       });
       setPrivkey(null);
       setIsLoggedIn(true);
