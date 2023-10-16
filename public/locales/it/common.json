@@ -181,5 +181,7 @@
   "tag-unmuted": "#{{ value }} has been unmuted",
   "word-unmuted": "'{{ value }}' has been unmuted",
   "mute-fail": "Failed to store mute list",
-  "contacts-saved": "Contacts saved"
+  "contacts-saved": "Contacts saved",
+  "moderators": "Moderators",
+  "rules": "Rules"
 }
