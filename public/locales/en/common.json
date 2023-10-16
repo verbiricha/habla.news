@@ -109,7 +109,7 @@
   "about-placeholder": "One or two sentences about yourself.",
   "nip05-label": "Nostr address",
   "nip05-placeholder": "you@domain.com",
-  "nip05-help": "You can get a nostr address in nostrcheck.com",
+  "nip05-help": "You can get a nostr address in nostrcheck.me",
   "website-label": "Website",
   "website-placeholder": "Do you have a website?",
   "save": "Save",
