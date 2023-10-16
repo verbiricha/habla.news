@@ -8,6 +8,7 @@ import {
   CardBody,
   CardFooter,
   Stack,
+  HStack,
   Text,
   Image,
 } from "@chakra-ui/react";
@@ -15,6 +16,7 @@ import { findTag } from "@habla/tags";
 import User from "@habla/components/nostr/User";
 import { useTranslation } from "next-i18next";
 import { FollowCommunityButton } from "@habla/components/nostr/FollowButton";
+import { MuteReferenceButton } from "@habla/components/nostr/MuteButton";
 import { getMetadata } from "@habla/nip72";
 import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
@@ -75,7 +77,10 @@ export default function Community({ event }) {
                   {name}
                 </Heading>
               </Link>
-              <FollowCommunityButton reference={event.tagReference()} />
+              <HStack gap={2}>
+                <MuteReferenceButton reference={event.tagReference()} />
+                <FollowCommunityButton reference={event.tagReference()} />
+              </HStack>
             </Flex>
             {description?.length > 0 && (
               <Text color="secondary" py={1} wordBreak="break-word">

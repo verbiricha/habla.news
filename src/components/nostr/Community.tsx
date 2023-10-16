@@ -1,6 +1,9 @@
 import { Helmet } from "react-helmet";
 import { useMemo } from "react";
 import { Flex, Stack, HStack, Heading, Text, Image } from "@chakra-ui/react";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
+import { useTranslation } from "next-i18next";
+
 import { findTag } from "@habla/tags";
 import { POST_APPROVAL, HIGHLIGHT, LONG_FORM, NOTE } from "@habla/const";
 import { useEvents } from "@habla/nostr/hooks";
@@ -13,6 +16,7 @@ import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
 
 export default function Community({ event }) {
+  const { t } = useTranslation("common");
   const { name, description, image, rules } = getMetadata(event);
   const moderators = event.tags
     .filter((t) => t.at(0) === "p" && t.includes("moderator"))
@@ -29,7 +33,7 @@ export default function Community({ event }) {
       "#a": [address],
     },
     {
-      cacheUsage: "ONLY_RELAY",
+      cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
     }
   );
 
@@ -79,13 +83,16 @@ export default function Community({ event }) {
         <Flex flexDir="column" gap={[4, 12]} w="100%">
           {image && <Image width="100%" maxH="320px" fit="cover" src={image} />}
           <Stack flex="1">
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" direction={["column", "row"]}>
               <Heading>{name}</Heading>
-              <FollowCommunityButton reference={event.tagReference()} />
+              <HStack gap={2}>
+                <MuteReferenceButton reference={event.tagReference()} />
+                <FollowCommunityButton reference={event.tagReference()} />
+              </HStack>
             </Flex>
             <Text fontSize="lg">{description}</Text>
             <Heading as="h4" fontSize="lg" mt={4}>
-              Moderators
+              {t("moderators")}
             </Heading>
             <Flex gap={6} flexWrap="wrap">
               {moderators.map((pk) => (
@@ -95,16 +102,14 @@ export default function Community({ event }) {
             {rules.length > 0 && (
               <>
                 <Heading as="h4" fontSize="lg" mt={4}>
-                  Rules
+                  {t("rules")}
                 </Heading>
                 <Text fontSize="md">{rules}</Text>
               </>
             )}
           </Stack>
         </Flex>
-        <Flex mt={10}>
-          <Events events={filteredEvents} />
-        </Flex>
+        <Events events={filteredEvents} />
       </Flex>
     </>
   );

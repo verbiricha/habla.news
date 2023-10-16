@@ -184,5 +184,7 @@
   "mute-fail": "Failed to store mute list",
   "profile-saved": "Profile saved",
   "contacts-saved": "Contacts saved",
-  "relays-saved": "Relays saved"
+  "relays-saved": "Relays saved",
+  "moderators": "Moderators",
+  "rules": "Rules"
 }
