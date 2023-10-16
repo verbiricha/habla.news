@@ -108,7 +108,7 @@
   "about-placeholder": "Sentensi moja au mbili kukuhusu.",
   "nip05-label": "Anwani ya Nostr",
   "nip05-placeholder": "you@domain.com",
-  "nip05-help": "Unaweza kupata anwani ya nostr katika nostrcheck.com",
+  "nip05-help": "You can get a nostr address in nostrcheck.me",
   "website-label": "Tovuti",
   "website-placeholder": "Je, una tovuti?",
   "save": "Hifadhi",
