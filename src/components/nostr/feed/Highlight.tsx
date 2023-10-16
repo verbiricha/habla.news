@@ -64,6 +64,14 @@ export default function Highlight({
   const a = findTag(event, "a");
   const e = findTag(event, "e");
   const r = findTag(event, "r");
+  const cleanR = useMemo(() => {
+    try {
+      const url = new URL(r);
+      return `${url.protocol}//${url.hostname}${url.pathname}`;
+    } catch (error) {
+      return r;
+    }
+  }, [r]);
   const context = findTag(event, "context");
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
   const nevent = useMemo(() => {
@@ -155,7 +163,7 @@ export default function Highlight({
                 fontSize="sm"
                 color="secondary"
               >
-                {r}
+                {cleanR}
               </Text>
             </ExternalLink>
           )}

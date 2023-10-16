@@ -66,13 +66,13 @@ const theme = extendTheme(
         width: "auto",
       },
       code: {
-        "overflow-y": "hidden",
-        "overflow-x": "scroll",
+        overflowX: "hidden",
+        overflowY: "scroll",
         width: "100vw",
       },
       pre: {
-        "overflow-y": "hidden",
-        "overflow-x": "scroll",
+        overflowY: "hidden",
+        overflowX: "scroll",
         width: "100vw",
         maxWidth: "45rem",
       },
