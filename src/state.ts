@@ -1,24 +1,21 @@
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import { NostrEvent } from "@nostr-dev-kit/ndk";
 
-import { atomWithLocalStorage } from "@habla/storage";
 import type { Session, Pubkey, Privkey, Tags } from "@habla/types";
 import { findTags } from "@habla/tags";
 
 // Login
-export const sessionAtom = atomWithLocalStorage<Session | null>(
-  "session",
-  null
-);
+export const sessionAtom = atomWithStorage<Session | null>("session", null);
 export const pubkeyAtom = atom<Pubkey | undefined>((get) => {
   const session = get(sessionAtom);
   return session?.pubkey;
 });
 // deprecated
-export const privkeyAtom = atomWithLocalStorage<Privkey | null>("nsec", null);
+export const privkeyAtom = atomWithStorage<Privkey | null>("nsec", null);
 
 // Relays
-export const relayListAtom = atomWithLocalStorage<NostrEvent | null>(
+export const relayListAtom = atomWithStorage<NostrEvent | null>(
   "relayList",
   null
 );
@@ -35,7 +32,7 @@ export const relaysAtom = atom<string[]>((get) => {
 });
 
 // Contacts
-export const contactListAtom = atomWithLocalStorage<NostrEvent | null>(
+export const contactListAtom = atomWithStorage<NostrEvent | null>(
   "contactList",
   null
 );
@@ -52,10 +49,9 @@ export const tagsAtom = atom<string[]>((get) => {
 export const peopleListsAtom = atom<Record<string, NostrEvent[]>>({});
 export const mutedAtom = atom<NostrEvent | null>(null);
 export const privateMutedAtom = atom<Tags>([]);
-export const couldDecryptMutedAtom = atom<boolean>(false);
 
 // Communities
-export const communitiesAtom = atomWithLocalStorage<NostrEvent | null>(
+export const communitiesAtom = atomWithStorage<NostrEvent | null>(
   "communities",
   null
 );

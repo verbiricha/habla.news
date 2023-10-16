@@ -1,4 +1,4 @@
-import { atomWithLocalStorage } from "@habla/storage";
+import { atomWithStorage } from "jotai/utils";
 
 type OnboardingStep =
   | "account-creation"
@@ -17,7 +17,7 @@ export const initialSteps: OnboardingProgress = {
   "discover-zaps": false,
 };
 
-export const stepsAtom = atomWithLocalStorage<OnboardingProgress>(
+export const stepsAtom = atomWithStorage<OnboardingProgress>(
   "onboarding",
   initialSteps
 );

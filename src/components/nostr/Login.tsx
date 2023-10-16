@@ -397,11 +397,16 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   useEffect(() => {
     // Communities
     ndk
-      .fetchEvent({
-        kinds: [BOOKMARKS],
-        authors: [pubkey],
-        "#d": ["communities"],
-      })
+      .fetchEvent(
+        {
+          kinds: [BOOKMARKS],
+          authors: [pubkey],
+          "#d": ["communities"],
+        },
+        {
+          cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
+        }
+      )
       .then((c) => {
         if (c) {
           const lastSeen = communities?.created_at ?? 0;
