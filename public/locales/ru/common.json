@@ -108,7 +108,7 @@
   "about-placeholder": "Одно или два предложения о себе.",
   "nip05-label": "Nostr адрес",
   "nip05-placeholder": "вы@domain.com",
-  "nip05-help": "Вы можете получить адрес nostr на сайте nostrcheck.com",
+  "nip05-help": "You can get a nostr address in nostrcheck.me",
   "website-label": "Вебсайт",
   "website-placeholder": "У вас есть веб-сайт?",
   "save": "Сохранить",
