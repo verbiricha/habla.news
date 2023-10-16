@@ -109,7 +109,7 @@
   "about-placeholder": "One or two sentences about yourself.",
   "nip05-label": "Nostr address",
   "nip05-placeholder": "you@domain.com",
-  "nip05-help": "You can get a nostr address in nostrcheck.me",
+  "nip05-help": "You can get a nostr address in nostrcheck.com",
   "website-label": "Website",
   "website-placeholder": "Do you have a website?",
   "save": "Save",
@@ -184,5 +184,7 @@
   "mute-fail": "Failed to store mute list",
   "profile-saved": "Profile saved",
   "contacts-saved": "Contacts saved",
-  "relays-saved": "Relays saved"
+  "relays-saved": "Relays saved",
+  "moderators": "Moderators",
+  "rules": "Rules"
 }
