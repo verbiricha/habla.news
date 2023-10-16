@@ -3,6 +3,7 @@ import { useAtom } from "jotai";
 import { useTranslation } from "next-i18next";
 import { nip19 } from "nostr-tools";
 import Link from "next/link";
+import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
@@ -27,6 +28,7 @@ import User from "@habla/components/nostr/User";
 import Hashtags from "@habla/components/Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import ArticleLink from "@habla/components/nostr/ArticleLink";
+import { ZAP, REPOST, HIGHLIGHT, NOTE } from "@habla/const";
 
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
@@ -86,6 +88,9 @@ export default function LongFormNote({
   excludeAuthor = false,
   excludeReactions = true,
 }) {
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
   const [defaultRelays] = useAtom(relaysAtom);
   const {
     identifier,
@@ -115,7 +120,7 @@ export default function LongFormNote({
   }, [mutedWords, isTagMuted]);
 
   return title.length > 0 && !isHidden ? (
-    <Card variant="article" my={4}>
+    <Card variant="article" my={4} ref={ref}>
       <CardHeader>
         <Flex
           align={["flex-start", "center"]}
@@ -187,6 +192,15 @@ export default function LongFormNote({
           )}
         </Flex>
       </CardBody>
+      {!excludeReactions && (
+        <CardFooter>
+          <Reactions
+            event={event}
+            kinds={[ZAP, REPOST, HIGHLIGHT, NOTE]}
+            live={inView}
+          />
+        </CardFooter>
+      )}
     </Card>
   ) : null;
 }
