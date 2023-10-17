@@ -15,7 +15,7 @@ export default function TagFeeds({ tag }) {
           <FollowTagButton tag={tag} />
         </HStack>
       </Flex>
-      <Feed filter={{ kinds: [LONG_FORM], "#t": [tag] }} />
+      <Feed filter={{ kinds: [LONG_FORM], "#t": [tag] }} limit={21} />
     </>
   );
 }
