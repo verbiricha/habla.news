@@ -31,7 +31,7 @@ import UsersIcon from "@habla/icons/Users";
 import GlobeIcon from "@habla/icons/Globe";
 import RelayIcon from "@habla/icons/Relay";
 
-import { LONG_FORM, HIGHLIGHT, DAY, WEEK, MONTH } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import {
   pubkeyAtom,
   followsAtom,
@@ -42,7 +42,7 @@ import {
 import SectionHeading from "@habla/components/SectionHeading";
 import RelayFavicon from "@habla/components/RelayFavicon";
 import Hashtags from "@habla/components/Hashtags";
-import FeedPage from "@habla/components/nostr/feed/FeedPage";
+import Feed from "@habla/components/nostr/feed/Feed";
 import Avatar from "@habla/components/nostr/Avatar";
 import User from "@habla/components/nostr/User";
 import { findTag, findTags } from "@habla/tags";
@@ -280,7 +280,6 @@ export default function HomeFeeds() {
           kinds,
           authors: follows,
         },
-        offset: follows.length < 100 ? 12 * MONTH : MONTH,
       };
     }
 
@@ -291,7 +290,9 @@ export default function HomeFeeds() {
           kinds,
           "#t": [tag],
         },
-        offset: MONTH,
+        options: {
+          cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
+        },
       };
     }
 
@@ -303,7 +304,9 @@ export default function HomeFeeds() {
         filter: {
           kinds,
         },
-        offset: DAY,
+        options: {
+          cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
+        },
       };
     }
 
@@ -314,10 +317,6 @@ export default function HomeFeeds() {
           kinds,
           authors: listPeople,
         },
-        offset: 12 * MONTH,
-        options: {
-          cacheUsage: NDKSubscriptionCacheUsage.RELAY_FIRST,
-        },
       };
     }
 
@@ -327,7 +326,6 @@ export default function HomeFeeds() {
         filter: {
           kinds,
         },
-        offset: MONTH,
         options: {
           relays: [relay],
           cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
@@ -412,12 +410,7 @@ export default function HomeFeeds() {
       )}
       {feed === Feeds.Relay && relay && <RelayHeading url={relay} />}
       {filter ? (
-        <FeedPage
-          key={filter.id}
-          filter={filter.filter}
-          offset={filter.offset}
-          options={filter.options}
-        />
+        <Feed key={filter.id} filter={filter.filter} options={filter.options} />
       ) : (
         <Text>{t("unknown-filter")}</Text>
       )}

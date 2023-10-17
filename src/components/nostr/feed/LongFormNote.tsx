@@ -35,7 +35,7 @@ function LongFormTime({ content, publishedAt, updatedAt }) {
   return (
     <>
       <Text color="secondary">{day}</Text>
-      {updatedAt < publishedAt && (
+      {updatedAt > publishedAt && (
         <Flex align="center" color="secondary" gap={2}>
           <Icon as={EditIcon} />
           <Text>{formatDay(updatedAt)}</Text>

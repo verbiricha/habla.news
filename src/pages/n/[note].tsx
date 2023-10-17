@@ -7,7 +7,7 @@ import { decodeNote } from "@habla/nostr";
 import { useEvent } from "@habla/nostr/hooks";
 import Layout from "@habla/layouts/Wide";
 
-const EventId = dynamic(() => import("@habla/markdown/EventId"), {
+const EventId = dynamic(() => import("@habla/components/nostr/EventId"), {
   ssr: false,
 });
 

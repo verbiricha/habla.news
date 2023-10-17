@@ -23,7 +23,7 @@ const NProfile = dynamic(() => import("./NProfile"), {
 const NAddr = dynamic(() => import("./NAddr"), {
   ssr: false,
 });
-const EventId = dynamic(() => import("./EventId"), {
+const EventId = dynamic(() => import("@habla/components/nostr/EventId"), {
   ssr: false,
 });
 const Mention = dynamic(() => import("./Mention"), {

@@ -24,7 +24,7 @@ import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
-import EventId from "@habla/markdown/EventId";
+import EventId from "@habla/components/nostr/EventId";
 import ExternalLink from "@habla/components/ExternalLink";
 import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
