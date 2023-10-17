@@ -298,7 +298,7 @@ export default function HomeFeeds() {
 
     if (feed === Feeds.Featured) {
       return {
-        id: `featured`,
+        id: `featured-${kinds.join("-")}`,
         filter: {
           kinds,
           authors: featuredPubkeys,
@@ -377,14 +377,14 @@ export default function HomeFeeds() {
         <ButtonGroup>
           <Button
             colorScheme={kinds.includes(LONG_FORM) ? "purple" : null}
-            onClick={() => setKind(LONG_FORM)}
+            onClick={() => setKinds([LONG_FORM])}
             fontWeight="normal"
           >
             {t("articles")}
           </Button>
           <Button
             colorScheme={kinds.includes(HIGHLIGHT) ? "purple" : null}
-            onClick={() => setKind(HIGHLIGHT)}
+            onClick={() => setKinds([HIGHLIGHT])}
             fontWeight="normal"
           >
             {t("highlights")}
