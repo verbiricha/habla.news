@@ -9,12 +9,24 @@ import { useUser } from "@habla/nostr/hooks";
 import { UserAvatar } from "@habla/components/nostr/Avatar";
 import { shortenString } from "@habla/format";
 import { getHandle } from "@habla/nip05";
+import { useNostrAddress } from "@habla/hooks/useNostrAddress";
+
+function NostrAddress({ pubkey, nip05 }) {
+  const { data } = useNostrAddress(nip05);
+  return data?.pubkey === pubkey ? (
+    <Text fontSize="2xs" color="secondary">
+      {nip05.startsWith("_@") ? nip05.slice(2) : nip05}
+    </Text>
+  ) : null;
+}
 
 export default function User({
   pubkey,
   flex,
   flexWrap = "wrap",
-  showBio,
+  showAvatar = true,
+  showNostrAddress = false,
+  showBio = false,
   size = "sm",
   ...rest
 }) {
@@ -43,17 +55,18 @@ export default function User({
       onClick={() => router.push(url, undefined, { shallow: true })}
       {...rest}
     >
-      <UserAvatar size={size} user={user} pubkey={pubkey} />
-      {showBio && user?.about ? (
-        <Stack>
-          {username}
-          <Text fontFamily="Inter" fontSize="sm" color="secondary">
+      {showAvatar && <UserAvatar size={size} user={user} pubkey={pubkey} />}
+      <Stack gap={0}>
+        {username}
+        {showNostrAddress && user?.nip05 && (
+          <NostrAddress pubkey={pubkey} nip05={user.nip05} />
+        )}
+        {showBio && user?.about && (
+          <Text fontFamily="Inter" fontSize="sm" color="secondary" mt={1}>
             {user?.about}
           </Text>
-        </Stack>
-      ) : (
-        username
-      )}
+        )}
+      </Stack>
     </Flex>
   );
 }

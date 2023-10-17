@@ -8,7 +8,7 @@ import Markdown from "@habla/markdown/Markdown";
 import MuteButton from "@habla/components/nostr/MuteButton";
 import FollowButton from "@habla/components/nostr/FollowButton";
 
-import Username from "./Username";
+import User from "./User";
 import { UserAvatar } from "./Avatar";
 import UserContent from "./UserContent";
 
@@ -36,7 +36,13 @@ export function ProfileHeading({ profile, pubkey, relays }) {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Username pubkey={pubkey} fontSize="2xl" fontWeight="500" />
+          <User
+            pubkey={pubkey}
+            fontSize="2xl"
+            fontWeight="500"
+            showAvatar={false}
+            showNostrAddress={true}
+          />
           <HStack>
             <MuteButton pubkey={pubkey} />
             <FollowButton pubkey={pubkey} />
