@@ -1,6 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 
-import Event from "./Event";
+import Event from "@habla/components/nostr/feed/Event";
 
 export default function Events({ events }) {
   return (

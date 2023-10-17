@@ -34,8 +34,11 @@ export default function useModeration() {
   const isTagMuted = useCallback(
     (tag: Tag) => {
       const [name, value] = tag;
+      const isPublicMute = muted?.tags.find(
+        (t) => t.at(0) === name && t.at(1) === value
+      );
       return Boolean(
-        muted?.tags.find((t) => t.at(0) === name && t.at(1) === value) ||
+        isPublicMute ||
           privateMuted.find((t) => t.at(0) === name && t.at(1) === value)
       );
     },

@@ -8,7 +8,7 @@ import "@fontsource/source-serif-pro/400.css";
 import { useMemo } from "react";
 import { appWithTranslation } from "next-i18next";
 import { AppProps } from "next/app";
-import { useAtomValue } from "jotai";
+import { Provider, useAtomValue } from "jotai";
 
 import { createLocalStorageManager, ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -45,7 +45,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <NostrContext.Provider value={{ ndk }}>
       <ChakraProvider theme={theme} colorModeManager={colorModeManager}>
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <Provider>
+            <Component {...pageProps} />
+          </Provider>
         </QueryClientProvider>
       </ChakraProvider>
     </NostrContext.Provider>

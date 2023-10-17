@@ -120,7 +120,7 @@ export default function LongFormNote({
     );
   }, [mutedWords, isTagMuted]);
 
-  return title.length > 0 && !isHidden ? (
+  return isHidden ? null : (
     <Card variant="article" my={4} ref={ref}>
       <CardHeader>
         <Flex
@@ -203,5 +203,5 @@ export default function LongFormNote({
         </CardFooter>
       )}
     </Card>
-  ) : null;
+  );
 }
