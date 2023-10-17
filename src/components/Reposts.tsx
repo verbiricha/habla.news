@@ -29,7 +29,6 @@ import { useNdk } from "@habla/nostr/hooks";
 function RepostModal({ event, isOpen, onClose }) {
   const ndk = useNdk();
   const toast = useToast();
-  const [comment, setComment] = useState();
   const { t } = useTranslation("common");
 
   async function onRepost() {
@@ -48,17 +47,6 @@ function RepostModal({ event, isOpen, onClose }) {
       const signed = new NDKEvent(ndk, ev);
       await signed.sign();
       await signed.publish();
-      if (comment && comment.trim().length > 0) {
-        const ev = {
-          kind: NOTE,
-          created_at: dateToUnix(),
-          tags: [signed.tagReference(), p],
-          content: `${comment.trim()}\n\nnostr:${signed.encode()}`,
-        };
-        const note = new NDKEvent(ndk, ev);
-        await note.sign();
-        await note.publish();
-      }
       toast({
         status: "success",
         title: t("reposted"),
@@ -83,14 +71,7 @@ function RepostModal({ event, isOpen, onClose }) {
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody fontFamily="'Inter'">
-          <Stack gap={2}>
-            <Textarea
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder="Comment (optional)"
-            />
-            <Event event={event} />{" "}
-          </Stack>
+          <Event event={event} showReactions={false} excludeReactions={true} />
         </ModalBody>
 
         <ModalFooter>
