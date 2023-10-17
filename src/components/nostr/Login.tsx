@@ -327,6 +327,9 @@ function ProfileMenu({ pubkey, relays, onClose }) {
   );
 }
 
+// outdated pre-NIP-51 list d and t tags
+const outdatedD = new Set(["mute", "p:mute", "pin", "pinned"]);
+
 function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const ndk = useNdk();
   const [contacts, setContactList] = useAtom(contactListAtom);
@@ -334,10 +337,10 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const [privateMuted, setPrivateMuted] = useAtom(privateMutedAtom);
   const [relayList, setRelayList] = useAtom(relayListAtom);
   const [communities, setCommunities] = useAtom(communitiesAtom);
-  const [peopleLists, setPeopleLists] = useAtom(peopleListsAtom);
+  const [, setPeopleLists] = useAtom(peopleListsAtom);
   const { events } = useEvents(
     {
-      kinds: [CONTACTS, RELAYS, PEOPLE, MUTED],
+      kinds: [CONTACTS, RELAYS, MUTED],
       authors: [pubkey],
     },
     {
@@ -376,14 +379,6 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
           setRelayList(nostrEvent);
         }
       }
-      if (event.kind === PEOPLE) {
-        const d = findTag(nostrEvent, "d");
-        const t = findTag(nostrEvent, "t");
-        const outdatedD = ["mute", "p:mute", "pin", "pinned"];
-        if (!outdatedD.includes(d) && !outdatedD.includes(t)) {
-          setPeopleLists({ ...peopleLists, [d]: nostrEvent });
-        }
-      }
       if (event.kind === MUTED) {
         const lastSeen = muted?.created_at ?? 0;
         if (nostrEvent.created_at > lastSeen) {
@@ -412,6 +407,30 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
           const lastSeen = communities?.created_at ?? 0;
           if (c.created_at > lastSeen) {
             setCommunities(c.rawEvent());
+          }
+        }
+      });
+    // People
+    ndk
+      .fetchEvents(
+        {
+          kinds: [PEOPLE],
+          authors: [pubkey],
+        },
+        {
+          cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
+          closeOnEose: true,
+        }
+      )
+      .then((events) => {
+        for (const event of events) {
+          const d = event.tagValue("d");
+          const t = event.tagValue("t");
+          const nostrEvent = event.rawEvent();
+          if (!outdatedD.has(d) && !outdatedD.has(t)) {
+            setPeopleLists((pl) => {
+              return { ...pl, [d]: nostrEvent };
+            });
           }
         }
       });
