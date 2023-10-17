@@ -183,5 +183,6 @@
   "mute-fail": "Fehler beim Speichern der Mute-Liste",
   "contacts-saved": "Kontakte gespeichert",
   "moderators": "Moderatoren",
-  "rules": "Regeln"
+  "rules": "Regeln",
+  "featured": "Ausgewählte"
 }
