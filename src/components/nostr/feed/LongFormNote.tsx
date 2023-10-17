@@ -90,7 +90,7 @@ export default function LongFormNote({
   excludeReactions = false,
 }) {
   const { ref, inView } = useInView({
-    threshold: 0,
+    threshold: 0.5,
   });
   const [defaultRelays] = useAtom(relaysAtom);
   const {

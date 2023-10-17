@@ -18,7 +18,8 @@ export function UserAvatar({ pubkey, user, ...rest }) {
   return (
     <BaseAvatar
       name={user?.name || pubkey}
-      src={user?.picture || user?.image || placeholder}
+      src={user?.image || user?.picture || placeholder}
+      ignoreFallback
       {...rest}
     />
   );
