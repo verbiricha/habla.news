@@ -45,19 +45,23 @@ export const names = {
   franzap: "726a1e261cc6474674e8285e3951b3bb139be9a773d1acf49dc868db861a1c11",
 };
 
-// todo: group by category
+// todo: group by category?
 export const featured = [
-  "nostreport",
-  "tony",
   "jack",
   "rabble",
   "fiatjaf",
+  "opensats",
   "dergigi",
+  "guyswann",
+  "jb55",
   "karnage",
+  "tony",
   "moon",
-  "isolabellart",
-  "herald",
+  "nostreport",
+  "getalby",
 ];
+
+export const featuredPubkeys = featured.map(getPubkey);
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
   const [k, v] = item;

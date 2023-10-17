@@ -24,13 +24,13 @@ import {
   AvatarGroup,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { featuredPubkeys } from "@habla/nip05";
 import KeyIcon from "@habla/icons/Key";
 import HashtagIcon from "@habla/icons/Hashtag";
 import ListIcon from "@habla/icons/List";
 import UsersIcon from "@habla/icons/Users";
-import GlobeIcon from "@habla/icons/Globe";
 import RelayIcon from "@habla/icons/Relay";
-
+import HeartIcon from "@habla/icons/Heart";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import {
   pubkeyAtom,
@@ -51,7 +51,7 @@ import useRelayMetadata from "@habla/hooks/useRelayMetadata";
 import { toPubkey } from "@habla/util";
 
 enum Feeds {
-  All = "All",
+  Featured = "Featured",
   Tag = "Tag",
   Follows = "Follows",
   PeopleList = "PeopleList",
@@ -60,8 +60,8 @@ enum Feeds {
 }
 
 function feedIcon(f: Feeds) {
-  if (f === Feeds.All) {
-    return <Icon as={GlobeIcon} />;
+  if (f === Feeds.Featured) {
+    return <Icon as={HeartIcon} />;
   } else if (f === Feeds.Tag) {
     return <Icon as={HashtagIcon} />;
   } else if (f === Feeds.Follows) {
@@ -147,7 +147,7 @@ export default function HomeFeeds() {
   const isLoggedIn = pubkey && follows.length > 0;
   const [kinds, setKinds] = useState([LONG_FORM]);
   const hasFollows = pubkey && follows.length > 0;
-  const [feed, setFeed] = useState(hasFollows ? Feeds.Follows : Feeds.All);
+  const [feed, setFeed] = useState(hasFollows ? Feeds.Follows : Feeds.Featured);
   const needsBackup = useNeedsBackup();
   const lists = useMemo(() => {
     return Object.entries(peopleLists);
@@ -172,7 +172,7 @@ export default function HomeFeeds() {
           <Flex align="center" gap={2}>
             {feedIcon(feed)}
             <Text>
-              {feed === Feeds.All && t("all")}
+              {feed === Feeds.Featured && t("featured")}
               {feed === Feeds.Follows && t("follows")}
               {feed === Feeds.PeopleList && listName}
               {feed === Feeds.Tag && `# ${tag}`}
@@ -198,10 +198,10 @@ export default function HomeFeeds() {
             </MenuItem>
           )}
           <MenuItem
-            icon={feedIcon(Feeds.All)}
-            onClick={() => setFeed(Feeds.All)}
+            icon={feedIcon(Feeds.Featured)}
+            onClick={() => setFeed(Feeds.Featured)}
           >
-            {t("all")}
+            {t("featured")}
           </MenuItem>
         </MenuGroup>
         {lists.length > 0 && (
@@ -296,14 +296,14 @@ export default function HomeFeeds() {
       };
     }
 
-    if (feed === Feeds.All) {
+    if (feed === Feeds.Featured) {
       return {
-        id: pubkey
-          ? `posts-${pubkey}-${kinds.join("-")}`
-          : `posts-${kinds.join("-")}`,
+        id: `featured`,
         filter: {
           kinds,
+          authors: featuredPubkeys,
         },
+        limit: 21,
         options: {
           cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
         },
@@ -326,6 +326,7 @@ export default function HomeFeeds() {
         filter: {
           kinds,
         },
+        limit: 21,
         options: {
           relays: [relay],
           cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
@@ -336,27 +337,13 @@ export default function HomeFeeds() {
   }, [pubkey, follows, kinds, feed, list, tag, relay]);
 
   useEffect(() => {
-    if (pubkey && hasFollows && feed === Feeds.All) {
+    if (pubkey && hasFollows && feed === Feeds.Featured) {
       setFeed(Feeds.Follows);
     }
     if (!pubkey && feed === Feeds.Follows) {
-      setFeed(Feeds.All);
+      setFeed(Feeds.Featured);
     }
   }, [pubkey, hasFollows]);
-
-  function setKind(k) {
-    setKinds([k]);
-  }
-
-  function toggleKind(k) {
-    if (kinds.includes(k) && kinds.length > 1) {
-      setKinds(kinds.filter((kind) => k !== kind));
-    }
-
-    if (!kinds.includes(k)) {
-      setKinds(kinds.concat([k]));
-    }
-  }
 
   return (
     <>
@@ -410,7 +397,12 @@ export default function HomeFeeds() {
       )}
       {feed === Feeds.Relay && relay && <RelayHeading url={relay} />}
       {filter ? (
-        <Feed key={filter.id} filter={filter.filter} options={filter.options} />
+        <Feed
+          key={filter.id}
+          filter={filter.filter}
+          options={filter.options}
+          limit={filter.limit}
+        />
       ) : (
         <Text>{t("unknown-filter")}</Text>
       )}
