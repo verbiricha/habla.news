@@ -32,13 +32,14 @@ import { ZAP, REPOST, HIGHLIGHT, NOTE } from "@habla/const";
 
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
+  const updatedDay = useMemo(() => formatDay(updatedAt), [updatedAt]);
   return (
     <>
       <Text color="secondary">{day}</Text>
-      {updatedAt > publishedAt && (
+      {updatedAt > publishedAt && day !== updatedDay && (
         <Flex align="center" color="secondary" gap={2}>
           <Icon as={EditIcon} />
-          <Text>{formatDay(updatedAt)}</Text>
+          <Text>{updatedDay}</Text>
         </Flex>
       )}
     </>
@@ -86,7 +87,7 @@ export function PublishedIn({ event, community }) {
 export default function LongFormNote({
   event,
   excludeAuthor = false,
-  excludeReactions = true,
+  excludeReactions = false,
 }) {
   const { ref, inView } = useInView({
     threshold: 0,

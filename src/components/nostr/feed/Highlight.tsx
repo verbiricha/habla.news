@@ -54,7 +54,7 @@ const HighlightSubstring = ({ text, substring }) => {
 export default function Highlight({
   event,
   showHeader = true,
-  showReactions = false,
+  showReactions = true,
   ...props
 }) {
   const { ref, inView } = useInView({
