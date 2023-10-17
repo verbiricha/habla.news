@@ -5,6 +5,7 @@ import { nip19 } from "nostr-tools";
 import { getHandle } from "@habla/nip05";
 import { getMetadata } from "@habla/nip23";
 import { useUser } from "@habla/nostr/hooks";
+import { useNostrAddress } from "@habla/hooks/useNostrAddress";
 
 export function articleAddress(event) {
   const { identifier } = getMetadata(event);
@@ -15,7 +16,7 @@ export function articleAddress(event) {
   });
 }
 
-export function articleLink(event, profile) {
+export function articleLink(event, profile, isVerified) {
   const { kind, pubkey } = event;
   const { identifier } = getMetadata(event);
   const handle = getHandle(pubkey);
@@ -24,7 +25,13 @@ export function articleLink(event, profile) {
     return `/${handle}/${identifier}`;
   }
 
-  if (profile && profile.nip05 && identifier && !identifier.includes("/")) {
+  if (
+    profile &&
+    profile.nip05 &&
+    identifier &&
+    !identifier.includes("/") &&
+    isVerified
+  ) {
     const nip05handle = profile.nip05.replace(/^_@/, "");
     return `/u/${nip05handle}/${identifier}`;
   }
@@ -42,9 +49,10 @@ export function articleLink(event, profile) {
 
 export default function ArticleLink({ event, children }) {
   const profile = useUser(event.pubkey);
+  const { data } = useNostrAddress(profile?.nip05);
   const link = useMemo(() => {
-    return articleLink(event, profile);
-  }, [event, profile]);
+    return articleLink(event, profile, data?.pubkey === event.pubkey);
+  }, [event, profile, data]);
 
   return link ? (
     <Link href={link} shallow>

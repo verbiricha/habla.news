@@ -11,13 +11,12 @@ import { shortenString } from "@habla/format";
 import { getHandle } from "@habla/nip05";
 import { useNostrAddress } from "@habla/hooks/useNostrAddress";
 
-function NostrAddress({ pubkey, nip05 }) {
-  const { data } = useNostrAddress(nip05);
-  return data?.pubkey === pubkey ? (
+function NostrAddress({ pubkey, nip05, isVerified }) {
+  return (
     <Text fontSize="2xs" color="secondary">
       {nip05.startsWith("_@") ? nip05.slice(2) : nip05}
     </Text>
-  ) : null;
+  );
 }
 
 export default function User({
@@ -34,9 +33,11 @@ export default function User({
   const router = useRouter();
   const user = useUser(pubkey);
   const handle = getHandle(pubkey);
+  const { data } = useNostrAddress(user?.nip05);
+  const isVerified = data?.pubkey === pubkey;
   const url = handle
     ? `/${handle}`
-    : user?.nip05
+    : user?.nip05 && isVerified
     ? `/u/${user.nip05}`
     : `/p/${nip19.nprofileEncode({ pubkey, relays })}`;
   const username = (
@@ -58,7 +59,7 @@ export default function User({
       {showAvatar && <UserAvatar size={size} user={user} pubkey={pubkey} />}
       <Stack gap={0}>
         {username}
-        {showNostrAddress && user?.nip05 && (
+        {showNostrAddress && isVerified && (
           <NostrAddress pubkey={pubkey} nip05={user.nip05} />
         )}
         {showBio && user?.about && (
