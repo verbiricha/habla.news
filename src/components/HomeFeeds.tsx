@@ -290,6 +290,7 @@ export default function HomeFeeds() {
           kinds,
           "#t": [tag],
         },
+        limit: 21,
         options: {
           cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
         },
