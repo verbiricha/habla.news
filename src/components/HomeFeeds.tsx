@@ -316,6 +316,7 @@ export default function HomeFeeds() {
           kinds,
           authors: featuredPubkeys,
         },
+        limit: 5,
       };
     }
 
