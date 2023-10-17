@@ -97,7 +97,11 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
         {followedCommunities.map((t) => {
           const [, address] = t;
           const [, , d] = address.split(":");
-          return <option value={address}>{d}</option>;
+          return (
+            <option key={address} value={address}>
+              {d}
+            </option>
+          );
         })}
       </Select>
     </FormControl>
