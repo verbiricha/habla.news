@@ -30,6 +30,7 @@ import HashtagIcon from "@habla/icons/Hashtag";
 import ListIcon from "@habla/icons/List";
 import UsersIcon from "@habla/icons/Users";
 import RelayIcon from "@habla/icons/Relay";
+import GlobeIcon from "@habla/icons/Globe";
 import HeartIcon from "@habla/icons/Heart";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import {
@@ -52,6 +53,7 @@ import { toPubkey } from "@habla/util";
 
 enum Feeds {
   Featured = "Featured",
+  All = "All",
   Tag = "Tag",
   Follows = "Follows",
   PeopleList = "PeopleList",
@@ -60,7 +62,9 @@ enum Feeds {
 }
 
 function feedIcon(f: Feeds) {
-  if (f === Feeds.Featured) {
+  if (f === Feeds.All) {
+    return <Icon as={GlobeIcon} />;
+  } else if (f === Feeds.Featured) {
     return <Icon as={HeartIcon} />;
   } else if (f === Feeds.Tag) {
     return <Icon as={HashtagIcon} />;
@@ -173,6 +177,7 @@ export default function HomeFeeds() {
             {feedIcon(feed)}
             <Text>
               {feed === Feeds.Featured && t("featured")}
+              {feed === Feeds.All && t("all")}
               {feed === Feeds.Follows && t("follows")}
               {feed === Feeds.PeopleList && listName}
               {feed === Feeds.Tag && `# ${tag}`}
@@ -251,6 +256,13 @@ export default function HomeFeeds() {
         <>
           <MenuDivider />
           <MenuGroup title={t("Relays")}>
+            <MenuItem
+              key="global"
+              icon={feedIcon(Feeds.All)}
+              onClick={() => setFeed(Feeds.All)}
+            >
+              {t("all")}
+            </MenuItem>
             {relays.map((r) => {
               const onClick = () => {
                 setRelay(r);
@@ -304,7 +316,15 @@ export default function HomeFeeds() {
           kinds,
           authors: featuredPubkeys,
         },
-        limit: 21,
+      };
+    }
+
+    if (feed === Feeds.All) {
+      return {
+        id: `global-${kinds.join("-")}`,
+        filter: {
+          kinds,
+        },
         options: {
           cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
         },
