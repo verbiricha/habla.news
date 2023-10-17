@@ -53,12 +53,12 @@ export const featured = [
   "opensats",
   "dergigi",
   "guyswann",
-  "jb55",
   "karnage",
   "tony",
   "moon",
   "nostreport",
   "getalby",
+  "verbiricha",
 ];
 
 export const featuredPubkeys = featured.map(getPubkey);
