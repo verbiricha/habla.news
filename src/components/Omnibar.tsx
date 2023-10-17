@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { nip05, nip19 } from "nostr-tools";
 
-import { LONG_FORM, HIGHLIGHT, HASHTAG_REGEX, MONTH } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, HASHTAG_REGEX } from "@habla/const";
 import { urlsToNip27 } from "@habla/nip27";
 import Feed from "@habla/components/nostr/feed/Feed";
 import SearchIcon from "@habla/icons/Search";
@@ -133,7 +133,7 @@ export default function Omnibar() {
         <Feed
           key={searchTerm}
           limit={10}
-          filter={{ kinds: [LONG_FORM], search: [searchTerm] }}
+          filter={{ kinds: [LONG_FORM], search: searchTerm }}
         />
       )}
     </Stack>

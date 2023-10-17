@@ -1,7 +1,7 @@
 import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import Feed from "@habla/components/nostr/feed/Feed";
-import { LONG_FORM, MONTH } from "@habla/const";
+import { LONG_FORM } from "@habla/const";
 
 export default function SearchFeed({ query, relays }) {
   const filter = {
@@ -14,13 +14,7 @@ export default function SearchFeed({ query, relays }) {
   };
   return (
     query.length > 2 && (
-      <Feed
-        key={query}
-        offset={MONTH}
-        filter={filter}
-        options={options}
-        limit={21}
-      />
+      <Feed key={query} filter={filter} options={options} limit={21} />
     )
   );
 }
