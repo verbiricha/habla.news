@@ -183,5 +183,6 @@
   "mute-fail": "Failed to store mute list",
   "contacts-saved": "Contacts saved",
   "moderators": "Moderators",
-  "rules": "Rules"
+  "rules": "Rules",
+  "featured": "Featured"
 }
