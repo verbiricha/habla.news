@@ -2,17 +2,24 @@ import { useMemo } from "react";
 import { Helmet } from "react-helmet";
 
 import { getMetadata } from "@habla/nip23";
-import { ZAP, HIGHLIGHT, NOTE, REPOST, REACTION } from "@habla/const";
+import {
+  ZAP,
+  HIGHLIGHT,
+  NOTE,
+  REPOST,
+  REACTION,
+  BOOKMARKS,
+} from "@habla/const";
 import { useReactions } from "@habla/nostr/hooks";
 import BaseLongFormNote from "@habla/components/LongFormNote";
 
 export default function LongFormNote({ event, relays, excludeAuthor }) {
   const { title, summary, image } = getMetadata(event);
-  const { reactions, notes, reposts, zaps, highlights } = useReactions(
-    event,
-    [ZAP, HIGHLIGHT, REPOST, NOTE, REACTION],
-    { cacheUsage: "PARALLEL", closeOnEose: false }
-  );
+  const { reactions, notes, reposts, zaps, highlights, bookmarks } =
+    useReactions(event, [ZAP, HIGHLIGHT, REPOST, NOTE, REACTION, BOOKMARKS], {
+      cacheUsage: "PARALLEL",
+      closeOnEose: false,
+    });
   return (
     <>
       <Helmet>
@@ -31,6 +38,7 @@ export default function LongFormNote({ event, relays, excludeAuthor }) {
         highlights={highlights}
         reposts={reposts}
         zaps={zaps}
+        bookmarks={bookmarks}
       />
     </>
   );

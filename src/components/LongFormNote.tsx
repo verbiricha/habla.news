@@ -42,9 +42,10 @@ import ShareModal from "@habla/components/ShareModal";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
 import Write from "@habla/components/Write";
 import { pubkeyAtom, relaysAtom } from "@habla/state";
-import Zaps from "./Zaps";
-import Reposts from "./Reposts";
-import Comments from "./Comments";
+import Zaps from "@habla/components/Zaps";
+import Reposts from "@habla/components/Reposts";
+import Comments from "@habla/components/Comments";
+import Bookmarks from "@habla/components/Bookmarks";
 import { PublishedIn } from "@habla/components/nostr/feed/LongFormNote";
 
 const Thread = dynamic(() => import("@habla/components/nostr/Thread"), {
@@ -114,6 +115,7 @@ export default function LongFormNote({
   notes = [],
   highlights = [],
   reposts = [],
+  bookmarks = [],
   isEditingInline,
 }) {
   const ref = useRef();
@@ -160,6 +162,7 @@ export default function LongFormNote({
       <Reposts event={event} reposts={reposts} />
       <Highlights event={event} highlights={highlights} />
       <Comments event={event} comments={notes} />
+      <Bookmarks event={event} bookmarks={bookmarks} />
     </Flex>
   );
 

@@ -7,23 +7,28 @@ import { useReactions } from "@habla/nostr/hooks";
 import Highlights from "@habla/components/reactions/Highlights";
 import TextReactions from "../Reactions";
 import Comments from "../Comments";
+import Bookmarks from "@habla/components/Bookmarks";
 import Zaps from "../Zaps";
 import Reposts from "../Reposts";
-import { ZAP, REACTION, REPOST, NOTE, HIGHLIGHT } from "@habla/const";
+import {
+  ZAP,
+  REACTION,
+  REPOST,
+  NOTE,
+  HIGHLIGHT,
+  BOOKMARKS,
+} from "@habla/const";
 
 export default function Reactions({
   event,
-  kinds = [ZAP, REACTION, REPOST, NOTE, HIGHLIGHT],
+  kinds = [ZAP, REACTION, REPOST, NOTE, HIGHLIGHT, BOOKMARKS],
   opts = {
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
     closeOnEose: false,
   },
 }) {
-  const { zaps, reactions, reposts, notes, highlights } = useReactions(
-    event,
-    kinds,
-    opts
-  );
+  const { zaps, reactions, reposts, notes, highlights, bookmarks } =
+    useReactions(event, kinds, opts);
   return (
     <Flex alignItems="center" gap="6">
       {kinds.includes(ZAP) && <Zaps event={event} zaps={zaps} />}
@@ -34,6 +39,9 @@ export default function Reactions({
       {kinds.includes(NOTE) && <Comments event={event} comments={notes} />}
       {kinds.includes(REACTION) && (
         <TextReactions event={event} reactions={reactions} />
+      )}
+      {kinds.includes(BOOKMARKS) && (
+        <Bookmarks event={event} bookmarks={bookmarks} />
       )}
     </Flex>
   );

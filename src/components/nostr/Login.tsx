@@ -62,6 +62,7 @@ import {
   relayListAtom,
   communitiesAtom,
   peopleListsAtom,
+  bookmarkListsAtom,
   defaultRelays,
 } from "@habla/state";
 import { findTag } from "@habla/tags";
@@ -275,6 +276,7 @@ function ProfileMenu({ pubkey, relays, onClose }) {
 
   function logOut(ev) {
     setPeopleLists({});
+    setBookmarkLists({});
     setContactList(null);
     setRelayList(null);
     setSession(null);
@@ -338,9 +340,10 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const [relayList, setRelayList] = useAtom(relayListAtom);
   const [communities, setCommunities] = useAtom(communitiesAtom);
   const [, setPeopleLists] = useAtom(peopleListsAtom);
+  const [, setBookmarkLists] = useAtom(bookmarkListsAtom);
   const { events } = useEvents(
     {
-      kinds: [CONTACTS, RELAYS, MUTED],
+      kinds: [CONTACTS, RELAYS, MUTED, BOOKMARKS],
       authors: [pubkey],
     },
     {
@@ -385,6 +388,13 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
           setMuted(nostrEvent);
           decryptMuteList(nostrEvent);
         }
+      }
+      if (event.kind === BOOKMARKS && event.tagValue("d") !== "communities") {
+        const d = event.tagValue("d");
+        const nostrEvent = event.rawEvent();
+        setBookmarkLists((bl) => {
+          return { ...bl, [d]: nostrEvent };
+        });
       }
     }
   }, [pubkey, events]);

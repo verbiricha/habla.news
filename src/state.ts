@@ -47,6 +47,7 @@ export const tagsAtom = atom<string[]>((get) => {
 
 // NIP-51
 export const peopleListsAtom = atom<Record<string, NostrEvent[]>>({});
+export const bookmarkListsAtom = atom<Record<string, NostrEvent[]>>({});
 export const mutedAtom = atom<NostrEvent | null>(null);
 export const privateMutedAtom = atom<Tags>([]);
 

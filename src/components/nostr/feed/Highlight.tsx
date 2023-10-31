@@ -18,7 +18,7 @@ import {
 import { LinkIcon } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 
-import { ZAP, REPOST, NOTE } from "@habla/const";
+import { ZAP, REPOST, NOTE, BOOKMARKS } from "@habla/const";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";
@@ -165,7 +165,11 @@ export default function Highlight({
       </CardBody>
       {showReactions && (
         <CardFooter dir="auto">
-          <Reactions event={event} kinds={[ZAP, REPOST, NOTE]} live={inView} />
+          <Reactions
+            event={event}
+            kinds={[ZAP, REPOST, NOTE, BOOKMARKS]}
+            live={inView}
+          />
         </CardFooter>
       )}
     </Card>

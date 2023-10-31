@@ -19,6 +19,7 @@ import {
   REPOST,
   LONG_FORM,
   NOTE,
+  BOOKMARKS,
 } from "@habla/const";
 import { relaysAtom } from "@habla/state";
 import { uniqByFn } from "@habla/util";
@@ -170,8 +171,9 @@ export function useReactions(
   const reactions = events.filter((e) => e.kind === REACTION);
   const reposts = events.filter((e) => e.kind === REPOST);
   const notes = events.filter((e) => e.kind === NOTE);
+  const bookmarks = events.filter((e) => e.kind === BOOKMARKS);
 
-  return { zaps, reactions, highlights, reposts, notes };
+  return { zaps, reactions, highlights, reposts, notes, bookmarks };
 }
 
 export function useNdk() {
