@@ -24,7 +24,7 @@ import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
-import EventId from "@habla/components/nostr/EventId";
+import EventTitle from "@habla/components/nostr/EventTitle";
 import ExternalLink from "@habla/components/ExternalLink";
 import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
@@ -124,21 +124,15 @@ export default function Highlight({
       )}
       <CardBody dir="auto">
         <Stack gap="1">
-          {!e && (
-            <Box mb={2}>
-              <Blockquote style={{ margin: 0 }}>
-                {context && context.length > event.content.length + 1 ? (
-                  <HighlightSubstring
-                    text={context}
-                    substring={event.content}
-                  />
-                ) : (
-                  event.content
-                )}
-              </Blockquote>
-            </Box>
-          )}
-          {e && <EventId id={e} my={0} highlights={[event]} />}
+          <Box mb={2}>
+            <Blockquote style={{ margin: 0 }}>
+              {context && context.length > event.content.length + 1 ? (
+                <HighlightSubstring text={context} substring={event.content} />
+              ) : (
+                event.content
+              )}
+            </Blockquote>
+          </Box>
           {naddr && (
             <Flex gap={2} direction="column">
               <ArticleTitle
@@ -166,6 +160,7 @@ export default function Highlight({
               </Text>
             </ExternalLink>
           )}
+          {e && !naddr && <EventTitle id={e} />}
         </Stack>
       </CardBody>
       {showReactions && (

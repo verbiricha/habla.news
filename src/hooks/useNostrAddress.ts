@@ -1,7 +1,7 @@
 import { nip05 } from "nostr-tools";
 import { useQuery } from "@tanstack/react-query";
 
-export function useNostrAddress(handle: string) {
+export function useNostrAddress(handle?: string) {
   const query = useQuery({
     queryKey: ["nip05", handle],
     queryFn: async () => {
@@ -14,6 +14,7 @@ export function useNostrAddress(handle: string) {
     cacheTime: 24 * 60 * 60 * 1000,
     retry: false,
     refetchOnMount: false,
+    enabled: Boolean(handle),
   });
   return query;
 }
