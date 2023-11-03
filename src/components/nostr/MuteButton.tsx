@@ -9,7 +9,10 @@ interface MuteReferenceButtonProps {
   reference: Tag;
 }
 
-export function MuteReferenceButton({ reference }: MuteReferenceButtonProps) {
+export function MuteReferenceButton({
+  reference,
+  ...rest
+}: MuteReferenceButtonProps) {
   const { t } = useTranslation("common");
   const [tag, value] = reference;
   const { isTagMuted, muteTag, unmuteTag } = useModeration();
@@ -29,7 +32,12 @@ export function MuteReferenceButton({ reference }: MuteReferenceButtonProps) {
     </Button>
   ) : (
     <Menu>
-      <MenuButton variant="outline" as={Button} rightIcon={<ChevronDownIcon />}>
+      <MenuButton
+        variant="outline"
+        as={Button}
+        rightIcon={<ChevronDownIcon />}
+        {...rest}
+      >
         {t("mute")}
       </MenuButton>
       <MenuList>
@@ -40,10 +48,10 @@ export function MuteReferenceButton({ reference }: MuteReferenceButtonProps) {
   );
 }
 
-export function MuteTagButton({ tag }) {
-  return <MuteReferenceButton reference={["t", tag]} />;
+export function MuteTagButton({ tag, ...rest }) {
+  return <MuteReferenceButton reference={["t", tag]} {...rest} />;
 }
 
-export default function MuteButton({ pubkey }) {
-  return <MuteReferenceButton reference={["p", pubkey]} />;
+export default function MuteButton({ pubkey, ...rest }) {
+  return <MuteReferenceButton reference={["p", pubkey]} {...rest} />;
 }

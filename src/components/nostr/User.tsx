@@ -6,6 +6,7 @@ import { Flex, Stack, Text } from "@chakra-ui/react";
 
 import { relaysAtom } from "@habla/state";
 import { useUser } from "@habla/nostr/hooks";
+import { useProfileLink } from "@habla/hooks/useProfileLink";
 import { UserAvatar } from "@habla/components/nostr/Avatar";
 import { shortenString } from "@habla/format";
 import { getHandle } from "@habla/nip05";
@@ -32,14 +33,7 @@ export default function User({
   const [relays] = useAtom(relaysAtom);
   const router = useRouter();
   const user = useUser(pubkey);
-  const handle = getHandle(pubkey);
-  const { data } = useNostrAddress(user?.nip05);
-  const isVerified = data?.pubkey === pubkey;
-  const url = handle
-    ? `/${handle}`
-    : user?.nip05 && isVerified
-    ? `/u/${user.nip05}`
-    : `/p/${nip19.nprofileEncode({ pubkey, relays })}`;
+  const { url, isVerified } = useProfileLink(pubkey, relays);
   const username = (
     <Text as="span" fontFamily="Inter" {...rest}>
       {user?.name || shortenString(pubkey, 6)}

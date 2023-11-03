@@ -30,7 +30,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   const explicitRelayUrls = useAtomValue(relaysAtom);
   const options =
     typeof window === "undefined"
-      ? { autoConnectUserRelays: false, explicitRelayUrls }
+      ? {
+          autoConnectUserRelays: false,
+          explicitRelayUrls,
+        }
       : {
           autoConnectUserRelays: false,
           explicitRelayUrls,

@@ -84,7 +84,6 @@ export default function Omnibar() {
     // Hashtags
     const hashtags = newContent.match(HASHTAG_REGEX);
     if (hashtags) {
-      console.log("TAGS", hashtags);
       setTags(hashtags.map((t) => t.slice(1)));
     }
 

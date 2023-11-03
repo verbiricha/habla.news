@@ -1,6 +1,6 @@
 import { Heading } from "@chakra-ui/react";
 
-export default function SectionHeading({ children }) {
+export default function SectionHeading({ children, ...rest }) {
   return (
     <Heading
       mt={6}
@@ -15,6 +15,7 @@ export default function SectionHeading({ children }) {
         lineHeight: "16px",
         letterSpacing: "0.04em",
       }}
+      {...rest}
     >
       {children}
     </Heading>

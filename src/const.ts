@@ -8,6 +8,7 @@ export const ZAP = 9735;
 export const ZAP_REQUEST = 9734;
 export const PROFILE = 0;
 export const FILE = 1063;
+export const SUPPORT = 7001;
 export const HIGHLIGHT = 9802;
 export const MUTED = 10000;
 export const PINNED = 10001;

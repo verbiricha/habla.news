@@ -1,75 +1,174 @@
+import { useMemo } from "react";
 import { Helmet } from "react-helmet";
-import { Flex, HStack, Box, Stack, Text } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  HStack,
+  Stack,
+  Heading,
+  Text,
+  AvatarGroup,
+  Image,
+} from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
-import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, SUPPORT } from "@habla/const";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import Markdown from "@habla/markdown/Markdown";
 import MuteButton from "@habla/components/nostr/MuteButton";
 import FollowButton from "@habla/components/nostr/FollowButton";
+import SectionHeading from "@habla/components/SectionHeading";
 
 import User from "./User";
-import { UserAvatar } from "./Avatar";
+import Avatar, { UserAvatar } from "./Avatar";
 import UserContent from "./UserContent";
 
 function Bio({ profile }) {
   return profile?.about ? (
-    <Prose fontFamily="'Inter'" style={{ wordBreak: "break-word" }}>
+    <Box fontSize="sm">
       <Markdown content={profile?.about} />
-    </Prose>
+    </Box>
   ) : null;
 }
 
-export function ProfileHeading({ profile, pubkey, relays }) {
+export function ProfileHeading({
+  profile,
+  pubkey,
+  relays,
+  supports,
+  supporters,
+}) {
+  const { t } = useTranslation("common");
+  // todo: amounts ban be fiat or sats
+  const supporterPubkeys = useMemo(() => {
+    return [
+      ...supporters
+        .sort((a, b) => {
+          return Number(b.tagValue("amount")) - Number(a.tagValue("amount"));
+        })
+        .reduce((acc, ev) => {
+          acc.add(ev.pubkey);
+          return acc;
+        }, new Set()),
+    ];
+  }, [supporters]);
+  const supportingPubkeys = useMemo(() => {
+    return [
+      ...supports
+        .sort((a, b) => {
+          return Number(b.tagValue("amount")) - Number(a.tagValue("amount"));
+        })
+        .reduce((acc, ev) => {
+          acc.add(ev.tagValue("p"));
+          return acc;
+        }, new Set()),
+    ];
+  }, [supports]);
   return (
-    <Flex
-      gap="4"
-      flexDirection={["column", "row"]}
-      alignItems={["center", "flex-start"]}
-      mb={5}
-      width="100%"
-    >
-      <UserAvatar pubkey={pubkey} user={profile} size="xl" />
-      <Stack flex={1}>
-        <Flex
-          flexDir={["column", "row"]}
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <User
-            pubkey={pubkey}
-            fontSize="2xl"
-            fontWeight="500"
-            showAvatar={false}
-            showNostrAddress={true}
-          />
-          <HStack>
-            <MuteButton pubkey={pubkey} />
-            <FollowButton pubkey={pubkey} />
-          </HStack>
-        </Flex>
-        <Bio profile={profile} />
-      </Stack>
-    </Flex>
+    <>
+      <Flex
+        gap="4"
+        flexDirection={["column", "row"]}
+        alignItems={["center", "flex-start"]}
+        mb={5}
+        w="100%"
+      >
+        <Box display={{ base: "none", md: "block" }}>
+          <UserAvatar pubkey={pubkey} user={profile} size="xl" />
+        </Box>
+        <Stack flex={1} w="100%">
+          <Flex
+            flexDir={["column", "row"]}
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Flex
+              gap={2}
+              align="flex-start"
+              direction="row"
+              justifyContent="space-between"
+              w="100%"
+            >
+              <User
+                pubkey={pubkey}
+                fontSize="2xl"
+                fontWeight="500"
+                showAvatar={false}
+                showNostrAddress={true}
+              />
+              <HStack>
+                <MuteButton size={{ base: "sm", sm: "md" }} pubkey={pubkey} />
+                <FollowButton size={{ base: "sm", sm: "md" }} pubkey={pubkey} />
+              </HStack>
+            </Flex>
+          </Flex>
+          <Bio profile={profile} />
+          <Flex direction={["column", "row"]} gap={[2, 6]} w="100%">
+            {supporterPubkeys.length > 0 && (
+              <Stack>
+                <SectionHeading my={1}>
+                  {t("supporters", { n: supporterPubkeys.length })}
+                </SectionHeading>
+                <AvatarGroup size="sm" max={6} spacing="-0.5rem">
+                  {supporterPubkeys.map((pk) => (
+                    <Avatar key={pk} pubkey={pk} size="xs" />
+                  ))}
+                </AvatarGroup>
+              </Stack>
+            )}
+            {supportingPubkeys.length > 0 && (
+              <Stack>
+                <SectionHeading my={1}>
+                  {t("supports", { n: supportingPubkeys.length })}
+                </SectionHeading>
+                <AvatarGroup size="sm" max={6} spacing="-0.5rem">
+                  {supportingPubkeys.map((pk) => (
+                    <Avatar key={pk} pubkey={pk} size="xs" />
+                  ))}
+                </AvatarGroup>
+              </Stack>
+            )}
+          </Flex>
+        </Stack>
+      </Flex>
+    </>
   );
 }
 
 export default function Profile({ pubkey, relays }) {
   const profile = useUser(pubkey);
+  const { events: supporterEvents } = useEvents(
+    {
+      kinds: [SUPPORT],
+      "#p": [pubkey],
+    },
+    { relays, cacheUsage: NDKSubscriptionCacheUsage.PARALLEL }
+  );
   const { events } = useEvents(
     {
-      kinds: [LONG_FORM, HIGHLIGHT],
+      kinds: [LONG_FORM, HIGHLIGHT, SUPPORT],
       authors: [pubkey],
     },
-    { relays, cacheUsage: "PARALLEL" }
+    { relays, cacheUsage: NDKSubscriptionCacheUsage.PARALLEL }
   );
+  const supports = useMemo(() => {
+    return events.filter((ev) => ev.kind === SUPPORT);
+  }, [events]);
   return (
     <>
       <Helmet>
         <title>{profile?.name || pubkey}</title>
       </Helmet>
       <Stack align="center">
-        <ProfileHeading profile={profile} pubkey={pubkey} relays={relays} />
+        <ProfileHeading
+          profile={profile}
+          pubkey={pubkey}
+          relays={relays}
+          supports={supports}
+          supporters={supporterEvents}
+        />
         <UserContent pubkey={pubkey} events={events} />
       </Stack>
     </>

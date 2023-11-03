@@ -141,7 +141,6 @@ function BookmarkModal({ event, isOpen, onClose }) {
   async function onBookmark() {
     if (selectedList) {
       const listEv = bookmarkLists[selectedList];
-      console.log("TODO", listEv, event.tagReference());
       const ev = {
         kind: BOOKMARKS,
         content: listEv.content,

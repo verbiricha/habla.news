@@ -196,5 +196,7 @@
   "create-bookmark-list": "Create a bookmark list",
   "choose-a-list": "Choose a list to bookmark this item",
   "no-bookmarks": "No bookmark lists found, create one to start bookmarking",
-  "bookmark-saved": "Bookmark saved"
+  "bookmark-saved": "Bookmark saved",
+  "supporters": "Sponsors ({{ n }})",
+  "supports": "Sponsored ({{ n }})"
 }

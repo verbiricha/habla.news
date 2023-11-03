@@ -100,6 +100,7 @@ interface FollowReferenceButtonProps {
 
 export function FollowReferenceButton({
   reference,
+  ...rest
 }: FollowReferenceButtonProps) {
   const [tag, value] = reference;
   const { t } = useTranslation("common");
@@ -180,28 +181,29 @@ export function FollowReferenceButton({
       variant="outline"
       leftIcon={following ? <Icon as={CheckIcon} color="green.400" /> : null}
       onClick={following ? unfollowReference : followReference}
+      {...rest}
     >
       {following ? t("unfollow") : t("follow")}
     </Button>
   );
 }
 
-export function FollowAddressButton({ address }) {
-  return <FollowReferenceButton reference={["a", address]} />;
+export function FollowAddressButton({ address, ...rest }) {
+  return <FollowReferenceButton reference={["a", address]} {...rest} />;
 }
 
-export function FollowTagButton({ tag }) {
-  return <FollowReferenceButton reference={["t", tag]} />;
+export function FollowTagButton({ tag, ...rest }) {
+  return <FollowReferenceButton reference={["t", tag]} {...rest} />;
 }
 
-export function FollowEvent({ id }) {
-  return <FollowReferenceButton reference={["e", id]} />;
+export function FollowEvent({ id, ...rest }) {
+  return <FollowReferenceButton reference={["e", id]} {...rest} />;
 }
 
-export function FollowURL({ href }) {
-  return <FollowReferenceButton reference={["r", href]} />;
+export function FollowURL({ href, ...rest }) {
+  return <FollowReferenceButton reference={["r", href]} {...rest} />;
 }
 
-export default function FollowButton({ pubkey }) {
-  return <FollowReferenceButton reference={["p", pubkey]} />;
+export default function FollowButton({ pubkey, ...rest }) {
+  return <FollowReferenceButton reference={["p", pubkey]} {...rest} />;
 }

@@ -8,7 +8,13 @@ import { relaysAtom } from "@habla/state";
 import { shortenString } from "@habla/format";
 import { getHandle } from "@habla/nip05";
 
-export default function User({ pubkey, user, size = "sm", ...rest }) {
+export default function User({
+  pubkey,
+  user,
+  size = "sm",
+  includeUsername = true,
+  ...rest
+}) {
   const [relays] = useAtom(relaysAtom);
   const router = useRouter();
   const handle = getHandle(pubkey);
@@ -32,7 +38,9 @@ export default function User({ pubkey, user, size = "sm", ...rest }) {
         src={user.picture || user.image}
       />
 
-      <Text fontFamily="Inter">{user.name || shortenString(pubkey, 8)}</Text>
+      {includeUsername && (
+        <Text fontFamily="Inter">{user.name || shortenString(pubkey, 8)}</Text>
+      )}
     </Flex>
   );
 }
