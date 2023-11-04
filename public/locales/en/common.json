@@ -187,5 +187,16 @@
   "relays-saved": "Relays saved",
   "moderators": "Moderators",
   "rules": "Rules",
-  "featured": "Featured"
+  "featured": "Featured",
+  "bookmark": "Bookmark",
+  "new-bookmark-list": "Create a bookmark list",
+  "bookmark-list-created": "Bookmark list created",
+  "bookmark-list-created-descr": "You can now start adding bookmarks to the list you just created.",
+  "create": "Create",
+  "create-bookmark-list": "Create a bookmark list",
+  "choose-a-list": "Choose a list to bookmark this item",
+  "no-bookmarks": "No bookmark lists found, create one to start bookmarking",
+  "bookmark-saved": "Bookmark saved",
+  "supporters": "Supporters ({{ n }})",
+  "supports": "Supports ({{ n }})"
 }
