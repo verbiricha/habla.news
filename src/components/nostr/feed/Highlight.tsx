@@ -55,6 +55,7 @@ export default function Highlight({
   event,
   showHeader = true,
   showReactions = true,
+  skipModeration = false,
   ...props
 }) {
   const { ref, inView } = useInView({
@@ -95,6 +96,9 @@ export default function Highlight({
   const { mutedWords, isTagMuted } = useModeration();
   const hashtags = useHashtags(event);
   const isHidden = useMemo(() => {
+    if (skipModeration) {
+      return false;
+    }
     return (
       isTagMuted(["p", event.pubkey]) ||
       isTagMuted(event.tagReference()) ||

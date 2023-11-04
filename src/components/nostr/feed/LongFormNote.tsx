@@ -88,6 +88,7 @@ export default function LongFormNote({
   event,
   excludeAuthor = false,
   excludeReactions = false,
+  skipModeration = false,
 }) {
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -105,6 +106,9 @@ export default function LongFormNote({
   } = useMemo(() => getMetadata(event), [event]);
   const { mutedWords, isTagMuted } = useModeration();
   const isHidden = useMemo(() => {
+    if (skipModeration) {
+      return false;
+    }
     return (
       isTagMuted(["p", event.pubkey]) ||
       isTagMuted(event.tagReference()) ||

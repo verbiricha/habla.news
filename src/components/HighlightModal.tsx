@@ -162,6 +162,7 @@ export default function HighlightModal({
         <ModalCloseButton />
         <ModalBody fontFamily="'Inter'">
           <Highlight
+            skipModeration
             event={highlight}
             showHeader={false}
             showReactions={false}

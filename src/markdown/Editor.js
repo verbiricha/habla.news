@@ -209,7 +209,11 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
         <ModalCloseButton />
         <ModalBody>
           <Stack spacing={4}>
-            <FeedLongFormNote event={nostrEvent} excludeReactions={true} />
+            <FeedLongFormNote
+              event={nostrEvent}
+              excludeReactions={true}
+              skipModeration={true}
+            />
             <AccordionMenu items={menu} />
             {link && (
               <Text
