@@ -14,7 +14,7 @@ import { useTranslation } from "next-i18next";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
-import { LONG_FORM, HIGHLIGHT, SUPPORT } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, BOOKMARKS, SUPPORT } from "@habla/const";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import Markdown from "@habla/markdown/Markdown";
 import MuteButton from "@habla/components/nostr/MuteButton";
@@ -148,13 +148,18 @@ export default function Profile({ pubkey, relays }) {
   );
   const { events } = useEvents(
     {
-      kinds: [LONG_FORM, HIGHLIGHT, SUPPORT],
+      kinds: [LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS],
       authors: [pubkey],
     },
     { relays, cacheUsage: NDKSubscriptionCacheUsage.PARALLEL }
   );
   const supports = useMemo(() => {
     return events.filter((ev) => ev.kind === SUPPORT);
+  }, [events]);
+  const bookmarks = useMemo(() => {
+    return events.filter(
+      (ev) => ev.kind === BOOKMARKS && ev.tagValue("d") !== "communities"
+    );
   }, [events]);
   return (
     <>
@@ -169,7 +174,7 @@ export default function Profile({ pubkey, relays }) {
           supports={supports}
           supporters={supporterEvents}
         />
-        <UserContent pubkey={pubkey} events={events} />
+        <UserContent pubkey={pubkey} events={events} bookmarks={bookmarks} />
       </Stack>
     </>
   );

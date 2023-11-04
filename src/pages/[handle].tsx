@@ -12,7 +12,7 @@ import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";
 import { ProfileHeading } from "@habla/components/nostr/Profile";
 import UserContent from "@habla/components/nostr/UserContent";
-import { LONG_FORM, HIGHLIGHT, SUPPORT } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS } from "@habla/const";
 
 export default function Profile({
   handle,
@@ -39,6 +39,12 @@ export default function Profile({
       .filter((e) => e.kind === SUPPORT && e.pubkey === pubkey)
       .map((e) => new NDKEvent(ndk, e));
   }, [events]);
+  const bookmarks = useMemo(() => {
+    return events
+      .filter((e) => e.kind === BOOKMARKS)
+      .map((e) => new NDKEvent(ndk, e))
+      .filter((e) => e.tagValue("d") !== "communities");
+  }, [events]);
   return (
     <>
       <Head>
@@ -56,7 +62,7 @@ export default function Profile({
           supports={supporting}
           supporters={supporters}
         />
-        <UserContent events={ndkEvents} pubkey={pubkey} />
+        <UserContent events={ndkEvents} pubkey={pubkey} bookmarks={bookmarks} />
       </Layout>
     </>
   );

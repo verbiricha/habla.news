@@ -1,5 +1,5 @@
 import { SimplePool } from "nostr-tools";
-import { LONG_FORM, HIGHLIGHT, SUPPORT } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS } from "@habla/const";
 import { uniqByFn } from "@habla/util";
 import { findTag } from "@habla/tags";
 
@@ -72,7 +72,7 @@ export const getPosts = memoize(getNostrPosts);
 async function getNostrEvents(pubkey) {
   const filters = [
     {
-      kinds: [LONG_FORM, HIGHLIGHT, SUPPORT],
+      kinds: [LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS],
       authors: [pubkey],
     },
     {

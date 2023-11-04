@@ -47,7 +47,7 @@ export default function User({
       wordBreak="break-word"
       flex={flex}
       flexWrap={flexWrap}
-      onClick={() => router.push(url, undefined, { shallow: true })}
+      onClick={() => router.push(url)}
       {...rest}
     >
       {showAvatar && <UserAvatar size={size} user={user} pubkey={pubkey} />}

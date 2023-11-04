@@ -23,7 +23,7 @@ import ExternalLink from "@habla/components/ExternalLink";
 import { EMOJIS } from "@habla/const";
 import useHashtags from "@habla/hooks/useHashtags";
 
-export function ListTag({ tag }) {
+export function ListTag({ tag, ...rest }) {
   const [t, value, relay] = tag;
   if (t === "p") {
     return (
@@ -33,7 +33,7 @@ export function ListTag({ tag }) {
       </Flex>
     );
   } else if (t === "e") {
-    return <EventId id={value} />;
+    return <EventId id={value} {...rest} />;
   } else if (t === "a") {
     const [k, pubkey, identifier] = value.split(":");
     const relays = relay?.length > 0 ? [relay] : [];
@@ -50,6 +50,7 @@ export function ListTag({ tag }) {
         identifier={identifier}
         pubkey={pubkey}
         relays={relays}
+        {...rest}
       />
     );
   } else if (t === "emoji") {
@@ -77,32 +78,34 @@ export function ListTag({ tag }) {
   }
 }
 
-export default function List({ event }) {
+export default function List({ event, isFeed = false }) {
   const identifier = findTag(event, "d");
   const subject = findTag(event, "title") || findTag(event, "subject");
   const description = findTag(event, "description");
   const hashtags = useHashtags(event);
   const isEmojiPack = event.kind === EMOJIS;
-  const content = event.tags.map((t) => <ListTag tag={t} />);
+  const content = event.tags.map((t) => <ListTag tag={t} isFeed={isFeed} />);
   return (
     <>
-      <Flex
-        flexDirection={["column", "row"]}
-        alignItems={["flex-start", "center"]}
-        justifyContent="space-between"
-        my={4}
-      >
-        <Stack>
-          <Heading as="h5">{subject || identifier}</Heading>
-          {description && <Text color="secondary">{description}</Text>}
-        </Stack>
-        <Flex alignItems="center" gap={2}>
-          <Text as="span" fontSize="lg" color="secondary">
-            by
-          </Text>
-          <Username renderLink pubkey={event.pubkey} />
+      {!isFeed && (
+        <Flex
+          flexDirection={["column", "row"]}
+          alignItems={["flex-start", "center"]}
+          justifyContent="space-between"
+          my={4}
+        >
+          <Stack>
+            <Heading as="h5">{subject || identifier}</Heading>
+            {description && <Text color="secondary">{description}</Text>}
+          </Stack>
+          <Flex alignItems="center" gap={2}>
+            <Text as="span" fontSize="lg" color="secondary">
+              by
+            </Text>
+            <Username renderLink pubkey={event.pubkey} />
+          </Flex>
         </Flex>
-      </Flex>
+      )}
       <Hashtags hashtags={hashtags} />
       {isEmojiPack ? (
         <Flex flexDirection="row" align="flex-start" wrap="wrap" gap={2}>

@@ -55,7 +55,6 @@ export default function Nav() {
           sx={path === "/c" ? activeNav : nav}
         />
       </Link>
-      {/*
       <Link href="/bookmarks">
         <IconButton
           aria-label="Bookmarks"
@@ -63,7 +62,6 @@ export default function Nav() {
           sx={path === "/bookmarks" ? activeNav : nav}
         />
       </Link>
-      */}
     </Flex>
   );
 }

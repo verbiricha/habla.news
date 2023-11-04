@@ -6,8 +6,8 @@ import { useTranslation } from "next-i18next";
 import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import Tabs from "@habla/components/Tabs";
 import Highlights from "@habla/components/nostr/Highlights";
+import BookmarkLists from "@habla/components/nostr/BookmarkLists";
 import { getMetadata } from "@habla/nip23";
-import { useEvents } from "@habla/nostr/hooks";
 
 import LongFormNote from "./feed/LongFormNote";
 
@@ -21,7 +21,7 @@ const NewHighlights = dynamic(
   }
 );
 
-export default function UserContent({ pubkey, events }) {
+export default function UserContent({ pubkey, events, bookmarks }) {
   const { t } = useTranslation("common");
   const posts = useMemo(() => {
     return events
@@ -67,6 +67,10 @@ export default function UserContent({ pubkey, events }) {
           <Highlights highlights={highlights} />
         </Stack>
       ),
+    },
+    {
+      name: t("bookmarks"),
+      panel: <BookmarkLists bookmarks={bookmarks} />,
     },
   ];
 

@@ -266,6 +266,7 @@ function ProfileMenu({ pubkey, relays, onClose }) {
   const [session, setSession] = useAtom(sessionAtom);
   const [, setContactList] = useAtom(contactListAtom);
   const [, setPeopleLists] = useAtom(peopleListsAtom);
+  const [, setBookmarkLists] = useAtom(bookmarkListsAtom);
   const [, setRelayList] = useAtom(relayListAtom);
   const nprofile = useMemo(() => {
     return nip19.nprofileEncode({
@@ -340,7 +341,7 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const [relayList, setRelayList] = useAtom(relayListAtom);
   const [communities, setCommunities] = useAtom(communitiesAtom);
   const [, setPeopleLists] = useAtom(peopleListsAtom);
-  const [, setBookmarkLists] = useAtom(bookmarkListsAtom);
+  const [bookmarkLists, setBookmarkLists] = useAtom(bookmarkListsAtom);
   const { events } = useEvents(
     {
       kinds: [CONTACTS, RELAYS, MUTED, BOOKMARKS],
@@ -392,9 +393,12 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
       if (event.kind === BOOKMARKS && event.tagValue("d") !== "communities") {
         const d = event.tagValue("d");
         const nostrEvent = event.rawEvent();
-        setBookmarkLists((bl) => {
-          return { ...bl, [d]: nostrEvent };
-        });
+        const lastSeen = bookmarkLists[d]?.created_at ?? 0;
+        if (nostrEvent.created_at > lastSeen) {
+          setBookmarkLists((bl) => {
+            return { ...bl, [d]: nostrEvent };
+          });
+        }
       }
     }
   }, [pubkey, events]);
