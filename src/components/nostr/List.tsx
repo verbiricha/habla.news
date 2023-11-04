@@ -66,12 +66,7 @@ export function ListTag({ tag, ...rest }) {
       return <RelayItem key={value} url={value} />;
     }
     if (relay) {
-      return (
-        <Flex flexDir="column">
-          <Text fontSize="xl">{relay}</Text>
-          <ExternalLink href={value}>{value}</ExternalLink>
-        </Flex>
-      );
+      return <ExternalLink href={value}>{relay}</ExternalLink>;
     } else {
       return <ExternalLink href={value}>{value}</ExternalLink>;
     }
