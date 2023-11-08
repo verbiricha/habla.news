@@ -65,13 +65,13 @@ export default function ImageUploader({ pubkey, onImageUpload }) {
           setAvatar(upload.url);
           onImageUpload(upload.url);
           toast({
-            type: "success",
+            status: "success",
             title: t("file-uploaded"),
           });
         }
         if (upload.error) {
           toast({
-            type: "error",
+            status: "error",
             title: upload.error,
           });
         }
