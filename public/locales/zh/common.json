@@ -184,5 +184,19 @@
   "contacts-saved": "通讯录已保存",
   "moderators": "管理员",
   "rules": "规则",
-  "featured": "精选"
+  "featured": "精选",
+  "bookmark": "Bookmark",
+  "new-bookmark-list": "Create a bookmark list",
+  "bookmark-list-created": "Bookmark list created",
+  "bookmark-list-created-descr": "You can now start adding bookmarks to the list you just created.",
+  "create": "Create",
+  "create-bookmark-list": "Create a bookmark list",
+  "choose-a-list": "Choose a list to bookmark this item",
+  "no-bookmarks": "No bookmark lists found, create one to start bookmarking",
+  "no-bookmarks-found": "No bookmark lists found",
+  "bookmark-saved": "Bookmark saved",
+  "supporters": "Supporters ({{ n }})",
+  "supports": "Supports ({{ n }})",
+  "bookmarks": "Bookmarks",
+  "select-bookmark-list": "Select bookmark list..."
 }

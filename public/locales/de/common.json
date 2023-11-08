@@ -184,5 +184,19 @@
   "contacts-saved": "Kontakte gespeichert",
   "moderators": "Moderatoren",
   "rules": "Regeln",
-  "featured": "Ausgewählte"
+  "featured": "Ausgewählte",
+  "bookmark": "Lesezeichen",
+  "new-bookmark-list": "Lesezeichenliste erstellen",
+  "bookmark-list-created": "Lesezeichenliste erstellt",
+  "bookmark-list-created-descr": "Du kannst nun Lesezeichen zu der gerade erstellten Liste hinzufügen.",
+  "create": "Erstellen",
+  "create-bookmark-list": "Lesezeichenliste erstellen",
+  "choose-a-list": "Wähle eine Liste, um diese Sache mit einem Lesezeichen zu versehen",
+  "no-bookmarks": "Keine Lesezeichenlisten gefunden, erstelle eine, um Lesezeichen zu speichern",
+  "no-bookmarks-found": "Keine Lesezeichenlisten gefunden",
+  "bookmark-saved": "Lesezeichen gespeichert",
+  "supporters": "Unterstützer ({{ n }})",
+  "supports": "Unterstützt ({{ n }})",
+  "bookmarks": "Lesezeichen",
+  "select-bookmark-list": "Lesezeichenliste auswählen..."
 }
