@@ -1,4 +1,4 @@
-import { LONG_FORM, HIGHLIGHT, NOTE, BADGE } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT, NOTE, BADGE, LIVE_EVENT } from "@habla/const";
 
 import Highlight from "./nostr/feed/Highlight";
 import Note from "./nostr/Note";

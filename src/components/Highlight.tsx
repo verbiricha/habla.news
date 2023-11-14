@@ -43,7 +43,7 @@ export default function Highlight({ event }) {
     }
   }, [kind, pubkey, identifier]);
   return event.content.length < 4200 ? (
-    <Card variant="highlight" ref={ref}>
+    <Card ref={ref}>
       <CardHeader>
         {naddr && (
           <Stack direction="column" spacing="1">

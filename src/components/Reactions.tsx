@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useAtom } from "jotai";
 
 import { NDKEvent } from "@nostr-dev-kit/ndk";
-import { Flex, Text, IconButton } from "@chakra-ui/react";
+import { Flex, Text, Icon } from "@chakra-ui/react";
 
 import { useNdk } from "@habla/nostr/hooks";
 import { formatShortNumber } from "@habla/format";
@@ -36,8 +36,8 @@ export default function Reactions({ event, reactions, highlights }) {
     }
   }
   return (
-    <Flex alignItems="center" color="secondary" fontFamily="'Inter'">
-      <IconButton
+    <Flex alignItems="center" color="secondary" fontFamily="'Inter'" gap={3}>
+      <Icon
         variant="unstyled"
         onClick={react}
         cursor={liked ? "auto" : "pointer"}

@@ -50,7 +50,7 @@ import AccordionMenu from "@habla/components/AccordionMenu";
 import LongFormNote from "@habla/components/LongFormNote";
 import FeedLongFormNote from "@habla/components/nostr/feed/LongFormNote";
 import ZapSplitConfig from "@habla/components/ZapSplitConfig";
-import { useEvents, useUser } from "@habla/nostr/hooks";
+import { useUser } from "@habla/nostr/hooks";
 import { findTag } from "@habla/tags";
 import { articleLink } from "@habla/components/nostr/ArticleLink";
 import { useRelaysMetadata } from "@habla/hooks/useRelayMetadata";
@@ -138,7 +138,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
     if (zapTags && zapTags.length > 0) {
       ev.tags = ev.tags.concat(zapTags);
     }
-    return new NDKEvent(ndk, ev);
+    return ev;
   }, [event, zapSplits]);
 
   async function onPost() {
@@ -146,13 +146,20 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       setIsPublishing(true);
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
       const ndkEvent = new NDKEvent(ndk, nostrEvent);
+      let link;
+      if (!isDraft !! ndkEvent.tags.find(t => t[0] === "alt")) {
+        link = articleLink(ndkEvent);
+        ndkEvent.tags.push([
+          "alt",
+          `This is a long form article, you can read it in https://habla.news${link}`,
+        ]);
+      }
       await ndkEvent.sign();
       const results = await ndkEvent.publish(relaySet, 5_000);
       setPublishedOn(Array.from(results).map((r) => r.url));
       setHasPublished(true);
       onCloseModal();
-      if (!isDraft) {
-        const link = articleLink(ndkEvent);
+      if (link) {
         await router.push(link, undefined, { shallow: true });
       }
     } finally {

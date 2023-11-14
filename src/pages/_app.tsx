@@ -32,10 +32,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     typeof window === "undefined"
       ? {
           autoConnectUserRelays: false,
+          blacklistRelayUrls: ["wss://brb.io", "wss://brb.io/"],
           explicitRelayUrls,
         }
       : {
           autoConnectUserRelays: false,
+          blacklistRelayUrls: ["wss://brb.io", "wss://brb.io/"],
           explicitRelayUrls,
           cacheAdapter,
         };

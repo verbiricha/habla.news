@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
@@ -21,7 +22,7 @@ export default function Note({ event, highlights = [], ...props }) {
     return event.encode();
   }, [event]);
   return (
-    <Card variant="outline" my={4} maxW="586px" {...props}>
+    <Card my={4} maxW="586px" {...props}>
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />

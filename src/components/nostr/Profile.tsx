@@ -7,7 +7,6 @@ import {
   Stack,
   Heading,
   Text,
-  AvatarGroup,
   Image,
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
@@ -20,6 +19,7 @@ import Markdown from "@habla/markdown/Markdown";
 import MuteButton from "@habla/components/nostr/MuteButton";
 import FollowButton from "@habla/components/nostr/FollowButton";
 import SectionHeading from "@habla/components/SectionHeading";
+import People from "@habla/components/nostr/People";
 
 import User from "./User";
 import Avatar, { UserAvatar } from "./Avatar";
@@ -111,11 +111,7 @@ export function ProfileHeading({
                 <SectionHeading my={1}>
                   {t("supporters", { n: supporterPubkeys.length })}
                 </SectionHeading>
-                <AvatarGroup size="sm" max={6} spacing="-0.5rem">
-                  {supporterPubkeys.map((pk) => (
-                    <Avatar key={pk} pubkey={pk} size="xs" />
-                  ))}
-                </AvatarGroup>
+                <People pubkeys={supporterPubkeys} />
               </Stack>
             )}
             {supportingPubkeys.length > 0 && (
@@ -123,11 +119,7 @@ export function ProfileHeading({
                 <SectionHeading my={1}>
                   {t("supports", { n: supportingPubkeys.length })}
                 </SectionHeading>
-                <AvatarGroup size="sm" max={6} spacing="-0.5rem">
-                  {supportingPubkeys.map((pk) => (
-                    <Avatar key={pk} pubkey={pk} size="xs" />
-                  ))}
-                </AvatarGroup>
+                <People pubkeys={supportingPubkeys} />
               </Stack>
             )}
           </Flex>

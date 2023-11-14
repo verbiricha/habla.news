@@ -68,3 +68,16 @@ export function parseJSON<T>(raw: string, defaultValue: T) {
     return defaultValue;
   }
 }
+
+export function dedupe<T>(list: T[]): T[] {
+  return list.reduce(
+    (acc, i) => {
+      if (!acc.seen.has(i)) {
+        acc.result.push(i);
+      }
+      acc.seen.add(i);
+      return acc;
+    },
+    { result: [], seen: new Set() }
+  ).result;
+}

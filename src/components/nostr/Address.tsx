@@ -11,7 +11,6 @@ import {
   HIGHLIGHT,
   BADGE,
   LISTS,
-  LIVE_EVENT,
   COMMUNITY,
 } from "@habla/const";
 
@@ -23,6 +22,7 @@ import Badge from "./Badge";
 import ZapstrTrack from "./ZapstrTrack";
 import Community from "@habla/components/nostr/feed/Community";
 import App from "./App";
+import LiveEvent from "./LiveEvent";
 import AppReccomendation from "./AppReccomendation";
 import UnknownKind from "./UnknownKind";
 
@@ -67,6 +67,11 @@ export default function Address({
   if (event?.kind === APP) {
     return <App event={event} />;
   }
+
+  //if (event?.kind === LIVE_EVENT) {
+  //  return <LiveEvent event={event} />;
+  //}
+
   //if (event?.kind === APP_RECOMMENDATION) {
   //  return <AppReccomendation event={event} />;
   //}

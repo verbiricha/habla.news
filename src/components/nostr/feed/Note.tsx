@@ -42,7 +42,7 @@ export default function Note({ event, highlights = [], ...props }) {
     );
   }, [mutedWords, isTagMuted]);
   return isHidden ? null : (
-    <Card variant="outline" my={4} {...props}>
+    <Card my={4} {...props}>
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />
