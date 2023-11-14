@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import { nip19 } from "nostr-tools";
+import { Box } from "@chakra-ui/react";
 import { ZapThreadsAttributes } from "zapthreads";
 import "zapthreads";
 
@@ -14,12 +15,14 @@ export default function Thread({ anchor }) {
   }, [loggedInPubkey]);
 
   return (
-    <zap-threads
-      anchor={anchor}
-      npub={npub}
-      relays={defaultRelays}
-      disable="likes: true,zaps: true, watch: true"
-    />
+    <Box maxW="92vw">
+      <zap-threads
+        anchor={anchor}
+        npub={npub}
+        relays={defaultRelays}
+        disable="likes: true,zaps: true, watch: true"
+      />
+    </Box>
   );
 }
 
