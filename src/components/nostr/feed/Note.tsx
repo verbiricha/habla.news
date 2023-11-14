@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useRouter } from "next/router";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
+import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
@@ -18,10 +19,15 @@ import { nip19 } from "nostr-tools";
 
 import Markdown from "@habla/markdown/Markdown";
 import User from "@habla/components/nostr/User";
+import Reactions from "@habla/components/nostr/LazyReactions";
 import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
+import { ZAP, NOTE, REACTION, BOOKMARKS } from "@habla/const";
 
 export default function Note({ event, highlights = [], ...props }) {
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
   const router = useRouter();
   const nevent = useMemo(() => {
     return nip19.neventEncode({
@@ -42,7 +48,7 @@ export default function Note({ event, highlights = [], ...props }) {
     );
   }, [mutedWords, isTagMuted]);
   return isHidden ? null : (
-    <Card my={4} {...props}>
+    <Card my={4} {...props} ref={ref}>
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />
@@ -52,11 +58,11 @@ export default function Note({ event, highlights = [], ...props }) {
             boxSize={3}
             color="secondary"
             as={LinkIcon}
-            onClick={() => router.push(`https://snort.social/e/${nevent}`)}
+            onClick={() => router.push(`/e/${nevent}`)}
           />
         </Flex>
       </CardHeader>
-      <CardBody px={"60px"} dir="auto" pt={0} wordBreak="break-word">
+      <CardBody dir="auto" pt={0} wordBreak="break-word">
         <Prose>
           <Markdown
             content={event.content}
@@ -65,6 +71,13 @@ export default function Note({ event, highlights = [], ...props }) {
           />
         </Prose>
       </CardBody>
+      <CardFooter dir="auto">
+        <Reactions
+          event={event}
+          kinds={[ZAP, NOTE, REACTION, BOOKMARKS]}
+          live={inView}
+        />
+      </CardFooter>
     </Card>
   );
 }

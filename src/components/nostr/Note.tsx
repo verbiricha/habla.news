@@ -14,28 +14,40 @@ import {
 import { nip19 } from "nostr-tools";
 
 import Markdown from "@habla/markdown/Markdown";
-import User from "./User";
+import Reactions from "@habla/components/nostr/LazyReactions";
+import User from "@habla/components/nostr/User";
 import ExternalLinkIcon from "@habla/components/ExternalLinkIcon";
+import { ZAP, NOTE, REACTION, BOOKMARKS } from "@habla/const";
 
 export default function Note({ event, highlights = [], ...props }) {
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
   const nevent = useMemo(() => {
     return event.encode();
   }, [event]);
   return (
-    <Card my={4} maxW="586px" {...props}>
+    <Card my={4} maxW="586px" {...props} ref={ref}>
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />
-          <ExternalLinkIcon href={`https://snort.social/e/${nevent}`} />
+          <ExternalLinkIcon href={`/e/${nevent}`} />
         </Flex>
       </CardHeader>
-      <CardBody px={"60px"} dir="auto" pt={0} wordBreak="break-word">
+      <CardBody dir="auto" pt={0} wordBreak="break-word">
         <Markdown
           content={event.content}
           tags={event.tags}
           highlights={highlights}
         />
       </CardBody>
+      <CardFooter dir="auto">
+        <Reactions
+          event={event}
+          kinds={[ZAP, NOTE, REACTION, BOOKMARKS]}
+          live={inView}
+        />
+      </CardFooter>
     </Card>
   );
 }
