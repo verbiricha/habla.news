@@ -147,7 +147,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
       const ndkEvent = new NDKEvent(ndk, nostrEvent);
       let link;
-      if (!isDraft !! ndkEvent.tags.find(t => t[0] === "alt")) {
+      if (!isDraft && !ndkEvent.tags.find((t) => t[0] === "alt")) {
         link = articleLink(ndkEvent);
         ndkEvent.tags.push([
           "alt",
