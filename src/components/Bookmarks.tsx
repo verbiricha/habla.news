@@ -199,7 +199,11 @@ function BookmarkModal({ event, isOpen, onClose }) {
                 >
                   {lists.map((l) => {
                     const [d] = l;
-                    return <option value={d}>{d}</option>;
+                    return (
+                      <option key={d} value={d}>
+                        {d}
+                      </option>
+                    );
                   })}
                 </Select>
               </FormControl>

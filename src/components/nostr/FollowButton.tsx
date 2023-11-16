@@ -5,7 +5,7 @@ import { NDKEvent } from "@nostr-dev-kit/ndk";
 import { CheckIcon } from "@chakra-ui/icons";
 
 import { dateToUnix } from "@habla/time";
-import { CONTACTS, BOOKMARKS } from "@habla/const";
+import { CONTACTS, BOOKMARKS, COMMUNITIES } from "@habla/const";
 import {
   pubkeyAtom,
   followsAtom,
@@ -16,10 +16,6 @@ import {
 import { useNdk } from "@habla/nostr/hooks";
 import type { Tag } from "@habla/types";
 
-// todo: communities NIP follow
-//export function FollowCommunityButton({ reference }) {
-//  return <FollowReferenceButton reference={["a", address]} />;
-//}
 export function FollowCommunityButton({ reference }) {
   const [tag, value] = reference;
   const { t } = useTranslation("common");
@@ -36,12 +32,9 @@ export function FollowCommunityButton({ reference }) {
       const newFollows =
         communities?.tags.length > 0
           ? [...communities?.tags, [tag, value]]
-          : [
-              ["d", "communities"],
-              [tag, value],
-            ];
+          : [[tag, value]];
       const newContacts = {
-        kind: BOOKMARKS,
+        kind: COMMUNITIES,
         created_at: dateToUnix(),
         content: communities?.content || "",
         tags: newFollows,
@@ -61,11 +54,10 @@ export function FollowCommunityButton({ reference }) {
 
   async function unfollowCommunity() {
     try {
-      const newFollows = communities?.tags.filter((t) => t.at(1) !== value) || [
-        ["d", "communities"],
-      ];
+      const newFollows =
+        communities?.tags.filter((t) => t.at(1) !== value) || [];
       const newContacts = {
-        kind: BOOKMARKS,
+        kind: COMMUNITIES,
         created_at: dateToUnix(),
         content: communities?.content || "",
         tags: newFollows,

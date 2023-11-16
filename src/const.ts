@@ -13,8 +13,11 @@ export const HIGHLIGHT = 9802;
 export const MUTED = 10000;
 export const PINNED = 10001;
 export const RELAYS = 10002;
+export const COMMUNITIES = 10004;
+export const SEARCH_RELAYS = 10007;
 export const PEOPLE = 30000;
 export const BOOKMARKS = 30001;
+export const CURATIONS = 30004;
 export const LONG_FORM = 30023;
 export const LONG_FORM_DRAFT = 30024;
 export const BADGE = 30009;
@@ -44,3 +47,11 @@ export const FILE_EXT_REGEX = /\.([\w]{1,7})$/i;
 
 export const HABLA_PUBKEY =
   "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c";
+
+export const deprecatedPeopleLists = new Set([
+  "mute",
+  "p:mute",
+  "pin",
+  "pinned",
+]);
+export const deprecatedBookmarkLists = new Set(["pin", "mute", "communities"]);

@@ -75,6 +75,9 @@ import {
   CONTACTS,
   RELAYS,
   MUTED,
+  COMMUNITIES,
+  deprecatedPeopleLists,
+  deprecatedBookmarkLists,
 } from "@habla/const";
 
 function LoginDialog({ isOpen, onClose }) {
@@ -330,9 +333,6 @@ function ProfileMenu({ pubkey, relays, onClose }) {
   );
 }
 
-// outdated pre-NIP-51 list d and t tags
-const outdatedD = new Set(["mute", "p:mute", "pin", "pinned"]);
-
 function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const ndk = useNdk();
   const [contacts, setContactList] = useAtom(contactListAtom);
@@ -340,16 +340,17 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const [privateMuted, setPrivateMuted] = useAtom(privateMutedAtom);
   const [relayList, setRelayList] = useAtom(relayListAtom);
   const [communities, setCommunities] = useAtom(communitiesAtom);
-  const [, setPeopleLists] = useAtom(peopleListsAtom);
+  const [peopleLists, setPeopleLists] = useAtom(peopleListsAtom);
   const [bookmarkLists, setBookmarkLists] = useAtom(bookmarkListsAtom);
   const { events } = useEvents(
     {
-      kinds: [CONTACTS, RELAYS, MUTED, BOOKMARKS],
+      kinds: [CONTACTS, RELAYS, MUTED, PEOPLE, BOOKMARKS, COMMUNITIES],
       authors: [pubkey],
     },
     {
       disable: !isLoggedIn,
-      cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
+      groupable: false,
+      cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
       closeOnEose: false,
     }
   );
@@ -390,65 +391,33 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
           decryptMuteList(nostrEvent);
         }
       }
-      if (event.kind === BOOKMARKS && event.tagValue("d") !== "communities") {
-        const d = event.tagValue("d");
-        const nostrEvent = event.rawEvent();
-        const lastSeen = bookmarkLists[d]?.created_at ?? 0;
+      if (event.kind === COMMUNITIES) {
+        const lastSeen = communities?.created_at ?? 0;
         if (nostrEvent.created_at > lastSeen) {
-          setBookmarkLists((bl) => {
-            return { ...bl, [d]: nostrEvent };
-          });
+          setCommunities(nostrEvent);
+        }
+      }
+      if (event.kind === PEOPLE) {
+        const d = event.tagValue("d");
+        if (!deprecatedPeopleLists.has(d)) {
+          const t = event.tagValue("t");
+          const lastSeen = peopleLists[d]?.created_at ?? 0;
+          if (d && nostrEvent.created_at > lastSeen) {
+            setPeopleLists({ ...peopleLists, [d]: nostrEvent });
+          }
+        }
+      }
+      if (event.kind === BOOKMARKS) {
+        const d = event.tagValue("d");
+        if (!deprecatedBookmarkLists.has(d)) {
+          const lastSeen = bookmarkLists[d]?.created_at ?? 0;
+          if (nostrEvent.created_at > lastSeen) {
+            setBookmarkLists({ ...bookmarkLists, [d]: nostrEvent });
+          }
         }
       }
     }
   }, [pubkey, events]);
-
-  useEffect(() => {
-    // Communities
-    ndk
-      .fetchEvent(
-        {
-          kinds: [BOOKMARKS],
-          authors: [pubkey],
-          "#d": ["communities"],
-        },
-        {
-          cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
-        }
-      )
-      .then((c) => {
-        if (c) {
-          const lastSeen = communities?.created_at ?? 0;
-          if (c.created_at > lastSeen) {
-            setCommunities(c.rawEvent());
-          }
-        }
-      });
-    // People
-    ndk
-      .fetchEvents(
-        {
-          kinds: [PEOPLE],
-          authors: [pubkey],
-        },
-        {
-          cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
-          closeOnEose: true,
-        }
-      )
-      .then((events) => {
-        for (const event of events) {
-          const d = event.tagValue("d");
-          const t = event.tagValue("t");
-          const nostrEvent = event.rawEvent();
-          if (!outdatedD.has(d) && !outdatedD.has(t)) {
-            setPeopleLists((pl) => {
-              return { ...pl, [d]: nostrEvent };
-            });
-          }
-        }
-      });
-  }, [pubkey]);
 }
 
 function LoggedInUser({ pubkey, isLoggedIn, onClose }) {

@@ -13,7 +13,13 @@ import { useTranslation } from "next-i18next";
 import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
-import { LONG_FORM, HIGHLIGHT, BOOKMARKS, SUPPORT } from "@habla/const";
+import {
+  LONG_FORM,
+  HIGHLIGHT,
+  BOOKMARKS,
+  SUPPORT,
+  deprecatedBookmarkLists,
+} from "@habla/const";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import Markdown from "@habla/markdown/Markdown";
 import MuteButton from "@habla/components/nostr/MuteButton";
@@ -150,7 +156,8 @@ export default function Profile({ pubkey, relays }) {
   }, [events]);
   const bookmarks = useMemo(() => {
     return events.filter(
-      (ev) => ev.kind === BOOKMARKS && ev.tagValue("d") !== "communities"
+      (ev) =>
+        ev.kind === BOOKMARKS && !deprecatedBookmarkLists.has(ev.tagValue("d"))
     );
   }, [events]);
   return (

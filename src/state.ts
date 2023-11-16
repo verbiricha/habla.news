@@ -52,7 +52,4 @@ export const mutedAtom = atom<NostrEvent | null>(null);
 export const privateMutedAtom = atom<Tags>([]);
 
 // Communities
-export const communitiesAtom = atomWithStorage<NostrEvent | null>(
-  "communities",
-  null
-);
+export const communitiesAtom = atom<NostrEvent | null>(null);

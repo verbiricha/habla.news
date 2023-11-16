@@ -12,7 +12,13 @@ import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";
 import { ProfileHeading } from "@habla/components/nostr/Profile";
 import UserContent from "@habla/components/nostr/UserContent";
-import { LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS } from "@habla/const";
+import {
+  LONG_FORM,
+  HIGHLIGHT,
+  SUPPORT,
+  BOOKMARKS,
+  deprecatedBookmarkLists,
+} from "@habla/const";
 
 export default function Profile({
   handle,
@@ -43,7 +49,7 @@ export default function Profile({
     return events
       .filter((e) => e.kind === BOOKMARKS)
       .map((e) => new NDKEvent(ndk, e))
-      .filter((e) => e.tagValue("d") !== "communities");
+      .filter((e) => !deprecatedBookmarkLists.has(e.tagValue("d")));
   }, [events]);
   return (
     <>
