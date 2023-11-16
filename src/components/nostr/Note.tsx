@@ -27,7 +27,7 @@ export default function Note({ event, highlights = [], ...props }) {
     return event.encode();
   }, [event]);
   return (
-    <Card my={4} maxW="586px" {...props} ref={ref}>
+    <Card my={4} {...props} ref={ref}>
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />

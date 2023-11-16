@@ -26,7 +26,7 @@ export default function Event(props) {
   const { event } = props;
 
   if (event.kind === HIGHLIGHT) {
-    return <Highlight {...props} maxW="586px" />;
+    return <Highlight {...props} />;
   }
 
   if (event.kind === NOTE) {
