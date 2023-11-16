@@ -199,6 +199,6 @@
   "supports": "Unterstützt ({{ n }})",
   "bookmarks": "Lesezeichen",
   "select-bookmark-list": "Lesezeichenliste auswählen...",
-  "unknown-kind": "Unsupported event kind: {{ kind }}",
-  "open-with": "Open with"
+  "unknown-kind": "Nicht unterstützte Event-Art: {{ kind }}",
+  "open-with": "Öffnen mit"
 }
