@@ -198,5 +198,7 @@
   "supporters": "Supporters ({{ n }})",
   "supports": "Supports ({{ n }})",
   "bookmarks": "Bookmarks",
-  "select-bookmark-list": "Select bookmark list..."
+  "select-bookmark-list": "Select bookmark list...",
+  "unknown-kind": "Unsupported event kind: {{ kind }}",
+  "open-with": "Open with"
 }
