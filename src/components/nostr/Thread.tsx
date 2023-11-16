@@ -15,9 +15,10 @@ export default function Thread({ anchor }) {
 
   return <zap-threads
     anchor={anchor}
-    npub={npub}
-    relays={defaultRelays}
-    disable="likes: true, zaps: true"
+    user={npub}
+    relays={defaultRelays.join(',')}
+    disable="likes,zaps"
+    urls="naddr:habla.news/a/,npub:habla.news/p/,nprofile:habla.news/p/,nevent:habla.news/e/,note:habla.news/n/,tag:habla.news/t/"
   />;
 }
 
