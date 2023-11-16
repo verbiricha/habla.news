@@ -14,10 +14,10 @@ export default function ReactionCount({ icon, reactions, count, ...props }) {
         variant="unstyled"
         color={reacted && "highlight"}
         as={icon}
-        boxSize={4}
+        boxSize={3}
         {...props}
       />
-      <Text as="span" color="secondary" fontSize="md" fontFamily="body">
+      <Text as="span" color="secondary" fontSize="sm" fontFamily="body">
         {formatShortNumber(count || reactions.length)}
       </Text>
     </Flex>
