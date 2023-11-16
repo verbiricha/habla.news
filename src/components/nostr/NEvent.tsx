@@ -2,7 +2,7 @@ import { useAtomValue } from "jotai";
 import { Spinner } from "@chakra-ui/react";
 import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
-import Event from "@habla/components/Event";
+import Event from "@habla/components/nostr/Event";
 import { useEvent } from "@habla/nostr/hooks";
 import { relaysAtom } from "@habla/state";
 

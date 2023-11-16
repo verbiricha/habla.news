@@ -24,17 +24,7 @@ export const BADGE = 30009;
 export const RELAY_LIST = 30022;
 export const EMOJIS = 30030;
 export const LIVE_EVENT = 30311;
-export const ZAPSTR_TRACK = 31337;
-export const ZAPSTR_LIST = 31338;
-export const LISTS = [
-  MUTED,
-  PINNED,
-  PEOPLE,
-  BOOKMARKS,
-  ZAPSTR_LIST,
-  EMOJIS,
-  RELAY_LIST,
-];
+export const LISTS = [MUTED, PINNED, PEOPLE, BOOKMARKS, EMOJIS, RELAY_LIST];
 export const APP = 31990;
 export const APP_RECOMMENDATION = 31989;
 export const COMMUNITY = 34550;
