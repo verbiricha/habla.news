@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import {
   HStack,
   Text,
-  Code,
   Image,
   Menu,
   MenuButton,
@@ -69,11 +68,13 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
           )}
           {isPreferredApp ? (
             <HStack>
-              <Text>{appProfile.display_name || appProfile.name}</Text>
+              <Text as="span">
+                {appProfile.display_name || appProfile.name}
+              </Text>
               <Icon as={StarIcon} boxSize={3} color="purple.500" />
             </HStack>
           ) : (
-            <Text>{appProfile.display_name || appProfile.name}</Text>
+            <Text as="span">{appProfile.display_name || appProfile.name}</Text>
           )}
         </HStack>
         <People sx={{ pointerEvents: "none" }} pubkeys={recommenders} />
@@ -119,7 +120,7 @@ function Recommendations({ event, recommendations }) {
     <Card>
       <CardHeader>
         <HStack align="center" justify="space-between">
-          <Text>{t("unknown-kind", { kind: event.kind })}</Text>
+          <Text as="span">{t("unknown-kind", { kind: event.kind })}</Text>
           <Menu isLazy>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
               {t("open-with")}
@@ -149,6 +150,7 @@ function Recommendations({ event, recommendations }) {
 }
 
 export default function UnknownKind({ event }) {
+  const { t } = useTranslation("common");
   const contacts = useAtomValue(followsAtom);
   const pubkey = useAtomValue(pubkeyAtom);
   const relays = useAtomValue(relaysAtom);
@@ -190,6 +192,17 @@ export default function UnknownKind({ event }) {
     );
   }
 
-  const alt = findTag(event, "alt");
-  return alt ? <Text>{alt}</Text> : null;
+  const alt = event.tagValue("alt");
+  return (
+    <Card>
+      <CardHeader>
+        <Text as="span">{t("unknown-kind", { kind: event.kind })}</Text>
+      </CardHeader>
+      {alt && (
+        <CardBody>
+          <Blockquote>{alt}</Blockquote>
+        </CardBody>
+      )}
+    </Card>
+  );
 }

@@ -10,7 +10,6 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import {

@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useRouter } from "next/router";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { useInView } from "react-intersection-observer";
 
 import {
@@ -63,13 +62,11 @@ export default function Note({ event, highlights = [], ...props }) {
         </Flex>
       </CardHeader>
       <CardBody dir="auto" pt={0} wordBreak="break-word">
-        <Prose>
-          <Markdown
-            content={event.content}
-            tags={event.tags}
-            highlights={highlights}
-          />
-        </Prose>
+        <Markdown
+          content={event.content}
+          tags={event.tags}
+          highlights={highlights}
+        />
       </CardBody>
       <CardFooter dir="auto">
         <Reactions

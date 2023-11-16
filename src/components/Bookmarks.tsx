@@ -241,7 +241,6 @@ function BookmarkModal({ event, isOpen, onClose }) {
 export default function Bookmarks({ event, bookmarks }) {
   const modal = useDisclosure();
   const [pubkey] = useAtom(pubkeyAtom);
-  const bookmarked = bookmarks.some((r) => r.pubkey === pubkey);
   return (
     <>
       <ReactionCount

@@ -1,5 +1,4 @@
 import { Flex, Card, CardHeader, CardBody } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import Markdown from "@habla/markdown/Markdown";
 import { useUser } from "@habla/nostr/hooks";
@@ -7,11 +6,7 @@ import User from "./User";
 import FollowButton from "@habla/components/nostr/FollowButton";
 
 function Bio({ profile }) {
-  return profile?.about ? (
-    <Prose>
-      <Markdown content={profile?.about} />
-    </Prose>
-  ) : null;
+  return profile?.about ? <Markdown content={profile?.about} /> : null;
 }
 
 export default function UserCard({ pubkey, size = "sm", ...rest }) {

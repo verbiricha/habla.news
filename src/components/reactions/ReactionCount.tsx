@@ -5,20 +5,20 @@ import { Flex, Icon, Text } from "@chakra-ui/react";
 
 import { formatShortNumber } from "@habla/format";
 
-export default function ReactionCount({ icon, reactions, ...props }) {
+export default function ReactionCount({ icon, reactions, count, ...props }) {
   const [pubkey] = useAtom(pubkeyAtom);
   const reacted = reactions.some((r) => r.pubkey === pubkey);
   return (
-    <Flex alignItems="center" color="secondary" fontFamily="'Inter'" gap={3}>
+    <Flex alignItems="center" color="secondary" gap={3}>
       <Icon
         variant="unstyled"
         color={reacted && "highlight"}
         as={icon}
-        boxSize={3}
+        boxSize={4}
         {...props}
       />
-      <Text color="secondary" fontSize="sm">
-        {formatShortNumber(reactions.length)}
+      <Text as="span" color="secondary" fontSize="md" fontFamily="body">
+        {formatShortNumber(count || reactions.length)}
       </Text>
     </Flex>
   );

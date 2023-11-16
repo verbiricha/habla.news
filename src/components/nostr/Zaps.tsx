@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 
 import { Flex, Text, Stack } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { formatShortNumber } from "@habla/format";
 import { getZapRequest, getZapAmount } from "@habla/nip57";

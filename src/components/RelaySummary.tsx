@@ -24,7 +24,6 @@ import {
 } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 import CommentIcon from "@habla/icons/Comment";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import User from "@habla/components/nostr/User";
 import ExternalLink from "@habla/components/ExternalLink";
