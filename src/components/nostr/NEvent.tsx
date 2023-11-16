@@ -1,4 +1,6 @@
 import { useAtomValue } from "jotai";
+import { Spinner } from "@chakra-ui/react";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import Event from "@habla/components/Event";
 import { useEvent } from "@habla/nostr/hooks";
@@ -11,7 +13,10 @@ export default function NEvent({ id, author, relays, nevent }) {
       ids: [id],
       authors: [author],
     },
-    { relays: relays.concat(defaultRelays) }
+    {
+      relays: relays.concat(defaultRelays),
+      cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+    }
   );
-  return event ? <Event event={event} /> : null;
+  return event ? <Event event={event} /> : <Spinner />;
 }
