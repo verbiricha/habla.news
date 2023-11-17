@@ -198,5 +198,7 @@
   "supporters": "Unterstützer ({{ n }})",
   "supports": "Unterstützt ({{ n }})",
   "bookmarks": "Lesezeichen",
-  "select-bookmark-list": "Lesezeichenliste auswählen..."
+  "select-bookmark-list": "Lesezeichenliste auswählen...",
+  "unknown-kind": "Nicht unterstützte Event-Art: {{ kind }}",
+  "open-with": "Öffnen mit"
 }

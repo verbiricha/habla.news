@@ -198,5 +198,7 @@
   "supporters": "حامیان ({{ n }})",
   "supports": "حمایت می کند ({{ n }})",
   "bookmarks": "نشانک ها",
-  "select-bookmark-list": "انتخاب لیست نشانک..."
+  "select-bookmark-list": "انتخاب لیست نشانک...",
+  "unknown-kind": "Unsupported event kind: {{ kind }}",
+  "open-with": "Open with"
 }
