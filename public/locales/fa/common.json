@@ -194,11 +194,13 @@
   "choose-a-list": "یک لیست انتخاب کنید تا این مورد را نشانک گذاری نمایید",
   "no-bookmarks": "هیچ لیست نشانکی یافت نشد، یکی انتخاب کنید تا شروع به نشانک گذاری کنید",
   "no-bookmarks-found": "هیچ لیست نشانکی یافت نشد",
+  "empty-bookmarks": "Empty bookmark list",
   "bookmark-saved": "نشانک ذخیره شد",
   "supporters": "حامیان ({{ n }})",
   "supports": "حمایت می کند ({{ n }})",
   "bookmarks": "نشانک ها",
   "select-bookmark-list": "انتخاب لیست نشانک...",
   "unknown-kind": "Unsupported event kind: {{ kind }}",
-  "open-with": "Open with"
+  "open-with": "Open with",
+  "general": "General"
 }
