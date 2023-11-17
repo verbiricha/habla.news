@@ -6,7 +6,6 @@ import { getMetadata } from "@habla/nip23";
 import {
   LONG_FORM,
   LONG_FORM_DRAFT,
-  LIVE_EVENT,
   HIGHLIGHT,
   LISTS,
   COMMUNITY,

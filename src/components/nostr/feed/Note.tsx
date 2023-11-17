@@ -21,7 +21,7 @@ import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
-import { ZAP, NOTE, REACTION, BOOKMARKS } from "@habla/const";
+import { ZAP, NOTE, REACTION } from "@habla/const";
 
 export default function Note({ event, highlights = [], ...props }) {
   const { ref, inView } = useInView({
@@ -69,11 +69,7 @@ export default function Note({ event, highlights = [], ...props }) {
         />
       </CardBody>
       <CardFooter dir="auto">
-        <Reactions
-          event={event}
-          kinds={[ZAP, NOTE, REACTION, BOOKMARKS]}
-          live={inView}
-        />
+        <Reactions event={event} kinds={[ZAP, NOTE, REACTION]} live={inView} />
       </CardFooter>
     </Card>
   );

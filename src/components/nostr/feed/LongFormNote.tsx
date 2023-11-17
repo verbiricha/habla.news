@@ -28,7 +28,14 @@ import User from "@habla/components/nostr/User";
 import Hashtags from "@habla/components/Hashtags";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import ArticleLink from "@habla/components/nostr/ArticleLink";
-import { ZAP, REPOST, HIGHLIGHT, NOTE, BOOKMARKS } from "@habla/const";
+import {
+  ZAP,
+  REPOST,
+  HIGHLIGHT,
+  NOTE,
+  BOOKMARKS,
+  GENERAL_BOOKMARKS,
+} from "@habla/const";
 
 function LongFormTime({ content, publishedAt, updatedAt }) {
   const day = useMemo(() => formatDay(publishedAt), [publishedAt]);
@@ -123,8 +130,10 @@ export default function LongFormNote({
       })
     );
   }, [mutedWords, isTagMuted]);
+  const shouldHide = isHidden || title?.length === 0;
 
-  return isHidden || title?.length === 0 ? null : (
+  // todo: show toggle to show regardless
+  return shouldHide ? null : (
     <Card variant="article" my={4} ref={ref}>
       <CardHeader>
         <Flex
@@ -189,7 +198,7 @@ export default function LongFormNote({
               src={image}
               alt={title}
               mt={[2, 0]}
-              fit={["contain", "cover"]}
+              fit="cover"
               maxWidth={["none", "240px"]}
               width="100%"
               maxHeight="160px"
@@ -201,7 +210,7 @@ export default function LongFormNote({
         <CardFooter>
           <Reactions
             event={event}
-            kinds={[ZAP, REPOST, HIGHLIGHT, NOTE, BOOKMARKS]}
+            kinds={[ZAP, REPOST, HIGHLIGHT, NOTE, BOOKMARKS, GENERAL_BOOKMARKS]}
             live={inView}
           />
         </CardFooter>

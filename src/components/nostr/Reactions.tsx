@@ -17,11 +17,20 @@ import {
   NOTE,
   HIGHLIGHT,
   BOOKMARKS,
+  GENERAL_BOOKMARKS,
 } from "@habla/const";
 
 export default function Reactions({
   event,
-  kinds = [ZAP, REACTION, REPOST, NOTE, HIGHLIGHT, BOOKMARKS],
+  kinds = [
+    ZAP,
+    REACTION,
+    REPOST,
+    NOTE,
+    HIGHLIGHT,
+    BOOKMARKS,
+    GENERAL_BOOKMARKS,
+  ],
   opts = {
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
     closeOnEose: false,
@@ -40,7 +49,7 @@ export default function Reactions({
       {kinds.includes(REACTION) && (
         <TextReactions event={event} reactions={reactions} />
       )}
-      {kinds.includes(BOOKMARKS) && (
+      {(kinds.includes(BOOKMARKS) || kinds.includes(GENERAL_BOOKMARKS)) && (
         <Bookmarks event={event} bookmarks={bookmarks} />
       )}
     </Flex>

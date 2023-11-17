@@ -63,6 +63,7 @@ import {
   communitiesAtom,
   peopleListsAtom,
   bookmarkListsAtom,
+  bookmarksAtom,
   defaultRelays,
 } from "@habla/state";
 import { findTag } from "@habla/tags";
@@ -342,6 +343,7 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const [communities, setCommunities] = useAtom(communitiesAtom);
   const [peopleLists, setPeopleLists] = useAtom(peopleListsAtom);
   const [bookmarkLists, setBookmarkLists] = useAtom(bookmarkListsAtom);
+  const [generalBookmarks, setGeneralBookmarks] = useAtom(bookmarksAtom);
   const { events } = useEvents(
     {
       kinds: [CONTACTS, RELAYS, MUTED, PEOPLE, BOOKMARKS, COMMUNITIES],
@@ -350,7 +352,7 @@ function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
     {
       disable: !isLoggedIn,
       groupable: false,
-      cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
+      cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
       closeOnEose: false,
     }
   );
