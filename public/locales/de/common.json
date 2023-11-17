@@ -194,7 +194,7 @@
   "choose-a-list": "Wähle eine Liste, um diese Sache mit einem Lesezeichen zu versehen",
   "no-bookmarks": "Keine Lesezeichenlisten gefunden, erstelle eine, um Lesezeichen zu speichern",
   "no-bookmarks-found": "Keine Lesezeichenlisten gefunden",
-  "empty-bookmarks": "Empty bookmark list",
+  "empty-bookmarks": "Leere Lesezeichenliste",
   "bookmark-saved": "Lesezeichen gespeichert",
   "supporters": "Unterstützer ({{ n }})",
   "supports": "Unterstützt ({{ n }})",
@@ -202,5 +202,5 @@
   "select-bookmark-list": "Lesezeichenliste auswählen...",
   "unknown-kind": "Nicht unterstützte Event-Art: {{ kind }}",
   "open-with": "Öffnen mit",
-  "general": "General"
+  "general": "Allgemein"
 }
