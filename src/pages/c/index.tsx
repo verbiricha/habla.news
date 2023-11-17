@@ -1,18 +1,17 @@
 import Head from "next/head";
-import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import { Heading } from "@chakra-ui/react";
 import Layout from "@habla/layouts/Wide";
-import { COMMUNITY } from "@habla/const";
 
-const Feed = dynamic(() => import("@habla/components/nostr/Feed"), {
-  ssr: false,
-});
+const Communities = dynamic(
+  () => import("@habla/components/nostr/Communities"),
+  {
+    ssr: false,
+  }
+);
 
-export default function Communities() {
-  const { t } = useTranslation("common");
+export default function CommunitiesPage() {
   return (
     <>
       <Head>
@@ -21,8 +20,7 @@ export default function Communities() {
         <meta name="og:description" content="Browse moderated communities" />
       </Head>
       <Layout>
-        <Heading>{t("communities")}</Heading>
-        <Feed key={`communities`} filter={{ kinds: [COMMUNITY] }} />
+        <Communities />
       </Layout>
     </>
   );

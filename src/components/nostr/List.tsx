@@ -1,19 +1,29 @@
-import { Flex, Stack, Text, Heading, Divider } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Stack,
+  Text,
+  Heading,
+  Divider,
+  Tooltip,
+} from "@chakra-ui/react";
 
 import { nip19 } from "nostr-tools";
 
-import { findTag, findTags } from "@habla/tags";
+import { findTag } from "@habla/tags";
 import Username from "./Username";
 import User from "./User";
 import FollowButton from "@habla/components/nostr/FollowButton";
 import Emoji from "@habla/components/Emoji";
-import EventId from "@habla/markdown/EventId";
 import Hashtags from "@habla/components/Hashtags";
 import Address from "@habla/components/nostr/Address";
+import EventId from "@habla/components/nostr/EventId";
 import { RelayItem } from "@habla/components/Relays";
 import ExternalLink from "@habla/components/ExternalLink";
+import { EMOJIS } from "@habla/const";
+import useHashtags from "@habla/hooks/useHashtags";
 
-export function ListTag({ tag }) {
+export function ListTag({ tag, ...rest }) {
   const [t, value, relay] = tag;
   if (t === "p") {
     return (
@@ -23,7 +33,7 @@ export function ListTag({ tag }) {
       </Flex>
     );
   } else if (t === "e") {
-    return <EventId id={value} />;
+    return <EventId id={value} {...rest} />;
   } else if (t === "a") {
     const [k, pubkey, identifier] = value.split(":");
     const relays = relay?.length > 0 ? [relay] : [];
@@ -40,62 +50,65 @@ export function ListTag({ tag }) {
         identifier={identifier}
         pubkey={pubkey}
         relays={relays}
+        {...rest}
       />
     );
   } else if (t === "emoji") {
     return (
-      <Flex align="center" gap={3} height="42px">
-        <Emoji src={relay} />
-        <Text>{value}</Text>
-      </Flex>
+      <Tooltip label={value} placement="bottom">
+        <Box>
+          <Emoji src={relay} />
+        </Box>
+      </Tooltip>
     );
   } else if (t === "r") {
     if (value.startsWith("ws://") || value.startsWith("wss://")) {
       return <RelayItem key={value} url={value} />;
     }
     if (relay) {
-      return (
-        <Flex flexDir="column">
-          <Text fontSize="xl">{relay}</Text>
-          <ExternalLink href={value}>{value}</ExternalLink>
-        </Flex>
-      );
+      return <ExternalLink href={value}>{relay}</ExternalLink>;
     } else {
       return <ExternalLink href={value}>{value}</ExternalLink>;
     }
   }
 }
 
-export default function List({ event }) {
+export default function List({ event, isFeed = false }) {
   const identifier = findTag(event, "d");
   const subject = findTag(event, "title") || findTag(event, "subject");
   const description = findTag(event, "description");
-  const hashtags = findTags(event, "t");
+  const hashtags = useHashtags(event);
+  const isEmojiPack = event.kind === EMOJIS;
+  const content = event.tags.map((t) => <ListTag tag={t} isFeed={isFeed} />);
   return (
     <>
-      <Flex
-        flexDirection={["column", "row"]}
-        alignItems={["flex-start", "center"]}
-        justifyContent="space-between"
-        my={4}
-      >
-        <Stack>
-          <Heading as="h5">{subject || identifier}</Heading>
-          {description && <Text color="secondary">{description}</Text>}
-        </Stack>
-        <Flex alignItems="center" gap={2}>
-          <Text as="span" fontSize="lg" color="secondary">
-            by
-          </Text>
-          <Username renderLink pubkey={event.pubkey} />
+      {!isFeed && (
+        <Flex
+          flexDirection={["column", "row"]}
+          alignItems={["flex-start", "center"]}
+          justifyContent="space-between"
+          my={4}
+        >
+          <Stack>
+            <Heading as="h5">{subject || identifier}</Heading>
+            {description && <Text color="secondary">{description}</Text>}
+          </Stack>
+          <Flex alignItems="center" gap={2}>
+            <Text as="span" fontSize="lg" color="secondary">
+              by
+            </Text>
+            <Username renderLink pubkey={event.pubkey} />
+          </Flex>
         </Flex>
-      </Flex>
+      )}
       <Hashtags hashtags={hashtags} />
-      <Stack>
-        {event.tags.map((t) => (
-          <ListTag tag={t} />
-        ))}
-      </Stack>
+      {isEmojiPack ? (
+        <Flex flexDirection="row" align="flex-start" wrap="wrap" gap={2}>
+          {content}
+        </Flex>
+      ) : (
+        <Stack>{content}</Stack>
+      )}
     </>
   );
 }

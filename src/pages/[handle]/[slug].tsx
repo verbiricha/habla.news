@@ -12,10 +12,22 @@ import { getMetadata } from "@habla/nip23";
 import Layout from "@habla/layouts/Wide";
 import LongFormNote from "@habla/components/nostr/LongFormNote";
 
-export default function Post({ event }) {
+const HablaPost = dynamic(() => import("@habla/components/nostr/HablaPost"), {
+  ssr: false,
+});
+
+export default function Post({ pubkey, slug, event }) {
   const router = useRouter();
   if (router.isFallback) {
     return <span>Loading...</span>;
+  }
+
+  if (!event) {
+    return (
+      <Layout>
+        <HablaPost pubkey={pubkey} slug={slug} />
+      </Layout>
+    );
   }
 
   const { title, summary, image } = getMetadata(event);
@@ -49,17 +61,12 @@ export async function getStaticProps({ locale, params }) {
     };
   }
   const event = await getPost(pubkey, slug);
-  if (!event) {
-    return {
-      redirect: {
-        destination: "/",
-      },
-    };
-  }
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["common"])),
+      pubkey,
+      slug,
       event,
+      ...(await serverSideTranslations(locale, ["common"])),
     },
   };
 }

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Event as NostrEvent } from "nostr-tools";
 import { bech32 } from "bech32";
 
+const BECH32_MAX_BYTES = 42000;
+
 function bech32ToText(str: string) {
   const decoded = bech32.decode(str, BECH32_MAX_BYTES);
   const buf = bech32.fromWords(decoded.words);

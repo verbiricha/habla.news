@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { useAtom } from "jotai";
-import { useColorModeValue, Flex, IconButton } from "@chakra-ui/react";
+import { useColorModeValue, Flex, IconButton, Box, Text } from "@chakra-ui/react";
 
 import { pubkeyAtom } from "@habla/state";
 import ReadIcon from "@habla/icons/Read";
@@ -17,53 +17,80 @@ export default function Nav() {
   // todo: extract to theme
   const bg = useColorModeValue("brand.50", "#3B3B3D");
   const color = useColorModeValue("brand.500", "#B196FF");
-  const activeNav = {
-    bg,
-    color,
+  const navLink = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: "2",
     borderRadius: "16px",
+    transition: "background-color 0.2s ease-in-out",
+  };
+  const navLinkText = {
+    display: ["none", "none", "none", "none", "block"]
+  };
+  const activeNav = {
+    ...navLink,
+    bg,
+    "& svg, & p": { color },
   };
   const nav = {
+    ...navLink,
     bg: "transparent",
-    borderRadius: "16px",
+  };
+  const navIcon = {
+    "&:hover": { bg: "transparent" },
+    bg: "transparent",
+  };
+  const getLinkSX = (checkPath: string) => {
+    if (path === checkPath) {
+      return activeNav;
+    } else {
+      return {
+        ...nav,
+        "&:hover": { bg: bg },
+      };
+    }
   };
   return (
     <Flex
       flexDirection={["row", "row", "column"]}
-      align="center"
       gap={4}
       mx={[4, 4, 0]}
       my={[0, 0, 4]}
+      px={[0, 0, 4, 4]}
     >
-      <Link href="/" shallow>
+      <Box as={Link} href="/" sx={getLinkSX("/")} shallow>
         <IconButton
           icon={<ReadIcon />}
           aria-label="Read"
-          sx={path === "/" ? activeNav : nav}
+          sx={navIcon}
         />
-      </Link>
-      {/*
-      <Link href="/bookmarks">
-        <IconButton
-          icon={<BookmarkIcon />}
-          aria-label="Bookmarks"
-          sx={path === "/bookmarks" ? activeNav : nav}
-        />
-      </Link>
-      */}
-      <Link href="/search" shallow>
+        <Text sx={navLinkText}>Read</Text>
+      </Box>
+      <Box as={Link} href="/search" sx={getLinkSX("/search")} shallow>
         <IconButton
           icon={<SearchIcon />}
           aria-label="Search"
-          sx={path === "/search" ? activeNav : nav}
+          sx={navIcon}
         />
-      </Link>
-      <Link href="/c/" shallow>
+        <Text sx={navLinkText}>Search</Text>
+      </Box>
+      <Box as={Link} href="/c" sx={getLinkSX("/c")} shallow>
         <IconButton
           icon={<CommunitiesIcon />}
           aria-label="Communities"
-          sx={path === "/c" ? activeNav : nav}
+          sx={navIcon}
         />
-      </Link>
+        <Text sx={navLinkText}>Communities</Text>
+      </Box>
+      <Box as={Link} href="/bookmarks" sx={getLinkSX("/bookmarks")} shallow>
+        <IconButton
+          aria-label="Bookmarks"
+          icon={<BookmarkIcon />}
+          sx={navIcon}
+        />
+        <Text sx={navLinkText}>Bookmarks</Text>
+      </Box>
     </Flex>
   );
 }

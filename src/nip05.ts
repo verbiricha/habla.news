@@ -1,5 +1,6 @@
 export const names = {
   _: "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c",
+  botev: "2c930918de42dca5d140c84c58e6d4f25b05a5d016171001c29c2a236d90c511",
   getalby: "4657dfe8965be8980a93072bcfb5e59a65124406db0f819215ee78ba47934b3e",
   verbiricha:
     "7fa56f5d6962ab1e3cd424e758c3002b8665f7b0d8dcee9fe9e288d7751ac194",
@@ -45,19 +46,23 @@ export const names = {
   franzap: "726a1e261cc6474674e8285e3951b3bb139be9a773d1acf49dc868db861a1c11",
 };
 
-// todo: group by category
+// todo: group by category?
 export const featured = [
   "jack",
   "rabble",
   "fiatjaf",
+  "opensats",
   "dergigi",
+  "guyswann",
   "karnage",
   "tony",
-  "isolabellart",
   "moon",
-  "herald",
   "nostreport",
+  "getalby",
+  "verbiricha",
 ];
+
+export const featuredPubkeys = featured.map(getPubkey);
 
 const pubkeyToHandle = Object.entries(names).reduce((acc, item) => {
   const [k, v] = item;

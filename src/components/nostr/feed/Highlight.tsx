@@ -4,6 +4,7 @@ import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
+  Box,
   Heading,
   Text,
   Icon,
@@ -15,19 +16,18 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { LinkIcon } from "@chakra-ui/icons";
-
 import { nip19 } from "nostr-tools";
 
-import { ZAP, REPOST, NOTE } from "@habla/const";
-import NAddr from "@habla/markdown/Naddr";
-import { useEvent } from "@habla/nostr/hooks";
+import { ZAP, REPOST, NOTE, BOOKMARKS, GENERAL_BOOKMARKS } from "@habla/const";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
-import EventId from "@habla/markdown/EventId";
+import EventTitle from "@habla/components/nostr/EventTitle";
 import ExternalLink from "@habla/components/ExternalLink";
+import useModeration from "@habla/hooks/useModeration";
+import useHashtags from "@habla/hooks/useHashtags";
 
 const HighlightSubstring = ({ text, substring }) => {
   const startIndex = text.indexOf(substring);
@@ -54,7 +54,8 @@ const HighlightSubstring = ({ text, substring }) => {
 export default function Highlight({
   event,
   showHeader = true,
-  showReactions = false,
+  showReactions = true,
+  skipModeration = false,
   ...props
 }) {
   const { ref, inView } = useInView({
@@ -63,6 +64,14 @@ export default function Highlight({
   const a = findTag(event, "a");
   const e = findTag(event, "e");
   const r = findTag(event, "r");
+  const cleanR = useMemo(() => {
+    try {
+      const url = new URL(r);
+      return `${url.protocol}//${url.hostname}${url.pathname}`;
+    } catch (error) {
+      return r;
+    }
+  }, [r]);
   const context = findTag(event, "context");
   const [kind, pubkey, identifier] = a?.split(":") ?? [];
   const nevent = useMemo(() => {
@@ -84,8 +93,23 @@ export default function Highlight({
   }, [kind, pubkey, identifier]);
 
   const { colorMode } = useColorMode();
+  const { mutedWords, isTagMuted } = useModeration();
+  const hashtags = useHashtags(event);
+  const isHidden = useMemo(() => {
+    if (skipModeration) {
+      return false;
+    }
+    return (
+      isTagMuted(["p", event.pubkey]) ||
+      isTagMuted(event.tagReference()) ||
+      hashtags.some((t) => isTagMuted(["t", t])) ||
+      mutedWords.some((word) => {
+        return event.content.toLowerCase().includes(word.toLowerCase());
+      })
+    );
+  }, [mutedWords, isTagMuted]);
 
-  return event.content.length < 4200 ? (
+  return event.content.length < 4200 && !isHidden ? (
     <Card variant="highlight" key={event.id} ref={ref} my={4} {...props}>
       {showHeader && (
         <CardHeader>
@@ -104,7 +128,7 @@ export default function Highlight({
       )}
       <CardBody dir="auto">
         <Stack gap="1">
-          {!e && (
+          <Box mb={2}>
             <Blockquote style={{ margin: 0 }}>
               {context && context.length > event.content.length + 1 ? (
                 <HighlightSubstring text={context} substring={event.content} />
@@ -112,19 +136,21 @@ export default function Highlight({
                 event.content
               )}
             </Blockquote>
-          )}
-          {e && <EventId id={e} my={0} highlights={[event]} />}
+          </Box>
           {naddr && (
-            <ArticleTitle
-              naddr={naddr}
-              kind={Number(kind)}
-              identifier={identifier}
-              pubkey={pubkey}
-              fontFamily="'Inter'"
-              fontWeight={600}
-              fontSize="sm"
-              color="secondary"
-            />
+            <Flex gap={2} direction="column">
+              <ArticleTitle
+                naddr={naddr}
+                kind={Number(kind)}
+                identifier={identifier}
+                pubkey={pubkey}
+                fontFamily="'Inter'"
+                fontWeight={600}
+                fontSize="sm"
+                color="secondary"
+              />
+              <User pubkey={pubkey} size="xs" fontSize="xs" />
+            </Flex>
           )}
           {r && !naddr && !r.startsWith("https://habla.news") && (
             <ExternalLink href={r}>
@@ -134,15 +160,20 @@ export default function Highlight({
                 fontSize="sm"
                 color="secondary"
               >
-                {r}
+                {cleanR}
               </Text>
             </ExternalLink>
           )}
+          {e && !naddr && <EventTitle id={e} />}
         </Stack>
       </CardBody>
       {showReactions && (
         <CardFooter dir="auto">
-          <Reactions event={event} kinds={[ZAP, REPOST, NOTE]} live={inView} />
+          <Reactions
+            event={event}
+            kinds={[ZAP, REPOST, NOTE, BOOKMARKS, GENERAL_BOOKMARKS]}
+            live={inView}
+          />
         </CardFooter>
       )}
     </Card>

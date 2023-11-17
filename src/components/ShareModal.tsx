@@ -21,12 +21,14 @@ import {
 } from "@habla/components/nostr/ArticleLink";
 import InputCopy from "@habla/components/InputCopy";
 import { useUser } from "@habla/nostr/hooks";
+import { useNostrAddress } from "@habla/hooks/useNostrAddress";
 import { getHandle } from "@habla/nip05";
 
 export default function ShareModal({ event, isOpen, onClose }) {
   const { t } = useTranslation("common");
   const profile = useUser(event.pubkey);
-  const link = articleLink(event, profile);
+  const { data } = useNostrAddress(profile?.nip05);
+  const link = articleLink(event, profile, data?.pubkey === event.pubkey);
   const address = articleAddress(event);
   const toast = useToast();
   const handle = getHandle(event.pubkey);
@@ -50,7 +52,7 @@ export default function ShareModal({ event, isOpen, onClose }) {
             />
             <Heading fontSize="xl">{t("share-nostr")}</Heading>
             <Text>{t("share-nostr-cta")}</Text>
-            <InputCopy text={address} />
+            <InputCopy text={`nostr:${address}`} />
           </Stack>
         </ModalBody>
 

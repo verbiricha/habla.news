@@ -1,16 +1,22 @@
-import { useEvent, useReactions } from "@habla/nostr/hooks";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
+import { Spinner } from "@chakra-ui/react";
+
+import { useEvent } from "@habla/nostr/hooks";
 import {
   LONG_FORM,
   LONG_FORM_DRAFT,
-  ZAP,
+  APP,
   HIGHLIGHT,
   LISTS,
   COMMUNITY,
 } from "@habla/const";
+
 import LongFormNote from "./LongFormNote";
-import Feed from "./Feed";
+import FeedLongFormNote from "./feed/LongFormNote";
 import List from "./List";
-import Community from "./Community";
+import Community from "@habla/components/nostr/feed/Community";
+import App from "./App";
+import UnknownKind from "./UnknownKind";
 
 export default function Address({
   naddr,
@@ -18,6 +24,7 @@ export default function Address({
   identifier,
   pubkey,
   relays,
+  isFeed = false,
   ...props
 }) {
   const event = useEvent(
@@ -26,11 +33,15 @@ export default function Address({
       "#d": [identifier],
       authors: [pubkey],
     },
-    { cacheUsage: "CACHE_FIRST" }
+    { cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST }
   );
 
   if (event && (kind === LONG_FORM || kind === LONG_FORM_DRAFT)) {
-    return <LongFormNote event={event} relays={relays} {...props} />;
+    return isFeed ? (
+      <FeedLongFormNote event={event} />
+    ) : (
+      <LongFormNote event={event} relays={relays} {...props} />
+    );
   }
 
   if (event && LISTS.includes(kind)) {
@@ -39,10 +50,9 @@ export default function Address({
   if (event && kind === COMMUNITY) {
     return <Community event={event} />;
   }
+  if (event?.kind === APP) {
+    return <App event={event} />;
+  }
 
-  return event ? (
-    <>
-      <code>{JSON.stringify(event.tags, null, 2)}</code>
-    </>
-  ) : null;
+  return event ? <UnknownKind event={event} /> : <Spinner />;
 }

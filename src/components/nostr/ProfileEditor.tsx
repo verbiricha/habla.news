@@ -117,7 +117,7 @@ export default function ProfileEditor({ profile, onCancel, onSave }) {
 
   return (
     <Stack spacing={4}>
-      <Heading>{t("your-profile")}</Heading>
+      <Heading fontSize="xl">{t("your-profile")}</Heading>
       <FormControl>
         <FormLabel>{t("avatar-label")}</FormLabel>
         <ImageUploader pubkey={pubkey} onImageUpload={onImageUpload} />

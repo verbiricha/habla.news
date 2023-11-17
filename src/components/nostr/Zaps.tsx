@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 
 import { Flex, Text, Stack } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 
 import { formatShortNumber } from "@habla/format";
 import { getZapRequest, getZapAmount } from "@habla/nip57";
@@ -9,11 +8,9 @@ import User from "@habla/components/nostr/User";
 
 export default function Zaps({ event, zaps }) {
   const zappers = useMemo(() => {
-    return zaps
-      .map((z) => {
-        return { ...z, ...getZapRequest(z), amount: getZapAmount(z) };
-      })
-      .filter((z) => z.pubkey !== event.pubkey);
+    return zaps.map((z) => {
+      return { ...z, ...getZapRequest(z), amount: getZapAmount(z) };
+    });
   }, [zaps]);
   const sorted = useMemo(() => {
     const s = [...zappers];

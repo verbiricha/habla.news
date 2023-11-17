@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 import { nip19 } from "nostr-tools";
 import { useAtom } from "jotai";
@@ -24,6 +25,11 @@ import InputCopy from "@habla/components/InputCopy";
 import ExternalLink from "@habla/components/ExternalLink";
 import ImageUploader from "@habla/components/ImageUploader";
 import { PROFILE } from "@habla/const";
+
+const BitcoinConnectButton = dynamic(
+  () => import("@getalby/bitcoin-connect-react").then(({ Button }) => Button),
+  { ssr: false }
+);
 
 export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
   // todo: wallet selector: webln, nwc
@@ -69,9 +75,9 @@ export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
   return (
     <Stack spacing={4}>
       {skipText ? (
-        <Heading>{t("lnaddress-label")}</Heading>
+        <Heading fontSize="xl">{t("lnaddress-label")}</Heading>
       ) : (
-        <Heading>{t("zaps-settings")}</Heading>
+        <Heading fontSize="xl">{t("zaps-settings")}</Heading>
       )}
       {!skipText && (
         <>
@@ -104,6 +110,9 @@ export default function ZapsSettings({ profile, onCancel, onSave, skipText }) {
         >
           {t("save")}
         </Button>
+      </Flex>
+      <Flex mt={4}>
+        <BitcoinConnectButton />
       </Flex>
     </Stack>
   );

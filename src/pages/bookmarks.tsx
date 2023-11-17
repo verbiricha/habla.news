@@ -1,18 +1,28 @@
+import { useMemo } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 import { useAtom } from "jotai";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
 
-import { pubkeyAtom } from "@habla/state";
+import { useNdk } from "@habla/nostr/hooks";
+import { bookmarkListsAtom } from "@habla/state";
 import Layout from "@habla/layouts/Wide";
 
-const Bookmarks = dynamic(() => import("@habla/components/nostr/Bookmarks"), {
-  ssr: false,
-});
+const BookmarkLists = dynamic(
+  () => import("@habla/components/nostr/BookmarkLists"),
+  {
+    ssr: false,
+  }
+);
 
 export default function BookmarksPage() {
-  const [pubkey] = useAtom(pubkeyAtom);
+  const ndk = useNdk();
+  const [bookmarkLists] = useAtom(bookmarkListsAtom);
+  const bookmarks = useMemo(
+    () => Object.values(bookmarkLists).map((ev) => new NDKEvent(ndk, ev)),
+    [bookmarkLists]
+  );
   return (
     <>
       <Head>
@@ -20,7 +30,9 @@ export default function BookmarksPage() {
         <meta name="og:title" content="Habla" />
         <meta name="og:description" content="Speak your mind" />
       </Head>
-      <Layout>{pubkey && <Bookmarks pubkey={pubkey} />}</Layout>
+      <Layout>
+        <BookmarkLists bookmarks={bookmarks} />
+      </Layout>
     </>
   );
 }

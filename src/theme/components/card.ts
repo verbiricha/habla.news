@@ -6,7 +6,6 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const wordBreak = "break-word";
 
-// define custom styles for funky variant
 const variants = {
   article: definePartsStyle({
     header: {

@@ -29,7 +29,8 @@ export default function Layout({ aside, children }) {
         }}
         gridTemplateColumns={{
           base: "1fr",
-          md: "60px 1fr 0.5fr",
+          md: "73px 1fr 0.5fr",
+          xl: "200px 1fr 0.5fr",
         }}
         minHeight="100vh"
         gap={2}

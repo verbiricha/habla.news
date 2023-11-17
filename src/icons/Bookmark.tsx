@@ -1,4 +1,6 @@
-export default function Bookmark(props) {
+import type { IconProps } from "@chakra-ui/icon";
+
+export default function Bookmark(props: IconProps) {
   return (
     <svg
       width="16"

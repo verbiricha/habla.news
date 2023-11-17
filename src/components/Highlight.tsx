@@ -12,7 +12,6 @@ import {
 
 import { nip19 } from "nostr-tools";
 
-import NAddr from "@habla/markdown/Naddr";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Reactions from "@habla/components/nostr/LazyReactions";
@@ -44,7 +43,7 @@ export default function Highlight({ event }) {
     }
   }, [kind, pubkey, identifier]);
   return event.content.length < 4200 ? (
-    <Card variant="highlight" ref={ref}>
+    <Card ref={ref}>
       <CardHeader>
         {naddr && (
           <Stack direction="column" spacing="1">

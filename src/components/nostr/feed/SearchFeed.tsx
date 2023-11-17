@@ -1,19 +1,20 @@
-import { LONG_FORM } from "@habla/const";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
-import Feed from "@habla/components/nostr/Feed";
+import Feed from "@habla/components/nostr/feed/Feed";
+import { LONG_FORM } from "@habla/const";
 
 export default function SearchFeed({ query, relays }) {
   const filter = {
     kinds: [LONG_FORM],
     search: query,
-    limit: 21,
   };
   const options = {
     relays,
-    cacheUsage: "ONLY_RELAY",
-    closeOnEose: true,
+    cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
   };
   return (
-    query.length > 2 && <Feed key={query} filter={filter} options={options} />
+    query.length > 2 && (
+      <Feed key={query} filter={filter} options={options} limit={21} />
+    )
   );
 }

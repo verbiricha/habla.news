@@ -3,11 +3,13 @@ import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import {
+  NostrEvent,
   NDKUser,
   NDKNip07Signer,
   NDKPrivateKeySigner,
+  NDKSubscriptionCacheUsage,
 } from "@nostr-dev-kit/ndk";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { nip05, nip19 } from "nostr-tools";
 
 import {
@@ -35,9 +37,13 @@ import {
   UnorderedList,
   ListItem,
 } from "@chakra-ui/react";
-import { AtSignIcon, ChevronDownIcon, WarningIcon } from "@chakra-ui/icons";
+import {
+  AtSignIcon,
+  ChevronDownIcon,
+  WarningIcon,
+  ViewOffIcon,
+} from "@chakra-ui/icons";
 
-import { PROFILE, PEOPLE, CONTACTS, RELAYS } from "@habla/const";
 import SettingsIcon from "@habla/icons/Settings";
 import RelayIcon from "@habla/icons/Relay";
 import WriteIcon from "@habla/icons/Write";
@@ -47,36 +53,60 @@ import Avatar from "@habla/components/nostr/Avatar";
 import { useEvents } from "@habla/nostr/hooks";
 import {
   relaysAtom,
+  sessionAtom,
   pubkeyAtom,
   privkeyAtom,
   contactListAtom,
+  mutedAtom,
+  privateMutedAtom,
   relayListAtom,
+  communitiesAtom,
   peopleListsAtom,
+  bookmarkListsAtom,
+  bookmarksAtom,
   defaultRelays,
 } from "@habla/state";
 import { findTag } from "@habla/tags";
 import { useIsOnboarding } from "@habla/onboarding/hooks";
 import { useNdk } from "@habla/nostr/hooks";
+import {
+  PROFILE,
+  PEOPLE,
+  BOOKMARKS,
+  CONTACTS,
+  RELAYS,
+  MUTED,
+  COMMUNITIES,
+  deprecatedPeopleLists,
+  deprecatedBookmarkLists,
+} from "@habla/const";
 
 function LoginDialog({ isOpen, onClose }) {
   const ndk = useNdk();
+  const { t } = useTranslation("common");
   const [pubkeyLike, setPubkeyLike] = useState();
   const [relays] = useAtom(relaysAtom);
   const toast = useToast();
-  const [, setPubkey] = useAtom(pubkeyAtom);
-  const { t } = useTranslation("common");
+  const [session, setSession] = useAtom(sessionAtom);
 
   async function loginWithPubkey() {
     try {
+      // todo: nprofile support, store pubkey and relays
       if (pubkeyLike.startsWith("npub")) {
         const decoded = nip19.decode(pubkeyLike);
         if (decoded.type === "npub") {
-          setPubkey(decoded.data);
+          setSession({
+            method: "pubkey",
+            pubkey: decoded.data,
+          });
         }
       } else {
         const profile = await nip05.queryProfile(pubkeyLike);
         if (profile) {
-          setPubkey(profile.pubkey);
+          setSession({
+            method: "pubkey",
+            pubkey: profile.pubkey,
+          });
         }
       }
       onClose();
@@ -95,7 +125,10 @@ function LoginDialog({ isOpen, onClose }) {
       const signer = new NDKNip07Signer();
       ndk.signer = signer;
       signer.blockUntilReady().then((user) => {
-        setPubkey(user.hexpubkey);
+        setSession({
+          method: "nip7",
+          pubkey: user.pubkey,
+        });
       });
     } catch (error) {
       toast({
@@ -109,19 +142,19 @@ function LoginDialog({ isOpen, onClose }) {
 
   return (
     <>
-      <Stack mb={5}>
+      <Stack mb={5} gap={2}>
         <Heading fontSize="lg" mb={2}>
           {t("extension")}
         </Heading>
         <Text>{t("extension-descr")}</Text>
         <UnorderedList pl={6}>
           <ListItem>
+            <ExternalLink href="https://getalby.com/">Alby</ExternalLink>
+          </ListItem>
+          <ListItem>
             <ExternalLink href="https://chrome.google.com/webstore/detail/nos2x/kpgefcfmnafjgpblomihpgmejjdanjjp">
               nos2x
             </ExternalLink>
-          </ListItem>
-          <ListItem>
-            <ExternalLink href="https://getalby.com/">Alby</ExternalLink>
           </ListItem>
         </UnorderedList>
         <Button
@@ -170,28 +203,8 @@ function LoginModal({ isOpen, onClose }) {
   const [flow, setFlow] = useState<LoginModalFlow | null>(null);
   const { t } = useTranslation("common");
   const onboardingModal = useDisclosure("onboarding");
-  const [pubkey, setPubkey] = useAtom(pubkeyAtom);
-
-  async function autoLogin(shouldRetry = true) {
-    try {
-      if ("nostr" in window) {
-        const signer = new NDKNip07Signer();
-        ndk.signer = signer;
-        const user = await signer.blockUntilReady();
-        setPubkey(user.hexpubkey);
-      } else if (shouldRetry) {
-        setTimeout(() => autoLogin(false), 1_000);
-      }
-    } catch (error) {
-      console.error(`Autologin failed: ${error}`);
-    }
-  }
-
-  useEffect(() => {
-    if (pubkey === undefined) {
-      autoLogin();
-    }
-  }, [pubkey]);
+  const [session, setSession] = useAtom(sessionAtom);
+  const pubkey = useAtomValue(pubkeyAtom);
 
   function continueOnboarding() {
     closeModal();
@@ -208,7 +221,10 @@ function LoginModal({ isOpen, onClose }) {
       <Modal isOpen={isOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent dir="auto">
-          <ModalHeader>{!flow && t("get-started")}</ModalHeader>
+          <ModalHeader>
+            {!flow && t("get-started")}
+            {flow === "login" && t("log-in")}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {flow === null && (
@@ -248,26 +264,28 @@ function LoginModal({ isOpen, onClose }) {
 
 function ProfileMenu({ pubkey, relays, onClose }) {
   const { t } = useTranslation("common");
+  const ndk = useNdk();
   const router = useRouter();
-  const [, setPubkey] = useAtom(pubkeyAtom);
-  const [, setPrivkey] = useAtom(privkeyAtom);
+  const isOnboarding = useIsOnboarding();
+  const [session, setSession] = useAtom(sessionAtom);
   const [, setContactList] = useAtom(contactListAtom);
   const [, setPeopleLists] = useAtom(peopleListsAtom);
-  const isOnboarding = useIsOnboarding();
+  const [, setBookmarkLists] = useAtom(bookmarkListsAtom);
+  const [, setRelayList] = useAtom(relayListAtom);
   const nprofile = useMemo(() => {
-    if (pubkey) {
-      return nip19.nprofileEncode({
-        pubkey,
-        relays,
-      });
-    }
+    return nip19.nprofileEncode({
+      pubkey,
+      relays,
+    });
   }, [pubkey, relays]);
 
   function logOut(ev) {
-    setPeopleLists([]);
-    setPubkey(null);
-    setPrivkey(null);
+    setPeopleLists({});
+    setBookmarkLists({});
     setContactList(null);
+    setRelayList(null);
+    setSession(null);
+    ndk.signer = undefined;
     onClose();
   }
 
@@ -299,6 +317,14 @@ function ProfileMenu({ pubkey, relays, onClose }) {
         >
           {t("relays")}
         </MenuItem>
+        <MenuItem
+          icon={<ViewOffIcon />}
+          onClick={() =>
+            router.push(`/moderation`, undefined, { shallow: true })
+          }
+        >
+          {t("moderation")}
+        </MenuItem>
         <MenuDivider />
         <MenuItem icon={<WarningIcon />} onClick={logOut}>
           {t("logout")}
@@ -308,68 +334,100 @@ function ProfileMenu({ pubkey, relays, onClose }) {
   );
 }
 
-function LoggedInUser({ pubkey, onClose }) {
+function useFetchUserEvents(pubkey: string, isLoggedIn: boolean) {
   const ndk = useNdk();
-  const [relays] = useAtom(relaysAtom);
   const [contacts, setContactList] = useAtom(contactListAtom);
+  const [muted, setMuted] = useAtom(mutedAtom);
+  const [privateMuted, setPrivateMuted] = useAtom(privateMutedAtom);
+  const [relayList, setRelayList] = useAtom(relayListAtom);
+  const [communities, setCommunities] = useAtom(communitiesAtom);
+  const [peopleLists, setPeopleLists] = useAtom(peopleListsAtom);
+  const [bookmarkLists, setBookmarkLists] = useAtom(bookmarkListsAtom);
+  const [generalBookmarks, setGeneralBookmarks] = useAtom(bookmarksAtom);
   const { events } = useEvents(
     {
-      kinds: [CONTACTS, RELAYS],
+      kinds: [CONTACTS, RELAYS, MUTED, PEOPLE, BOOKMARKS, COMMUNITIES],
       authors: [pubkey],
     },
     {
-      cacheUsage: "RELAY_ONLY",
+      disable: !isLoggedIn,
+      groupable: false,
+      cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
       closeOnEose: false,
     }
   );
-  const { t } = useTranslation("common");
-  const [relayList, setRelayList] = useAtom(relayListAtom);
-  const [, setPeopleLists] = useAtom(peopleListsAtom);
+
+  async function decryptMuteList(ev: NostrEvent) {
+    if (ev.content.length === 0) {
+      return;
+    }
+    try {
+      const user = await ndk.signer.user();
+      const decrypted = await ndk.signer.decrypt(user, ev.content);
+      setPrivateMuted(JSON.parse(decrypted));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
-    const fn = async () => {
-      for (const event of events) {
-        const nostrEvent = await event.toNostrEvent();
-        if (event.kind === CONTACTS) {
-          const lastSeen = contacts?.created_at ?? 0;
-          if (nostrEvent.created_at > lastSeen) {
-            setContactList(nostrEvent);
-          }
+    for (const event of events) {
+      const nostrEvent = event.rawEvent();
+      if (event.kind === CONTACTS) {
+        const lastSeen = contacts?.created_at ?? 0;
+        if (nostrEvent.created_at > lastSeen) {
+          setContactList(nostrEvent);
         }
-        if (event.kind === RELAYS) {
-          const relays = nostrEvent.tags.map((r) => r.at(1));
-          const lastSeen = relayList?.created_at ?? 0;
-          if (nostrEvent.created_at > lastSeen) {
-            setRelayList(nostrEvent);
+      }
+      if (event.kind === RELAYS) {
+        const relays = nostrEvent.tags.map((r) => r.at(1));
+        const lastSeen = relayList?.created_at ?? 0;
+        if (nostrEvent.created_at > lastSeen) {
+          setRelayList(nostrEvent);
+        }
+      }
+      if (event.kind === MUTED) {
+        const lastSeen = muted?.created_at ?? 0;
+        if (nostrEvent.created_at > lastSeen) {
+          setMuted(nostrEvent);
+          decryptMuteList(nostrEvent);
+        }
+      }
+      if (event.kind === COMMUNITIES) {
+        const lastSeen = communities?.created_at ?? 0;
+        if (nostrEvent.created_at > lastSeen) {
+          setCommunities(nostrEvent);
+        }
+      }
+      if (event.kind === PEOPLE) {
+        const d = event.tagValue("d");
+        if (!deprecatedPeopleLists.has(d)) {
+          const t = event.tagValue("t");
+          const lastSeen = peopleLists[d]?.created_at ?? 0;
+          if (d && nostrEvent.created_at > lastSeen) {
+            setPeopleLists({ ...peopleLists, [d]: nostrEvent });
           }
         }
       }
-    };
-    fn();
-  }, [events]);
-
-  useEffect(() => {
-    // People lists
-    ndk
-      .fetchEvents({
-        kinds: [PEOPLE],
-        authors: [pubkey],
-      })
-      .then((people) => {
-        if (people) {
-          const peopleLists = Array.from(people)
-            .filter((p) => {
-              const d = findTag(p, "d");
-              const t = findTag(p, "t");
-              const outdatedD = ["mute", "p:mute", "pin", "pinned"];
-              // discard outdated pre nip-51 lists
-              return !outdatedD.includes(d) && !outdatedD.includes(t);
-            })
-            .filter((p) => p.tags.find((t) => t.at(0) === "p"));
-          setPeopleLists(peopleLists);
+      if (event.kind === BOOKMARKS) {
+        const d = event.tagValue("d");
+        if (!deprecatedBookmarkLists.has(d)) {
+          const lastSeen = bookmarkLists[d]?.created_at ?? 0;
+          if (nostrEvent.created_at > lastSeen) {
+            setBookmarkLists({ ...bookmarkLists, [d]: nostrEvent });
+          }
         }
-      });
-  }, [pubkey]);
+      }
+    }
+  }, [pubkey, events]);
+}
+
+function LoggedInUser({ pubkey, isLoggedIn, onClose }) {
+  const { t } = useTranslation("common");
+  const relays = useAtomValue(relaysAtom);
+
+  useFetchUserEvents(pubkey, isLoggedIn);
+
   return (
     <Stack align="center" direction="row" spacing={2}>
       <Link href="/write">
@@ -387,14 +445,50 @@ function LoggedInUser({ pubkey, onClose }) {
 }
 
 export default function Login() {
-  const toast = useToast();
-  const [pubkey, setPubkey] = useAtom(pubkeyAtom);
-  const [privkey, setPrivkey] = useAtom(privkeyAtom);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { t } = useTranslation("common");
+  const ndk = useNdk();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [session, setSession] = useAtom(sessionAtom);
+  const pubkey = useAtomValue(pubkeyAtom);
+  const [privkey, setPrivkey] = useAtom(privkeyAtom);
+  const [isLoggedIn, setIsLoggedIn] = useState();
+
+  async function loginWithPrivateKey(privkey: string) {
+    try {
+      const signer = new NDKPrivateKeySigner(privkey);
+      ndk.signer = signer;
+      const user = await signer.blockUntilReady();
+      setSession({
+        method: "privkey",
+        privkey,
+        pubkey: user.pubkey,
+      });
+      setPrivkey(null);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error(`Autologin failed: ${error}`);
+    }
+  }
+
+  useEffect(() => {
+    if (!session || ndk.signer) {
+      return;
+    }
+    if (session?.method === "privkey" && session?.privkey) {
+      loginWithPrivateKey(session.privkey);
+    }
+    if (session?.method === "nip7") {
+      const signer = new NDKNip07Signer();
+      ndk.signer = signer;
+      signer.blockUntilReady().then(() => setIsLoggedIn(true));
+    }
+    if (session?.method === "pubkey") {
+      setIsLoggedIn(true);
+    }
+  }, [session?.method]);
 
   return pubkey ? (
-    <LoggedInUser pubkey={pubkey} onClose={onClose} />
+    <LoggedInUser pubkey={pubkey} isLoggedIn={isLoggedIn} onClose={onClose} />
   ) : (
     <>
       <Button colorScheme="orange" onClick={onOpen}>

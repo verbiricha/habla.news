@@ -1,17 +1,18 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { nip19 } from "nostr-tools";
+import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import { Stack, Heading, Text } from "@chakra-ui/react";
 
-import { LONG_FORM, HIGHLIGHT, DAY, WEEK } from "@habla/const";
+import { LONG_FORM, HIGHLIGHT } from "@habla/const";
 import { decodeNrelay } from "@habla/nostr";
 import Events from "@habla/components/nostr/feed/Events";
 import RelayFavicon from "@habla/components/RelayFavicon";
 import Tabs from "@habla/components/Tabs";
-import FeedPage from "@habla/components/nostr/feed/FeedPage";
+import Feed from "@habla/components/nostr/feed/Feed";
 import { Nips } from "@habla/components/RelaySummary";
 import useRelayMetadata from "@habla/hooks/useRelayMetadata";
 import Search from "@habla/components/Search";
@@ -25,13 +26,13 @@ export default function Relay({ relay }) {
       {
         name: t("articles"),
         panel: (
-          <FeedPage
+          <Feed
             key={`${relay}-posts`}
             filter={{ kinds: [LONG_FORM] }}
-            offset={2 * DAY}
+            limit={10}
             options={{
               relays,
-              cacheUsage: "ONLY_RELAY",
+              cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
             }}
           />
         ),
@@ -39,18 +40,19 @@ export default function Relay({ relay }) {
       {
         name: t("highlights"),
         panel: (
-          <FeedPage
+          <Feed
             key={`${relay}-highlights`}
             filter={{ kinds: [HIGHLIGHT] }}
-            offset={WEEK}
+            limit={10}
             options={{
               relays,
-              cacheUsage: "ONLY_RELAY",
+              cacheUsage: NDKSubscriptionCacheUsage.ONLY_RELAY,
             }}
           />
         ),
       },
     ];
+
     if (data?.supported_nips?.includes(50)) {
       result.push({
         name: t("search"),
@@ -61,11 +63,11 @@ export default function Relay({ relay }) {
   }, [data, relays]);
   return (
     <>
-      <Stack align="center" direction="row" gap={1} wordBreak="break-word">
+      <Stack align="center" direction="row" gap={3} wordBreak="break-word">
         <RelayFavicon url={relay} size="md" />
         <Heading textOverflow="ellipsis">{data?.name || relay}</Heading>
       </Stack>
-      <Text>{data?.description}</Text>
+      {data?.description && <Text>{data?.description}</Text>}
       {data && <Nips info={data} />}
       <Tabs tabs={tabs} />
     </>

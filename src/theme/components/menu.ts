@@ -8,7 +8,8 @@ const baseStyle = definePartsStyle({
   button: {},
   list: {},
   item: {
-    fontFamily: "'Inter'",
+    fontFamily: "body",
+    fontSize: "md",
   },
   groupTitle: {},
   command: {},

@@ -1,5 +1,12 @@
+// todo: migrate to NDK
 import { SimplePool } from "nostr-tools";
-import { LONG_FORM, HIGHLIGHT } from "@habla/const";
+import {
+  LONG_FORM,
+  HIGHLIGHT,
+  SUPPORT,
+  BOOKMARKS,
+  GENERAL_BOOKMARKS,
+} from "@habla/const";
 import { uniqByFn } from "@habla/util";
 import { findTag } from "@habla/tags";
 
@@ -40,6 +47,7 @@ const relays = [
   "wss://relay.damus.io/",
   "wss://nostr.wine/",
   "wss://nos.lol/",
+  "wss://soloco.nl/",
 ];
 const pool = new SimplePool(relays);
 
@@ -71,8 +79,12 @@ export const getPosts = memoize(getNostrPosts);
 async function getNostrEvents(pubkey) {
   const filters = [
     {
-      kinds: [LONG_FORM, HIGHLIGHT],
+      kinds: [LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS, GENERAL_BOOKMARKS],
       authors: [pubkey],
+    },
+    {
+      kinds: [SUPPORT],
+      "#p": [pubkey],
     },
   ];
   const results = await pool.list(relays, filters);

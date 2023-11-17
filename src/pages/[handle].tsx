@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
-import dynamic from "next/dynamic";
 import { Flex, Stack } from "@chakra-ui/react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
@@ -11,9 +10,15 @@ import { getHandles, getPubkey } from "@habla/nip05";
 import { getProfile, getEvents } from "@habla/db";
 import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";
-
-import FollowButton from "@habla/components/nostr/FollowButton";
+import { ProfileHeading } from "@habla/components/nostr/Profile";
 import UserContent from "@habla/components/nostr/UserContent";
+import {
+  LONG_FORM,
+  HIGHLIGHT,
+  SUPPORT,
+  BOOKMARKS,
+  deprecatedBookmarkLists,
+} from "@habla/const";
 
 export default function Profile({
   handle,
@@ -24,9 +29,28 @@ export default function Profile({
 }) {
   const ndk = useNdk();
   const ndkEvents = useMemo(
-    () => events.map((e) => new NDKEvent(ndk, e)),
+    () =>
+      events
+        .filter((e) => [LONG_FORM, HIGHLIGHT].includes(e.kind))
+        .map((e) => new NDKEvent(ndk, e)),
     [events]
   );
+  const supporters = useMemo(() => {
+    return events
+      .filter((e) => e.kind === SUPPORT && e.pubkey !== pubkey)
+      .map((e) => new NDKEvent(ndk, e));
+  }, [events]);
+  const supporting = useMemo(() => {
+    return events
+      .filter((e) => e.kind === SUPPORT && e.pubkey === pubkey)
+      .map((e) => new NDKEvent(ndk, e));
+  }, [events]);
+  const bookmarks = useMemo(() => {
+    return events
+      .filter((e) => e.kind === BOOKMARKS)
+      .map((e) => new NDKEvent(ndk, e))
+      .filter((e) => !deprecatedBookmarkLists.has(e.tagValue("d")));
+  }, [events]);
   return (
     <>
       <Head>
@@ -37,19 +61,14 @@ export default function Profile({
         {profile?.picture && <meta name="og:image" content={profile.picture} />}
       </Head>
       <Layout>
-        <Stack spacing="2">
-          <Flex justifyContent="space-between">
-            <User
-              pubkey={pubkey}
-              user={profile}
-              size="xl"
-              flexDirection="column"
-            />
-            <FollowButton pubkey={pubkey} />
-          </Flex>
-          {profile?.about && <Markdown content={profile?.about} />}
-        </Stack>
-        <UserContent events={ndkEvents} pubkey={pubkey} />
+        <ProfileHeading
+          profile={profile}
+          pubkey={pubkey}
+          relays={relays}
+          supports={supporting}
+          supporters={supporters}
+        />
+        <UserContent events={ndkEvents} pubkey={pubkey} bookmarks={bookmarks} />
       </Layout>
     </>
   );

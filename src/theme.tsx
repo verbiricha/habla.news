@@ -17,6 +17,7 @@ const breakpoints = {
   xl: "80em",
 };
 
+// todo: heading variants
 const components = { Tag, Card, Button, Menu };
 
 const config = {
@@ -38,7 +39,14 @@ const theme = extendTheme(
     baseStyle: {
       fontSize: "lg",
       p: {
+        fontFamily: "'Source Serif Pro', serif",
         fontSize: "lg",
+      },
+      ul: {
+        fontFamily: "'Source Serif Pro', serif",
+      },
+      ol: {
+        fontFamily: "'Source Serif Pro', serif",
       },
       blockquote: {
         fontSize: "lg",
@@ -58,13 +66,13 @@ const theme = extendTheme(
         width: "auto",
       },
       code: {
-        "overflow-y": "hidden",
-        "overflow-x": "scroll",
+        overflowX: "hidden",
+        overflowY: "scroll",
         width: "100vw",
       },
       pre: {
-        "overflow-y": "hidden",
-        "overflow-x": "scroll",
+        overflowY: "hidden",
+        overflowX: "scroll",
         width: "100vw",
         maxWidth: "45rem",
       },

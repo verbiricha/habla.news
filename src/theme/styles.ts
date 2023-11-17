@@ -38,12 +38,30 @@ const styles = {
     },
     ":root": {
       // Zapthreads custom styles
-      '--ztr-font': 'Inter',
-      '--ztr-text-color': mode('#2B2B2B', '#DEDEDE')(props),
-      '--ztr-font-size': '15px',
-      '--ztr-login-button-color': mode('var(--chakra-colors-orange-600)', 'var(--chakra-colors-orange-300)')(props),
-      '--ztr-link-color': mode('var(--chakra-colors-orange-600)', 'var(--chakra-colors-orange-300)')(props)
-    }
+      "--ztr-font": "Inter",
+      "--ztr-text-color": mode("#2B2B2B", "#DEDEDE")(props),
+      "--ztr-font-size": "15px",
+      "--ztr-login-button-color": mode(
+        "var(--chakra-colors-orange-600)",
+        "var(--chakra-colors-orange-300)"
+      )(props),
+      "--ztr-link-color": mode(
+        "var(--chakra-colors-orange-600)",
+        "var(--chakra-colors-orange-300)"
+      )(props),
+    },
+    ".date-picker": {
+      bg: mode("white", "#1D1D1E")(props),
+      borderRadius: "4px",
+      width: "100%",
+      border: "1px solid ",
+      borderColor: "whiteAlpha.300",
+      paddingX: "4",
+      paddingY: "2",
+    },
+    ".react-datepicker-wrapper": {
+      width: "100%",
+    },
   }),
 };
 

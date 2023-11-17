@@ -20,7 +20,7 @@ function Featured({ naddr, kind, pubkey, identifier }) {
         pubkey={pubkey}
         identifier={identifier}
       />
-      <User size="xs" pubkey={pubkey} />
+      <User size="xs" pubkey={pubkey} showNostrAddress={true} />
     </Stack>
   );
 }
@@ -107,7 +107,7 @@ export function FeaturedAuthors() {
               alignItems="center"
               justifyContent="space-between"
             >
-              <User pubkey={pubkey} />
+              <User pubkey={pubkey} showNostrAddress={true} />
               <FollowButton pubkey={pubkey} />
             </Flex>
           );

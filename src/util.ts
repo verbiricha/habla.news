@@ -1,3 +1,5 @@
+import { nip19 } from "nostr-tools";
+
 export function combineLists(lists) {
   const result = [];
 
@@ -50,3 +52,32 @@ export const uniqByFn = <T>(arr: T[], keyFn: any): T[] => {
     }, {})
   );
 };
+
+export function toPubkey(p?: string) {
+  if (p?.startsWith("npub")) {
+    return nip19.decode(p)?.data;
+  } else {
+    return p;
+  }
+}
+
+export function parseJSON<T>(raw: string, defaultValue: T) {
+  try {
+    return JSON.parse(raw) as T;
+  } catch (error) {
+    return defaultValue;
+  }
+}
+
+export function dedupe<T>(list: T[]): T[] {
+  return list.reduce(
+    (acc, i) => {
+      if (!acc.seen.has(i)) {
+        acc.result.push(i);
+      }
+      acc.seen.add(i);
+      return acc;
+    },
+    { result: [], seen: new Set() }
+  ).result;
+}

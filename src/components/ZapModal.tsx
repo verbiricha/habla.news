@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
@@ -24,7 +25,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Tooltip,
-  Input,
+  Textarea,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -35,13 +36,15 @@ import { useAtom } from "jotai";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import { ZAP_REQUEST } from "@habla/const";
-import useWebln from "@habla/hooks/useWebln";
+import useZapSplit from "@habla/hooks/useZapSplit";
 import InputCopy from "@habla/components/InputCopy";
 import { relaysAtom } from "@habla/state";
-import { useNdk, useUser } from "@habla/nostr/hooks";
+import { useNdk, useUser, useUsers } from "@habla/nostr/hooks";
 import { loadService, loadInvoice } from "@habla/lnurl";
-import { formatShortNumber } from "@habla/format";
+import { formatShortNumber, formatSats } from "@habla/format";
 import User from "@habla/components/nostr/User";
+import { getZapTags, getRelays } from "@habla/nip57";
+import("@getalby/bitcoin-connect-react"); // enable NWC
 
 const QrCode = dynamic(() => import("@habla/components/QrCode"), {
   ssr: false,
@@ -109,8 +112,8 @@ function SatSlider({ minSendable, maxSendable, onSelect }) {
   }
 
   return (
-    <Stack gap={1} width="100%">
-      <Stack align="center" gap={2}>
+    <Stack gap={2} width="100%">
+      <Stack align="center">
         <Heading sx={{ fontFeatureSettings: '"tnum"' }}>
           {formatShortNumber(amount)}
         </Heading>
@@ -146,28 +149,252 @@ function SatSlider({ minSendable, maxSendable, onSelect }) {
   );
 }
 
-export default function ZapModal({ event, isOpen, onClose }) {
+export function ZapSplitModal({ event, isOpen, onClose }) {
   const ndk = useNdk();
   const toast = useToast();
-  const [relays] = useAtom(relaysAtom);
-  const [isFetchingInvoice, setIsFetchingInvoice] = useState(false);
-  const webln = useWebln(isOpen);
-  const [lnurl, setLnurl] = useState();
-  const [cantZap, setCantZap] = useState(false);
-  const profile = useUser(event.pubkey);
-  const [invoice, setInvoice] = useState();
-  const [comment, setComment] = useState("");
-  const [sats, setSats] = useState(defaultZapAmount);
   const { t } = useTranslation("common");
   const bg = useColorModeValue("white", "layer");
+  const [defaultRelays] = useAtom(relaysAtom);
+  const relays = getRelays(event) || defaultRelays;
+  const [isFetchingInvoices, setIsFetchingInvoices] = useState(false);
+  const [lnurls, setLnurls] = useState();
+  const [canZap, setCanZap] = useState(false);
+  const zapTags = useMemo(() => {
+    return getZapTags(event);
+  }, [event]);
+  const recipients = useMemo(() => {
+    return zapTags.map((t) => t.at(1));
+  }, [event]);
+  const isZapSplit = recipients.length > 0;
+  const pubkeys = isZapSplit ? recipients : [event.pubkey];
+  const profiles = useUsers(pubkeys);
+  const hasAddresses = profiles?.length > 0 && profiles.every((p) => p.lud16);
+  const [sats, setSats] = useState(defaultZapAmount);
+  const split = useZapSplit(zapTags, sats);
+  const [invoices, setInvoices] = useState();
+  const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    if (isOpen && hasAddresses) {
+      Promise.all(profiles.map((p) => loadService(p.lud16))).then((lnurls) => {
+        setLnurls(lnurls);
+        setCanZap(true);
+      });
+    } else {
+      setCanZap(false);
+    }
+  }, [profiles, isOpen, hasAddresses]);
+
+  async function zapRequest(p: string, zapAmount: number) {
+    try {
+      const amount = zapAmount * 1000;
+      const zr = {
+        kind: ZAP_REQUEST,
+        created_at: Math.round(Date.now() / 1000),
+        content: comment,
+        tags: [
+          ["p", p],
+          event.tagReference(),
+          ["amount", String(amount)],
+          ["relays", ...relays],
+        ],
+      };
+      const signed = new NDKEvent(ndk, zr);
+      await signed.sign();
+      return signed.toNostrEvent();
+    } catch (error) {
+      console.error("Could not create zap request");
+    }
+  }
+
+  function closeModal() {
+    setSats(defaultZapAmount);
+    setComment();
+    setInvoices();
+    setLnurls();
+    onClose();
+  }
+
+  async function onZap() {
+    try {
+      setIsFetchingInvoices(true);
+      const fetchedInvoices = await Promise.all(
+        split.map(async ({ pubkey, gets }, idx) => {
+          const zr = await zapRequest(pubkey, gets);
+          return await loadInvoice(lnurls.at(idx), gets, comment, zr);
+        })
+      );
+      const hasFetchedInvoices = fetchedInvoices.every((i) => i?.pr);
+
+      if (!hasFetchedInvoices) {
+        toast({
+          title: "Could not get invoices",
+          status: "error",
+        });
+        return;
+      }
+
+      if (window.webln) {
+        try {
+          await window.webln.enable();
+          for (const i of fetchedInvoices) {
+            await window.webln.sendPayment(i.pr);
+          }
+          toast({
+            title: "⚡️ Zapped",
+            description: `${sats} sats sent`,
+            status: "success",
+          });
+          closeModal();
+        } catch (error) {
+          console.error(error);
+          setInvoices(fetchedInvoices.map((i) => i.pr));
+        }
+      } else {
+        setInvoices(fetchedInvoices.map((i) => i.pr));
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Could not get invoices",
+        status: "error",
+      });
+    } finally {
+      setIsFetchingInvoices(false);
+    }
+  }
+
+  return (
+    <Modal isOpen={isOpen} onClose={closeModal} isCentered>
+      <ModalOverlay />
+      <ModalContent dir="auto" bg={bg}>
+        <ModalHeader>
+          <Stack direction="row" gap={1}>
+            <Text fontFamily="'Inter'">Zap</Text>
+          </Stack>
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody fontFamily="'Inter'">
+          <Stack alignItems="center" minH="4rem">
+            {!lnurls && !canZap && <Spinner />}
+            {!lnurls && canZap && (
+              <Alert
+                status="warning"
+                variant="subtle"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                textAlign="center"
+                height="120px"
+              >
+                <AlertIcon />
+                <AlertTitle>{t("cant-zap-title")}</AlertTitle>
+                <AlertDescription maxWidth="sm">
+                  {t("cant-zap")}
+                </AlertDescription>
+              </Alert>
+            )}
+            {lnurls && !invoices && (
+              <>
+                <SatSlider
+                  minSendable={Math.max(...lnurls.map((l) => l.minSendable))}
+                  maxSendable={Math.min(...lnurls.map((l) => l.maxSendable))}
+                  onSelect={setSats}
+                />
+                <Textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Comment (optional)"
+                />
+              </>
+            )}
+            {lnurls &&
+              invoices &&
+              invoices.map((invoice) => {
+                return (
+                  <>
+                    <Box cursor="pointer">
+                      <QrCode data={invoice} link={`lightning:${invoice}`} />
+                    </Box>
+                    <Stack>
+                      <InputCopy text={invoice} />
+                      <Button
+                        colorScheme="orange"
+                        onClick={() => window.open(`lightning:${invoice}`)}
+                      >
+                        Open in wallet
+                      </Button>
+                    </Stack>
+                  </>
+                );
+              })}
+            <Stack w="100%">
+              {split.map(({ pubkey, gets, percentage }) => {
+                return (
+                  <Flex align="center" justifyContent="space-between">
+                    <User key={pubkey} pubkey={pubkey} size="xs" />
+                    <Flex
+                      alignItems="flex-end"
+                      flexDir="column"
+                      justifyContent="flex-end"
+                    >
+                      <Text as="span" fontSize="md">
+                        {formatShortNumber((percentage * 100).toFixed(0))}%
+                      </Text>
+                      <Text color="secondary" as="span" fontSize="sm">
+                        {formatShortNumber(gets)}
+                      </Text>
+                    </Flex>
+                  </Flex>
+                );
+              })}
+            </Stack>
+          </Stack>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button variant="outline" mr={3} onClick={closeModal}>
+            {t("close")}
+          </Button>
+          <Button
+            isDisabled={!lnurls || invoices}
+            isLoading={isFetchingInvoices}
+            colorScheme="orange"
+            onClick={onZap}
+          >
+            {t("zap")}
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}
+
+function SingleZapModal({ event, isOpen, onClose }) {
+  const ndk = useNdk();
+  const toast = useToast();
+  const { t } = useTranslation("common");
+  const bg = useColorModeValue("white", "layer");
+  const [defaultRelays] = useAtom(relaysAtom);
+  const relays = getRelays(event) || defaultRelays;
+  const [isFetchingInvoice, setIsFetchingInvoice] = useState(false);
+  const [lnurl, setLnurl] = useState();
+  const [canZap, setCanZap] = useState(false);
+  const [sats, setSats] = useState(defaultZapAmount);
+  const [invoice, setInvoice] = useState();
+  const [comment, setComment] = useState("");
+  const profile = useUser(event.pubkey);
 
   useEffect(() => {
     if (isOpen && profile?.lud16) {
-      loadService(profile.lud16).then(setLnurl);
+      loadService(profile.lud16).then((lnurl) => {
+        setLnurl(lnurl);
+        setCanZap(true);
+      });
     } else {
-      setCantZap(true);
+      setCanZap(false);
     }
-  }, [event, profile, isOpen]);
+  }, [profile, isOpen]);
 
   async function zapRequest() {
     try {
@@ -204,9 +431,17 @@ export default function ZapModal({ event, isOpen, onClose }) {
       setIsFetchingInvoice(true);
       const zr = await zapRequest();
       const invoice = await loadInvoice(lnurl, sats, comment, zr);
-      if (webln?.enabled && invoice?.pr) {
+      if (!invoice?.pr) {
+        toast({
+          title: "Could not get invoice",
+          status: "error",
+        });
+        return;
+      }
+      if (window.webln) {
         try {
-          await webln.sendPayment(invoice.pr);
+          await window.webln.enable();
+          await window.webln.sendPayment(invoice.pr);
           toast({
             title: "⚡️ Zapped",
             description: `${sats} sats sent to ${profile.lud16}`,
@@ -214,16 +449,12 @@ export default function ZapModal({ event, isOpen, onClose }) {
           });
           closeModal();
         } catch (error) {
+          console.error(error);
           setInvoice(invoice.pr);
         }
       } else {
         if (invoice?.pr) {
           setInvoice(invoice.pr);
-        } else {
-          toast({
-            title: "Could not get invoice",
-            status: "error",
-          });
         }
       }
     } catch (error) {
@@ -250,8 +481,8 @@ export default function ZapModal({ event, isOpen, onClose }) {
         <ModalCloseButton />
         <ModalBody fontFamily="'Inter'">
           <Stack alignItems="center" minH="4rem">
-            {!lnurl && !cantZap && <Spinner />}
-            {!lnurl && cantZap && (
+            {!lnurl && !canZap && <Spinner />}
+            {!lnurl && canZap && (
               <Alert
                 status="warning"
                 variant="subtle"
@@ -269,19 +500,18 @@ export default function ZapModal({ event, isOpen, onClose }) {
               </Alert>
             )}
             {lnurl && !invoice && (
-              <>
+              <Stack spacing={2}>
                 <SatSlider
                   minSendable={lnurl.minSendable}
                   maxSendable={lnurl.maxSendable}
                   onSelect={setSats}
                 />
-                <Input
+                <Textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  type="text"
                   placeholder="Comment (optional)"
                 />
-              </>
+              </Stack>
             )}
             {lnurl && invoice && (
               <>
@@ -304,7 +534,7 @@ export default function ZapModal({ event, isOpen, onClose }) {
 
         <ModalFooter>
           <Button variant="outline" mr={3} onClick={closeModal}>
-            Close
+            {t("close")}
           </Button>
           <Button
             isDisabled={!lnurl || invoice}
@@ -312,10 +542,30 @@ export default function ZapModal({ event, isOpen, onClose }) {
             colorScheme="orange"
             onClick={onZap}
           >
-            Zap
+            {t("zap")}
           </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
+  );
+}
+
+export default function ZapModal({ event, isOpen, onClose }) {
+  const zapTags = useMemo(() => {
+    return getZapTags(event);
+  }, [event]);
+  const recipients = useMemo(() => {
+    return zapTags.map((t) => t.at(1));
+  }, [event]);
+  const isZapSplit = recipients.length > 0;
+  return isZapSplit ? (
+    <ZapSplitModal
+      event={event}
+      zapTags={zapTags}
+      isOpen={isOpen}
+      onClose={onClose}
+    />
+  ) : (
+    <SingleZapModal event={event} isOpen={isOpen} onClose={onClose} />
   );
 }

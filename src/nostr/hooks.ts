@@ -2,7 +2,12 @@ import { useMemo, useEffect, useState, useContext } from "react";
 import { useAtom } from "jotai";
 import { useToast } from "@chakra-ui/react";
 
-import { NDKEvent, NDKRelay, NDKRelaySet } from "@nostr-dev-kit/ndk";
+import {
+  NDKEvent,
+  NDKRelay,
+  NDKRelaySet,
+  NDKSubscriptionCacheUsage,
+} from "@nostr-dev-kit/ndk";
 import { useLiveQuery } from "dexie-react-hooks";
 import { utils } from "nostr-tools";
 
@@ -14,10 +19,12 @@ import {
   REPOST,
   LONG_FORM,
   NOTE,
+  BOOKMARKS,
+  GENERAL_BOOKMARKS,
 } from "@habla/const";
-import db, { storeEvent } from "@habla/cache/db";
 import { relaysAtom } from "@habla/state";
 import { uniqByFn } from "@habla/util";
+import db from "@habla/cache/dexie";
 
 import NostrContext from "./provider";
 
@@ -25,22 +32,6 @@ const defaultOpts = {
   closeOnEose: true,
   cacheUsage: "CACHE_FIRST",
 };
-
-async function updateIdUrls(id, url) {
-  return db.transaction("rw", db.relaySet, async () => {
-    const existingUrl = await db.relaySet.get({ id });
-
-    if (existingUrl) {
-      if (existingUrl.urls.includes(url)) {
-        return;
-      }
-      const updatedUrls = [...existingUrl.urls, url];
-      await db.relaySet.put({ id, urls: updatedUrls });
-    } else {
-      await db.relaySet.put({ id, urls: [url] });
-    }
-  });
-}
 
 export function useEvents(filter, options = {}) {
   const { ndk } = useContext(NostrContext);
@@ -53,29 +44,20 @@ export function useEvents(filter, options = {}) {
   let relaySet;
   if (relays?.length > 0) {
     relaySet = NDKRelaySet.fromRelayUrls(relays, ndk);
-  } else if (defaultRelays) {
+  } else {
     relaySet = NDKRelaySet.fromRelayUrls(defaultRelays, ndk);
   }
 
   useEffect(() => {
-    if (filter) {
+    if (filter && !options.disable) {
       const sub = ndk.subscribe(filter, opts, relaySet);
 
       sub.on("event", (ev, relay) => {
         setEvents((evs) =>
           uniqByFn(utils.insertEventIntoDescendingList(evs, ev), (e) =>
-            e.kind === PROFILE ? `0:${e.pubkey}` : e.tagId()
+            e.tagId()
           )
         );
-        if (relay && ev.kind === LONG_FORM) {
-          updateIdUrls(ev.tagId(), normalizeURL(relay.url));
-        }
-      });
-
-      sub.on("event:dup", (ev, relay) => {
-        if (relay && ev.kind === LONG_FORM) {
-          updateIdUrls(ev.tagId(), normalizeURL(relay.url));
-        }
       });
 
       sub.on("eose", () => {
@@ -86,18 +68,28 @@ export function useEvents(filter, options = {}) {
         sub.stop();
       };
     }
-  }, []);
+  }, [options?.disable]);
 
   return { eose, events, opts };
 }
 
-export function useEvent(filter, opts = defaultOpts) {
+export function useEvent(filter, options = {}) {
   const [defaultRelays] = useAtom(relaysAtom);
   const { ndk } = useContext(NostrContext);
   const [event, setEvent] = useState();
 
+  const { relays, ...rest } = options;
+
+  let opts = { ...defaultOpts, ...rest };
+  let relaySet;
+  if (relays?.length > 0) {
+    relaySet = NDKRelaySet.fromRelayUrls(relays, ndk);
+  } else {
+    relaySet = NDKRelaySet.fromRelayUrls(defaultRelays, ndk);
+  }
+
   useEffect(() => {
-    ndk.fetchEvent(filter, opts).then(setEvent);
+    ndk.fetchEvent(filter, opts, relaySet).then(setEvent);
   }, []);
 
   return event;
@@ -105,35 +97,55 @@ export function useEvent(filter, opts = defaultOpts) {
 
 export function useUser(pubkey) {
   const { ndk } = useContext(NostrContext);
-
-  const user = useLiveQuery(
-    async () => {
-      try {
-        return await db.profile.get(pubkey);
-      } catch (error) {
-        console.error(error);
-        return {};
-      }
-    },
-    [pubkey],
-    {}
-  );
+  const [profile, setProfile] = useState({});
 
   useEffect(() => {
-    if (pubkey) {
-      ndk.fetchEvent(
-        {
-          kinds: [PROFILE],
-          authors: [pubkey],
-        },
-        {
-          cacheUsage: "PARALLEL",
+    const fn = async () => {
+      try {
+        const cached = await db.fetchProfile(pubkey);
+        if (cached) {
+          setProfile(cached);
+          return;
         }
-      );
-    }
+      } catch (error) {
+        console.error("Cache miss");
+      }
+      const user = ndk.getUser({ hexpubkey: pubkey });
+      const fetched = await user.fetchProfile({
+        cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+      });
+      setProfile(fetched);
+    };
+
+    fn();
   }, [pubkey]);
 
-  return user;
+  return profile;
+}
+
+export function useUsers(pubkeys) {
+  const { ndk } = useContext(NostrContext);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    if (pubkeys) {
+      ndk
+        .fetchEvents(
+          {
+            kinds: [PROFILE],
+            authors: pubkeys,
+          },
+          {
+            cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+          }
+        )
+        .then((profiles) => {
+          setEvents([...profiles].map((p) => JSON.parse(p.content)));
+        });
+    }
+  }, [pubkeys]);
+
+  return events;
 }
 
 function eventToFilter(ev: NDKEvent) {
@@ -148,7 +160,11 @@ export function useReactions(
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },
-    { cacheUsage: "CACHE_FIRST", closeOnEose: true, ...opts }
+    {
+      cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
+      closeOnEose: true,
+      ...opts,
+    }
   );
 
   const zaps = events.filter((e) => e.kind === ZAP);
@@ -156,8 +172,11 @@ export function useReactions(
   const reactions = events.filter((e) => e.kind === REACTION);
   const reposts = events.filter((e) => e.kind === REPOST);
   const notes = events.filter((e) => e.kind === NOTE);
+  const bookmarks = events.filter(
+    (e) => e.kind === BOOKMARKS || e.kind === GENERAL_BOOKMARKS
+  );
 
-  return { zaps, reactions, highlights, reposts, notes };
+  return { zaps, reactions, highlights, reposts, notes, bookmarks };
 }
 
 export function useNdk() {
@@ -183,9 +202,6 @@ export function usePublishEvent(options) {
     try {
       const ndkEvent = new NDKEvent(ndk, ev);
       await ndkEvent.sign();
-      if (ndkEvent.kind === PROFILE) {
-        await storeEvent(db, ndkEvent);
-      }
       if (debug) {
         console.debug(ndkEvent);
       } else {

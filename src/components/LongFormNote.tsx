@@ -42,9 +42,11 @@ import ShareModal from "@habla/components/ShareModal";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
 import Write from "@habla/components/Write";
 import { pubkeyAtom, relaysAtom } from "@habla/state";
-import Zaps from "./Zaps";
-import Reposts from "./Reposts";
-import Comments from "./Comments";
+import Zaps from "@habla/components/Zaps";
+import Reposts from "@habla/components/Reposts";
+import Comments from "@habla/components/Comments";
+import Bookmarks from "@habla/components/Bookmarks";
+import { PublishedIn } from "@habla/components/nostr/feed/LongFormNote";
 
 const Thread = dynamic(() => import("@habla/components/nostr/Thread"), {
   ssr: false,
@@ -84,8 +86,6 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
     );
   });
 
-  // todo: zapsort
-
   return (
     <Drawer size="md" isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
@@ -99,7 +99,6 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
             {highlightsToShow.reverse().map((event) => (
               <Box key={event.id}>
                 <Highlight showReactions key={event.id} event={event} />
-                <Thread anchor={event.encode()} />
               </Box>
             ))}
           </Stack>
@@ -116,6 +115,7 @@ export default function LongFormNote({
   notes = [],
   highlights = [],
   reposts = [],
+  bookmarks = [],
   isEditingInline,
 }) {
   const ref = useRef();
@@ -125,7 +125,7 @@ export default function LongFormNote({
   const { isOpen, onOpen, onClose } = useDisclosure("highlight");
   const shareModal = useDisclosure("share-modal");
   const highlightModal = useDisclosure();
-  const { title, summary, image, hashtags, publishedAt } = useMemo(
+  const { title, summary, image, hashtags, publishedAt, community } = useMemo(
     () => getMetadata(event),
     [event]
   );
@@ -162,6 +162,7 @@ export default function LongFormNote({
       <Reposts event={event} reposts={reposts} />
       <Highlights event={event} highlights={highlights} />
       <Comments event={event} comments={notes} />
+      <Bookmarks event={event} bookmarks={bookmarks} />
     </Flex>
   );
 
@@ -182,24 +183,32 @@ export default function LongFormNote({
   ) : (
     <>
       <Box sx={{ wordBreak: "break-word" }} ref={ref} dir="auto">
-        <Stack gap={2} mb={6}>
+        <Stack mb={6}>
           {image?.length > 0 && (
             <Image src={image} alt={title} width="100%" maxHeight="520px" />
           )}
-          <Heading as="h1" fontSize="4xl">
+          <Heading as="h1" fontSize="4xl" mt={2} mb={1}>
             {title}
           </Heading>
           {summary?.length > 0 && (
-            <Blockquote fontSize="lg">{summary}</Blockquote>
+            <Box my={1}>
+              <Blockquote fontSize="lg" fontFamily="'Source Serif Pro'">
+                {summary}
+              </Blockquote>
+            </Box>
           )}
-          <Hashtags hashtags={hashtags} />
-          {reactions}
+          <Box mb={2}>
+            <Hashtags hashtags={hashtags} />
+          </Box>
+          <Box mb={1.5}>{reactions}</Box>
           <Flex alignItems="center" justifyContent="space-between">
             <Flex align="center" gap={3} fontFamily="Inter">
               {event.pubkey && <User pubkey={event.pubkey} />}
-              <Text color="secondary" fontSize="sm">
-                {formatDay(publishedAt)}
-              </Text>
+              {publishedAt && (
+                <Text color="secondary" fontSize="sm">
+                  {formatDay(publishedAt)}
+                </Text>
+              )}
             </Flex>
             <Flex gap={1}>
               {!isEditingInline && isMine && (
@@ -240,6 +249,7 @@ export default function LongFormNote({
           />
         </Prose>
       </Box>
+      {community && <PublishedIn community={community} event={event} />}
 
       {textSelection?.length ? (
         <Box sx={{ position: "fixed", bottom: 4, right: 4 }}>

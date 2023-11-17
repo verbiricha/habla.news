@@ -9,9 +9,12 @@ import { getMetadata } from "@habla/nip23";
 import Layout from "@habla/layouts/Wide";
 import { HIGHLIGHT, NOTE, LONG_FORM } from "@habla/const";
 
-const Address = dynamic(() => import("@habla/components/nostr/Address"), {
-  ssr: false,
-});
+const CommunityAddress = dynamic(
+  () => import("@habla/components/nostr/CommunityAddress"),
+  {
+    ssr: false,
+  }
+);
 
 export default function Community({ metadata }) {
   const router = useRouter();
@@ -31,17 +34,12 @@ export default function Community({ metadata }) {
         {image && <meta name="og:image" content={image} />}
       </Helmet>
       <Layout>
-        {kind ? (
-          <>
-            <Address
-              kind={kind}
-              identifier={identifier}
-              pubkey={pubkey}
-              relays={relays}
-              naddr={naddr}
-            />
-          </>
-        ) : null}
+        <CommunityAddress
+          identifier={identifier}
+          pubkey={pubkey}
+          relays={relays}
+          naddr={naddr}
+        />
       </Layout>
     </>
   );

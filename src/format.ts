@@ -37,7 +37,7 @@ export function formatShortNumber(n: number) {
   });
 
   if (n < 2e3) {
-    return n;
+    return intl.format(n);
   } else if (n < 1e6) {
     return `${intl.format(n / 1e3)}K`;
   } else if (n < 1e9) {
@@ -45,4 +45,60 @@ export function formatShortNumber(n: number) {
   } else {
     return `${intl.format(n / 1e9)}G`;
   }
+}
+
+export function formatSats(n: number) {
+  const intl = new Intl.NumberFormat("en", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: n < 1e8 ? 2 : 8,
+  });
+
+  if (n === 1) {
+    return `1 sat`;
+  } else if (n < 2e3) {
+    return `${n} sats`;
+  } else if (n < 1e6) {
+    return `${intl.format(n / 1e3)}K sats`;
+  } else if (n < 1e9) {
+    return `${intl.format(n / 1e6)}M sats`;
+  } else {
+    return `${intl.format(n / 1e8)}BTC`;
+  }
+}
+
+export function formatRemainingTime(timestamp: number) {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const remainingTime = date.getTime() - now.getTime();
+
+  const seconds = Math.floor(remainingTime / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(months / 12);
+
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+  if (years !== 0) {
+    return rtf.format(years, "year");
+  }
+
+  if (months !== 0) {
+    return rtf.format(months, "month");
+  }
+
+  if (days !== 0) {
+    return rtf.format(days, "day");
+  }
+
+  if (hours !== 0) {
+    return rtf.format(hours, "hour");
+  }
+
+  if (minutes !== 0) {
+    return rtf.format(minutes, "minute");
+  }
+
+  return "";
 }
