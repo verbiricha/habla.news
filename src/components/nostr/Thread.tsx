@@ -18,9 +18,10 @@ export default function Thread({ anchor }) {
     <Box maxW="92vw">
       <zap-threads
         anchor={anchor}
-        npub={npub}
-        relays={defaultRelays}
-        disable="likes: true,zaps: true, watch: true"
+        user={npub}
+        relays={defaultRelays.join(',')}
+        disable="likes,zaps"
+        urls="naddr:habla.news/a/,npub:habla.news/p/,nprofile:habla.news/p/,nevent:habla.news/e/,note:habla.news/n/,tag:habla.news/t/"
       />
     </Box>
   );
