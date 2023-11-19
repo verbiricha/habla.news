@@ -11,7 +11,6 @@ import {
 import { nip19 } from "nostr-tools";
 
 import { findTag } from "@habla/tags";
-import Username from "./Username";
 import User from "./User";
 import FollowButton from "@habla/components/nostr/FollowButton";
 import Emoji from "@habla/components/Emoji";
@@ -93,12 +92,7 @@ export default function List({ event, isFeed = false }) {
             <Heading as="h5">{subject || identifier}</Heading>
             {description && <Text color="secondary">{description}</Text>}
           </Stack>
-          <Flex alignItems="center" gap={2}>
-            <Text as="span" fontSize="lg" color="secondary">
-              by
-            </Text>
-            <Username renderLink pubkey={event.pubkey} />
-          </Flex>
+          <User pubkey={event.pubkey} />
         </Flex>
       )}
       <Hashtags hashtags={hashtags} />

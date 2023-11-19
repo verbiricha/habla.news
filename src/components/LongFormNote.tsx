@@ -22,7 +22,6 @@ import {
   DrawerCloseButton,
   useColorMode,
 } from "@chakra-ui/react";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { useAtom } from "jotai";
 
 import User from "./nostr/User";
@@ -240,14 +239,14 @@ export default function LongFormNote({
             </Flex>
           </Flex>
         </Stack>
-        <Prose>
+        <Box as="article">
           <Markdown
             content={event.content}
             tags={event.tags}
             highlights={highlights}
             onHighlightClick={onHighlightClick}
           />
-        </Prose>
+        </Box>
       </Box>
       {community && <PublishedIn community={community} event={event} />}
 

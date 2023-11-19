@@ -18,6 +18,7 @@ import { parseJSON } from "@habla/util";
 import Hashtags from "@habla/components/Hashtags";
 import useHashtags from "@habla/hooks/useHashtags";
 
+// todo: show recommenders
 export default function App({ event }) {
   const publisherPubkey = event.pubkey;
   const authorPubkey = useMemo(() => {
@@ -58,7 +59,11 @@ export default function App({ event }) {
             alt={appProfile?.display_name || appProfile?.name}
             size="xl"
           />
-          {appProfile?.about && <Text>{appProfile?.about}</Text>}
+          {appProfile?.about && (
+            <Text fontSize="md" fontFamily="body" my={2}>
+              {appProfile?.about}
+            </Text>
+          )}
           <Hashtags hashtags={hashtags} />
         </Stack>
       </CardBody>

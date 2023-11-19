@@ -21,11 +21,24 @@ import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 import { findTag } from "@habla/tags";
 import { useEvents, useUser } from "@habla/nostr/hooks";
 import People from "@habla/components/nostr/People";
+import Brackets from "@habla/icons/Brackets";
 import Blockquote from "@habla/components/Blockquote";
 import { pubkeyAtom, relaysAtom, followsAtom } from "@habla/state";
 import { APP, APP_RECOMMENDATION } from "@habla/const";
 import { findTags } from "@habla/tags";
 import { parseJSON, dedupe } from "@habla/util";
+
+function UnknownKindText({ event }) {
+  const { t } = useTranslation("common");
+  return (
+    <HStack>
+      <Icon color="secondary" as={Brackets} boxSize={4} />
+      <Text fontFamily="body" fontSize="md">
+        {t("unknown-kind", { kind: event.kind })}
+      </Text>
+    </HStack>
+  );
+}
 
 function AppMenuItem({ event, unknownEvent, recommenders }) {
   const pubkey = useAtomValue(pubkeyAtom);
@@ -86,6 +99,7 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
 function Recommendations({ event, recommendations }) {
   const { t } = useTranslation("common");
   const addresses = Object.keys(recommendations);
+  const relays = useAtomValue(relaysAtom);
   const filter = useMemo(() => {
     return addresses.reduce(
       (acc, a) => {
@@ -102,6 +116,7 @@ function Recommendations({ event, recommendations }) {
     );
   }, [addresses]);
   const { events } = useEvents(filter, {
+    relays: relays.concat(["wss://relay.nostr.band"]),
     closeOnEose: true,
     groupable: false,
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
@@ -120,9 +135,9 @@ function Recommendations({ event, recommendations }) {
     <Card>
       <CardHeader>
         <HStack align="center" justify="space-between">
-          <Text as="span">{t("unknown-kind", { kind: event.kind })}</Text>
+          <UnknownKindText event={event} />
           <Menu isLazy>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+            <MenuButton as={Button} size="sm" rightIcon={<ChevronDownIcon />}>
               {t("open-with")}
             </MenuButton>
             <MenuList>
@@ -196,7 +211,7 @@ export default function UnknownKind({ event }) {
   return (
     <Card>
       <CardHeader>
-        <Text as="span">{t("unknown-kind", { kind: event.kind })}</Text>
+        <UnknownKindText event={event} />
       </CardHeader>
       {alt && (
         <CardBody>

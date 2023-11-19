@@ -34,7 +34,12 @@ export default function Note({ event, highlights = [], ...props }) {
           <ExternalLinkIcon href={`/e/${nevent}`} />
         </Flex>
       </CardHeader>
-      <CardBody dir="auto" pt={0} wordBreak="break-word">
+      <CardBody
+        dir="auto"
+        pt={0}
+        wordBreak="break-word"
+        sx={{ "> p": { fontSize: "md", my: 3 } }}
+      >
         <Markdown
           content={event.content}
           tags={event.tags}

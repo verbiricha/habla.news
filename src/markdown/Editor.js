@@ -31,7 +31,6 @@ import MdEditor from "react-markdown-editor-lite";
 import "react-markdown-editor-lite/lib/index.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Prose } from "@nikolovlazar/chakra-ui-prose";
 import { nip19 } from "nostr-tools";
 import slugify from "slugify";
 
@@ -367,11 +366,7 @@ export default function EventEditor({ event, showPreview }) {
           ref={ref}
           placeholder={t("content-placeholder")}
           value={content}
-          renderHTML={(text) => (
-            <Prose>
-              <Markdown content={content} tags={tags} />
-            </Prose>
-          )}
+          renderHTML={(text) => <Markdown content={content} tags={tags} />}
           config={{
             view: {
               menu: true,
