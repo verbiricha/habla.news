@@ -90,14 +90,45 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
             <Text as="span">{appProfile.display_name || appProfile.name}</Text>
           )}
         </HStack>
-        <People sx={{ pointerEvents: "none" }} pubkeys={recommenders} />
+        <People sx={{ pointerEvents: "none" }} max={3} pubkeys={recommenders} />
       </HStack>
     </MenuItem>
   );
 }
 
-function Recommendations({ event, recommendations }) {
+function useRecommendedApps(event) {
+  const contacts = useAtomValue(followsAtom);
+  const pubkey = useAtomValue(pubkeyAtom);
+  const { events, eose } = useEvents(
+    {
+      kinds: [APP_RECOMMENDATION],
+      authors: pubkey ? contacts.concat([pubkey]) : contacts,
+      "#d": [event.kind],
+    },
+    {
+      relays: ["wss://relay.nostr.band"],
+      cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
+    }
+  );
+  const recommendedApps = useMemo(() => {
+    return events.reduce((acc, ev) => {
+      const addresses = findTags(ev, "a").filter((a) =>
+        a.startsWith(`${APP}:`)
+      );
+      for (const address of addresses) {
+        const soFar = acc[address] ?? [];
+        acc[address] = dedupe(soFar.concat([ev.pubkey]));
+      }
+      return acc;
+    }, {});
+  }, [events]);
+
+  return { recommendedApps, eose };
+}
+
+export function RecommendedAppMenu({ event }) {
   const { t } = useTranslation("common");
+  const { recommendedApps: recommendations, eose } = useRecommendedApps(event);
   const addresses = Object.keys(recommendations);
   const relays = useAtomValue(relaysAtom);
   const filter = useMemo(() => {
@@ -116,19 +147,48 @@ function Recommendations({ event, recommendations }) {
     );
   }, [addresses]);
   const { events } = useEvents(filter, {
-    relays: relays.concat(["wss://relay.nostr.band"]),
+    disable: !eose,
+    relays: ["wss://relay.nostr.band"],
     closeOnEose: true,
-    groupable: false,
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
   });
   const recommended = useMemo(() => {
-    return events.sort((a, b) => {
-      return (
-        recommendations[b.tagId()].length - recommendations[a.tagId()].length
-      );
-    });
+    return events
+      .sort((a, b) => {
+        return (
+          recommendations[b.tagId()].length - recommendations[a.tagId()].length
+        );
+      })
+      .slice(0, 5);
   }, [events, recommendations]);
 
+  return (
+    <Menu isLazy>
+      <MenuButton
+        as={Button}
+        isDisabled={recommended.length === 0}
+        size="sm"
+        rightIcon={<ChevronDownIcon />}
+      >
+        {t("open-with")}
+      </MenuButton>
+      <MenuList>
+        {recommended.map((r) => (
+          <MenuItem>
+            <AppMenuItem
+              key={event.id}
+              unknownEvent={event}
+              event={r}
+              recommenders={recommendations[r.tagId()]}
+            />
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
+  );
+}
+
+export default function UnknownKind({ event }) {
   const alt = event.tagValue("alt");
 
   return (
@@ -136,82 +196,8 @@ function Recommendations({ event, recommendations }) {
       <CardHeader>
         <HStack align="center" justify="space-between">
           <UnknownKindText event={event} />
-          <Menu isLazy>
-            <MenuButton as={Button} size="sm" rightIcon={<ChevronDownIcon />}>
-              {t("open-with")}
-            </MenuButton>
-            <MenuList>
-              {recommended.map((r) => (
-                <MenuItem>
-                  <AppMenuItem
-                    key={event.id}
-                    unknownEvent={event}
-                    event={r}
-                    recommenders={recommendations[r.tagId()]}
-                  />
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
+          <RecommendedAppMenu event={event} />
         </HStack>
-      </CardHeader>
-      {alt && (
-        <CardBody>
-          <Blockquote>{alt}</Blockquote>
-        </CardBody>
-      )}
-    </Card>
-  );
-}
-
-export default function UnknownKind({ event }) {
-  const { t } = useTranslation("common");
-  const contacts = useAtomValue(followsAtom);
-  const pubkey = useAtomValue(pubkeyAtom);
-  const relays = useAtomValue(relaysAtom);
-  const { events: networkRecommendations } = useEvents(
-    {
-      kinds: [APP_RECOMMENDATION],
-      authors: pubkey ? contacts.concat([pubkey]) : contacts,
-      "#d": [event.kind],
-    },
-    {
-      disable: contacts.length === 0 && !pubkey,
-      relays: relays.concat(["wss://relay.nostr.band"]),
-      closeOnEose: true,
-      cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
-    }
-  );
-  const recommendedApps = useMemo(() => {
-    return networkRecommendations.reduce((acc, ev) => {
-      const addresses = findTags(ev, "a").filter((a) =>
-        a.startsWith(`${APP}:`)
-      );
-      for (const address of addresses) {
-        const soFar = acc[address] ?? [];
-        acc[address] = dedupe(soFar.concat([ev.pubkey]));
-      }
-      return acc;
-    }, {});
-  }, [networkRecommendations]);
-  const recommendationsAmount = Object.keys(recommendedApps).length;
-  const canShowRecommendations = recommendationsAmount > 0;
-
-  if (canShowRecommendations) {
-    return (
-      <Recommendations
-        key={recommendationsAmount}
-        event={event}
-        recommendations={recommendedApps}
-      />
-    );
-  }
-
-  const alt = event.tagValue("alt");
-  return (
-    <Card>
-      <CardHeader>
-        <UnknownKindText event={event} />
       </CardHeader>
       {alt && (
         <CardBody>

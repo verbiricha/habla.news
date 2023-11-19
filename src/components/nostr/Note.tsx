@@ -15,8 +15,8 @@ import { nip19 } from "nostr-tools";
 
 import Markdown from "@habla/markdown/Markdown";
 import Reactions from "@habla/components/nostr/LazyReactions";
+import { RecommendedAppMenu } from "@habla/components/nostr/UnknownKind";
 import User from "@habla/components/nostr/User";
-import ExternalLinkIcon from "@habla/components/ExternalLinkIcon";
 import { ZAP, NOTE, REACTION, BOOKMARKS } from "@habla/const";
 
 export default function Note({ event, highlights = [], ...props }) {
@@ -31,7 +31,7 @@ export default function Note({ event, highlights = [], ...props }) {
       <CardHeader>
         <Flex alignItems="center" justifyContent="space-between">
           <User pubkey={event.pubkey} size="sm" />
-          <ExternalLinkIcon href={`/e/${nevent}`} />
+          <RecommendedAppMenu event={event} />
         </Flex>
       </CardHeader>
       <CardBody
