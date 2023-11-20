@@ -14,7 +14,13 @@ export default function People({ pubkeys, ...rest }: PeopleProps) {
   }, [pubkeys]);
 
   return (
-    <AvatarGroup size="sm" max={6} spacing="-0.5rem" {...rest}>
+    <AvatarGroup
+      size="sm"
+      max={6}
+      spacing="-0.5rem"
+      fontFamily="body"
+      {...rest}
+    >
       {deduped.map((pk) => (
         <Avatar key={pk} pubkey={pk} size="xs" />
       ))}

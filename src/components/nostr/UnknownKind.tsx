@@ -99,7 +99,7 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
 function useRecommendedApps(event) {
   const contacts = useAtomValue(followsAtom);
   const pubkey = useAtomValue(pubkeyAtom);
-  const { events: reccs, eose } = useEvents(
+  const { events: reccs } = useEvents(
     {
       kinds: [APP_RECOMMENDATION],
       authors: pubkey ? contacts.concat([pubkey]) : contacts,
@@ -139,7 +139,6 @@ function useRecommendedApps(event) {
   }, [recommendedApps]);
 
   const { id, events } = useEvents(filter, {
-    closeOnEose: true,
     cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
   });
 
@@ -154,7 +153,7 @@ function useRecommendedApps(event) {
         return { ev, recommenders: recommendedApps[ev.tagId()] };
       })
       .slice(0, 5);
-  }, [events, recommendedApps]);
+  }, [id, recommendedApps]);
 
   return recommended;
 }

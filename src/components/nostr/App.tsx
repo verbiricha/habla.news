@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useTranslation } from "next-i18next";
 
 import {
   Flex,
@@ -7,19 +8,38 @@ import {
   CardBody,
   Avatar,
   Stack,
+  HStack,
+  VStack,
   Heading,
   Text,
 } from "@chakra-ui/react";
 
-import ExternalLinkIcon from "@habla/components/ExternalLinkIcon";
 import User from "@habla/components/nostr/User";
-import { useUser } from "@habla/nostr/hooks";
-import { parseJSON } from "@habla/util";
+import People from "@habla/components/nostr/People";
+import { RecommendedAppMenu } from "@habla/components/nostr/UnknownKind";
 import Hashtags from "@habla/components/Hashtags";
 import useHashtags from "@habla/hooks/useHashtags";
+import { useEvents, useUser } from "@habla/nostr/hooks";
+import { APP_RECOMMENDATION } from "@habla/const";
+import { dedupe, parseJSON } from "@habla/util";
 
-// todo: show recommenders
+export function useRecommenders(event) {
+  const address = useMemo(() => {
+    return event.tagId();
+  }, [event]);
+  const { events } = useEvents({
+    kinds: [APP_RECOMMENDATION],
+    "#a": [address],
+  });
+  const pks = useMemo(() => {
+    return dedupe(events.map((ev) => ev.pubkey));
+  }, [events]);
+  return pks;
+}
+
 export default function App({ event }) {
+  const { t } = useTranslation("common");
+  const recommenders = useRecommenders(event);
   const publisherPubkey = event.pubkey;
   const authorPubkey = useMemo(() => {
     const authorTag = event.tags.find(
@@ -27,44 +47,42 @@ export default function App({ event }) {
     );
     return authorTag?.at(1) || event.pubkey;
   }, [event]);
-  const naddr = useMemo(() => {
-    return event.encode();
-  }, [event]);
   const hashtags = useHashtags(event);
   const author = useUser(authorPubkey);
   const appProfile = useMemo(() => {
     return parseJSON(event.content, author);
   }, [event, author]);
   return (
-    <Card variant="outline" my={4} maxW="320px">
+    <Card>
       <CardHeader>
-        <Flex align="center" justifyContent="space-between">
-          <Stack>
-            <Heading style={{ margin: 0 }}>
-              {appProfile?.display_name || appProfile?.name}
-            </Heading>
-          </Stack>
-          <ExternalLinkIcon href={`https://nostrapp.link/a/${naddr}`} />
-        </Flex>
-        <Flex ml={2}>
+        <Stack>
+          <Flex align="center" justifyContent="space-between">
+            <HStack>
+              <Avatar
+                src={appProfile?.picture}
+                alt={appProfile?.display_name || appProfile?.name}
+                size="sm"
+              />
+              <Heading fontSize="xl">
+                {appProfile?.display_name || appProfile?.name}
+              </Heading>
+            </HStack>
+            <RecommendedAppMenu event={event} />
+          </Flex>
           {authorPubkey?.length === 64 && (
-            <User size="xs" pubkey={authorPubkey} />
+            <User size="xs" fontSize="md" pubkey={authorPubkey} />
           )}
-        </Flex>
+        </Stack>
       </CardHeader>
       <CardBody>
-        <Stack align="center">
-          <Avatar
-            src={appProfile?.picture}
-            alt={appProfile?.display_name || appProfile?.name}
-            size="xl"
-          />
+        <Stack gap={3}>
           {appProfile?.about && (
-            <Text fontSize="md" fontFamily="body" my={2}>
+            <Text fontSize="md" fontFamily="body">
               {appProfile?.about}
             </Text>
           )}
           <Hashtags hashtags={hashtags} />
+          {recommenders.length > 0 && <People pubkeys={recommenders} />}
         </Stack>
       </CardBody>
     </Card>
