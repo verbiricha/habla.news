@@ -52,7 +52,13 @@ export default function Note({ event, highlights = [], ...props }) {
           <RecommendedAppMenu event={event} />
         </Flex>
       </CardHeader>
-      <CardBody dir="auto" pt={0} wordBreak="break-word">
+      <CardBody
+        dir="auto"
+        pt={0}
+        wordBreak="break-word"
+        fontSize="md"
+        sx={{ "> p": { my: 2 } }}
+      >
         <Markdown
           content={event.content}
           tags={event.tags}
