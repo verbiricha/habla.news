@@ -104,7 +104,7 @@ function useRecommendedApps(event) {
     {
       kinds: [APP_RECOMMENDATION],
       authors: pubkey ? contacts.concat([pubkey]) : contacts,
-      "#d": [event.kind],
+      "#d": [String(event.kind)],
     },
     {
       cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
