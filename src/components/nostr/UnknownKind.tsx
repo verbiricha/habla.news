@@ -20,6 +20,7 @@ import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 
 import { findTag } from "@habla/tags";
 import { useEvents, useUser } from "@habla/nostr/hooks";
+import User from "@habla/components/nostr/User";
 import People from "@habla/components/nostr/People";
 import Brackets from "@habla/icons/Brackets";
 import Blockquote from "@habla/components/Blockquote";
@@ -196,10 +197,13 @@ export default function UnknownKind({ event }) {
           <UnknownKindText event={event} />
           <RecommendedAppMenu event={event} />
         </HStack>
+        <User size="2xs" fontSize="xs" pubkey={event.pubkey} />
       </CardHeader>
       {alt && (
         <CardBody>
-          <Blockquote>{alt}</Blockquote>
+          <Blockquote fontSize="md" fontFamily="body">
+            {alt}
+          </Blockquote>
         </CardBody>
       )}
     </Card>
