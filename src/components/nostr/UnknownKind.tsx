@@ -152,8 +152,8 @@ function useRecommendedApps(event) {
       .map((ev) => {
         return { ev, recommenders: recommendedApps[ev.tagId()] };
       })
-      .slice(0, 5);
-  }, [id, recommendedApps]);
+      .slice(0, 10);
+  }, [events, recommendedApps]);
 
   return recommended;
 }
