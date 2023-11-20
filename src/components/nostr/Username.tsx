@@ -36,11 +36,6 @@ export default function Username({ pubkey, renderLink, ...rest }) {
     }
     return result;
   }, [user, emoji]);
-  const username = (
-    <Text fontFamily="Inter" {...rest}>
-      {emojified || shortenString(pubkey, 8)}
-    </Text>
-  );
   return renderLink ? (
     <Link
       href={
@@ -49,9 +44,9 @@ export default function Username({ pubkey, renderLink, ...rest }) {
           : `/p/${nip19.nprofileEncode({ pubkey, relays })}`
       }
     >
-      {username}
+      {emojified || shortenString(pubkey, 8)}
     </Link>
   ) : (
-    username
+    emojified || shortenString(pubkey, 8)
   );
 }

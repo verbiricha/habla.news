@@ -24,7 +24,7 @@ import User from "@habla/components/nostr/User";
 import People from "@habla/components/nostr/People";
 import Brackets from "@habla/icons/Brackets";
 import Blockquote from "@habla/components/Blockquote";
-import { pubkeyAtom, relaysAtom, followsAtom } from "@habla/state";
+import { pubkeyAtom, followsAtom } from "@habla/state";
 import { APP, APP_RECOMMENDATION } from "@habla/const";
 import { findTags } from "@habla/tags";
 import { parseJSON, dedupe } from "@habla/util";
