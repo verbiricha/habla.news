@@ -8,8 +8,8 @@ import {
 } from "@habla/const";
 
 import LongFormNote from "./LongFormNote";
-import Highlight from "./Highlight";
-import Note from "./Note";
+import Highlight from "@habla/components/nostr/Highlight";
+import Note from "@habla/components/nostr/Note";
 import Community from "./Community";
 import List from "@habla/components/nostr/List";
 

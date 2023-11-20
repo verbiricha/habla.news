@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 
@@ -22,10 +23,10 @@ import { ZAP, REPOST, NOTE, BOOKMARKS, GENERAL_BOOKMARKS } from "@habla/const";
 import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";
+import ExternalLink from "@habla/components/ExternalLink";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import EventTitle from "@habla/components/nostr/EventTitle";
-import ExternalLink from "@habla/components/ExternalLink";
 import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
 
@@ -58,6 +59,7 @@ export default function Highlight({
   skipModeration = false,
   ...props
 }) {
+  const router = useRouter();
   const { ref, inView } = useInView({
     threshold: 0,
   });
@@ -113,22 +115,16 @@ export default function Highlight({
     <Card variant="highlight" key={event.id} ref={ref} my={4} {...props}>
       {showHeader && (
         <CardHeader>
-          <Flex alignItems="center" justifyContent="space-between" width="100%">
-            <User pubkey={event.pubkey} />
-            <Link href={`/e/${nevent}`} shallow>
-              <Icon
-                as={LinkIcon}
-                boxSize={3}
-                color="secondary"
-                cursor="pointer"
-              />
-            </Link>
-          </Flex>
+          <User pubkey={event.pubkey} />
         </CardHeader>
       )}
       <CardBody dir="auto">
         <Stack gap="1">
-          <Box mb={2}>
+          <Box
+            mb={2}
+            cursor="pointer"
+            onClick={() => router.push(`/e/${nevent}`)}
+          >
             <Blockquote style={{ margin: 0 }}>
               {context && context.length > event.content.length + 1 ? (
                 <HighlightSubstring text={context} substring={event.content} />

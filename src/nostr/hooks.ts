@@ -25,12 +25,28 @@ import {
 import { relaysAtom } from "@habla/state";
 import { uniqByFn } from "@habla/util";
 import db from "@habla/cache/dexie";
+import { sha256 } from "@noble/hashes/sha256";
 
 import NostrContext from "./provider";
 
+interface MyObject {
+  [key: string]: any;
+}
+
+export function hash(obj: MyObject): string {
+  const jsonString = JSON.stringify(obj);
+
+  const hashBuffer = sha256(new TextEncoder().encode(jsonString));
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+
+  return hashHex;
+}
+
 const defaultOpts = {
   closeOnEose: true,
-  cacheUsage: "CACHE_FIRST",
 };
 
 export function useEvents(filter, options = {}) {
@@ -39,6 +55,9 @@ export function useEvents(filter, options = {}) {
   const [eose, setEose] = useState(false);
   const [events, setEvents] = useState([]);
   const { relays, ...rest } = options;
+  const id = useMemo(() => {
+    return hash(filter);
+  }, [filter]);
 
   let opts = { ...defaultOpts, ...rest };
   let relaySet;
@@ -68,9 +87,9 @@ export function useEvents(filter, options = {}) {
         sub.stop();
       };
     }
-  }, [options?.disable]);
+  }, [id, options?.disable]);
 
-  return { eose, events, opts };
+  return { id, eose, events, opts };
 }
 
 export function useEvent(filter, options = {}) {

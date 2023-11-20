@@ -34,7 +34,7 @@ import Hashtags from "@habla/components/Hashtags";
 import { formatDay } from "@habla/format";
 import Highlighter from "@habla/icons/Highlighter";
 import WriteIcon from "@habla/icons/Write";
-import Highlight from "@habla/components/nostr/feed/Highlight";
+import Highlight from "@habla/components/nostr/Highlight";
 import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
 import ShareModal from "@habla/components/ShareModal";

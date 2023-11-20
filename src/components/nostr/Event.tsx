@@ -11,7 +11,7 @@ import {
 import Blockquote from "@habla/components/Blockquote";
 
 import LongFormNote from "@habla/components/nostr/feed/LongFormNote";
-import Highlight from "@habla/components/nostr/feed/Highlight";
+import Highlight from "@habla/components/nostr/Highlight";
 import Note from "@habla/components/nostr/Note";
 import Goal from "@habla/components/nostr/Goal";
 import File from "@habla/components/nostr/File";

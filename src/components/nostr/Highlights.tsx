@@ -1,4 +1,4 @@
-import Highlight from "@habla/components/nostr/feed/Highlight";
+import Highlight from "@habla/components/nostr/Highlight";
 
 export default function Highlights({ highlights, ...rest }) {
   return (

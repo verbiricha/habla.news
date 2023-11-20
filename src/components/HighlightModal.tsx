@@ -25,7 +25,7 @@ import RelaySelector from "@habla/components/RelaySelector";
 import ZapSplitConfig from "@habla/components/ZapSplitConfig";
 import { HIGHLIGHT } from "@habla/const";
 import { getMetadata } from "@habla/nip23";
-import Highlight from "@habla/components/nostr/feed/Highlight";
+import Highlight from "@habla/components/nostr/Highlight";
 import User from "@habla/components/nostr/User";
 import { pubkeyAtom, relaysAtom } from "@habla/state";
 import { useRelaysMetadata } from "@habla/hooks/useRelayMetadata";
