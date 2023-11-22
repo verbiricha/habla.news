@@ -2,6 +2,7 @@ import {
   Flex,
   Box,
   Stack,
+  HStack,
   Text,
   Heading,
   Divider,
@@ -17,8 +18,10 @@ import Emoji from "@habla/components/Emoji";
 import Hashtags from "@habla/components/Hashtags";
 import Address from "@habla/components/nostr/Address";
 import EventId from "@habla/components/nostr/EventId";
+import Blockquote from "@habla/components/Blockquote";
 import { RelayItem } from "@habla/components/Relays";
 import ExternalLink from "@habla/components/ExternalLink";
+import { RecommendedAppMenu } from "@habla/components/nostr/UnknownKind";
 import { EMOJIS } from "@habla/const";
 import useHashtags from "@habla/hooks/useHashtags";
 
@@ -72,29 +75,24 @@ export function ListTag({ tag, ...rest }) {
   }
 }
 
-export default function List({ event, isFeed = false }) {
+export default function List({ event }) {
   const identifier = findTag(event, "d");
   const subject = findTag(event, "title") || findTag(event, "subject");
-  const description = findTag(event, "description");
+  const description =
+    findTag(event, "summary") || findTag(event, "description");
   const hashtags = useHashtags(event);
   const isEmojiPack = event.kind === EMOJIS;
-  const content = event.tags.map((t) => <ListTag tag={t} isFeed={isFeed} />);
+  const content = event.tags.map((t) => <ListTag tag={t} isFeed />);
   return (
-    <>
-      {!isFeed && (
-        <Flex
-          flexDirection={["column", "row"]}
-          alignItems={["flex-start", "center"]}
-          justifyContent="space-between"
-          my={4}
-        >
-          <Stack>
-            <Heading as="h5">{subject || identifier}</Heading>
-            {description && <Text color="secondary">{description}</Text>}
-          </Stack>
-          <User pubkey={event.pubkey} />
-        </Flex>
-      )}
+    <Stack>
+      <HStack align="flex-start" justify="space-between">
+        <Stack>
+          <Heading as="h5">{subject || identifier}</Heading>
+          {description && <Blockquote>{description}</Blockquote>}
+          <User size="xs" pubkey={event.pubkey} fontSize="xs" />
+        </Stack>
+        <RecommendedAppMenu event={event} />
+      </HStack>
       <Hashtags hashtags={hashtags} />
       {isEmojiPack ? (
         <Flex flexDirection="row" align="flex-start" wrap="wrap" gap={2}>
@@ -103,6 +101,6 @@ export default function List({ event, isFeed = false }) {
       ) : (
         <Stack>{content}</Stack>
       )}
-    </>
+    </Stack>
   );
 }

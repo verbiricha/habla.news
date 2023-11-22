@@ -45,7 +45,7 @@ export default function Address({
   }
 
   if (event && LISTS.includes(kind)) {
-    return <List event={event} />;
+    return <List event={event} {...props} />;
   }
   if (event && kind === COMMUNITY) {
     return <Community event={event} />;
