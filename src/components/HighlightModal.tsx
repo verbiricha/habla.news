@@ -31,7 +31,7 @@ import { pubkeyAtom, relaysAtom } from "@habla/state";
 import { useRelaysMetadata } from "@habla/hooks/useRelayMetadata";
 import { useNdk } from "@habla/nostr/hooks";
 import { filterTags } from "@habla/tags";
-import { HABLA_PUBKEY } from "@habla/const";
+import { HABLA_PUBKEY, HABLA_ADDRESS } from "@habla/const";
 
 export default function HighlightModal({
   event,
@@ -70,8 +70,8 @@ export default function HighlightModal({
     }
     if (pubkey !== event.pubkey) {
       return [
-        ["zap", event.pubkey, "wss://purplepag.es", "14"],
-        ["zap", pubkey, "wss://purplepag.es", "7"],
+        ["zap", event.pubkey, "wss://purplepag.es", "2"],
+        ["zap", pubkey, "wss://purplepag.es", "1"],
       ];
     }
   }, [pubkey, event]);
@@ -85,7 +85,14 @@ export default function HighlightModal({
       kind: HIGHLIGHT,
       created_at: Math.round(Date.now() / 1000),
       content,
-      tags: [["p", event.pubkey]],
+      tags: [
+        ["p", event.pubkey],
+        [
+          "alt",
+          `This is a highlight created in https://habla.news\n"${content}"`,
+        ],
+        ["client", HABLA_ADDRESS, "wss://relay.nostr.band", "web"],
+      ],
     };
     if (event.tagReference) {
       ev.tags.push(event.tagReference());
