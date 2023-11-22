@@ -47,7 +47,7 @@ export function articleLink(event, profile, isVerified) {
   }
 }
 
-export default function ArticleLink({ event, children }) {
+export default function ArticleLink({ event, children, ...rest }) {
   const profile = useUser(event.pubkey);
   const { data } = useNostrAddress(profile?.nip05);
   const link = useMemo(() => {
@@ -55,7 +55,7 @@ export default function ArticleLink({ event, children }) {
   }, [event, profile, data]);
 
   return link ? (
-    <Link href={link} shallow>
+    <Link href={link} shallow {...rest}>
       {children}
     </Link>
   ) : (

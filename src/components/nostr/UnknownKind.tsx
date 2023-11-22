@@ -50,7 +50,7 @@ export function useAppAddress(address: string) {
       "#d": [d],
     },
     {
-      cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
+      cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
     }
   );
   return event ? parseAppInfo(event) : {};
@@ -108,7 +108,6 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
       window.open(url, "_blank", "noopener,noreferrer");
     }
   }
-  console.log("PROFILE", profile);
 
   return (
     <MenuItem isDisabled={!url} onClick={onClick}>
@@ -139,11 +138,20 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
 function useRecommendedApps(event) {
   const contacts = useAtomValue(followsAtom);
   const pubkey = useAtomValue(pubkeyAtom);
+  const authors = useMemo(() => {
+    if (pubkey) {
+      return { authors: contacts.concat([pubkey]) };
+    }
+    if (contacts.length > 0) {
+      return { authors: contacts };
+    }
+    return {};
+  }, [pubkey, contacts]);
   const { events: reccs } = useEvents(
     {
       kinds: [APP_RECOMMENDATION],
-      authors: pubkey ? contacts.concat([pubkey]) : contacts,
       "#d": [String(event.kind)],
+      ...authors,
     },
     {
       cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
