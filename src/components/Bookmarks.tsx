@@ -63,7 +63,7 @@ function NewBookmarkList({ isOpen, onClose, onCreateList }) {
         created_at: dateToUnix(),
       };
       if (description.length > 0) {
-        ev.tags.push(["description", description]);
+        ev.tags.push(["summary", description]);
       }
 
       const signed = new NDKEvent(ndk, ev);
