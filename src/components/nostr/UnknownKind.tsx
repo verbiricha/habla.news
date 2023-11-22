@@ -123,7 +123,7 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
           )}
           {isPreferredApp ? (
             <HStack>
-              <Text as="span">{profle.display_name || profile.name}</Text>
+              <Text as="span">{profile.display_name || profile.name}</Text>
               <Icon as={StarIcon} boxSize={3} color="purple.500" />
             </HStack>
           ) : (

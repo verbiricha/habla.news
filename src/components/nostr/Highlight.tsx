@@ -5,6 +5,7 @@ import { useInView } from "react-intersection-observer";
 
 import {
   Flex,
+  HStack,
   Box,
   Heading,
   Text,
@@ -19,16 +20,17 @@ import {
 import { LinkIcon } from "@chakra-ui/icons";
 import { nip19 } from "nostr-tools";
 
-import { ZAP, REPOST, NOTE, BOOKMARKS, GENERAL_BOOKMARKS } from "@habla/const";
-import { findTag } from "@habla/tags";
 import ArticleTitle from "@habla/components/nostr/ArticleTitle";
 import Blockquote from "@habla/components/Blockquote";
 import ExternalLink from "@habla/components/ExternalLink";
 import User from "@habla/components/nostr/User";
 import Reactions from "@habla/components/nostr/LazyReactions";
 import EventTitle from "@habla/components/nostr/EventTitle";
+import { RecommendedAppMenu } from "@habla/components/nostr/UnknownKind";
 import useModeration from "@habla/hooks/useModeration";
 import useHashtags from "@habla/hooks/useHashtags";
+import { ZAP, REPOST, NOTE, BOOKMARKS, GENERAL_BOOKMARKS } from "@habla/const";
+import { findTag } from "@habla/tags";
 
 const HighlightSubstring = ({ text, substring }) => {
   const startIndex = text.indexOf(substring);
@@ -57,6 +59,7 @@ export default function Highlight({
   showHeader = true,
   showReactions = true,
   skipModeration = false,
+  isDetail = false,
   ...props
 }) {
   const router = useRouter();
@@ -115,7 +118,14 @@ export default function Highlight({
     <Card variant="highlight" key={event.id} ref={ref} my={4} {...props}>
       {showHeader && (
         <CardHeader>
-          <User pubkey={event.pubkey} />
+          {isDetail ? (
+            <HStack justify="space-between">
+              <User pubkey={event.pubkey} />
+              <RecommendedAppMenu event={event} />
+            </HStack>
+          ) : (
+            <User pubkey={event.pubkey} />
+          )}
         </CardHeader>
       )}
       <CardBody dir="auto">

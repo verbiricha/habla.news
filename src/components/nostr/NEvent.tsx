@@ -18,5 +18,5 @@ export default function NEvent({ id, author, relays, nevent }) {
       cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
     }
   );
-  return event ? <Event event={event} /> : <Spinner />;
+  return event ? <Event event={event} isDetail /> : <Spinner />;
 }

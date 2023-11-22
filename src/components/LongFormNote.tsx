@@ -43,6 +43,7 @@ import Zaps from "@habla/components/Zaps";
 import Reposts from "@habla/components/Reposts";
 import Comments from "@habla/components/Comments";
 import Bookmarks from "@habla/components/Bookmarks";
+import { RecommendedAppMenu } from "@habla/components/nostr/UnknownKind";
 import { PublishedIn } from "@habla/components/nostr/feed/LongFormNote";
 import { pubkeyAtom, relaysAtom } from "@habla/state";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
@@ -233,7 +234,12 @@ export default function LongFormNote({
             <Hashtags hashtags={hashtags} />
           </Box>
           <Box mb={1.5}>{reactions}</Box>
-          <Flex alignItems="flex-start" justifyContent="space-between">
+          <Flex
+            alignItems={clientAddr ? "flex-start" : "center"}
+            gap={2}
+            wrap="wrap"
+            justifyContent="space-between"
+          >
             <Stack>
               <Flex align="center" gap={3} fontFamily="Inter">
                 {event.pubkey && <User pubkey={event.pubkey} />}
@@ -249,28 +255,25 @@ export default function LongFormNote({
               {!isEditingInline && isMine && (
                 <Button
                   maxW="12em"
-                  variant="write"
                   aria-label="Edit"
-                  bg="secondary"
-                  size="sm"
-                  color="white"
+                  size={{ base: "xs", sm: "sm" }}
                   onClick={() => setIsEditing(true)}
                 >
                   {t("edit")}
                 </Button>
               )}
               {!isEditingInline && (
-                <Button
-                  maxW="12em"
-                  size="sm"
-                  variant="write"
-                  aria-label="Share"
-                  bg="secondary"
-                  color="white"
-                  onClick={shareModal.onOpen}
-                >
-                  {t("share")}
-                </Button>
+                <>
+                  <Button
+                    maxW="12em"
+                    aria-label="Share"
+                    onClick={shareModal.onOpen}
+                    size={{ base: "xs", sm: "sm" }}
+                  >
+                    {t("share")}
+                  </Button>
+                  <RecommendedAppMenu event={event} />
+                </>
               )}
             </Flex>
           </Flex>
