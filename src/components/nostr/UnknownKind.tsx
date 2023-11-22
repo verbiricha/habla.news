@@ -138,20 +138,10 @@ function AppMenuItem({ event, unknownEvent, recommenders }) {
 function useRecommendedApps(event) {
   const contacts = useAtomValue(followsAtom);
   const pubkey = useAtomValue(pubkeyAtom);
-  const authors = useMemo(() => {
-    if (pubkey) {
-      return { authors: contacts.concat([pubkey]) };
-    }
-    if (contacts.length > 0) {
-      return { authors: contacts };
-    }
-    return {};
-  }, [pubkey, contacts]);
   const { events: reccs } = useEvents(
     {
       kinds: [APP_RECOMMENDATION],
       "#d": [String(event.kind)],
-      ...authors,
     },
     {
       cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
@@ -193,9 +183,29 @@ function useRecommendedApps(event) {
   const recommended = useMemo(() => {
     return events
       .sort((a, b) => {
-        return (
-          recommendedApps[b.tagId()].length - recommendedApps[a.tagId()].length
-        );
+        const aRecommendations = recommendedApps[a.tagId()];
+        const aNetworkReccomendations = aRecommendations.reduce((acc, pk) => {
+          if (pk === pubkey) {
+            return acc + 42;
+          }
+          if (contacts.includes(pk)) {
+            return acc + 1;
+          }
+          return acc;
+        }, 0);
+        const aScore = aRecommendations.length + aNetworkReccomendations;
+        const bRecommendations = recommendedApps[b.tagId()];
+        const bNetworkReccomendations = bRecommendations.reduce((acc, pk) => {
+          if (pk === pubkey) {
+            return acc + 42;
+          }
+          if (contacts.includes(pk)) {
+            return acc + 1;
+          }
+          return acc;
+        }, 0);
+        const bScore = bRecommendations.length + bNetworkReccomendations;
+        return bScore - aScore;
       })
       .map((ev) => {
         return { ev, recommenders: recommendedApps[ev.tagId()] };
