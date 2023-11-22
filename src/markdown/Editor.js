@@ -38,6 +38,7 @@ import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
 import {
   HABLA_PUBKEY,
+  HABLA_ADDRESS,
   COMMUNITY,
   LONG_FORM,
   LONG_FORM_DRAFT,
@@ -146,11 +147,19 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
       const ndkEvent = new NDKEvent(ndk, nostrEvent);
       let link;
-      if (!isDraft && !ndkEvent.tags.find((t) => t[0] === "alt")) {
+      if (!isDraft && !findTag(ndkEvent, "alt")) {
         link = articleLink(ndkEvent);
         ndkEvent.tags.push([
           "alt",
           `This is a long form article, you can read it in https://habla.news${link}`,
+        ]);
+      }
+      if (!isDraft && !findTag(ndkEvent, "client")) {
+        ndkEvent.tags.push([
+          "client",
+          HABLA_ADDRESS,
+          "wss://relay.nostr.band",
+          "web",
         ]);
       }
       await ndkEvent.sign();

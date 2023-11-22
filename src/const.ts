@@ -44,7 +44,8 @@ export const FILE_EXT_REGEX = /\.([\w]{1,7})$/i;
 
 export const HABLA_PUBKEY =
   "7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c";
-
+export const HABLA_ADDRESS =
+  "31990:7d4e04503ab26615dd5f29ec08b52943cbe5f17bacc3012b26220caa232ab14c:1687329691033";
 export const deprecatedPeopleLists = new Set([
   "mute",
   "p:mute",

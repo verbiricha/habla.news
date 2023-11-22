@@ -12,6 +12,10 @@ export function filterTags(ev: NDKEvent, tag: string) {
   return ev.tags.filter((t) => t.at(0) === tag);
 }
 
+export function findFullTag(ev: NDKEvent, tag: string) {
+  return ev.tags?.find((t) => t.at(0) === tag);
+}
+
 export function filterTagList(tags: Tags, tag: string) {
   return tags.filter((t) => t.at(0) === tag).map((t) => t.at(1));
 }

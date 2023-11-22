@@ -9,7 +9,7 @@ const FileExtensionRegex = /\.([\w]+)$/i;
 const TweetUrlRegex =
   /https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)/;
 
-export default function HyperText({ link, children }) {
+export default function HyperText({ link, children, ...rest }) {
   const render = useCallback(() => {
     try {
       const url = new URL(link);
@@ -50,7 +50,9 @@ export default function HyperText({ link, children }) {
           }
           default:
             return (
-              <Link href={url.toString()}>{children || url.toString()}</Link>
+              <Link {...rest} href={url.toString()}>
+                {children || url.toString()}
+              </Link>
             );
         }
       } else if (tweetId) {
@@ -60,10 +62,18 @@ export default function HyperText({ link, children }) {
           </div>
         );
       } else {
-        return <Link href={link}>{children || link}</Link>;
+        return (
+          <Link {...rest} href={link}>
+            {children || link}
+          </Link>
+        );
       }
     } catch (error) {
-      return <Link href={link}>{children || link}</Link>;
+      return (
+        <Link {...rest} href={link}>
+          {children || link}
+        </Link>
+      );
     }
   }, [link, children]);
 

@@ -340,11 +340,13 @@ export default function Markdown({
           ev.stopPropagation();
         }
         return isInternal ? (
-          <a {...props} onClick={goToHref}>
+          <a {...props} className="article-link" onClick={goToHref}>
             {props.children}
           </a>
         ) : (
-          <HyperText link={props.href}>{props.children}</HyperText>
+          <HyperText className="article-link" link={props.href}>
+            {props.children}
+          </HyperText>
         );
       },
     };

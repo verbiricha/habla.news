@@ -8,9 +8,11 @@ import {
   Button,
   Flex,
   Stack,
+  HStack,
   Box,
   Heading,
   Text,
+  Link,
   Image,
   Icon,
   IconButton,
@@ -26,26 +28,30 @@ import { useAtom } from "jotai";
 
 import User from "./nostr/User";
 
-import { ZAP, HIGHLIGHT, REACTION } from "@habla/const";
 import { getMetadata } from "@habla/nip23";
 import Blockquote from "@habla/components/Blockquote";
 import Markdown from "@habla/markdown/Markdown";
 import Hashtags from "@habla/components/Hashtags";
-import { formatDay } from "@habla/format";
 import Highlighter from "@habla/icons/Highlighter";
 import WriteIcon from "@habla/icons/Write";
 import Highlight from "@habla/components/nostr/Highlight";
 import Highlights from "@habla/components/reactions/Highlights";
 import HighlightModal from "@habla/components/HighlightModal";
 import ShareModal from "@habla/components/ShareModal";
-import { useTextSelection } from "@habla/hooks/useTextSelection";
 import Write from "@habla/components/Write";
-import { pubkeyAtom, relaysAtom } from "@habla/state";
 import Zaps from "@habla/components/Zaps";
 import Reposts from "@habla/components/Reposts";
 import Comments from "@habla/components/Comments";
 import Bookmarks from "@habla/components/Bookmarks";
 import { PublishedIn } from "@habla/components/nostr/feed/LongFormNote";
+import { pubkeyAtom, relaysAtom } from "@habla/state";
+import { useTextSelection } from "@habla/hooks/useTextSelection";
+import {
+  useAppAddress,
+  useClientAddress,
+} from "@habla/components/nostr/UnknownKind";
+import { formatDay } from "@habla/format";
+import { ZAP, HIGHLIGHT, REACTION } from "@habla/const";
 
 const Thread = dynamic(() => import("@habla/components/nostr/Thread"), {
   ssr: false,
@@ -107,6 +113,32 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
   );
 }
 
+function PublishedVia({ address }) {
+  const { app } = useAppAddress(address);
+  const name = app?.display_name || app?.name;
+  return (
+    app && (
+      <Text color="secondary" fontSize="2xs">
+        published via{" "}
+        {app.website ? (
+          <Link
+            isExternal
+            href={app.website}
+            textDecoration="underline"
+            textDecorationStyle="dotted"
+          >
+            {name}
+          </Link>
+        ) : (
+          <Text as="span" color="secondary" fontSize="2xs">
+            {name}
+          </Text>
+        )}
+      </Text>
+    )
+  );
+}
+
 export default function LongFormNote({
   event,
   isDraft,
@@ -119,6 +151,7 @@ export default function LongFormNote({
 }) {
   const ref = useRef();
   const [pubkey] = useAtom(pubkeyAtom);
+  const clientAddr = useClientAddress(event);
   const [selected, setSelected] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure("highlight");
@@ -200,15 +233,18 @@ export default function LongFormNote({
             <Hashtags hashtags={hashtags} />
           </Box>
           <Box mb={1.5}>{reactions}</Box>
-          <Flex alignItems="center" justifyContent="space-between">
-            <Flex align="center" gap={3} fontFamily="Inter">
-              {event.pubkey && <User pubkey={event.pubkey} />}
-              {publishedAt && (
-                <Text color="secondary" fontSize="sm">
-                  {formatDay(publishedAt)}
-                </Text>
-              )}
-            </Flex>
+          <Flex alignItems="flex-start" justifyContent="space-between">
+            <Stack>
+              <Flex align="center" gap={3} fontFamily="Inter">
+                {event.pubkey && <User pubkey={event.pubkey} />}
+                {publishedAt && (
+                  <Text color="secondary" fontSize="sm">
+                    {formatDay(publishedAt)}
+                  </Text>
+                )}
+              </Flex>
+              {clientAddr && <PublishedVia address={clientAddr} />}
+            </Stack>
             <Flex gap={1}>
               {!isEditingInline && isMine && (
                 <Button

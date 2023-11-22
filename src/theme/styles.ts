@@ -42,7 +42,7 @@ const articleStyles = {
       lineHeight: 6,
       my: 6,
     },
-    a: {
+    ".article-link": {
       fontWeight: 500,
       textDecoration: "underline",
       textDecorationStyle: "dotted",
