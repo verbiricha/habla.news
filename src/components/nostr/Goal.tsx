@@ -21,7 +21,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 import { useEvents } from "@habla/nostr/hooks";
 import User from "@habla/components/nostr/User";
-import { findTag } from "@habla/tags";
+import { RecommendedAppMenu } from "@habla/components/nostr/UnknownKind";
 import {
   formatRemainingTime,
   formatShortNumber,
@@ -42,13 +42,14 @@ export default function Goal({ event }) {
     return getRelays(event) || defaultRelays;
   }, [event]);
   const closedAt = useMemo(() => {
-    const ts = findTag(event, "closed_at");
+    const ts = event.tagValue("closed_at");
     return ts && Number(ts) * 1000;
   }, [event]);
   const isExpired = closedAt && closedAt < Date.now();
-  const url = useMemo(() => findTag(event, "r"), [event]);
+  const url = useMemo(() => event.tagValue("r"), [event]);
+  const description = useMemo(() => event.tagValue("summary"), [event]);
   const amount = useMemo(
-    () => Number(findTag(event, "amount")) / 1000,
+    () => Number(event.tagValue("amount")) / 1000,
     [event]
   );
   const time = closedAt
@@ -85,36 +86,40 @@ export default function Goal({ event }) {
       <Card sx={isExpired ? { opacity: 0.5 } : {}}>
         <CardHeader>
           <Flex align="flex-start" justifyContent="space-between">
-            {event.content.length > 0 && (
-              <Heading fontSize="md" style={{ margin: 0, marginBottom: 3 }}>
-                {event.content}
-              </Heading>
-            )}
-            {closedAt && (
-              <Text
-                fontFamily="sans-serif"
-                as="span"
-                color="secondary"
-                fontSize="xs"
-              >
-                {isExpired && t("ended")}
-                {!isExpired && `${t("ends")} `}
-                {!isExpired && formatRemainingTime(closedAt)}
-              </Text>
-            )}
+            <Stack>
+              {event.content.length > 0 && (
+                <Heading fontSize="xl" style={{ margin: 0, marginBottom: 3 }}>
+                  {event.content}
+                </Heading>
+              )}
+              {closedAt && (
+                <Text
+                  fontFamily="sans-serif"
+                  as="span"
+                  color="secondary"
+                  fontSize="xs"
+                >
+                  {isExpired && t("ended")}
+                  {!isExpired && `${t("ends")} `}
+                  {!isExpired && formatRemainingTime(closedAt)}
+                </Text>
+              )}
+            </Stack>
+            <RecommendedAppMenu event={event} />
           </Flex>
           <User size="xs" fontSize="md" pubkey={event.pubkey} />
         </CardHeader>
         <CardBody fontFamily="'Inter', serif">
-          {url && (
-            <Flex align="center" gap={2}>
-              <Icon as={ExternalLinkIcon} boxSize={3} color="gray.500" />
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {url}
-              </a>
-            </Flex>
-          )}
           <Stack>
+            {description && <Text>{description}</Text>}
+            {url && (
+              <Flex align="center" gap={2}>
+                <Icon as={ExternalLinkIcon} boxSize={3} color="gray.500" />
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {url}
+                </a>
+              </Flex>
+            )}
             <Flex justifyContent="space-between" my={3}>
               <Text as="span">{formatSats(total)}</Text>
               <Text
