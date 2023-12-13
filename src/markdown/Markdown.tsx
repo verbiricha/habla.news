@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import ReactMarkdown, { uriTransformer } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -292,7 +292,7 @@ export default function Markdown({
 }) {
   const highlighted = useMemo(
     () => processHighlights(content, highlights),
-    [content, highlights]
+    [content, highlights],
   );
   const mark = ({ children, ...rest }) => {
     const content = children.filter((c) => typeof c === "string").join("");
