@@ -33,7 +33,7 @@ export default function Address({
       "#d": [identifier],
       authors: [pubkey],
     },
-    { cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST }
+    { cacheUsage: NDKSubscriptionCacheUsage.PARALLEL }
   );
 
   if (event && (kind === LONG_FORM || kind === LONG_FORM_DRAFT)) {
