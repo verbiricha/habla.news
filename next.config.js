@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 
+const isProduction = process.env.NODE_ENV === "production";
 
-const isProduction = process.env.NODE_ENV === "production"
-
-const withPWA = require('next-pwa')({
-  dest: 'public',
+const withPWA = require("next-pwa")({
+  dest: "public",
   skipWaiting: true,
   register: isProduction,
   disable: !isProduction,
@@ -13,7 +12,20 @@ const withPWA = require('next-pwa')({
 module.exports = withPWA({
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "es", "ja", "de", "ru", "uk", "fa", "it", "zh", "eo", "sw"],
+    locales: [
+      "en",
+      "es",
+      "ja",
+      "de",
+      "ru",
+      "uk",
+      "fa",
+      "it",
+      "zh",
+      "eo",
+      "sw",
+      "he",
+    ],
   },
 
   typescript: {
@@ -41,4 +53,4 @@ module.exports = withPWA({
       },
     ];
   },
-})
+});
