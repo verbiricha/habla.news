@@ -1,10 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
 
-import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
+import NDK, { NDKRelayAuthPolicies, NDKEvent } from "@nostr-dev-kit/ndk";
 import { nip05, nip19 } from "nostr-tools";
 
 export function createNdk(options) {
   const ndk = new NDK(options);
+  ndk.relayAuthDefaultPolicy = NDKRelayAuthPolicies.signIn({ ndk });
   try {
     ndk.connect();
   } catch (error) {

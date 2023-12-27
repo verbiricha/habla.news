@@ -33,8 +33,8 @@ dependencies:
     specifier: ^2.0.0
     version: 2.0.0(@types/react@18.2.15)(react@18.2.0)
   '@nostr-dev-kit/ndk':
-    specifier: ^2.0.3
-    version: 2.0.3(typescript@4.9.5)
+    specifier: ^2.3.1
+    version: 2.3.1(typescript@4.9.5)
   '@nostr-dev-kit/ndk-cache-dexie':
     specifier: ^2.0.3
     version: 2.0.3(typescript@4.9.5)
@@ -3014,6 +3014,25 @@ packages:
       light-bolt11-decoder: 3.0.0
       node-fetch: 3.3.1
       nostr-tools: 1.17.0(typescript@4.9.5)
+      typescript-lru-cache: 2.0.0
+      utf8-buffer: 1.0.0
+      websocket-polyfill: 0.0.3
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+    dev: false
+
+  /@nostr-dev-kit/ndk@2.3.1(typescript@4.9.5):
+    resolution: {integrity: sha512-T9raZyRXJstYWWVIyQIz6dAQVpth+TIda/+OHfuYnxuY6q6Lz5T0jPvue9cMSHrzWmmtUA6yZiJ1PfgzvRn8+g==}
+    dependencies:
+      '@noble/hashes': 1.3.1
+      '@noble/secp256k1': 2.0.0
+      '@scure/base': 1.1.1
+      debug: 4.3.4
+      light-bolt11-decoder: 3.0.0
+      node-fetch: 3.3.1
+      nostr-tools: 1.17.0(typescript@4.9.5)
+      tseep: 1.1.3
       typescript-lru-cache: 2.0.0
       utf8-buffer: 1.0.0
       websocket-polyfill: 0.0.3
@@ -8123,6 +8142,10 @@ packages:
 
   /trough@2.1.0:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
+    dev: false
+
+  /tseep@1.1.3:
+    resolution: {integrity: sha512-deBIcIlXUMlr3xaN0UEochqjU/zXGaZGPqHPd1rxo4w6DklBdRM6WQQtsk7bekIF+qY6QTeen3nE6OA7BxL9rg==}
     dev: false
 
   /tslib@2.4.0:
