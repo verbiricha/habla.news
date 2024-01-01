@@ -200,7 +200,7 @@
   "supports": "Inaauni ({{ n }})",
   "bookmarks": "Alamisho",
   "select-bookmark-list": "Select bookmark list...",
-  "unknown-kind": "Unsupported event kind: {{ kind }}",
-  "open-with": "Open with",
-  "general": "General"
+  "unknown-kind": "Aina ya tukio lisilotumika: {{ kind }}",
+  "open-with": "Fungua na",
+  "general": "Jumla"
 }
