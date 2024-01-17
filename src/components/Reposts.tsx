@@ -59,7 +59,6 @@ function RepostModal({ event, isOpen, onClose }) {
       });
     } finally {
       onClose();
-      setComment();
     }
   }
   return (
