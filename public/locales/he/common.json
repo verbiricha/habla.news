@@ -11,8 +11,11 @@
   "log-in": "כניסה",
   "account": "יש לי חשבון כבר",
   "account-descr": "אם כבר יש לך חשבון נוסטר תוכל להכנס עם האמצעי המועדף עליך.",
-  "extension": "הרחבת נוסטר",
-  "extension-descr": "השתמש בהרחבת נוסטר בשביל להכנס. שוהי הדרך המומלצת.",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "מפתח ציבורי",
   "public-key-descr": "כנס באמצעות מפתח ציבורי או כתובת נוסטר. קריאה בלבד.",
   "public-key-placeholder": "npub או כתובות נוסטר (nip-05)",
@@ -24,6 +27,7 @@
   "highlight": "הדגש",
   "highlights": "הדגשות",
   "search": "חפש",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "כתוב",
   "all": "הכל",
   "follows": "עוקב",
@@ -58,6 +62,7 @@
   "cancel": "בטל",
   "watch-stream": "צפה בשידור ישיר",
   "communities": "קהילות",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "נראה שאתה עדיין לא עוקב אחרי שום קהילה. אל תדאג, אתה יכול לדפדף בהן ולהתחיל לעקוב אחריהן למטה.",
   "my-communities": "הקהילות שלי",
   "browse-communities": "דפדף בקהילות",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "בחר רשימת סימניות...",
   "unknown-kind": "אירוע מסוג זה לא נתמך: {{ kind }}",
   "open-with": "פתח עם",
-  "general": "כללי"
+  "general": "כללי",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }

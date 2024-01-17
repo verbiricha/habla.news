@@ -11,8 +11,11 @@
   "log-in": "Ingia",
   "account": "Tayari nina akaunti",
   "account-descr": "Ikiwa tayari una akaunti ya nostr unaweza kuingia kwa njia unayopendelea.",
-  "extension": "Ugani wa Nostr",
-  "extension-descr": "Tumia kiendelezi cha nostr kwa kuingia. Hii ndiyo njia inayopendekezwa.",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "Ufunguo wa umma",
   "public-key-descr": "Ingia na ufunguo wa umma au anwani ya nostr. Soma tu.",
   "public-key-placeholder": "npub au nostr address (nip-05)",
@@ -24,6 +27,7 @@
   "highlight": "Kuonyesha",
   "highlights": "Vivutio",
   "search": "Tafuta",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "Andika",
   "all": "Yote",
   "follows": "Anafuata",
@@ -58,6 +62,7 @@
   "cancel": "Ghairi",
   "watch-stream": "Tazama mtiririko wa moja kwa moja",
   "communities": "Jumuiya",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "Inaonekana bado hufuati jumuiya zozote. Usijali, unaweza kuvinjari na kuanza kuzifuata hapa chini.",
   "my-communities": "Jumuiya zangu",
   "browse-communities": "Vinjari jumuiya",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "Select bookmark list...",
   "unknown-kind": "Aina ya tukio lisilotumika: {{ kind }}",
   "open-with": "Fungua na",
-  "general": "Jumla"
+  "general": "Jumla",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }

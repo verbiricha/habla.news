@@ -11,8 +11,11 @@
   "log-in": "Anmelden",
   "account": "Ich habe bereits ein Konto",
   "account-descr": "Wenn du bereits ein Nostr-Konto hast, kannst du dich mit deiner bevorzugten Methode anmelden.",
-  "extension": "Nostr-Erweiterung",
-  "extension-descr": "Verwende eine Nostr-Erweiterung für die Anmeldung. Dies ist die empfohlene Methode.",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "Öffentlicher Schlüssel",
   "public-key-descr": "Mit öffentlichem Schlüssel oder Nostr-Adresse anmelden. Nur Lesezugriff.",
   "public-key-placeholder": "npub oder Nostr-Adresse (nip-05)",
@@ -24,6 +27,7 @@
   "highlight": "Hervorhebung",
   "highlights": "Highlights",
   "search": "Suche",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "Schreiben",
   "all": "Alle",
   "follows": "Folge Ich",
@@ -58,6 +62,7 @@
   "cancel": "Abbrechen",
   "watch-stream": "Live-Stream anschauen",
   "communities": "Communities",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "Es sieht so aus, als ob du noch keiner Community folgst. Keine Sorge, du kannst sie durchsuchen und ihnen unten folgen.",
   "my-communities": "Meine Communities",
   "browse-communities": "Communities durchsuchen",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "Lesezeichenliste auswählen...",
   "unknown-kind": "Nicht unterstützte Event-Art: {{ kind }}",
   "open-with": "Öffnen mit",
-  "general": "Allgemein"
+  "general": "Allgemein",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }

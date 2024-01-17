@@ -11,8 +11,11 @@
   "log-in": "Войти",
   "account": "У меня уже есть аккаунт",
   "account-descr": "Если у вас уже есть Ностр-аккаунт, вы можете войти в систему удобным вам методом.",
-  "extension": "Ностр-расширение",
-  "extension-descr": "Используйте ностр-расширение для входа в систему. Рекомендуемый метод.",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "Публичный ключ",
   "public-key-descr": "Войти с помощью публичного ключа или ностр-адреса. Только для чтения.",
   "public-key-placeholder": "npub или ностр-адрес (nip-05)",
@@ -24,6 +27,7 @@
   "highlight": "Особенный момент",
   "highlights": "Мысли",
   "search": "Поиск",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "Новый пост",
   "all": "Все",
   "follows": "Подписки",
@@ -58,6 +62,7 @@
   "cancel": "Отмена",
   "watch-stream": "Смотреть Прямую Трансляцию",
   "communities": "Сообщества",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "Похоже вы ещё не подписались ни на какое сообщество. Не волнуйтесь, вы можете просмотреть их и подписаться на них ниже.",
   "my-communities": "Мои сообщества",
   "browse-communities": "Просмотр сообществ",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "Select bookmark list...",
   "unknown-kind": "Unsupported event kind: {{ kind }}",
   "open-with": "Open with",
-  "general": "General"
+  "general": "General",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }

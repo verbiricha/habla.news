@@ -11,8 +11,11 @@
   "log-in": "ログイン",
   "account": "既にアカウントを持っています",
   "account-descr": "すでにNostrアカウントをお持ちの場合は、さまざまな方法でログインできます。",
-  "extension": "Nostr 拡張",
-  "extension-descr": "nostr 拡張を使用してログインします。推奨される方法です。",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "公開鍵",
   "public-key-descr": "公開鍵または nostr アドレスでログインします。読み取り専用です。",
   "public-key-placeholder": "npub または nostr アドレス (nip-05)",
@@ -24,6 +27,7 @@
   "highlight": "Highlight",
   "highlights": "ハイライト",
   "search": "検索",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "作成",
   "all": "すべて",
   "follows": "フォロー",
@@ -58,6 +62,7 @@
   "cancel": "キャンセル",
   "watch-stream": "ライブストリームを見る",
   "communities": "コミュニティ",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "Looks like you don't follow any communities yet. Don't worry, you can browse them and start following them below.",
   "my-communities": "My communities",
   "browse-communities": "Browse communities",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "Select bookmark list...",
   "unknown-kind": "Unsupported event kind: {{ kind }}",
   "open-with": "Open with",
-  "general": "General"
+  "general": "General",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }

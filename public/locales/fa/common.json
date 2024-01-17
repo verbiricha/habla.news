@@ -11,8 +11,11 @@
   "log-in": "ورود",
   "account": "یک حساب کاربری از قبل دارم",
   "account-descr": "اگر هم اکنون یک حساب کاربری ناستر دارید می توانید به روشی که ترجیح می دهید وارد شوید.",
-  "extension": "افزونه ناستر",
-  "extension-descr": "از افزونه ناستر برای ورود استفاده کنید. این روش توصیه می شود.",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "کلید عمومی",
   "public-key-descr": "ورود با کلید عمومی یا آدرس ناستر. فقط خواندنی.",
   "public-key-placeholder": "npub یا آدرس ناستر (nip-05)",
@@ -24,6 +27,7 @@
   "highlight": "نکات برجسته",
   "highlights": "نکات برجسته",
   "search": "جستجو",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "نوشتن",
   "all": "همه",
   "follows": "دنبال شوندگان",
@@ -58,6 +62,7 @@
   "cancel": "انصراف",
   "watch-stream": "تماشای پخش زنده",
   "communities": "انجمن ها",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "به نظر می رسد هنوز هیچ انجمنی را دنبال نمی کنید. نگران نباشید، می توانید اینجا آن ها را مرور و دنبال کنید.",
   "my-communities": "انجمن های من",
   "browse-communities": "مرور انجمن ها",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "انتخاب لیست نشانک...",
   "unknown-kind": "Unsupported event kind: {{ kind }}",
   "open-with": "Open with",
-  "general": "General"
+  "general": "General",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }

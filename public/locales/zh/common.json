@@ -11,8 +11,11 @@
   "log-in": "登錄",
   "account": "我已拥有帐户",
   "account-descr": "如果你已经有一个 nostr 帐户，你可以使用你的首选方法登录。",
-  "extension": "Nostr 擴充功能",
-  "extension-descr": "使用 nostr 擴充功能登錄。這是推薦的方式。",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "公鑰",
   "public-key-descr": "用公鑰或 nostr 地址登錄。只能閱讀。",
   "public-key-placeholder": "npub 或 nostr 地址（nip-05）",
@@ -24,6 +27,7 @@
   "highlight": "亮点",
   "highlights": "亮點",
   "search": "搜索",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "撰寫",
   "all": "全部",
   "follows": "關注",
@@ -58,6 +62,7 @@
   "cancel": "取消",
   "watch-stream": "觀看直播",
   "communities": "社區",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "看起来你还没有关注任何社区。没关系，你可以在下方开始浏览并开始关注社区。",
   "my-communities": "我的社区",
   "browse-communities": "浏览社区",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "选择书签列表",
   "unknown-kind": "未支持的事件种类：{{ kind }}",
   "open-with": "打开方式",
-  "general": "一般"
+  "general": "一般",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }

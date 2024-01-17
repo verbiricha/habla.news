@@ -11,8 +11,11 @@
   "log-in": "Ensaluti",
   "account": "I already have an account",
   "account-descr": "If you already have a nostr account you can log in with your preferred method.",
-  "extension": "Nostr Etendaĵo",
-  "extension-descr": "Uzu nostr-an etendaĵon por ensaluti. Ĉi tiu estas la rekomendita maniero.",
+  "extension": "Extension",
+  "extension-descr": "Use a nostr extension for logging in.",
+  "nostr-connect": "Nostr Connect",
+  "nostr-connect-descr": "Use nostr connect for logging in.",
+  "nostr-connect-placeholder": "bunker:// URL or nostr address",
   "public-key": "Publika ŝlosilo",
   "public-key-descr": "Ensaluti per publika ŝlosilo aŭ nostr-adreso. Nurlega.",
   "public-key-placeholder": "npub aŭ nostr-adreso (nip-05)",
@@ -24,6 +27,7 @@
   "highlight": "Highlight",
   "highlights": "Elstaraĵoj",
   "search": "Serĉi",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "Skribi",
   "all": "Ĉio",
   "follows": "Sekvitoj",
@@ -58,6 +62,7 @@
   "cancel": "Nuligi",
   "watch-stream": "Vidi vivafluon",
   "communities": "Komunumoj",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "Looks like you don't follow any communities yet. Don't worry, you can browse them and start following them below.",
   "my-communities": "My communities",
   "browse-communities": "Browse communities",
@@ -202,5 +207,7 @@
   "select-bookmark-list": "Select bookmark list...",
   "unknown-kind": "Unsupported event kind: {{ kind }}",
   "open-with": "Open with",
-  "general": "General"
+  "general": "General",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }
