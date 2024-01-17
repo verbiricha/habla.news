@@ -231,13 +231,11 @@ export function RecommendedAppMenu({ event }) {
       </MenuButton>
       <MenuList>
         {recommended.map(({ ev, recommenders }) => (
-          <MenuItem>
-            <AppMenuItem
-              unknownEvent={event}
-              event={ev}
-              recommenders={recommenders}
-            />
-          </MenuItem>
+          <AppMenuItem
+            unknownEvent={event}
+            event={ev}
+            recommenders={recommenders}
+          />
         ))}
       </MenuList>
     </Menu>
