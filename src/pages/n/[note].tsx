@@ -1,33 +1,32 @@
 import { useRouter } from "next/router";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Head from "next/head";
+import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 
 import { decodeNote } from "@habla/nostr";
 import { useEvent } from "@habla/nostr/hooks";
 import Layout from "@habla/layouts/Wide";
-
+import Metadata from "@habla/components/Metadata";
 const EventId = dynamic(() => import("@habla/components/nostr/EventId"), {
   ssr: false,
 });
 
-export default function NotePage({ metadata }) {
+export default function NotePage() {
   const router = useRouter();
+  const { t } = useTranslation("common");
+
   const { note } = router.query;
   const id = decodeNote(note);
-  const { title, summary, image } = metadata ?? {
-    title: "Habla",
-    summary: "Speak your mind",
+
+  const url = `https://habla.news/n/${note}`;
+  const metadata = {
+    title: t("habla"),
+    summary: t("tagline"),
   };
+
   return (
     <>
-      <Head>
-        <title>{title}</title>
-        <meta name="og:title" content={title} />
-        <meta property="og:type" content="article" />
-        <meta name="og:description" content={summary} />
-        {image && <meta name="og:image" content={image} />}
-      </Head>
+      <Metadata url={url} metadata={metadata} />
       <Layout>{id && <EventId id={id} />}</Layout>
     </>
   );

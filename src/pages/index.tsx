@@ -20,7 +20,6 @@ export default function Index() {
   const metadata = {
     title: t("habla"),
     summary: t("tagline"),
-    image: "https://habla.news/family.png",
   };
   return (
     <>

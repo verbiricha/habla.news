@@ -7,18 +7,19 @@ import { Text } from "@chakra-ui/react";
 
 import { decodeNrelay } from "@habla/nostr";
 import Layout from "@habla/layouts/Wide";
-
+import Metadata from "@habla/components/Metadata";
 const Relay = dynamic(() => import("@habla/components/nostr/Relay"), {
   ssr: false,
 });
 
 export default function RelayPage({ relay }) {
   const router = useRouter();
+  const metadata = {
+    title: relay,
+  };
   return (
     <>
-      <Head>
-        <title>Relay: {relay}</title>
-      </Head>
+      <Metadata metadata={metadata} />
       <Layout>
         <Relay key={relay} relay={relay} />
       </Layout>

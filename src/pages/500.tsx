@@ -1,19 +1,18 @@
-import Head from "next/head";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Heading, Flex, Box, Img, Text } from "@chakra-ui/react";
 
 import Layout from "@habla/layouts/Wide";
+import Metadata from "@habla/components/Metadata";
 
 export default function ServerError() {
   const { t } = useTranslation("common");
+  const metadata = {
+    title: t("oops"),
+  };
   return (
     <>
-      <Head>
-        <title>{t("oops")}</title>
-        <meta name="og:title" content={t("habla")} />
-        <meta name="og:description" content={t("tagline")} />
-      </Head>
+      <Metadata metadata={metadata} />
       <Layout>
         <Heading>{t("server-error")}</Heading>
         <Text>{t("server-error-long")}</Text>

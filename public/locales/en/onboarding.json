@@ -23,5 +23,6 @@
   "private-key-descr": "Your private key is like a password, allows you to post from your account. Please keep your private key in a safe place.",
   "private-key-more": "We recommend using key manager extensions for accessing your Nostr accounts securely.",
   "private-key-backup": "I have stored my keys",
-  "got-it": "Got it!"
+  "got-it": "Got it!",
+  "onboarding": "Profile progress",
 }

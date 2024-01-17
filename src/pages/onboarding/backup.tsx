@@ -1,20 +1,22 @@
-import Head from "next/head";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 import Layout from "@habla/layouts/Wide";
-
+import Metadata from "@habla/components/Metadata";
 const Backup = dynamic(() => import("@habla/onboarding/backup"), {
   ssr: false,
 });
 
 export default function OnboardingProgress() {
+  const { t } = useTranslation("common");
+  const url = "https://habla.news/onboarding/backup";
+  const metadata = {
+    title: t("backup-keys"),
+  };
   return (
     <>
-      <Head>
-        <title>Backup your keys</title>
-        <meta name="og:title" content="Backup your keys" />
-      </Head>
+      <Metadata url={url} metadata={metadata} />
       <Layout>
         <Backup />
       </Layout>

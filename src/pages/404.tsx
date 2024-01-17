@@ -9,7 +9,6 @@ export default function Error() {
   const { t } = useTranslation("common");
   const metadata = {
     title: t("oops"),
-    summary: t("tagline"),
   };
   return (
     <>

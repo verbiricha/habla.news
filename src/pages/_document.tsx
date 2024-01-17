@@ -13,7 +13,6 @@ export default class Document extends NextDocument {
           <meta name="theme-color" content="#151220" />
         </Head>
         <body>
-          {/* Make Color mode to persists when you refresh the page. */}
           <ColorModeScript />
           <Main />
           <NextScript />

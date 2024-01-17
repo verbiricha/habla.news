@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Head from "next/head";
 import { Flex, Stack } from "@chakra-ui/react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
