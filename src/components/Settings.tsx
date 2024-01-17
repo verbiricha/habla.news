@@ -53,7 +53,7 @@ export default function Settings() {
   return (
     <>
       <Heading>{t("settings")}</Heading>
-      {profile && <Tabs tabs={tabs} />}
+      {pubkey && <Tabs tabs={tabs} />}
     </>
   );
 }
