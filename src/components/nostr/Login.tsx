@@ -2,10 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import {
+import NDK, {
   NostrEvent,
   NDKUser,
   NDKNip07Signer,
+  NDKNip46Signer,
   NDKPrivateKeySigner,
   NDKSubscriptionCacheUsage,
 } from "@nostr-dev-kit/ndk";
@@ -84,7 +85,9 @@ import {
 function LoginDialog({ isOpen, onClose }) {
   const ndk = useNdk();
   const { t } = useTranslation("common");
+  const [isBusy, setIsBusy] = useState(false);
   const [pubkeyLike, setPubkeyLike] = useState();
+  const [nostrConnect, setNostrConnect] = useState();
   const [relays] = useAtom(relaysAtom);
   const toast = useToast();
   const [session, setSession] = useAtom(sessionAtom);
@@ -140,6 +143,72 @@ function LoginDialog({ isOpen, onClose }) {
     }
   }
 
+  async function getNostrConnectSettings() {
+    try {
+      if (nostrConnect?.includes("bunker://")) {
+        const asURL = new URL(nostrConnect);
+        const relays = asURL.searchParams.getAll("relay");
+        const pubkey = asURL.pathname.replace(/^\/\//, "");
+        return { relays, pubkey };
+      } else {
+        const user = await NDKUser.fromNip05(nostrConnect, ndk);
+        if (user) {
+          const pubkey = user.hexpubkey;
+          const relays =
+            user.nip46Urls?.length > 0
+              ? user.nip46Urls
+              : ["wss://relay.nsecbunker.com"];
+          return {
+            pubkey,
+            relays,
+          };
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function loginWithNip46() {
+    try {
+      setIsBusy(true);
+      const settings = await getNostrConnectSettings();
+      if (settings) {
+        const { pubkey, relays } = settings;
+        const bunkerNDK = new NDK({
+          explicitRelayUrls: relays,
+        });
+        await bunkerNDK.connect();
+        const localSigner = NDKPrivateKeySigner.generate();
+        const signer = new NDKNip46Signer(bunkerNDK, pubkey, localSigner);
+        signer.on("authUrl", (url) => {
+          window.open(url, "auth", "width=600,height=600");
+        });
+        const user = await signer.blockUntilReady();
+        if (user) {
+          ndk.signer = signer;
+          setSession({
+            method: "nip46",
+            pubkey,
+            bunker: {
+              privkey: localSigner.privateKey as string,
+              relays,
+            },
+          });
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "Could not sign in",
+        status: "error",
+        description: error.message,
+      });
+      console.error(error);
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
   return (
     <>
       <Stack mb={5} gap={2}>
@@ -162,6 +231,32 @@ function LoginDialog({ isOpen, onClose }) {
           colorScheme="orange"
           isDisabled={typeof window === "undefined" || !window.nostr}
           onClick={() => loginWithExtension(true)}
+        >
+          {t("log-in")}
+        </Button>
+      </Stack>
+
+      <Divider />
+
+      <Stack my={4} gap={2}>
+        <Heading fontSize="lg" mb={2}>
+          {t("nostr-connect")}
+        </Heading>
+        <Text>{t("nostr-connect-descr")}</Text>
+        <Input
+          fontFamily="'Inter'"
+          size="sm"
+          placeholder={t("nostr-connect-placeholder")}
+          type="text"
+          value={nostrConnect}
+          onChange={(e) => setNostrConnect(e.target.value)}
+        />
+        <Button
+          maxW="12rem"
+          colorScheme="orange"
+          isLoading={isBusy}
+          isDisabled={!nostrConnect}
+          onClick={loginWithNip46}
         >
           {t("log-in")}
         </Button>
@@ -481,6 +576,27 @@ export default function Login() {
       const signer = new NDKNip07Signer();
       ndk.signer = signer;
       signer.blockUntilReady().then(() => setIsLoggedIn(true));
+    }
+    if (session?.method === "nip46" && session.bunker) {
+      const { privkey, relays } = session.bunker;
+      const bunkerNDK = new NDK({
+        explicitRelayUrls: relays,
+      });
+      bunkerNDK.connect().then(() => {
+        const localSigner = new NDKPrivateKeySigner(privkey);
+        const signer = new NDKNip46Signer(
+          bunkerNDK,
+          session.pubkey,
+          localSigner
+        );
+        signer.on("authUrl", (url) => {
+          window.open(url, "auth", "width=600,height=600");
+        });
+        signer.blockUntilReady().then(() => {
+          ndk.signer = signer;
+          setIsLoggedIn(true);
+        });
+      });
     }
     if (session?.method === "pubkey") {
       setIsLoggedIn(true);
