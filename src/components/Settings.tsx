@@ -53,7 +53,7 @@ export default function Settings() {
   return (
     <>
       <Heading>{t("settings")}</Heading>
-      {profile?.created_at && <Tabs tabs={tabs} />}
+      {profile && <Tabs tabs={tabs} />}
     </>
   );
 }
