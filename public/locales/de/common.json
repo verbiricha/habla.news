@@ -27,6 +27,7 @@
   "highlight": "Hervorhebung",
   "highlights": "Highlights",
   "search": "Suche",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "Schreiben",
   "all": "Alle",
   "follows": "Folge Ich",
@@ -61,6 +62,7 @@
   "cancel": "Abbrechen",
   "watch-stream": "Live-Stream anschauen",
   "communities": "Communities",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "Es sieht so aus, als ob du noch keiner Community folgst. Keine Sorge, du kannst sie durchsuchen und ihnen unten folgen.",
   "my-communities": "Meine Communities",
   "browse-communities": "Communities durchsuchen",
@@ -205,5 +207,7 @@
   "select-bookmark-list": "Lesezeichenliste auswählen...",
   "unknown-kind": "Nicht unterstützte Event-Art: {{ kind }}",
   "open-with": "Öffnen mit",
-  "general": "Allgemein"
+  "general": "Allgemein",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }
