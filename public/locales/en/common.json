@@ -27,6 +27,7 @@
   "highlight": "Highlight",
   "highlights": "Highlights",
   "search": "Search",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "Write",
   "all": "All",
   "follows": "Follows",

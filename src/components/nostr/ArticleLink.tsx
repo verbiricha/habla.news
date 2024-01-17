@@ -5,6 +5,7 @@ import { nip19 } from "nostr-tools";
 import { getHandle } from "@habla/nip05";
 import { getMetadata } from "@habla/nip23";
 import { useUser } from "@habla/nostr/hooks";
+import { articleURL } from "@habla/urls";
 import { useNostrAddress } from "@habla/hooks/useNostrAddress";
 
 export function articleAddress(event) {
@@ -19,27 +20,15 @@ export function articleAddress(event) {
 export function articleLink(event, profile, isVerified) {
   const { kind, pubkey } = event;
   const { identifier } = getMetadata(event);
-  const handle = getHandle(pubkey);
 
-  if (handle && identifier && !identifier.includes("/")) {
-    return `/${handle}/${identifier}`;
+  if (identifier) {
+    return articleURL(identifier, pubkey, profile, isVerified);
   }
 
-  if (
-    profile &&
-    profile.nip05 &&
-    identifier &&
-    !identifier.includes("/") &&
-    isVerified
-  ) {
-    const nip05handle = profile.nip05.replace(/^_@/, "");
-    return `/u/${nip05handle}/${identifier}`;
-  }
-
-  if (event.pubkey) {
+  if (pubkey) {
     const naddr = nip19.naddrEncode({
-      kind: event.kind,
-      pubkey: event.pubkey,
+      kind,
+      pubkey,
       identifier: identifier ?? "",
     });
 

@@ -1,12 +1,13 @@
-import Head from "next/head";
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 import { Stack } from "@chakra-ui/react";
 
 import Layout from "@habla/layouts/Layout";
 import Hero from "@habla/components/Hero";
 import HotTopics from "@habla/components/HotTopics";
+import Metadata from "@habla/components/Metadata";
 import Featured, { FeaturedAuthors } from "@habla/components/Featured";
 
 const HomeFeeds = dynamic(() => import("@habla/components/HomeFeeds"), {
@@ -14,13 +15,16 @@ const HomeFeeds = dynamic(() => import("@habla/components/HomeFeeds"), {
 });
 
 export default function Index() {
+  const { t } = useTranslation("common");
+  const url = "https://habla.news";
+  const metadata = {
+    title: t("habla"),
+    summary: t("tagline"),
+    image: "https://habla.news/family.png",
+  };
   return (
     <>
-      <Head>
-        <title>Habla</title>
-        <meta name="og:title" content="Habla" />
-        <meta name="og:description" content="Speak your mind" />
-      </Head>
+      <Metadata url={url} metadata={metadata} />
       <Layout
         aside={
           <Stack spacing={8} display={["none", "none", "block"]}>

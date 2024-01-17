@@ -5,10 +5,11 @@ import { Flex, Stack } from "@chakra-ui/react";
 import { NDKEvent } from "@nostr-dev-kit/ndk";
 
 import Markdown from "@habla/markdown/Markdown";
+import Metadata from "@habla/components/Metadata";
 import Layout from "@habla/layouts/Wide";
+import User from "@habla/components/User";
 import { getHandles, getPubkey } from "@habla/nip05";
 import { getProfile, getEvents } from "@habla/db";
-import User from "@habla/components/User";
 import { useNdk } from "@habla/nostr/hooks";
 import { ProfileHeading } from "@habla/components/nostr/Profile";
 import UserContent from "@habla/components/nostr/UserContent";
@@ -51,15 +52,17 @@ export default function Profile({
       .map((e) => new NDKEvent(ndk, e))
       .filter((e) => !deprecatedBookmarkLists.has(e.tagValue("d")));
   }, [events]);
+
+  const url = `https://habla.news/${handle}`;
+  const metadata = {
+    title: profile?.name || handle || pubkey,
+    summary: profile?.about,
+    image: profile?.picture,
+  };
+
   return (
     <>
-      <Head>
-        <title>{profile?.name || handle}</title>
-        <meta name="og:title" content={profile?.name || handle} />
-        <meta name="og:type" content="profile" />
-        <meta name="og:description" content={profile?.about} />
-        {profile?.picture && <meta name="og:image" content={profile.picture} />}
-      </Head>
+      <Metadata type="profile" url={url} metadata={metadata} />
       <Layout>
         <ProfileHeading
           profile={profile}
