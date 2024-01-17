@@ -232,6 +232,7 @@ export function RecommendedAppMenu({ event }) {
       <MenuList>
         {recommended.map(({ ev, recommenders }) => (
           <AppMenuItem
+            key={ev.id}
             unknownEvent={event}
             event={ev}
             recommenders={recommenders}
