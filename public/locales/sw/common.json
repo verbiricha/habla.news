@@ -27,6 +27,7 @@
   "highlight": "Kuonyesha",
   "highlights": "Vivutio",
   "search": "Tafuta",
+  "search-summary": "Search by term, hashtag, URL, nostr id or nostr address",
   "write": "Andika",
   "all": "Yote",
   "follows": "Anafuata",
@@ -61,6 +62,7 @@
   "cancel": "Ghairi",
   "watch-stream": "Tazama mtiririko wa moja kwa moja",
   "communities": "Jumuiya",
+  "communities-summary": "Browse moderated communities",
   "follow-communities": "Inaonekana bado hufuati jumuiya zozote. Usijali, unaweza kuvinjari na kuanza kuzifuata hapa chini.",
   "my-communities": "Jumuiya zangu",
   "browse-communities": "Vinjari jumuiya",
@@ -205,5 +207,7 @@
   "select-bookmark-list": "Select bookmark list...",
   "unknown-kind": "Aina ya tukio lisilotumika: {{ kind }}",
   "open-with": "Fungua na",
-  "general": "Jumla"
+  "general": "Jumla",
+  "faq": "FAQ",
+  "faq-summary": "Frequently Asked Questions"
 }
