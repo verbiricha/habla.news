@@ -11,11 +11,10 @@ export default function Hero() {
       borderRadius="20px"
       p="17px 24px"
       gap={4}
+      dir="auto"
     >
-      <Heading dir="auto" fontSize="xl">
-        {t("what-is-habla")}
-      </Heading>
-      <Text dir="auto" fontSize="md" fontWeight={400}>
+      <Heading fontSize="xl">{t("what-is-habla")}</Heading>
+      <Text fontSize="md" fontWeight={400}>
         {t("habla-description")}
       </Text>
       <Link href={`/faq`} shallow>

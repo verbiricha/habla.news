@@ -4,7 +4,7 @@ import { ColorModeScript } from "@chakra-ui/react";
 export default class Document extends NextDocument {
   render() {
     return (
-      <Html>
+      <Html dir="auto">
         <Head>
           <link rel="icon" type="image/png" href="/favicon.png" />
           <link rel="manifest" href="/manifest.json" />
