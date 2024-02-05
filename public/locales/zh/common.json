@@ -209,5 +209,9 @@
   "open-with": "打开方式",
   "general": "一般",
   "faq": "FAQ",
-  "faq-summary": "Frequently Asked Questions"
+  "faq-summary": "Frequently Asked Questions",
+  "nav-read": "Read",
+  "nav-search": "Search",
+  "nav-communities": "Communities",
+  "nav-bookmarks": "Bookmarks"
 }

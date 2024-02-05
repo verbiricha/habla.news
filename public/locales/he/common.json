@@ -209,5 +209,9 @@
   "open-with": "פתח עם",
   "general": "כללי",
   "faq": "FAQ",
-  "faq-summary": "Frequently Asked Questions"
+  "faq-summary": "Frequently Asked Questions",
+  "nav-read": "Read",
+  "nav-search": "Search",
+  "nav-communities": "Communities",
+  "nav-bookmarks": "Bookmarks"
 }
