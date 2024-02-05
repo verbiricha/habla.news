@@ -4,6 +4,18 @@ import { NostrEvent } from "@nostr-dev-kit/ndk";
 
 import type { Session, Pubkey, Privkey, Tags } from "@habla/types";
 import { findTags } from "@habla/tags";
+import { parseJSON } from "@habla/util";
+
+// Local draft
+// Load from local storage on first render, see https://github.com/pmndrs/jotai/discussions/1737
+const initialDraft =
+  typeof window !== "undefined" && localStorage
+    ? parseJSON(localStorage?.getItem("draft"), null)
+    : null;
+export const draftAtom = atomWithStorage<NostrEvent | null>(
+  "draft",
+  initialDraft
+);
 
 // Login
 export const sessionAtom = atomWithStorage<Session | null>("session", null);
@@ -11,7 +23,6 @@ export const pubkeyAtom = atom<Pubkey | undefined>((get) => {
   const session = get(sessionAtom);
   return session?.pubkey;
 });
-// deprecated
 export const privkeyAtom = atomWithStorage<Privkey | null>("nsec", null);
 
 // Relays

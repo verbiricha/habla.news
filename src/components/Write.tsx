@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from "react";
+import { useState, useMemo, type ReactNode } from "react";
 import { useTranslation } from "next-i18next";
-
+import { useAtomValue } from "jotai";
 import {
   Flex,
   Button,
@@ -13,9 +13,10 @@ import {
   MenuGroup,
   MenuItem,
 } from "@chakra-ui/react";
-import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NDKEvent, NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
 import { AddIcon, HamburgerIcon, ViewIcon, EditIcon } from "@chakra-ui/icons";
 
+import { draftAtom } from "@habla/state";
 import { getMetadata } from "@habla/nip23";
 import { LONG_FORM, LONG_FORM_DRAFT } from "@habla/const";
 import { useEvents } from "@habla/nostr/hooks";
@@ -37,7 +38,8 @@ export default function Write({
 }: WriteProps) {
   const { t } = useTranslation("common");
   const [showPreview, setShowPreview] = useState(false);
-  const [event, setEvent] = useState(ev);
+  const localDraft = useAtomValue(draftAtom);
+  const [event, setEvent] = useState(localDraft || ev);
   const { events } = useEvents(
     {
       kinds: [LONG_FORM, LONG_FORM_DRAFT],
@@ -45,7 +47,7 @@ export default function Write({
     },
     {
       closeOnEose: true,
-      cacheUsage: "PARALLEL",
+      cacheUsage: NDKSubscriptionCacheUsage.PARALLEL,
     }
   );
   const posts = events.filter((e) => e.kind === LONG_FORM);
@@ -58,6 +60,10 @@ export default function Write({
       !publishedArticle || publishedArticle.created_at < e.created_at;
     return e.kind === LONG_FORM_DRAFT && shouldShowDraft;
   });
+  const key = useMemo(() => {
+    if (!event) return "";
+    return event.id || JSON.stringify(event.tags.find((t) => t[0] === "d"));
+  }, [event]);
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between">
@@ -127,7 +133,7 @@ export default function Write({
           </Menu>
         )}
       </Flex>
-      <Editor key={event?.id} showPreview={showPreview} event={event} />
+      <Editor key={key} showPreview={showPreview} event={event} />
     </>
   );
 }

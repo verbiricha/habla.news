@@ -2,7 +2,7 @@ import { useRef, useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { NDKRelaySet, NDKEvent } from "@nostr-dev-kit/ndk";
 
 import { useDisclosure } from "@chakra-ui/react";
@@ -32,7 +32,6 @@ import "react-markdown-editor-lite/lib/index.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { nip19 } from "nostr-tools";
-import slugify from "slugify";
 
 import { dateToUnix } from "@habla/time";
 import { urlsToNip27 } from "@habla/nip27";
@@ -59,6 +58,7 @@ import {
   relaysAtom,
   communitiesAtom,
   contactListAtom,
+  draftAtom,
 } from "@habla/state";
 import { getHandle } from "@habla/nip05";
 import RelaySelector from "@habla/components/RelaySelector";
@@ -72,7 +72,7 @@ function isCommunityTag(t) {
 function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   const { t } = useTranslation("common");
   const [selected, setSelected] = useState(initialCommunity);
-  const [communities] = useAtom(communitiesAtom);
+  const communities = useAtomValue(communitiesAtom);
   const followedCommunities = useMemo(() => {
     return (
       communities?.tags.filter(
@@ -112,9 +112,9 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
   const { t } = useTranslation("common");
   const ndk = useNdk();
   const router = useRouter();
-  const [relays] = useAtom(relaysAtom);
+  const pubkey = useAtomValue(pubkeyAtom);
+  const relays = useAtomValue(relaysAtom);
   const [link, setLink] = useState();
-  const [pubkey] = useAtom(pubkeyAtom);
   const [relaySelection, setRelaySelection] = useState(relays);
   const { data: relayMetadata } = useRelaysMetadata(relaySelection);
   const splitSuggestions = useMemo(() => {
@@ -149,9 +149,10 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       let link;
       if (!isDraft && !findTag(ndkEvent, "alt")) {
         link = articleLink(ndkEvent);
+        const altText = `This is a long form article, you can read it in https://habla.news${link}`;
         ndkEvent.tags.push([
           "alt",
-          `This is a long form article, you can read it in https://habla.news${link}`,
+          summary?.length > 0 ? `${summary}\n\n${altText}` : altText,
         ]);
       }
       if (!isDraft && !findTag(ndkEvent, "client")) {
@@ -166,6 +167,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       const results = await ndkEvent.publish(relaySet, 5_000);
       setPublishedOn(Array.from(results).map((r) => r.url));
       setHasPublished(true);
+      setLocalDraft(null);
       onCloseModal();
       if (link) {
         await router.push(link, undefined, { shallow: true });
@@ -264,36 +266,25 @@ export default function EventEditor({ event, showPreview }) {
   const ref = useRef();
   const router = useRouter();
   const publishModal = useDisclosure();
-  const metadata = event && getMetadata(event);
-  const [pubkey] = useAtom(pubkeyAtom);
+  const [, setLocalDraft] = useAtom(draftAtom);
+  const pubkey = useAtomValue(pubkeyAtom);
   const handle = getHandle(pubkey);
   const profile = useUser(pubkey);
+  const metadata = event && getMetadata(event);
   const [isPublishing, setIsPublishing] = useState(false);
   const [title, setTitle] = useState(metadata?.title ?? "");
   const [slug, setSlug] = useState(metadata?.identifier ?? String(Date.now()));
   const [summary, setSummary] = useState(metadata?.summary ?? "");
   const [image, setImage] = useState(metadata?.image ?? "");
   const [publishedAt, setPublishedAt] = useState(metadata?.publishedAt);
+  const [content, setContent] = useState(event?.content ?? "");
   const [publishedDate, setPublishedDate] = useState(
     publishedAt ? new Date(publishedAt * 1000) : null
   );
-
-  function onDateChange(d) {
-    if (d) {
-      const unixTs = d.getTime() / 1000;
-      setPublishedAt(unixTs);
-      setPublishedDate(d);
-    } else {
-      setPublishedAt();
-      setPublishedDate(null);
-    }
-  }
-
   const [hashtags, setHashtags] = useState(
     metadata?.hashtags?.join(", ") ?? ""
   );
   const [isDraft, setIsDraft] = useState(false);
-  const [content, setContent] = useState(event?.content ?? "");
   const initialCommunity = (event?.tags ?? [])
     .find((t) => {
       return t.at(0) === "a" && isCommunityTag(t.at(1));
@@ -327,6 +318,23 @@ export default function EventEditor({ event, showPreview }) {
     tags,
   };
 
+  useEffect(() => {
+    if (title?.length > 0) {
+      setLocalDraft(ev);
+    }
+  }, [title, summary, image, content]);
+
+  function onDateChange(d) {
+    if (d) {
+      const unixTs = d.getTime() / 1000;
+      setPublishedAt(unixTs);
+      setPublishedDate(d);
+    } else {
+      setPublishedAt();
+      setPublishedDate(null);
+    }
+  }
+
   function onChange({ text }) {
     setContent(urlsToNip27(text));
   }
@@ -340,6 +348,7 @@ export default function EventEditor({ event, showPreview }) {
   function onSaveDraft() {
     setIsDraft(true);
     publishModal.onOpen();
+    setLocalDraft(null);
   }
 
   function onSave() {
@@ -347,12 +356,8 @@ export default function EventEditor({ event, showPreview }) {
     publishModal.onOpen();
   }
 
-  function onTitleChange(ev) {
-    setTitle(ev.target.value);
-    //const slug = slugify(ev.target.value.toLowerCase());
-    //if (slug.trim().length) {
-    //  setSlug(slug);
-    //}
+  function onTitleChange(t) {
+    setTitle(t);
   }
 
   const editor = (
@@ -364,7 +369,7 @@ export default function EventEditor({ event, showPreview }) {
           id="title"
           value={title}
           placeholder={t("title-placeholder")}
-          onChange={onTitleChange}
+          onChange={(e) => onTitleChange(e.target.value)}
           size="md"
           mb={2}
         />
@@ -437,7 +442,7 @@ export default function EventEditor({ event, showPreview }) {
           {t("save-draft")}
         </Button>
         <Button variant="solid" colorScheme="orange" onClick={onSave}>
-          {event?.kind === LONG_FORM && event?.sig ? t("update") : t("post")}
+          {t("post")}
         </Button>
       </Flex>
 
