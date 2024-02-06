@@ -288,6 +288,11 @@ export default function EventEditor({ event, showPreview }) {
   const handle = getHandle(pubkey);
   const profile = useUser(pubkey);
   const metadata = event && getMetadata(event);
+  const existingTags = event
+    ? event.tags.filter(
+        (t) => !["d", "title", "image", "summary"].includes(t[0])
+      )
+    : [];
   const [isPublishing, setIsPublishing] = useState(false);
   const [title, setTitle] = useState(metadata?.title ?? "");
   const [slug, setSlug] = useState(metadata?.identifier ?? String(Date.now()));
