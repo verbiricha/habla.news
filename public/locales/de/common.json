@@ -214,5 +214,7 @@
   "nav-read": "Lesen",
   "nav-search": "Suche",
   "nav-communities": "Communities",
-  "nav-bookmarks": "Lesezeichen"
+  "nav-bookmarks": "Lesezeichen",
+  "nostr-link": "Nostr link",
+  "nostr-apps": "Apps"
 }
