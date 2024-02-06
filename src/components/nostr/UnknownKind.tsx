@@ -7,13 +7,14 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  MenuGroup,
   Card,
   CardHeader,
   CardBody,
   Button,
   Icon,
 } from "@chakra-ui/react";
-import { ChevronDownIcon, StarIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, LinkIcon, StarIcon } from "@chakra-ui/icons";
 import { useAtomValue } from "jotai";
 import { useTranslation } from "next-i18next";
 import { NDKSubscriptionCacheUsage } from "@nostr-dev-kit/ndk";
@@ -219,6 +220,10 @@ function useRecommendedApps(event) {
 export function RecommendedAppMenu({ event }) {
   const { t } = useTranslation("common");
   const recommended = useRecommendedApps(event);
+  function openNostrLink() {
+    const url = `nostr:${event.encode()}`;
+    window.open(url);
+  }
   return (
     <Menu isLazy>
       <MenuButton
@@ -230,14 +235,23 @@ export function RecommendedAppMenu({ event }) {
         {t("open-with")}
       </MenuButton>
       <MenuList>
-        {recommended.map(({ ev, recommenders }) => (
-          <AppMenuItem
-            key={ev.id}
-            unknownEvent={event}
-            event={ev}
-            recommenders={recommenders}
-          />
-        ))}
+        <MenuItem icon={<LinkIcon />} onClick={openNostrLink}>
+          {t("nostr-link")}
+        </MenuItem>
+        {recommended.length > 0 && (
+          <>
+            <MenuGroup title={t("nostr-apps")}>
+              {recommended.map(({ ev, recommenders }) => (
+                <AppMenuItem
+                  key={ev.id}
+                  unknownEvent={event}
+                  event={ev}
+                  recommenders={recommenders}
+                />
+              ))}
+            </MenuGroup>
+          </>
+        )}
       </MenuList>
     </Menu>
   );
