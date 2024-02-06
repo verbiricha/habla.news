@@ -110,6 +110,7 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
 
 function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
   const { t } = useTranslation("common");
+  const [, setLocalDraft] = useAtom(draftAtom);
   const ndk = useNdk();
   const router = useRouter();
   const pubkey = useAtomValue(pubkeyAtom);
@@ -190,7 +191,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
   const menu = [
     {
       title: t("relays"),
-      description: t("select-relays"),
+      description: isDraft ? t("select-draft-relays") : t("select-relays"),
       panel: (
         <RelaySelector
           isPublishing={isPublishing}
@@ -222,10 +223,13 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
     <Modal isOpen={isOpen} onClose={onCloseModal} size="xl">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{isDraft ? t("publish-draft") : t("publish")}</ModalHeader>
+        <ModalHeader>{isDraft ? t("save-draft") : t("publish")}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Stack spacing={4}>
+            {isDraft && (
+              <Text color="chakra-subtle-text">{t("drafts-descr")}</Text>
+            )}
             <FeedLongFormNote
               event={nostrEvent}
               excludeReactions={true}
@@ -251,7 +255,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
             colorScheme="orange"
             onClick={onPost}
           >
-            {t("post")}
+            {isDraft ? t("save") : t("post")}
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -348,7 +352,6 @@ export default function EventEditor({ event, showPreview }) {
   function onSaveDraft() {
     setIsDraft(true);
     publishModal.onOpen();
-    setLocalDraft(null);
   }
 
   function onSave() {
