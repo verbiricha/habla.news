@@ -108,7 +108,14 @@ function CommunitySelector({ initialCommunity, onCommunitySelect }) {
   );
 }
 
-function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
+function PublishModal({
+  event,
+  publishedAt,
+  initialZapSplits,
+  isDraft,
+  isOpen,
+  onClose,
+}) {
   const { t } = useTranslation("common");
   const [, setLocalDraft] = useAtom(draftAtom);
   const ndk = useNdk();
@@ -148,7 +155,13 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
       const relaySet = NDKRelaySet.fromRelayUrls(relaySelection, ndk);
       const ndkEvent = new NDKEvent(ndk, nostrEvent);
       let link;
-      if (!isDraft && !findTag(ndkEvent, "alt")) {
+      if (publishedAt || !ndkEvent.tagValue("published_at")) {
+        ndkEvent.tags.push([
+          "published_at",
+          publishedAt ? String(publishedAt) : String(nostrEvent.created_at),
+        ]);
+      }
+      if (!isDraft && !ndkEvent.tagValue("alt")) {
         link = articleLink(ndkEvent);
         const altText = `This is a long form article, you can read it in https://habla.news${link}`;
         ndkEvent.tags.push([
@@ -156,7 +169,7 @@ function PublishModal({ event, initialZapSplits, isDraft, isOpen, onClose }) {
           summary?.length > 0 ? `${summary}\n\n${altText}` : altText,
         ]);
       }
-      if (!isDraft && !findTag(ndkEvent, "client")) {
+      if (!isDraft && ndkEvent.tagValue("client")) {
         ndkEvent.tags.push([
           "client",
           HABLA_ADDRESS,
@@ -306,7 +319,7 @@ export default function EventEditor({ event, showPreview }) {
     ["d", slug],
     ["title", title],
     ["summary", summary],
-    ["published_at", publishedAt ? String(publishedAt) : String(createdAt)],
+    ...existingTags,
     ...ttags,
   ];
   if (image?.length > 0) {
@@ -500,6 +513,7 @@ export default function EventEditor({ event, showPreview }) {
       <PublishModal
         initialZapSplits={event?.tags.filter((t) => t.at(0) === "zap")}
         event={ev}
+        publishedAt={publishedAt}
         isDraft={isDraft}
         {...publishModal}
       />
