@@ -54,10 +54,13 @@ export default function Note({ event, highlights = [], ...props }) {
       </CardHeader>
       <CardBody
         dir="auto"
-        pt={0}
+        py={0}
         wordBreak="break-word"
         fontSize="md"
-        sx={{ "> p": { my: 2 } }}
+        sx={{
+          "> p": { my: 2 },
+          "> p:last-child": { mb: 0 },
+        }}
       >
         <Markdown
           content={event.content}
