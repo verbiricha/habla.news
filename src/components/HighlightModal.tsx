@@ -89,7 +89,7 @@ export default function HighlightModal({
         ["p", event.pubkey],
         [
           "alt",
-          `This is a highlight created in https://habla.news\n"${content}"`,
+          `"${content}"\n\nThis is a highlight created in https://habla.news`,
         ],
         ["client", HABLA_ADDRESS, "wss://relay.nostr.band", "web"],
       ],
