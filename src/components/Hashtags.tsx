@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import Link from "next/link";
+import { dedupe } from "@habla/util";
 
 import { Box, Flex, Tag } from "@chakra-ui/react";
 
@@ -13,9 +15,10 @@ export function Hashtag({ tag, ...rest }) {
 }
 
 export default function Hashtags({ hashtags, gap = 2, ...rest }) {
+  const deduped = useMemo(() => dedupe(hashtags), [hashtags]);
   return (
     <Flex flexWrap="wrap" gap={gap} {...rest}>
-      {hashtags.map((t, idx) => (
+      {deduped.map((t, idx) => (
         <Box key={`${t}-${idx}`}>
           <Hashtag tag={t} {...rest} />
         </Box>

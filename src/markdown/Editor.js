@@ -290,7 +290,7 @@ export default function EventEditor({ event, showPreview }) {
   const metadata = event && getMetadata(event);
   const existingTags = event
     ? event.tags.filter(
-        (t) => !["d", "title", "image", "summary"].includes(t[0])
+        (t) => !["d", "title", "image", "summary", "t"].includes(t[0])
       )
     : [];
   const [isPublishing, setIsPublishing] = useState(false);
@@ -314,11 +314,16 @@ export default function EventEditor({ event, showPreview }) {
     ?.at(1);
   const [community, setCommunity] = useState(initialCommunity);
   const createdAt = dateToUnix();
-  const htags = hashtags
-    .split(",")
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0);
-
+  const htags = useMemo(() => {
+    return Array.from(
+      new Set(
+        hashtags
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
+      )
+    );
+  }, [hashtags]);
   const ttags = htags.map((t) => ["t", t]);
   const tags = [
     ["d", slug],
