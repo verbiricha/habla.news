@@ -148,7 +148,7 @@ function LoginDialog({ isOpen, onClose }) {
       if (nostrConnect?.includes("bunker://")) {
         const asURL = new URL(nostrConnect);
         const relays = asURL.searchParams.getAll("relay");
-        const pubkey = asURL.pathname.replace(/^\/\//, "");
+        const pubkey = asURL.hostname || asURL.pathname.replace(/^\/\//, "");
         return { relays, pubkey };
       } else {
         const user = await NDKUser.fromNip05(nostrConnect, ndk);
