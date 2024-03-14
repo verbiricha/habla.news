@@ -5,9 +5,10 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { Text } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 
-import { pubkeyAtom } from "@habla/state";
+import { pubkeyAtom, sessionAtom } from "@habla/state";
 import Layout from "@habla/layouts/Wide";
 import Metadata from "@habla/components/Metadata";
+import { useAtomValue } from "jotai/index";
 const Write = dynamic(() => import("@habla/components/Write"), {
   ssr: false,
 });
@@ -19,7 +20,21 @@ export default function WritePage() {
     title: t("habla"),
     summary: t("tagline"),
   };
+
+  const session = useAtomValue(sessionAtom);
   const [pubkey] = useAtom(pubkeyAtom);
+
+  if (session && session.method === 'pubkey') {
+    return (
+      <>
+        <Metadata url={url} metadata={metadata} />
+        <Layout>
+          <Text>Account is in read-only mode. Make sure Habla has access to your private key.</Text>
+        </Layout>
+      </>
+    )
+  }
+
   return (
     <>
       <Metadata url={url} metadata={metadata} />
