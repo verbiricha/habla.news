@@ -148,8 +148,9 @@ function LoginDialog({ isOpen, onClose }) {
       if (nostrConnect?.includes("bunker://")) {
         const asURL = new URL(nostrConnect);
         const relays = asURL.searchParams.getAll("relay");
+        const token = asURL.searchParams.get("secret");
         const pubkey = asURL.hostname || asURL.pathname.replace(/^\/\//, "");
-        return { relays, pubkey };
+        return { relays, pubkey, token };
       } else {
         const user = await NDKUser.fromNip05(nostrConnect, ndk);
         if (user) {
@@ -174,13 +175,14 @@ function LoginDialog({ isOpen, onClose }) {
       setIsBusy(true);
       const settings = await getNostrConnectSettings();
       if (settings) {
-        const { pubkey, relays } = settings;
+        const { pubkey, relays, token } = settings;
         const bunkerNDK = new NDK({
           explicitRelayUrls: relays,
         });
         await bunkerNDK.connect();
         const localSigner = NDKPrivateKeySigner.generate();
         const signer = new NDKNip46Signer(bunkerNDK, pubkey, localSigner);
+        if (token) signer.token = token
         signer.on("authUrl", (url) => {
           window.open(url, "auth", "width=600,height=600");
         });
