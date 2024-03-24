@@ -63,7 +63,7 @@ import {
 import { getHandle } from "@habla/nip05";
 import RelaySelector from "@habla/components/RelaySelector";
 import User from "@habla/components/nostr/User";
-import { toPubkey } from "@habla/util";
+import { toPubkey, dedupe } from "@habla/util";
 
 function isCommunityTag(t) {
   return t.startsWith(`${COMMUNITY}:`);
@@ -315,13 +315,11 @@ export default function EventEditor({ event, showPreview }) {
   const [community, setCommunity] = useState(initialCommunity);
   const createdAt = dateToUnix();
   const htags = useMemo(() => {
-    return Array.from(
-      new Set(
-        hashtags
-          .split(",")
-          .map((s) => s.trim())
-          .filter((s) => s.length > 0)
-      )
+    return dedupe(
+      hashtags
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0)
     );
   }, [hashtags]);
   const ttags = htags.map((t) => ["t", t]);
