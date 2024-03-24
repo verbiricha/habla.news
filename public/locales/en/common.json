@@ -217,5 +217,8 @@
   "nav-read": "Read",
   "nav-search": "Search",
   "nav-communities": "Communities",
-  "nav-bookmarks": "Bookmarks"
+  "nav-bookmarks": "Bookmarks",
+  "nostr-apps": "Apps",
+  "nostr-link": "Nostr link",
+  "read-only": "Your account is in read-only mode. Make sure Habla can sign events and try again."
 }
