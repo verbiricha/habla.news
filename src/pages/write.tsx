@@ -3,9 +3,9 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { Text } from "@chakra-ui/react";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 
-import { pubkeyAtom } from "@habla/state";
+import { pubkeyAtom, sessionAtom } from "@habla/state";
 import Layout from "@habla/layouts/Wide";
 import Metadata from "@habla/components/Metadata";
 const Write = dynamic(() => import("@habla/components/Write"), {
@@ -19,12 +19,15 @@ export default function WritePage() {
     title: t("habla"),
     summary: t("tagline"),
   };
-  const [pubkey] = useAtom(pubkeyAtom);
+  const pubkey = useAtomValue(pubkeyAtom);
+  const session = useAtomValue(sessionAtom);
+  const isReadOnly = session?.method === "pubkey";
+
   return (
     <>
       <Metadata url={url} metadata={metadata} />
       <Layout>
-        {!pubkey && <Text>Log in to write</Text>}
+        {(!pubkey || isReadOnly) && <Text>{t("read-only")}</Text>}
         {pubkey && <Write pubkey={pubkey} />}
       </Layout>
     </>
