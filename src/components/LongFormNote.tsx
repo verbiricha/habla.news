@@ -45,7 +45,7 @@ import Comments from "@habla/components/Comments";
 import Bookmarks from "@habla/components/Bookmarks";
 import { RecommendedAppMenu } from "@habla/components/nostr/UnknownKind";
 import { PublishedIn } from "@habla/components/nostr/feed/LongFormNote";
-import { pubkeyAtom, relaysAtom } from "@habla/state";
+import { pubkeyAtom, relaysAtom, draftAtom } from "@habla/state";
 import { useTextSelection } from "@habla/hooks/useTextSelection";
 import {
   useAppAddress,
@@ -153,6 +153,7 @@ export default function LongFormNote({
   const ref = useRef();
   const [pubkey] = useAtom(pubkeyAtom);
   const clientAddr = useClientAddress(event);
+  const [, setLocalDraft] = useAtom(draftAtom);
   const [selected, setSelected] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure("highlight");
@@ -200,6 +201,11 @@ export default function LongFormNote({
   );
 
   const { colorMode } = useColorMode();
+
+  function startEditing() {
+    setLocalDraft(null);
+    setIsEditing(true);
+  }
 
   return isMine && isEditing ? (
     <Write pubkey={pubkey} ev={event} isEditingInline>
@@ -257,7 +263,7 @@ export default function LongFormNote({
                   maxW="12em"
                   aria-label="Edit"
                   size={{ base: "xs", sm: "sm" }}
-                  onClick={() => setIsEditing(true)}
+                  onClick={startEditing}
                 >
                   {t("edit")}
                 </Button>
