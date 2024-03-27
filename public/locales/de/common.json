@@ -216,6 +216,6 @@
   "nav-communities": "Communities",
   "nav-bookmarks": "Lesezeichen",
   "nostr-apps": "Apps",
-  "nostr-link": "Nostr link",
-  "read-only": "Your account is in read-only mode. Make sure Habla can sign events and try again."
+  "nostr-link": "Nostr-Link",
+  "read-only": "Dein Konto ist im schreibgeschützten Modus. Stelle sicher, dass Habla Events signieren kann und versuche es erneut."
 }
