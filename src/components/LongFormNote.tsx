@@ -114,6 +114,7 @@ function HighlightsDrawer({ highlights, selected, isOpen, onClose }) {
   );
 }
 
+// todo: translate, shortcut if address === HABLA_ADDRESS
 function PublishedVia({ address }) {
   const { app } = useAppAddress(address);
   const name = app?.display_name || app?.name;

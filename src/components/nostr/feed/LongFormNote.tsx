@@ -54,7 +54,6 @@ function LongFormTime({ content, publishedAt, updatedAt }) {
 }
 
 export function PublishedIn({ event, community }) {
-  // todo: make sure is approved by community
   const { t } = useTranslation("common");
   const { name, naddr } = useMemo(() => {
     if (!community) return {};
