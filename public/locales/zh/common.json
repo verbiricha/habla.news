@@ -214,5 +214,8 @@
   "nav-read": "阅读",
   "nav-search": "搜索",
   "nav-communities": "社区",
-  "nav-bookmarks": "书签"
+  "nav-bookmarks": "书签",
+  "nostr-apps": "Apps",
+  "nostr-link": "Nostr link",
+  "read-only": "Your account is in read-only mode. Make sure Habla can sign events and try again."
 }

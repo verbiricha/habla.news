@@ -214,5 +214,8 @@
   "nav-read": "Lesen",
   "nav-search": "Suche",
   "nav-communities": "Communities",
-  "nav-bookmarks": "Lesezeichen"
+  "nav-bookmarks": "Lesezeichen",
+  "nostr-apps": "Apps",
+  "nostr-link": "Nostr-Link",
+  "read-only": "Dein Konto ist im schreibgeschützten Modus. Stelle sicher, dass Habla Events signieren kann und versuche es erneut."
 }
