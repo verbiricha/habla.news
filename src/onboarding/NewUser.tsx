@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { useTranslation } from "next-i18next";
-import { generatePrivateKey, getPublicKey } from "nostr-tools";
+import { generateSecretKey, getPublicKey } from "nostr-tools/pure";
+import { bytesToHex } from "@noble/hashes/utils";
 import { NDKEvent, NDKPrivateKeySigner } from "@nostr-dev-kit/ndk";
 
 import {
@@ -80,7 +81,7 @@ export default function NewUser({ onDone }) {
   const [, setSteps] = useAtom(stepsAtom);
   const [, setContactList] = useAtom(contactListAtom);
   const privkey = useMemo(() => {
-    return generatePrivateKey();
+    return generateSecretKey();
   }, []);
   const pubkey = useMemo(() => {
     return getPublicKey(privkey);
@@ -91,7 +92,10 @@ export default function NewUser({ onDone }) {
   const [tags, setTags] = useState([]);
   const [follows, setFollows] = useState([]);
   const { t } = useTranslation("common");
-  const signer = useMemo(() => new NDKPrivateKeySigner(privkey), [privkey]);
+  const signer = useMemo(
+    () => new NDKPrivateKeySigner(bytesToHex(privkey)),
+    [privkey]
+  );
 
   useEffect(() => {
     setSteps(initialSteps);
@@ -207,7 +211,7 @@ export default function NewUser({ onDone }) {
           setSession({
             method: "privkey",
             pubkey,
-            privkey,
+            privkey: bytesToHex(privkey),
           });
         } catch (error) {
           console.error(error);
