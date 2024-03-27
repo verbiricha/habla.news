@@ -1,5 +1,5 @@
 // todo: migrate to NDK
-import { SimplePool } from "nostr-tools";
+import { SimplePool } from "nostr-tools/pool";
 import {
   LONG_FORM,
   HIGHLIGHT,
@@ -64,31 +64,27 @@ async function getNostrPost(pubkey, slug) {
 export const getPost = memoize(getNostrPost);
 
 async function getNostrPosts(pubkey) {
-  const filters = [
-    {
-      kinds: [LONG_FORM],
-      authors: [pubkey],
-    },
-  ];
-  const results = await pool.list(relays, filters);
+  const filters = {
+    kinds: [LONG_FORM],
+    authors: [pubkey],
+  };
+  const results = await pool.querySync(relays, filters);
   return uniqByFn(results, getAddress);
 }
 
 export const getPosts = memoize(getNostrPosts);
 
 async function getNostrEvents(pubkey) {
-  const filters = [
-    {
-      kinds: [LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS, GENERAL_BOOKMARKS],
-      authors: [pubkey],
-    },
-    {
-      kinds: [SUPPORT],
-      "#p": [pubkey],
-    },
-  ];
-  const results = await pool.list(relays, filters);
-  return uniqByFn(results, getAddress);
+  const filters = {
+    kinds: [LONG_FORM, HIGHLIGHT, SUPPORT, BOOKMARKS, GENERAL_BOOKMARKS],
+    authors: [pubkey],
+  };
+  const posts = await pool.querySync(relays, filters);
+  const supportEvents = await pool.querySync(relays, {
+    kinds: [SUPPORT],
+    "#p": [pubkey],
+  });
+  return uniqByFn(posts.concat(supportEvents), getAddress);
 }
 
 export const getEvents = memoize(getNostrEvents);
