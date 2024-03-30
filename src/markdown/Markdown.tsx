@@ -292,7 +292,7 @@ export default function Markdown({
 }) {
   const highlighted = useMemo(
     () => processHighlights(content, highlights),
-    [content, highlights],
+    [content, highlights]
   );
   const mark = ({ children, ...rest }) => {
     const content = children.filter((c) => typeof c === "string").join("");

@@ -44,7 +44,7 @@ export default function ArticleLink({ event, children, ...rest }) {
   }, [event, profile, data]);
 
   return link ? (
-    <Link href={link} shallow {...rest}>
+    <Link href={link} {...rest}>
       {children}
     </Link>
   ) : (

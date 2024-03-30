@@ -15,7 +15,7 @@ const Nip05Address = dynamic(
 export default function Profile({ nip05, slug }) {
   return (
     <Layout>
-      <Nip05Address identifier={slug} query={nip05} />
+      <Nip05Address key={`${nip05}-${slug}`} identifier={slug} query={nip05} />
     </Layout>
   );
 }
