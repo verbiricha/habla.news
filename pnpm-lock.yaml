@@ -33,8 +33,8 @@ dependencies:
     specifier: ^2.0.0
     version: 2.0.0(@types/react@18.2.15)(react@18.2.0)
   '@nostr-dev-kit/ndk':
-    specifier: ^2.3.3
-    version: 2.3.3(typescript@4.9.5)
+    specifier: ^2.6.0
+    version: 2.6.0(typescript@4.9.5)
   '@nostr-dev-kit/ndk-cache-dexie':
     specifier: ^2.2.4
     version: 2.2.4(typescript@4.9.5)
@@ -3019,6 +3019,25 @@ packages:
     resolution: {integrity: sha512-R2r6U1Xt4B7yygQFgTEexNqhuQQrbJ0Kxh4GvcCgNgSjMI+cPJQPWg4g4noWGRnaWf4epqLNCblfo5UfMuijTw==}
     dependencies:
       '@noble/hashes': 1.3.1
+      '@noble/secp256k1': 2.0.0
+      '@scure/base': 1.1.1
+      debug: 4.3.4
+      light-bolt11-decoder: 3.0.0
+      node-fetch: 3.3.1
+      nostr-tools: 1.17.0(typescript@4.9.5)
+      tseep: 1.1.3
+      typescript-lru-cache: 2.0.0
+      utf8-buffer: 1.0.0
+      websocket-polyfill: 0.0.3
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+    dev: false
+
+  /@nostr-dev-kit/ndk@2.6.0(typescript@4.9.5):
+    resolution: {integrity: sha512-K7w6j2Hw5qTctAM0EiuqFsv9OvgtSR1NnYG1+zTAjBXe3+g6fDKeS/0p45pgKzAhCDyFdSe5JItzQT+wGWQDNg==}
+    dependencies:
+      '@noble/hashes': 1.3.2
       '@noble/secp256k1': 2.0.0
       '@scure/base': 1.1.1
       debug: 4.3.4
