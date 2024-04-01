@@ -151,7 +151,7 @@ export function useUsers(pubkeys) {
           },
           {
             cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
-          },
+          }
         )
         .then((profiles) => {
           setEvents([...profiles].map((p) => JSON.parse(p.content)));
@@ -170,7 +170,7 @@ function eventToFilter(ev: NDKEvent) {
 export function useReactions(
   event: NDKEvent,
   kinds = [ZAP, HIGHLIGHT, REPOST, NOTE],
-  opts = {},
+  opts = {}
 ) {
   const { events } = useEvents(
     { ...eventToFilter(event), kinds },
@@ -178,7 +178,7 @@ export function useReactions(
       cacheUsage: NDKSubscriptionCacheUsage.CACHE_FIRST,
       closeOnEose: true,
       ...opts,
-    },
+    }
   );
 
   const zaps = events.filter((e) => e.kind === ZAP);
@@ -187,7 +187,7 @@ export function useReactions(
   const reposts = events.filter((e) => e.kind === REPOST);
   const notes = events.filter((e) => e.kind === NOTE);
   const bookmarks = events.filter(
-    (e) => e.kind === BOOKMARKS || e.kind === GENERAL_BOOKMARKS,
+    (e) => e.kind === BOOKMARKS || e.kind === GENERAL_BOOKMARKS
   );
 
   return { zaps, reactions, highlights, reposts, notes, bookmarks };
@@ -211,7 +211,7 @@ export function usePublishEvent(options) {
       sucessMessage = "Posted",
       errorTitle = "Error",
       errorMessage = "Couldn't sign event, please log in first",
-    },
+    }
   ) => {
     try {
       const ndkEvent = new NDKEvent(ndk, ev);
