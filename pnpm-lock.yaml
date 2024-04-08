@@ -147,8 +147,8 @@ dependencies:
     specifier: ^8.13.0
     version: 8.13.0
   zapthreads:
-    specifier: 0.5.0
-    version: 0.5.0(typescript@4.9.5)
+    specifier: 0.5.1
+    version: 0.5.1(typescript@4.9.5)
 
 devDependencies:
   '@types/node':
@@ -7025,6 +7025,25 @@ packages:
       nostr-wasm: 0.1.0
     dev: false
 
+  /nostr-tools@2.4.0(typescript@4.9.5):
+    resolution: {integrity: sha512-xQC7XdGeh0gLyprcKhvx5lwr7OQ+ZOiQ9C6GpzlVAj+EBv+AiN8kySb57t3uJoG1HK15oT9jf++MmQLwhp1xNQ==}
+    peerDependencies:
+      typescript: '>=5.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@noble/ciphers': 0.5.2
+      '@noble/curves': 1.2.0
+      '@noble/hashes': 1.3.1
+      '@scure/base': 1.1.1
+      '@scure/bip32': 1.3.1
+      '@scure/bip39': 1.2.1
+      typescript: 4.9.5
+    optionalDependencies:
+      nostr-wasm: 0.1.0
+    dev: false
+
   /nostr-wasm@0.1.0:
     resolution: {integrity: sha512-78BTryCLcLYv96ONU8Ws3Q1JzjlAt+43pWQhIl86xZmWeegYCNLPml7yQ+gG3vR6V5h4XGj+TxO+SS5dsThQIA==}
     requiresBuild: true
@@ -8867,8 +8886,8 @@ packages:
     engines: {node: '>= 6'}
     dev: false
 
-  /zapthreads@0.5.0(typescript@4.9.5):
-    resolution: {integrity: sha512-MQmiTuA69EDbPfsIW5wrnIZnVEAcgT7VKr6jQ+VDpbulotppsU3pep/jg5vXYWztVRexRv1EvB/XHiBhvzxj5w==}
+  /zapthreads@0.5.1(typescript@4.9.5):
+    resolution: {integrity: sha512-1p06aJioNHuoAus+OskDD0KRbVHT38PXK0OQ7O8u37hE6BFG3K4zhXquAi08ANvdLd3CggEwHiX3UVz48h+/ag==}
     dependencies:
       '@solid-primitives/autofocus': 0.0.107(solid-js@1.8.5)
       '@solid-primitives/resize-observer': 2.0.22(solid-js@1.8.5)
@@ -8877,7 +8896,7 @@ packages:
       idb: 7.1.1
       light-bolt11-decoder: 3.0.0
       nano-markdown: 1.2.2
-      nostr-tools: 1.17.0(typescript@4.9.5)
+      nostr-tools: 2.4.0(typescript@4.9.5)
       solid-element: 1.7.1(solid-js@1.8.5)
       solid-js: 1.8.5
     transitivePeerDependencies:
