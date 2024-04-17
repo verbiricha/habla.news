@@ -216,6 +216,6 @@
   "nav-communities": "社区",
   "nav-bookmarks": "书签",
   "nostr-apps": "应用程序",
-  "nostr-link": "Nostr link",
-  "read-only": "你的帐户处于只读模式。请确保Habla能够签名事件并重试。"
+  "nostr-link": "Nostr 链接",
+  "read-only": "你的帐户处于只读模式。请确保 Habla 能够签名事件并重试。"
 }
