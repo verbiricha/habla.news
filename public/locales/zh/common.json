@@ -215,7 +215,7 @@
   "nav-search": "搜索",
   "nav-communities": "社区",
   "nav-bookmarks": "书签",
-  "nostr-apps": "應用程式",
-  "nostr-link": "Nostr 鏈接",
-  "read-only": "你的帳戶處於只讀模式。請確保 Habla 能夠簽名事件並重試。"
+  "nostr-apps": "应用程序",
+  "nostr-link": "Nostr 链接",
+  "read-only": "你的帐户处于只读模式。请确保 Habla 能够签名事件并重试。"
 }
