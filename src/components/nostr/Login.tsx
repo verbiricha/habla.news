@@ -175,14 +175,13 @@ function LoginDialog({ isOpen, onClose }) {
       setIsBusy(true);
       const settings = await getNostrConnectSettings();
       if (settings) {
-        const { pubkey, relays, token } = settings;
+        const { relays } = settings;
         const bunkerNDK = new NDK({
           explicitRelayUrls: relays,
         });
         await bunkerNDK.connect();
         const localSigner = NDKPrivateKeySigner.generate();
-        const signer = new NDKNip46Signer(bunkerNDK, pubkey, localSigner);
-        if (token) signer.token = token
+        const signer = new NDKNip46Signer(bunkerNDK, nostrConnect, localSigner);
         signer.on("authUrl", (url) => {
           window.open(url, "auth", "width=600,height=600");
         });
@@ -191,8 +190,9 @@ function LoginDialog({ isOpen, onClose }) {
           ndk.signer = signer;
           setSession({
             method: "nip46",
-            pubkey,
+            pubkey: user.pubkey,
             bunker: {
+              url: nostrConnect,
               privkey: localSigner.privateKey as string,
               relays,
             },
@@ -579,18 +579,14 @@ export default function Login() {
       ndk.signer = signer;
       signer.blockUntilReady().then(() => setIsLoggedIn(true));
     }
-    if (session?.method === "nip46" && session.bunker) {
-      const { privkey, relays } = session.bunker;
+    if (session?.method === "nip46" && session.bunker && session.bunker.url) {
+      const { url, privkey, relays } = session.bunker;
       const bunkerNDK = new NDK({
         explicitRelayUrls: relays,
       });
       bunkerNDK.connect().then(() => {
         const localSigner = new NDKPrivateKeySigner(privkey);
-        const signer = new NDKNip46Signer(
-          bunkerNDK,
-          session.pubkey,
-          localSigner
-        );
+        const signer = new NDKNip46Signer(bunkerNDK, url, localSigner);
         signer.on("authUrl", (url) => {
           window.open(url, "auth", "width=600,height=600");
         });
