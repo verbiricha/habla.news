@@ -36,11 +36,11 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(@types/react@18.2.15)(react@18.2.0)
       '@nostr-dev-kit/ndk':
-        specifier: 2.11.0
-        version: 2.11.0(typescript@4.9.5)
+        specifier: 2.12.0
+        version: 2.12.0(typescript@4.9.5)
       '@nostr-dev-kit/ndk-cache-dexie':
-        specifier: 2.5.9
-        version: 2.5.9(typescript@4.9.5)
+        specifier: 2.5.13
+        version: 2.5.13(typescript@4.9.5)
       '@tanstack/react-query':
         specifier: ^4.35.0
         version: 4.35.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1537,11 +1537,11 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@nostr-dev-kit/ndk-cache-dexie@2.5.9':
-    resolution: {integrity: sha512-SZ5FjON0QPekiC7oW9Hy3JQxG0Oxxtud9LBa1q/A49JV/Qppv1x37nFHxi0XLxEbDgFTNYbaN27Zjfp2NPem2g==}
+  '@nostr-dev-kit/ndk-cache-dexie@2.5.13':
+    resolution: {integrity: sha512-Suv/ChvtLzmIa0yKnAjggT9SnoWAmxBrsWGGbVZea4lMCrZErlej+RVjza1SRphZhSDTB+ZtH6Q+O5TKUZpWPA==}
 
-  '@nostr-dev-kit/ndk@2.11.0':
-    resolution: {integrity: sha512-FKIMtcVsVcquzrC+yir9lOXHCIHmQ3IKEVCMohqEB7N96HjP2qrI9s5utbjI3lkavFNF5tXg1Gp9ODEo7XCfLA==}
+  '@nostr-dev-kit/ndk@2.12.0':
+    resolution: {integrity: sha512-B9NKdgn9CKNn0WHIFzj7SxeZhr+daT5im/ozj9Ey791MkaZiTB5XUCy5j9O15FDHTyFy0/gpCyq7LvJKIxCOoA==}
     engines: {node: '>=16'}
 
   '@parcel/bundler-default@2.9.3':
@@ -6224,18 +6224,18 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
-  '@nostr-dev-kit/ndk-cache-dexie@2.5.9(typescript@4.9.5)':
+  '@nostr-dev-kit/ndk-cache-dexie@2.5.13(typescript@4.9.5)':
     dependencies:
-      '@nostr-dev-kit/ndk': 2.11.0(typescript@4.9.5)
+      '@nostr-dev-kit/ndk': 2.12.0(typescript@4.9.5)
       debug: 4.4.0
       dexie: 4.0.10
-      nostr-tools: 2.4.0(typescript@4.9.5)
+      nostr-tools: 2.10.4(typescript@4.9.5)
       typescript-lru-cache: 2.0.0
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  '@nostr-dev-kit/ndk@2.11.0(typescript@4.9.5)':
+  '@nostr-dev-kit/ndk@2.12.0(typescript@4.9.5)':
     dependencies:
       '@noble/curves': 1.8.0
       '@noble/hashes': 1.7.0
