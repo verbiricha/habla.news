@@ -8,17 +8,44 @@ Available in https://habla.news.
 
 ## Contribute
 
+**prerequisites: **
+
+- [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [pnpm](https://pnpm.io/installation)
+
 To run Habla locally for development, run:
 
 ```
 pnpm dev
 ```
 
+
+1. Install [node js](https://nodejs.org/en/download/current) and npm:
+
+```
+npm install -g npm
+```
+3. Install pnpm:
+
+```
+npm install -g pnpm
+```
+
 This should start a local server and open a browser with the project. You can now start modifying the code and see the changes in real time.
 
 ## Run your own instance
+
+`git clone https://github.com/verbiricha/habla.news.git`
 
 ```
 pnpm install
 pnpm build
 ```
+Now run:
+
+```
+pnpm dev
+```
+It will give you a url such as: https://localhost:3000/
+
+
